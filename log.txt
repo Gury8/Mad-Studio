@@ -1,0 +1,45 @@
+//procedure TForm1.StringGrid1Selection(Sender: TObject; aCol, aRow: Integer);
+//var
+//  s, total, values: String;
+//  i: Integer;
+//  sel: TGridRect;
+//  Col: Integer;
+//  Row: Integer;
+//begin
+//  if chkHex.Checked then
+//    total := 'Selected rows: ' else
+//    total := 'Selected cells: ';
+//
+//  values := '';
+//
+//  for i:=0 to StringGrid1.SelectedRangeCount-1 do begin
+//    sel := StringGrid1.SelectedRange[i];
+//    if (goRowSelect in StringGrid1.Options) then begin
+//      if (sel.Top = sel.Bottom) then
+//        s := Format('row%d', [sel.Top])
+//      else
+//        s := Format('row%d..%d', [sel.Top, sel.Bottom]);
+//    end else begin
+//      if (sel.Left = sel.Right) and (sel.Top = sel.Bottom) then
+//        s := Format('col%d row%d', [sel.Left, sel.Top])
+//      else if (sel.Left = sel.Right) then
+//        s := Format('col%d row%d..%d', [sel.Left, sel.Top, sel.Bottom])
+//      else if (sel.Top = sel.Bottom) then
+//        s := Format('col%d..%d row%d', [sel.Left, sel.Right, sel.Top])
+//      else
+//        s := Format('col%d..%d row%d..%d', [sel.Left, sel.Right, sel.Top, sel.Bottom]);
+//    end;
+//    total := total + s + '; ';
+////    StringGrid1.Cells[Col, Row]
+////    values := values + StringGrid1.Cells[sel.Location.x, sel.Location.y];
+////    values := values + StringGrid1.Cells[sel..Location.x, sel.Location.y];
+////    showmessage(sel.
+//  end;
+//  Delete(total, Length(total)-1, 2);
+//
+//  for Row := StringGrid1.Selection.Top to StringGrid1.Selection.Bottom do
+//    for Col := StringGrid1.Selection.Left to StringGrid1.Selection.Right do
+//      values := values + StringGrid1.Cells[Col, Row];
+//
+//  Label1.Caption := total + ' *** ' + values;
+//end;

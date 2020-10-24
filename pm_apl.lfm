@@ -1,0 +1,107 @@
+object frmPmApl: TfrmPmApl
+  Left = 398
+  Height = 325
+  Top = 211
+  Width = 386
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Load Atari Player file'
+  ClientHeight = 325
+  ClientWidth = 386
+  Font.Height = -11
+  Font.Name = 'Verdana'
+  KeyPreview = True
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.8.0'
+  object btnClose: TButton
+    Left = 303
+    Height = 25
+    Top = 292
+    Width = 75
+    Caption = 'Close'
+    OnClick = CloseWin
+    TabOrder = 0
+  end
+  object chkFrames: TCheckGroup
+    Left = 9
+    Height = 180
+    Top = 104
+    Width = 369
+    AutoFill = True
+    Caption = 'Frames'
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.TopBottomSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 4
+    ClientHeight = 162
+    ClientWidth = 365
+    Columns = 4
+    Items.Strings = (
+      'Frame 1'
+      'Frame 2'
+      'Frame 3'
+      'Frame 4'
+      'Frame 5'
+      'Frame 6'
+      'Frame 7'
+      'Frame 8'
+      'Frame 9'
+      'Frame 10'
+      'Frame 11'
+      'Frame 12'
+      'Frame 13'
+      'Frame 14'
+      'Frame 15'
+      'Frame 16'
+      'Copy buffer'
+    )
+    TabOrder = 1
+    Data = {
+      110000000202020202020202020202020202020202
+    }
+  end
+  object rad2Players: TRadioButton
+    Left = 9
+    Height = 19
+    Top = 8
+    Width = 264
+    Caption = 'Load 2 frames (player 0 && 1, player 2 && 3)'
+    Checked = True
+    OnChange = rad2PlayersChange
+    TabOrder = 4
+    TabStop = True
+  end
+  object radLayer0: TRadioButton
+    Left = 9
+    Height = 19
+    Top = 36
+    Width = 156
+    Caption = 'Load 4 frames (layer 0)'
+    OnChange = radLayer0Change
+    TabOrder = 2
+  end
+  object btnLoad: TButton
+    Left = 9
+    Height = 25
+    Top = 292
+    Width = 75
+    Caption = 'Load'
+    OnClick = LoadAplFile
+    TabOrder = 3
+  end
+  object radLayer1: TRadioButton
+    Left = 9
+    Height = 19
+    Top = 64
+    Width = 156
+    Caption = 'Load 4 frames (layer 1)'
+    OnChange = radLayer0Change
+    TabOrder = 5
+  end
+end

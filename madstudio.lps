@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="11"/>
+    <BuildModes Active="Default"/>
+    <Units Count="43">
+      <Unit0>
+        <Filename Value="madstudio.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos Y="39"/>
+        <UsageCount Value="201"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmMain"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="841"/>
+        <CursorPos Y="874"/>
+        <UsageCount Value="201"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="common.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="133"/>
+        <CursorPos Y="145"/>
+        <UsageCount Value="201"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="src_editor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmSrcEdit"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="137"/>
+        <CursorPos Y="156"/>
+        <UsageCount Value="200"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="usyneditpopupedit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uSynEditPopupEdit"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="127"/>
+        <CursorPos X="6" Y="156"/>
+        <UsageCount Value="200"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="pmg.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmPmg"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1358"/>
+        <CursorPos X="7" Y="1385"/>
+        <UsageCount Value="204"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="pmg_gen.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmPmgGen"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="583"/>
+        <CursorPos X="26" Y="585"/>
+        <UsageCount Value="205"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="src_settings.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmSrcSettings"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="758"/>
+        <CursorPos X="3" Y="584"/>
+        <UsageCount Value="200"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="colors.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmColors"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="280"/>
+        <CursorPos X="35" Y="284"/>
+        <UsageCount Value="200"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="fonts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmFonts"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="904"/>
+        <CursorPos X="8" Y="599"/>
+        <UsageCount Value="201"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="lib.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="242"/>
+        <CursorPos X="39" Y="161"/>
+        <UsageCount Value="200"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="about.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAbout"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="58" Y="15"/>
+        <UsageCount Value="200"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="resource02.rc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="24"/>
+        <UsageCount Value="204"/>
+        <DefaultSyntaxHighlighter Value="None"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="font_gen.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmFontSetGen"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="825"/>
+        <CursorPos X="24" Y="853"/>
+        <UsageCount Value="200"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="antic2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAntic2"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="616"/>
+        <CursorPos X="34" Y="689"/>
+        <UsageCount Value="201"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="antic2_gen.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAntic2Gen"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="487"/>
+        <UsageCount Value="216"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="atascii_settings.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAntic2Settings"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="46" Y="14"/>
+        <UsageCount Value="201"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="ref_cards.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmRefCards"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos Y="62"/>
+        <UsageCount Value="200"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="antic6.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAntic6"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="57"/>
+        <CursorPos X="7" Y="75"/>
+        <UsageCount Value="206"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="antic6_gen.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAntic6Gen"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="790"/>
+        <CursorPos X="62" Y="802"/>
+        <UsageCount Value="200"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="antic6_settings.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAntic6Settings"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="62"/>
+        <CursorPos X="3" Y="71"/>
+        <UsageCount Value="200"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="dl_editor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmDisplayList"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="566"/>
+        <CursorPos X="17" Y="552"/>
+        <UsageCount Value="203"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="antic4.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAntic4"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1342"/>
+        <CursorPos Y="1236"/>
+        <UsageCount Value="215"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="antic4_gen.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAntic4Gen"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="282"/>
+        <CursorPos X="62" Y="261"/>
+        <UsageCount Value="200"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="dl_gen.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmDisplayListGen"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="316"/>
+        <CursorPos X="18" Y="346"/>
+        <UsageCount Value="201"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="input_value.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmInputValue"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="19" Y="7"/>
+        <UsageCount Value="204"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="anim_load_save.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAnimLoadSave"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="92" Y="24"/>
+        <UsageCount Value="200"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="animator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAnimator"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2091"/>
+        <CursorPos X="40" Y="1439"/>
+        <UsageCount Value="200"/>
+      </Unit27>
+      <Unit28>
+        <Filename Value="anim_gen.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAnimGen"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1303"/>
+        <CursorPos X="28" Y="1177"/>
+        <UsageCount Value="205"/>
+      </Unit28>
+      <Unit29>
+        <Filename Value="code_lib.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="489"/>
+        <CursorPos Y="520"/>
+        <UsageCount Value="208"/>
+      </Unit29>
+      <Unit30>
+        <Filename Value="viewer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmViewer"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="360"/>
+        <CursorPos X="7" Y="385"/>
+        <UsageCount Value="207"/>
+      </Unit30>
+      <Unit31>
+        <Filename Value="antic3.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAntic3"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1404"/>
+        <CursorPos X="30" Y="975"/>
+        <UsageCount Value="200"/>
+      </Unit31>
+      <Unit32>
+        <Filename Value="antic3_gen.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAntic3Code"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="519"/>
+        <CursorPos Y="98"/>
+        <UsageCount Value="217"/>
+      </Unit32>
+      <Unit33>
+        <Filename Value="copy_players.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmCopyPlayers"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="255"/>
+        <CursorPos Y="53"/>
+        <UsageCount Value="202"/>
+      </Unit33>
+      <Unit34>
+        <Filename Value="missile_sizes.inc"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="225"/>
+        <CursorPos X="41" Y="250"/>
+        <UsageCount Value="211"/>
+      </Unit34>
+      <Unit35>
+        <Filename Value="byte_editor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmByteEditor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="326"/>
+        <CursorPos X="32" Y="216"/>
+        <UsageCount Value="213"/>
+      </Unit35>
+      <Unit36>
+        <Filename Value="gr.pas"/>
+        <ComponentName Value="frmGr"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1475"/>
+        <CursorPos X="38" Y="1538"/>
+        <UsageCount Value="24"/>
+      </Unit36>
+      <Unit37>
+        <Filename Value="gr_gen.pas"/>
+        <ComponentName Value="frmGrGen"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="186"/>
+        <CursorPos X="3" Y="191"/>
+        <UsageCount Value="15"/>
+      </Unit37>
+      <Unit38>
+        <Filename Value="antic6_gen.lfm"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="2"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit38>
+      <Unit39>
+        <Filename Value="font_gen.lfm"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="6"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit39>
+      <Unit40>
+        <Filename Value="pm_apl.pas"/>
+        <ComponentName Value="frmPmApl"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="150"/>
+        <CursorPos X="13" Y="262"/>
+        <UsageCount Value="14"/>
+      </Unit40>
+      <Unit41>
+        <Filename Value="settings.pas"/>
+        <ComponentName Value="frmGrSettings"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="5"/>
+        <CursorPos X="31" Y="89"/>
+        <UsageCount Value="9"/>
+      </Unit41>
+      <Unit42>
+        <Filename Value="antic2_gen.lfm"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="7"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit42>
+    </Units>
+    <JumpHistory HistoryIndex="-1"/>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes Count="0" ActiveMode="default"/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

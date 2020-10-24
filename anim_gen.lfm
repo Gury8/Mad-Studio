@@ -1,0 +1,150 @@
+object frmAnimGen: TfrmAnimGen
+  Left = 246
+  Height = 658
+  Top = 126
+  Width = 784
+  BorderStyle = bsDialog
+  Caption = 'Player Animator source code generator'
+  ClientHeight = 658
+  ClientWidth = 784
+  Font.Height = -11
+  Font.Name = 'Verdana'
+  KeyPreview = True
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.8.0'
+  object btnCopy: TButton
+    Left = 294
+    Height = 25
+    Top = 624
+    Width = 96
+    Caption = 'Copy to editor'
+    OnClick = CopyToEditor
+    TabOrder = 0
+  end
+  object btnClose: TButton
+    Left = 701
+    Height = 25
+    Top = 624
+    Width = 75
+    Caption = 'Close'
+    OnClick = CloseWin
+    TabOrder = 1
+  end
+  object listExamples: TListBox
+    Left = 294
+    Height = 73
+    Top = 25
+    Width = 482
+    Font.Height = -13
+    Font.Name = 'Verdana'
+    Items.Strings = (
+      'Data values for animation frames'
+      'Animation with non-moving object'
+      'Animation with moving object in horizontal direction'
+    )
+    ItemHeight = 16
+    ItemIndex = 0
+    OnClick = ListExamplesClick
+    ParentFont = False
+    TabOrder = 2
+  end
+  object memo: TMemo
+    Tag = 3
+    Left = 294
+    Height = 507
+    Top = 108
+    Width = 482
+    Font.Height = -13
+    Font.Name = 'Courier New'
+    ParentFont = False
+    ScrollBars = ssAutoBoth
+    TabOrder = 3
+    WordWrap = False
+  end
+  object radLang: TRadioGroup
+    Left = 6
+    Height = 207
+    Top = 9
+    Width = 131
+    AutoFill = True
+    Caption = 'Selected language'
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 189
+    ClientWidth = 127
+    ItemIndex = 0
+    Items.Strings = (
+      'Atari BASIC'
+      'Turbo Basic XL'
+      'Mad Pascal'
+      'Action!'
+      'FastBasic'
+      'Mad Assembler'
+      'CC65'
+    )
+    OnClick = radLangProc
+    TabOrder = 4
+  end
+  object Label1: TLabel
+    Left = 294
+    Height = 13
+    Top = 9
+    Width = 167
+    Caption = 'Source code listing examples'
+    ParentColor = False
+  end
+  object boxStartLine: TGroupBox
+    Left = 150
+    Height = 114
+    Top = 9
+    Width = 134
+    ClientHeight = 96
+    ClientWidth = 130
+    TabOrder = 5
+    object lblStartLine: TLabel
+      Left = 6
+      Height = 13
+      Top = -6
+      Width = 117
+      Caption = 'Starting line number'
+      ParentColor = False
+    end
+    object editStartLine: TSpinEdit
+      Left = 6
+      Height = 21
+      Top = 12
+      Width = 78
+      MaxValue = 65535
+      OnChange = radLangProc
+      TabOrder = 0
+      Value = 10
+    end
+    object lblLineStep: TLabel
+      Left = 6
+      Height = 13
+      Top = 48
+      Width = 99
+      Caption = 'Line number step'
+      ParentColor = False
+    end
+    object editLineStep: TSpinEdit
+      Left = 6
+      Height = 21
+      Top = 66
+      Width = 78
+      MaxValue = 1000
+      MinValue = 1
+      OnChange = radLangProc
+      TabOrder = 1
+      Value = 10
+    end
+  end
+end

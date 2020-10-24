@@ -1,0 +1,86 @@
+==========
+Mad Studio
+==========
+
+Player/missile editor
+---------------------
+
+- Player editor
+  - Maximum height changed to 40
+  - Custom height setting
+  - Changing resolution size (double or single)
+  - Shift/move all players at once
+  - Flip all players horizontally/vertically at once
+  - Enhanced drawing in editor with no gaps and unpredictable plotting
+  - Changed tool icon images for horizontal and vertical manipulation
+  - Removed tool icons for shifting and moving players
+  - Copying specific player data to selected players
+  - Copying selected player data to all other players
+  - Immediate color change after changing color in Color palette
+  - Layout changes comforting new features and changes
+  
+- Multi-color player editor
+  - Maximum height changed to 40 (the same value is set also for Player editor)
+  - Custom height setting (the same value is set also for Player editor)
+  - Changing resolution size (double or single, the same value is then set for all P/M editors)
+  - Join players together
+  - Immediate color change after changing color in Color palette
+  - Layout changes comforting new features and changes
+
+- Missile editor
+  - Maximum height changed to 34
+  - Custom height setting
+  - Changing resolution size (double or single, the same value is then set for all P/M editors)
+  - Immediate color change after changing color in Color palette
+  - Layout changes comforting new features and changes
+
+Player Animator
+---------------
+
+- Maximum height changed to 40
+- Custom height setting
+- Changing resolution size (double or single)
+- Copy selected frame data to all other frames
+- Copy data from Player editor:
+  - copy to selected frame
+  - copy to all frames
+  - copy to both frame layers, frame layer 0 or frame layer 1
+- Shift/move all frames at once
+- Flip all frames horizontally/vertically at once
+- Immediate color change after changing color in Color palette
+- Layout changes comforting new features and changes
+
+Character set editor
+--------------------
+
+- Selected character display and detail information
+
+Text mode 1/2 editor
+--------------------
+
+- Text mode selection moved into toolbar as combo box selection
+
+Antic mode 3 editor
+-------------------
+
+- Direct data change of selected character in editor as it is edited
+
+Antic mode 4/5 editor
+---------------------
+
+- Direct data change of selected character in editor as it is edited
+- Selected character display and detail information
+- Text mode selection moved into toolbar as combo box selection
+
+Source code editor
+------------------
+
+- Combo box for specifying FastBasic version type
+
+Misc
+  - Lazarus 2.0.8 x86_64-win64-win32/win64
+  - Free Pascal Compiler 3.0.4
+  - Mad Assembler 2.1.0 build 8
+  - Mad Pascal Compiler version 1.6.4
+  - FastBasic 4.3 - Fast BASIC interpreter
+  - TurboBasic XL Parser Tool 10

@@ -1,0 +1,213 @@
+object frmByteEditor: TfrmByteEditor
+  Left = 224
+  Height = 728
+  Top = 52
+  Width = 661
+  Caption = 'Byte editor'
+  ClientHeight = 728
+  ClientWidth = 661
+  KeyPreview = True
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  LCLVersion = '2.0.8.0'
+  object btnClose: TButton
+    Left = 579
+    Height = 25
+    Top = 696
+    Width = 75
+    Caption = '&Close'
+    OnClick = btnCloseClick
+    TabOrder = 0
+  end
+  object scrlBox: TScrollBox
+    Left = 6
+    Height = 618
+    Top = 56
+    Width = 100
+    HorzScrollBar.Page = 1
+    HorzScrollBar.Visible = False
+    VertScrollBar.Increment = 10
+    VertScrollBar.Page = 105
+    VertScrollBar.Smooth = True
+    VertScrollBar.Tracking = True
+    ClientHeight = 614
+    ClientWidth = 96
+    TabOrder = 1
+    object paintBox: TPaintBox
+      Left = 0
+      Height = 614
+      Top = 0
+      Width = 96
+      Align = alClient
+      OnPaint = paintBoxPaint
+    end
+  end
+  object strGrid: TStringGrid
+    Left = 120
+    Height = 636
+    Top = 36
+    Width = 534
+    ColCount = 17
+    Columns = <    
+      item
+        Title.Caption = '0'
+        Width = 28
+      end    
+      item
+        Title.Caption = '1'
+        Width = 28
+      end    
+      item
+        Title.Caption = '2'
+        Width = 28
+      end    
+      item
+        Title.Caption = '3'
+        Width = 28
+      end    
+      item
+        Title.Caption = '4'
+        Width = 28
+      end    
+      item
+        Title.Caption = '5'
+        Width = 28
+      end    
+      item
+        Title.Caption = '6'
+        Width = 28
+      end    
+      item
+        Title.Caption = '7'
+        Width = 28
+      end    
+      item
+        Title.Caption = '8'
+        Width = 28
+      end    
+      item
+        Title.Caption = '9'
+        Width = 28
+      end    
+      item
+        Title.Caption = 'a'
+        Width = 28
+      end    
+      item
+        Title.Caption = 'b'
+        Width = 28
+      end    
+      item
+        Title.Caption = 'c'
+        Width = 28
+      end    
+      item
+        Title.Caption = 'd'
+        Width = 28
+      end    
+      item
+        Title.Caption = 'e'
+        Width = 28
+      end    
+      item
+        Title.Caption = 'f'
+        Width = 28
+      end>
+    ExtendedSelect = False
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSelect, goSmoothScroll]
+    RangeSelectMode = rsmMulti
+    RowCount = 2
+    ScrollBars = ssVertical
+    TabOrder = 2
+    OnHeaderClick = strGridHeaderClick
+    OnKeyUp = strGridKeyUp
+    OnMouseUp = strGridMouseUp
+  end
+  object chkRowSelect: TCheckBox
+    Left = 120
+    Height = 19
+    Top = 12
+    Width = 93
+    Caption = 'Row selection'
+    Checked = True
+    OnChange = chkRowSelectChange
+    State = cbChecked
+    TabOrder = 3
+  end
+  object chkHex: TCheckBox
+    Left = 234
+    Height = 19
+    Top = 12
+    Width = 125
+    Caption = 'Hexadecimal values'
+    Checked = True
+    OnChange = chkHexChange
+    State = cbChecked
+    TabOrder = 4
+  end
+  object btnLoadData: TButton
+    Left = 6
+    Height = 25
+    Top = 6
+    Width = 75
+    Caption = '&Load data'
+    OnClick = btnLoadDataClick
+    TabOrder = 5
+  end
+  object btnExportData: TButton
+    Left = 498
+    Height = 25
+    Top = 696
+    Width = 75
+    Caption = 'Export data'
+    OnClick = btnExportDataClick
+    TabOrder = 6
+  end
+  object editMaxLines: TSpinEdit
+    Left = 606
+    Height = 23
+    Top = 8
+    Width = 48
+    MaxValue = 255
+    MinValue = 1
+    TabOrder = 7
+    Value = 16
+  end
+  object Label1: TLabel
+    Left = 438
+    Height = 15
+    Top = 12
+    Width = 165
+    Caption = 'Max. number of exported lines '
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 6
+    Height = 15
+    Top = 39
+    Width = 86
+    Caption = 'Data byte values'
+    ParentColor = False
+  end
+  object lblFilePath: TLabel
+    Left = 6
+    Height = 15
+    Top = 678
+    Width = 55
+    Caption = 'lblFilePath'
+    ParentColor = False
+    Visible = False
+  end
+  object lblFilesize: TLabel
+    Left = 6
+    Height = 15
+    Top = 696
+    Width = 50
+    Caption = 'lblFilesize'
+    ParentColor = False
+    Visible = False
+  end
+end
