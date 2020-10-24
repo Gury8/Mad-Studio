@@ -15,3 +15,5 @@ This application is a set of utilities to help you to develop for your Atari 8-b
 - Player Animator
 - Display list editor
 - Byte editor
+
+![Alt text](/Gury8/Mad-Studio/images/madstudio_main.png?raw=true "Mad Studio main screen")
