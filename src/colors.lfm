@@ -1,0 +1,233 @@
+object frmColors: TfrmColors
+  Left = 368
+  Height = 485
+  Top = 177
+  Width = 206
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Color palette'
+  ClientHeight = 485
+  ClientWidth = 206
+  Font.Height = -11
+  Font.Name = 'Verdana'
+  KeyPreview = True
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  LCLVersion = '2.0.6.0'
+  object shapeColor0: TShape
+    Left = 9
+    Height = 32
+    Hint = 'Color register 0'
+    Top = 395
+    Width = 32
+    ParentShowHint = False
+    OnMouseDown = shapeColorMouseDown
+    OnMouseEnter = shapeColorMouseEnter
+    ShowHint = True
+  end
+  object shapeColor1: TShape
+    Tag = 1
+    Left = 48
+    Height = 32
+    Top = 395
+    Width = 32
+    HelpType = htKeyword
+    HelpKeyword = 'Color register 1'
+    ParentShowHint = False
+    OnMouseDown = shapeColorMouseDown
+    OnMouseEnter = shapeColorMouseEnter
+    ShowHint = True
+  end
+  object shapeColor2: TShape
+    Tag = 2
+    Left = 88
+    Height = 32
+    Top = 395
+    Width = 32
+    HelpType = htKeyword
+    HelpKeyword = 'Color register 2'
+    ParentShowHint = False
+    OnMouseDown = shapeColorMouseDown
+    OnMouseEnter = shapeColorMouseEnter
+    ShowHint = True
+  end
+  object shapeColor3: TShape
+    Tag = 3
+    Left = 126
+    Height = 32
+    Top = 395
+    Width = 32
+    HelpType = htKeyword
+    HelpKeyword = 'Color register 3'
+    ParentShowHint = False
+    OnMouseDown = shapeColorMouseDown
+    OnMouseEnter = shapeColorMouseEnter
+    ShowHint = True
+  end
+  object lblColor4: TLabel
+    Left = 9
+    Height = 10
+    Top = 384
+    Width = 33
+    Caption = 'COLOR4'
+    Font.Height = -8
+    Font.Name = 'Verdana'
+    ParentColor = False
+    ParentFont = False
+  end
+  object lblColor0: TLabel
+    Left = 48
+    Height = 10
+    Top = 384
+    Width = 33
+    Caption = 'COLOR0'
+    Font.Height = -8
+    Font.Name = 'Verdana'
+    ParentColor = False
+    ParentFont = False
+  end
+  object lblColor1: TLabel
+    Left = 87
+    Height = 10
+    Top = 384
+    Width = 33
+    Caption = 'COLOR1'
+    Font.Height = -8
+    Font.Name = 'Verdana'
+    ParentColor = False
+    ParentFont = False
+  end
+  object lblColor2: TLabel
+    Left = 126
+    Height = 10
+    Top = 384
+    Width = 33
+    Caption = 'COLOR2'
+    Font.Height = -8
+    Font.Name = 'Verdana'
+    ParentColor = False
+    ParentFont = False
+  end
+  object shapeColor704: TShape
+    Tag = 4
+    Left = 9
+    Height = 32
+    Hint = 'Color register 0'
+    Top = 446
+    Width = 32
+    ParentShowHint = False
+    OnMouseDown = shapeColorMouseDown
+    OnMouseEnter = shapeColorMouseEnter
+    ShowHint = True
+  end
+  object shapeColor705: TShape
+    Tag = 5
+    Left = 48
+    Height = 32
+    Top = 446
+    Width = 32
+    HelpType = htKeyword
+    HelpKeyword = 'Color register 1'
+    ParentShowHint = False
+    OnMouseDown = shapeColorMouseDown
+    OnMouseEnter = shapeColorMouseEnter
+    ShowHint = True
+  end
+  object shapeColor706: TShape
+    Tag = 6
+    Left = 87
+    Height = 32
+    Top = 446
+    Width = 32
+    HelpType = htKeyword
+    HelpKeyword = 'Color register 2'
+    ParentShowHint = False
+    OnMouseDown = shapeColorMouseDown
+    OnMouseEnter = shapeColorMouseEnter
+    ShowHint = True
+  end
+  object shapeColor707: TShape
+    Tag = 7
+    Left = 126
+    Height = 32
+    Top = 446
+    Width = 32
+    HelpType = htKeyword
+    HelpKeyword = 'Color register 3'
+    ParentShowHint = False
+    OnMouseDown = shapeColorMouseDown
+    OnMouseEnter = shapeColorMouseEnter
+    ShowHint = True
+  end
+  object lblPcolr0: TLabel
+    Left = 9
+    Height = 10
+    Top = 434
+    Width = 32
+    Caption = 'PCOLR0'
+    Font.Height = -8
+    Font.Name = 'Verdana'
+    ParentColor = False
+    ParentFont = False
+  end
+  object lblPcolr1: TLabel
+    Left = 48
+    Height = 10
+    Top = 434
+    Width = 32
+    Caption = 'PCOLR1'
+    Font.Height = -8
+    Font.Name = 'Verdana'
+    ParentColor = False
+    ParentFont = False
+  end
+  object lblPcolr2: TLabel
+    Left = 87
+    Height = 10
+    Top = 434
+    Width = 32
+    Caption = 'PCOLR2'
+    Font.Height = -8
+    Font.Name = 'Verdana'
+    ParentColor = False
+    ParentFont = False
+  end
+  object lblPcolr3: TLabel
+    Left = 126
+    Height = 10
+    Top = 434
+    Width = 32
+    Caption = 'PCOLR3'
+    Font.Height = -8
+    Font.Name = 'Verdana'
+    ParentColor = False
+    ParentFont = False
+  end
+  object lblColor3: TLabel
+    Left = 165
+    Height = 10
+    Top = 384
+    Width = 33
+    Caption = 'COLOR3'
+    Font.Height = -8
+    Font.Name = 'Verdana'
+    ParentColor = False
+    ParentFont = False
+  end
+  object shapeColor4: TShape
+    Tag = 10
+    Left = 165
+    Height = 32
+    Top = 395
+    Width = 32
+    HelpType = htKeyword
+    HelpKeyword = 'Color register 3'
+    ParentShowHint = False
+    OnMouseDown = shapeColorMouseDown
+    OnMouseEnter = shapeColorMouseEnter
+    ShowHint = True
+  end
+end

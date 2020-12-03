@@ -1,0 +1,689 @@
+object frmAntic2: TfrmAntic2
+  Left = 29
+  Height = 883
+  Top = 37
+  Width = 1189
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Text mode 0 editor'
+  ClientHeight = 863
+  ClientWidth = 1189
+  Font.Height = -11
+  Font.Name = 'Verdana'
+  KeyPreview = True
+  Menu = menuAntic2
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDeactivate = FormDeactivate
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.6.0'
+  object imgEditor: TImage
+    Tag = 2
+    Left = 224
+    Height = 576
+    Top = 40
+    Width = 960
+    OnMouseDown = imgEditorMouseDown
+    OnMouseMove = imgEditorMouseMove
+    OnMouseUp = imgEditorMouseUp
+  end
+  object statusBar: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 840
+    Width = 1189
+    Panels = <    
+      item
+        Width = 250
+      end    
+      item
+        Width = 100
+      end>
+    SimplePanel = False
+  end
+  object ToolBar2: TToolBar
+    Left = 0
+    Top = 0
+    Width = 1189
+    ButtonHeight = 30
+    ButtonWidth = 30
+    Caption = 'ToolBar2'
+    Images = frmMain.images
+    TabOrder = 1
+    object btnLoadScreen: TToolButton
+      Left = 31
+      Hint = 'Load screen from file'
+      Top = 2
+      Caption = 'btnLoadScreen'
+      ImageIndex = 1
+      OnClick = LoadScreenProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnSaveScreen: TToolButton
+      Left = 61
+      Hint = 'Save screen to file'
+      Top = 2
+      Caption = 'btnSaveScreen'
+      ImageIndex = 2
+      OnClick = SaveScreenProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object ToolButton16: TToolButton
+      Left = 91
+      Height = 30
+      Top = 2
+      Caption = 'ToolButton16'
+      Style = tbsDivider
+    end
+    object ToolButton25: TToolButton
+      Left = 156
+      Height = 30
+      Top = 2
+      Caption = 'ToolButton25'
+      Style = tbsDivider
+    end
+    object btnClearScreen: TToolButton
+      Left = 161
+      Hint = 'Clear screen'
+      Top = 2
+      Caption = 'btnClearScreen'
+      ImageIndex = 5
+      OnClick = ClearScreenProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnGenCode: TToolButton
+      Left = 126
+      Hint = 'Generate source code'
+      Top = 2
+      Caption = 'btnGenCode'
+      ImageIndex = 4
+      OnClick = GenCodeProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnNewScreen: TToolButton
+      Left = 1
+      Hint = 'New screen'
+      Top = 2
+      Caption = 'btnNewScreen'
+      ImageIndex = 0
+      OnClick = NewScreenProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnFillScreen: TToolButton
+      Left = 191
+      Hint = 'Fill screen with selected character'
+      Top = 2
+      Caption = 'btnFillScreen'
+      ImageIndex = 24
+      OnClick = FillScreenProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnViewer: TToolButton
+      Left = 96
+      Hint = 'Antic mode 2 viewer'
+      Top = 2
+      Caption = 'The Viewer'
+      ImageIndex = 25
+      OnClick = ViewerProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+  end
+  object Label2: TLabel
+    Left = 224
+    Height = 13
+    Top = 624
+    Width = 116
+    Caption = 'Standard characters'
+    ParentColor = False
+  end
+  object imgFontSet: TImage
+    Left = 224
+    Height = 192
+    Top = 640
+    Width = 384
+    OnMouseDown = imgFontSetMouseDown
+  end
+  object Label1: TLabel
+    Left = 624
+    Height = 13
+    Top = 624
+    Width = 108
+    Caption = 'Inverse characters'
+    ParentColor = False
+  end
+  object imgFontSetInv: TImage
+    Tag = 1
+    Left = 624
+    Height = 192
+    Top = 640
+    Width = 384
+    OnMouseDown = imgFontSetMouseDown
+  end
+  object boxTextPos: TGroupBox
+    Left = 9
+    Height = 162
+    Top = 186
+    Width = 207
+    Caption = 'Text position'
+    ClientHeight = 144
+    ClientWidth = 203
+    TabOrder = 2
+    object editText: TLabeledEdit
+      Left = 6
+      Height = 21
+      Top = 24
+      Width = 176
+      EditLabel.Height = 13
+      EditLabel.Width = 176
+      EditLabel.Caption = 'Input text'
+      EditLabel.ParentColor = False
+      MaxLength = 40
+      TabOrder = 0
+    end
+    object Label3: TLabel
+      Left = 6
+      Height = 13
+      Top = 60
+      Width = 84
+      Caption = 'Text X position'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      Left = 108
+      Height = 13
+      Top = 60
+      Width = 83
+      Caption = 'Text Y position'
+      ParentColor = False
+    end
+    object btnApplyText: TButton
+      Left = 6
+      Height = 25
+      Top = 111
+      Width = 75
+      Caption = 'Apply text'
+      OnClick = ApplyText
+      TabOrder = 1
+    end
+    object btnClearText: TButton
+      Left = 88
+      Height = 25
+      Top = 111
+      Width = 75
+      Caption = 'Clear text'
+      OnClick = ClearText
+      TabOrder = 2
+    end
+    object editTextX: TBCTrackbarUpdown
+      Left = 6
+      Height = 22
+      Top = 78
+      Width = 50
+      AllowNegativeValues = False
+      BarExponent = 1
+      Increment = 1
+      LongTimeInterval = 400
+      MinValue = 0
+      MaxValue = 39
+      Value = 3
+      ShortTimeInterval = 100
+      Background.Color = clWindow
+      Background.Gradient1.StartColor = clWhite
+      Background.Gradient1.EndColor = clBlack
+      Background.Gradient1.GradientType = gtLinear
+      Background.Gradient1.Point1XPercent = 0
+      Background.Gradient1.Point1YPercent = 0
+      Background.Gradient1.Point2XPercent = 0
+      Background.Gradient1.Point2YPercent = 100
+      Background.Gradient2.StartColor = clWhite
+      Background.Gradient2.EndColor = clOlive
+      Background.Gradient2.GradientType = gtLinear
+      Background.Gradient2.Point1XPercent = 0
+      Background.Gradient2.Point1YPercent = 0
+      Background.Gradient2.Point2XPercent = 0
+      Background.Gradient2.Point2YPercent = 100
+      Background.Gradient2.Sinus = True
+      Background.Gradient1EndPercent = 35
+      Background.Style = bbsColor
+      ButtonBackground.Gradient1.StartColor = clBtnShadow
+      ButtonBackground.Gradient1.EndColor = clBtnFace
+      ButtonBackground.Gradient1.GradientType = gtLinear
+      ButtonBackground.Gradient1.Point1XPercent = 0
+      ButtonBackground.Gradient1.Point1YPercent = -50
+      ButtonBackground.Gradient1.Point2XPercent = 0
+      ButtonBackground.Gradient1.Point2YPercent = 50
+      ButtonBackground.Gradient1.Sinus = True
+      ButtonBackground.Gradient2.StartColor = clBtnFace
+      ButtonBackground.Gradient2.EndColor = clBtnShadow
+      ButtonBackground.Gradient2.GradientType = gtLinear
+      ButtonBackground.Gradient2.Point1XPercent = 0
+      ButtonBackground.Gradient2.Point1YPercent = 50
+      ButtonBackground.Gradient2.Point2XPercent = 0
+      ButtonBackground.Gradient2.Point2YPercent = 150
+      ButtonBackground.Gradient2.Sinus = True
+      ButtonBackground.Gradient1EndPercent = 50
+      ButtonBackground.Style = bbsGradient
+      ButtonDownBackground.Color = clBtnShadow
+      ButtonDownBackground.Gradient1.StartColor = clWhite
+      ButtonDownBackground.Gradient1.EndColor = clBlack
+      ButtonDownBackground.Gradient1.GradientType = gtLinear
+      ButtonDownBackground.Gradient1.Point1XPercent = 0
+      ButtonDownBackground.Gradient1.Point1YPercent = 0
+      ButtonDownBackground.Gradient1.Point2XPercent = 0
+      ButtonDownBackground.Gradient1.Point2YPercent = 100
+      ButtonDownBackground.Gradient2.StartColor = clWhite
+      ButtonDownBackground.Gradient2.EndColor = clBlack
+      ButtonDownBackground.Gradient2.GradientType = gtLinear
+      ButtonDownBackground.Gradient2.Point1XPercent = 0
+      ButtonDownBackground.Gradient2.Point1YPercent = 0
+      ButtonDownBackground.Gradient2.Point2XPercent = 0
+      ButtonDownBackground.Gradient2.Point2YPercent = 100
+      ButtonDownBackground.Gradient1EndPercent = 35
+      ButtonDownBackground.Style = bbsColor
+      Border.Color = clWindowText
+      Border.ColorOpacity = 100
+      Border.Style = bboSolid
+      Rounding.RoundX = 4
+      Rounding.RoundY = 4
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      HasTrackBar = True
+      ArrowColor = clWindowText
+      TabOrder = 3
+      TabStop = True
+      UseDockManager = False
+    end
+    object editTextY: TBCTrackbarUpdown
+      Left = 108
+      Height = 22
+      Top = 78
+      Width = 50
+      AllowNegativeValues = False
+      BarExponent = 1
+      Increment = 1
+      LongTimeInterval = 400
+      MinValue = 0
+      MaxValue = 23
+      Value = 3
+      ShortTimeInterval = 100
+      Background.Color = clWindow
+      Background.Gradient1.StartColor = clWhite
+      Background.Gradient1.EndColor = clBlack
+      Background.Gradient1.GradientType = gtLinear
+      Background.Gradient1.Point1XPercent = 0
+      Background.Gradient1.Point1YPercent = 0
+      Background.Gradient1.Point2XPercent = 0
+      Background.Gradient1.Point2YPercent = 100
+      Background.Gradient2.StartColor = clWhite
+      Background.Gradient2.EndColor = clOlive
+      Background.Gradient2.GradientType = gtLinear
+      Background.Gradient2.Point1XPercent = 0
+      Background.Gradient2.Point1YPercent = 0
+      Background.Gradient2.Point2XPercent = 0
+      Background.Gradient2.Point2YPercent = 100
+      Background.Gradient2.Sinus = True
+      Background.Gradient1EndPercent = 35
+      Background.Style = bbsColor
+      ButtonBackground.Gradient1.StartColor = clBtnShadow
+      ButtonBackground.Gradient1.EndColor = clBtnFace
+      ButtonBackground.Gradient1.GradientType = gtLinear
+      ButtonBackground.Gradient1.Point1XPercent = 0
+      ButtonBackground.Gradient1.Point1YPercent = -50
+      ButtonBackground.Gradient1.Point2XPercent = 0
+      ButtonBackground.Gradient1.Point2YPercent = 50
+      ButtonBackground.Gradient1.Sinus = True
+      ButtonBackground.Gradient2.StartColor = clBtnFace
+      ButtonBackground.Gradient2.EndColor = clBtnShadow
+      ButtonBackground.Gradient2.GradientType = gtLinear
+      ButtonBackground.Gradient2.Point1XPercent = 0
+      ButtonBackground.Gradient2.Point1YPercent = 50
+      ButtonBackground.Gradient2.Point2XPercent = 0
+      ButtonBackground.Gradient2.Point2YPercent = 150
+      ButtonBackground.Gradient2.Sinus = True
+      ButtonBackground.Gradient1EndPercent = 50
+      ButtonBackground.Style = bbsGradient
+      ButtonDownBackground.Color = clBtnShadow
+      ButtonDownBackground.Gradient1.StartColor = clWhite
+      ButtonDownBackground.Gradient1.EndColor = clBlack
+      ButtonDownBackground.Gradient1.GradientType = gtLinear
+      ButtonDownBackground.Gradient1.Point1XPercent = 0
+      ButtonDownBackground.Gradient1.Point1YPercent = 0
+      ButtonDownBackground.Gradient1.Point2XPercent = 0
+      ButtonDownBackground.Gradient1.Point2YPercent = 100
+      ButtonDownBackground.Gradient2.StartColor = clWhite
+      ButtonDownBackground.Gradient2.EndColor = clBlack
+      ButtonDownBackground.Gradient2.GradientType = gtLinear
+      ButtonDownBackground.Gradient2.Point1XPercent = 0
+      ButtonDownBackground.Gradient2.Point1YPercent = 0
+      ButtonDownBackground.Gradient2.Point2XPercent = 0
+      ButtonDownBackground.Gradient2.Point2YPercent = 100
+      ButtonDownBackground.Gradient1EndPercent = 35
+      ButtonDownBackground.Style = bbsColor
+      Border.Color = clWindowText
+      Border.ColorOpacity = 100
+      Border.Style = bboSolid
+      Rounding.RoundX = 4
+      Rounding.RoundY = 4
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      HasTrackBar = True
+      ArrowColor = clWindowText
+      TabOrder = 4
+      TabStop = True
+      UseDockManager = False
+    end
+  end
+  object boxSelChar: TGroupBox
+    Left = 9
+    Height = 126
+    Top = 42
+    Width = 207
+    Caption = 'Selected character'
+    ClientHeight = 108
+    ClientWidth = 203
+    TabOrder = 3
+    object imgChar: TImage
+      Left = 9
+      Height = 24
+      Top = 6
+      Width = 24
+    end
+    object memoInfo: TMemo
+      Left = 11
+      Height = 57
+      Top = 42
+      Width = 183
+      BorderStyle = bsNone
+      Color = clForm
+      ReadOnly = True
+      TabOrder = 0
+    end
+  end
+  object boxResize: TGroupBox
+    Left = 9
+    Height = 102
+    Top = 366
+    Width = 207
+    Caption = 'Resize screen'
+    ClientHeight = 84
+    ClientWidth = 203
+    TabOrder = 4
+    object Label5: TLabel
+      Left = 9
+      Height = 13
+      Top = 6
+      Width = 67
+      Caption = 'X max. size'
+      ParentColor = False
+    end
+    object Label6: TLabel
+      Left = 110
+      Height = 13
+      Top = 6
+      Width = 66
+      Caption = 'Y max. size'
+      ParentColor = False
+    end
+    object editX: TBCTrackbarUpdown
+      Left = 9
+      Height = 22
+      Top = 24
+      Width = 50
+      AllowNegativeValues = False
+      BarExponent = 1
+      Increment = 1
+      LongTimeInterval = 400
+      MinValue = 0
+      MaxValue = 39
+      Value = 3
+      ShortTimeInterval = 100
+      Background.Color = clWindow
+      Background.Gradient1.StartColor = clWhite
+      Background.Gradient1.EndColor = clBlack
+      Background.Gradient1.GradientType = gtLinear
+      Background.Gradient1.Point1XPercent = 0
+      Background.Gradient1.Point1YPercent = 0
+      Background.Gradient1.Point2XPercent = 0
+      Background.Gradient1.Point2YPercent = 100
+      Background.Gradient2.StartColor = clWhite
+      Background.Gradient2.EndColor = clOlive
+      Background.Gradient2.GradientType = gtLinear
+      Background.Gradient2.Point1XPercent = 0
+      Background.Gradient2.Point1YPercent = 0
+      Background.Gradient2.Point2XPercent = 0
+      Background.Gradient2.Point2YPercent = 100
+      Background.Gradient2.Sinus = True
+      Background.Gradient1EndPercent = 35
+      Background.Style = bbsColor
+      ButtonBackground.Gradient1.StartColor = clBtnShadow
+      ButtonBackground.Gradient1.EndColor = clBtnFace
+      ButtonBackground.Gradient1.GradientType = gtLinear
+      ButtonBackground.Gradient1.Point1XPercent = 0
+      ButtonBackground.Gradient1.Point1YPercent = -50
+      ButtonBackground.Gradient1.Point2XPercent = 0
+      ButtonBackground.Gradient1.Point2YPercent = 50
+      ButtonBackground.Gradient1.Sinus = True
+      ButtonBackground.Gradient2.StartColor = clBtnFace
+      ButtonBackground.Gradient2.EndColor = clBtnShadow
+      ButtonBackground.Gradient2.GradientType = gtLinear
+      ButtonBackground.Gradient2.Point1XPercent = 0
+      ButtonBackground.Gradient2.Point1YPercent = 50
+      ButtonBackground.Gradient2.Point2XPercent = 0
+      ButtonBackground.Gradient2.Point2YPercent = 150
+      ButtonBackground.Gradient2.Sinus = True
+      ButtonBackground.Gradient1EndPercent = 50
+      ButtonBackground.Style = bbsGradient
+      ButtonDownBackground.Color = clBtnShadow
+      ButtonDownBackground.Gradient1.StartColor = clWhite
+      ButtonDownBackground.Gradient1.EndColor = clBlack
+      ButtonDownBackground.Gradient1.GradientType = gtLinear
+      ButtonDownBackground.Gradient1.Point1XPercent = 0
+      ButtonDownBackground.Gradient1.Point1YPercent = 0
+      ButtonDownBackground.Gradient1.Point2XPercent = 0
+      ButtonDownBackground.Gradient1.Point2YPercent = 100
+      ButtonDownBackground.Gradient2.StartColor = clWhite
+      ButtonDownBackground.Gradient2.EndColor = clBlack
+      ButtonDownBackground.Gradient2.GradientType = gtLinear
+      ButtonDownBackground.Gradient2.Point1XPercent = 0
+      ButtonDownBackground.Gradient2.Point1YPercent = 0
+      ButtonDownBackground.Gradient2.Point2XPercent = 0
+      ButtonDownBackground.Gradient2.Point2YPercent = 100
+      ButtonDownBackground.Gradient1EndPercent = 35
+      ButtonDownBackground.Style = bbsColor
+      Border.Color = clWindowText
+      Border.ColorOpacity = 100
+      Border.Style = bboSolid
+      Rounding.RoundX = 4
+      Rounding.RoundY = 4
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      HasTrackBar = True
+      ArrowColor = clWindowText
+      TabOrder = 0
+      TabStop = True
+      UseDockManager = False
+      OnMouseLeave = editTextXMouseLeave
+      OnMouseUp = editTextXMouseUp
+    end
+    object editY: TBCTrackbarUpdown
+      Left = 108
+      Height = 22
+      Top = 24
+      Width = 50
+      AllowNegativeValues = False
+      BarExponent = 1
+      Increment = 1
+      LongTimeInterval = 400
+      MinValue = 0
+      MaxValue = 23
+      Value = 3
+      ShortTimeInterval = 100
+      Background.Color = clWindow
+      Background.Gradient1.StartColor = clWhite
+      Background.Gradient1.EndColor = clBlack
+      Background.Gradient1.GradientType = gtLinear
+      Background.Gradient1.Point1XPercent = 0
+      Background.Gradient1.Point1YPercent = 0
+      Background.Gradient1.Point2XPercent = 0
+      Background.Gradient1.Point2YPercent = 100
+      Background.Gradient2.StartColor = clWhite
+      Background.Gradient2.EndColor = clOlive
+      Background.Gradient2.GradientType = gtLinear
+      Background.Gradient2.Point1XPercent = 0
+      Background.Gradient2.Point1YPercent = 0
+      Background.Gradient2.Point2XPercent = 0
+      Background.Gradient2.Point2YPercent = 100
+      Background.Gradient2.Sinus = True
+      Background.Gradient1EndPercent = 35
+      Background.Style = bbsColor
+      ButtonBackground.Gradient1.StartColor = clBtnShadow
+      ButtonBackground.Gradient1.EndColor = clBtnFace
+      ButtonBackground.Gradient1.GradientType = gtLinear
+      ButtonBackground.Gradient1.Point1XPercent = 0
+      ButtonBackground.Gradient1.Point1YPercent = -50
+      ButtonBackground.Gradient1.Point2XPercent = 0
+      ButtonBackground.Gradient1.Point2YPercent = 50
+      ButtonBackground.Gradient1.Sinus = True
+      ButtonBackground.Gradient2.StartColor = clBtnFace
+      ButtonBackground.Gradient2.EndColor = clBtnShadow
+      ButtonBackground.Gradient2.GradientType = gtLinear
+      ButtonBackground.Gradient2.Point1XPercent = 0
+      ButtonBackground.Gradient2.Point1YPercent = 50
+      ButtonBackground.Gradient2.Point2XPercent = 0
+      ButtonBackground.Gradient2.Point2YPercent = 150
+      ButtonBackground.Gradient2.Sinus = True
+      ButtonBackground.Gradient1EndPercent = 50
+      ButtonBackground.Style = bbsGradient
+      ButtonDownBackground.Color = clBtnShadow
+      ButtonDownBackground.Gradient1.StartColor = clWhite
+      ButtonDownBackground.Gradient1.EndColor = clBlack
+      ButtonDownBackground.Gradient1.GradientType = gtLinear
+      ButtonDownBackground.Gradient1.Point1XPercent = 0
+      ButtonDownBackground.Gradient1.Point1YPercent = 0
+      ButtonDownBackground.Gradient1.Point2XPercent = 0
+      ButtonDownBackground.Gradient1.Point2YPercent = 100
+      ButtonDownBackground.Gradient2.StartColor = clWhite
+      ButtonDownBackground.Gradient2.EndColor = clBlack
+      ButtonDownBackground.Gradient2.GradientType = gtLinear
+      ButtonDownBackground.Gradient2.Point1XPercent = 0
+      ButtonDownBackground.Gradient2.Point1YPercent = 0
+      ButtonDownBackground.Gradient2.Point2XPercent = 0
+      ButtonDownBackground.Gradient2.Point2YPercent = 100
+      ButtonDownBackground.Gradient1EndPercent = 35
+      ButtonDownBackground.Style = bbsColor
+      Border.Color = clWindowText
+      Border.ColorOpacity = 100
+      Border.Style = bboSolid
+      Rounding.RoundX = 4
+      Rounding.RoundY = 4
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      HasTrackBar = True
+      ArrowColor = clWindowText
+      TabOrder = 1
+      TabStop = True
+      UseDockManager = False
+      OnMouseLeave = editTextXMouseLeave
+      OnMouseUp = editTextXMouseUp
+    end
+    object chkMaxSize: TCheckBox
+      Left = 9
+      Height = 19
+      Top = 60
+      Width = 168
+      Caption = 'Text mode maximum size'
+      OnChange = chkMaxSizeChange
+      OnClick = chkMaxSizeClick
+      TabOrder = 2
+    end
+  end
+  object menuAntic2: TMainMenu
+    left = 78
+    top = 708
+    object MenuItem1: TMenuItem
+      Caption = '&File'
+      object miNewScreen: TMenuItem
+        Caption = 'New screen'
+        OnClick = NewScreenProc
+      end
+      object miLoadScreen: TMenuItem
+        Caption = 'Open screen'
+        OnClick = LoadScreenProc
+      end
+      object itemLoadCharSet: TMenuItem
+        Caption = 'Load custom character set'
+        OnClick = LoadFontProc
+      end
+      object MenuItem15: TMenuItem
+        Caption = '-'
+      end
+      object miSaveScreen: TMenuItem
+        Caption = 'Save screen'
+        OnClick = SaveScreenProc
+      end
+      object miSaveScreenAs: TMenuItem
+        Caption = 'Save screen as'
+        OnClick = SaveScreenAsProc
+      end
+      object MenuItem16: TMenuItem
+        Caption = '-'
+      end
+      object miClose: TMenuItem
+        Caption = 'Exit'
+        OnClick = CloseWinProc
+      end
+    end
+    object MenuItem19: TMenuItem
+      Caption = '&Edit'
+      object miClearScreen: TMenuItem
+        Caption = 'Clear screen'
+        OnClick = ClearScreenProc
+      end
+      object miFillScreen: TMenuItem
+        Caption = 'Fill screen with character'
+        OnClick = FillScreenProc
+      end
+    end
+    object MenuItem3: TMenuItem
+      Caption = '&Tools'
+      object miGenCode: TMenuItem
+        Caption = 'Source code generator'
+        OnClick = GenCodeProc
+      end
+      object itemDefaultFont: TMenuItem
+        Caption = 'Use default character set'
+        OnClick = DefaultFontProc
+      end
+      object MenuItem12: TMenuItem
+        Caption = 'Ascii character map'
+        Enabled = False
+        Visible = False
+      end
+    end
+    object menuView: TMenuItem
+      Caption = 'View'
+      object itemViewer: TMenuItem
+        Caption = 'Antic mode 2 viewer'
+        OnClick = ViewerProc
+      end
+    end
+    object MenuItem4: TMenuItem
+      Caption = '&Help'
+      Visible = False
+    end
+  end
+end

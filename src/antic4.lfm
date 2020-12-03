@@ -1,0 +1,918 @@
+object frmAntic4: TfrmAntic4
+  Left = 134
+  Height = 903
+  Top = 42
+  Width = 1211
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Antic mode 4 and 5 editor'
+  ClientHeight = 883
+  ClientWidth = 1211
+  KeyPreview = True
+  Menu = menuAntic4
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnDeactivate = FormDeactivate
+  OnKeyDown = FormKeyDown
+  OnMouseDown = FormMouseDown
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.6.0'
+  object Label2: TLabel
+    Left = 384
+    Height = 15
+    Top = 624
+    Width = 160
+    Caption = 'Antic mode 4 and 5 characters'
+    ParentColor = False
+  end
+  object Label1: TLabel
+    Left = 780
+    Height = 15
+    Top = 624
+    Width = 104
+    Caption = 'Standard characters'
+    ParentColor = False
+  end
+  object imgBaseFontSet: TImage
+    Tag = 1
+    Left = 780
+    Height = 192
+    Top = 640
+    Width = 384
+    OnMouseDown = imgFontSetMouseDown
+  end
+  object imgFontSet: TImage
+    Left = 384
+    Height = 192
+    Top = 640
+    Width = 384
+    OnMouseDown = imgFontSetMouseDown
+  end
+  object imgEditor: TImage
+    Tag = 2
+    Left = 248
+    Height = 576
+    Top = 36
+    Width = 958
+    OnMouseDown = imgEditorMouseDown
+    OnMouseMove = imgEditorMouseMove
+    OnMouseUp = imgEditorMouseUp
+  end
+  object ToolBar2: TToolBar
+    Left = 0
+    Height = 34
+    Top = 0
+    Width = 1211
+    ButtonHeight = 30
+    ButtonWidth = 30
+    Caption = 'ToolBar2'
+    Images = frmMain.images
+    TabOrder = 0
+    object btnLoadScreen: TToolButton
+      Left = 1
+      Hint = 'Load Antic mode 4/5 screen from file'
+      Top = 2
+      Caption = 'btnLoadScreen'
+      ImageIndex = 1
+      OnClick = LoadScreenProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnSaveScreen: TToolButton
+      Left = 31
+      Hint = 'Save Antic mode 4/5 screen to file'
+      Top = 2
+      Caption = 'btnSaveScreen'
+      ImageIndex = 2
+      OnClick = SaveScreenProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnClearScreen: TToolButton
+      Left = 121
+      Hint = 'Clear screen'
+      Top = 2
+      Caption = 'btnClearScreen'
+      ImageIndex = 5
+      OnClick = ClearScreenProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnCode: TToolButton
+      Left = 91
+      Hint = 'Generate source code'
+      Top = 2
+      Caption = 'btnCode'
+      ImageIndex = 4
+      OnClick = GenCodeProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object ToolButton17: TToolButton
+      Left = 151
+      Height = 30
+      Top = 2
+      Caption = 'ToolButton17'
+      Style = tbsDivider
+    end
+    object btnFillScreen: TToolButton
+      Left = 311
+      Hint = 'Fill screen with selected character'
+      Top = 2
+      Caption = 'btnFillScreen'
+      ImageIndex = 24
+      OnClick = FillScreenWithCharProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnClearCh: TToolButton
+      Left = 281
+      Hint = 'Clear selected character'
+      Top = 2
+      Caption = 'btnClearCh'
+      ImageIndex = 23
+      OnClick = ClearCharProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnFlipX: TToolButton
+      Left = 186
+      Hint = 'Flip character horizontally'
+      Top = 2
+      Caption = 'btnFlipX'
+      ImageIndex = 22
+      OnClick = FlipXProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnFlipY: TToolButton
+      Left = 216
+      Hint = 'Flip character vertically'
+      Top = 2
+      Caption = 'btnFlipY'
+      ImageIndex = 21
+      OnClick = FlipYProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnRotate: TToolButton
+      Left = 246
+      Hint = 'Rotate character'
+      Top = 2
+      Caption = 'btnRotate'
+      ImageIndex = 15
+      OnClick = RotateProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object ToolButton2: TToolButton
+      Left = 276
+      Height = 30
+      Top = 2
+      Caption = 'ToolButton2'
+      Style = tbsDivider
+    end
+    object cmbAnticMode: TComboBox
+      Left = 461
+      Height = 23
+      Top = 2
+      Width = 146
+      ItemHeight = 15
+      ItemIndex = 0
+      Items.Strings = (
+        'Antic mode 4 (40 x 24)'
+        'Antic mode 5 (40 x 12)'
+      )
+      OnChange = cmbAnticModeChange
+      Style = csDropDownList
+      TabOrder = 0
+      Text = 'Antic mode 4 (40 x 24)'
+    end
+    object btnViewer: TToolButton
+      Left = 61
+      Hint = 'Graphics viewer'
+      Top = 2
+      Caption = 'The Viewer'
+      ImageIndex = 25
+      OnClick = ViewerProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object color4: TImage
+      Left = 341
+      Height = 30
+      Hint = 'Background color'
+      Top = 2
+      Width = 30
+      BorderSpacing.Around = 1
+      OnMouseDown = ColorProc
+      ParentShowHint = False
+    end
+    object color0: TImage
+      Tag = 1
+      Left = 371
+      Height = 30
+      Hint = 'Color register 0'
+      Top = 2
+      Width = 30
+      BorderSpacing.Around = 1
+      OnMouseDown = ColorProc
+      ParentShowHint = False
+    end
+    object color1: TImage
+      Tag = 2
+      Left = 401
+      Height = 30
+      Hint = 'Color register 1'
+      Top = 2
+      Width = 30
+      BorderSpacing.Around = 1
+      OnMouseDown = ColorProc
+      ParentShowHint = False
+    end
+    object color2: TImage
+      Tag = 3
+      Left = 431
+      Height = 30
+      Hint = 'Color register 2'
+      Top = 2
+      Width = 30
+      BorderSpacing.Around = 1
+      OnMouseDown = ColorProc
+      ParentShowHint = False
+    end
+    object btnInvert: TToolButton
+      Left = 156
+      Hint = 'Invert bits of character'
+      Top = 2
+      Caption = 'btnInvert'
+      ImageIndex = 27
+      OnClick = InvertProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+  end
+  object statusBar: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 860
+    Width = 1211
+    Panels = <    
+      item
+        Width = 250
+      end    
+      item
+        Width = 100
+      end>
+    SimplePanel = False
+  end
+  object imgChar: TImage
+    Left = 23
+    Height = 176
+    Top = 199
+    Width = 176
+    OnMouseDown = imgCharMouseDown
+    OnMouseMove = imgCharMouseMove
+    OnMouseUp = imgCharMouseUp
+  end
+  object lblNum1: TLabel
+    Tag = 1
+    Left = 206
+    Height = 15
+    Top = 224
+    Width = 46
+    Caption = 'lblNum1'
+    ParentColor = False
+    OnClick = lblNum0Click
+  end
+  object lblNum2: TLabel
+    Tag = 2
+    Left = 206
+    Height = 15
+    Top = 246
+    Width = 46
+    Caption = 'lblNum2'
+    ParentColor = False
+    OnClick = lblNum0Click
+  end
+  object lblNum3: TLabel
+    Tag = 3
+    Left = 206
+    Height = 15
+    Top = 268
+    Width = 46
+    Caption = 'lblNum3'
+    ParentColor = False
+    OnClick = lblNum0Click
+  end
+  object Label5: TLabel
+    Left = 10
+    Height = 15
+    Top = 218
+    Width = 6
+    Caption = '1'
+    ParentColor = False
+  end
+  object Label6: TLabel
+    Left = 10
+    Height = 15
+    Top = 238
+    Width = 6
+    Caption = '2'
+    ParentColor = False
+  end
+  object Label7: TLabel
+    Left = 10
+    Height = 15
+    Top = 258
+    Width = 6
+    Caption = '3'
+    ParentColor = False
+  end
+  object Label8: TLabel
+    Left = 10
+    Height = 15
+    Top = 282
+    Width = 6
+    Caption = '4'
+    ParentColor = False
+  end
+  object Label9: TLabel
+    Left = 10
+    Height = 15
+    Top = 306
+    Width = 6
+    Caption = '5'
+    ParentColor = False
+  end
+  object Label10: TLabel
+    Left = 10
+    Height = 15
+    Top = 330
+    Width = 6
+    Caption = '6'
+    ParentColor = False
+  end
+  object Label11: TLabel
+    Left = 10
+    Height = 15
+    Top = 354
+    Width = 6
+    Caption = '7'
+    ParentColor = False
+  end
+  object Label12: TLabel
+    Left = 10
+    Height = 15
+    Top = 198
+    Width = 6
+    Caption = '0'
+    ParentColor = False
+  end
+  object lblNum0: TLabel
+    Left = 206
+    Height = 15
+    Top = 202
+    Width = 46
+    Caption = 'lblNum0'
+    ParentColor = False
+    OnClick = lblNum0Click
+  end
+  object lblNum4: TLabel
+    Tag = 4
+    Left = 206
+    Height = 15
+    Top = 292
+    Width = 46
+    Caption = 'lblNum4'
+    ParentColor = False
+    OnClick = lblNum0Click
+  end
+  object lblNum5: TLabel
+    Tag = 5
+    Left = 206
+    Height = 15
+    Top = 316
+    Width = 46
+    Caption = 'lblNum5'
+    ParentColor = False
+    OnClick = lblNum0Click
+  end
+  object lblNum6: TLabel
+    Tag = 6
+    Left = 206
+    Height = 15
+    Top = 338
+    Width = 46
+    Caption = 'lblNum6'
+    ParentColor = False
+    OnClick = lblNum0Click
+  end
+  object lblNum7: TLabel
+    Tag = 7
+    Left = 206
+    Height = 15
+    Top = 360
+    Width = 46
+    Caption = 'lblNum7'
+    ParentColor = False
+    OnClick = lblNum0Click
+  end
+  object Label13: TLabel
+    Left = 50
+    Height = 15
+    Top = 180
+    Width = 6
+    Caption = '6'
+    ParentColor = False
+  end
+  object Label14: TLabel
+    Left = 70
+    Height = 15
+    Top = 180
+    Width = 6
+    Caption = '5'
+    ParentColor = False
+  end
+  object Label15: TLabel
+    Left = 90
+    Height = 15
+    Top = 180
+    Width = 6
+    Caption = '4'
+    ParentColor = False
+  end
+  object Label16: TLabel
+    Left = 114
+    Height = 15
+    Top = 180
+    Width = 6
+    Caption = '3'
+    ParentColor = False
+  end
+  object Label17: TLabel
+    Left = 138
+    Height = 15
+    Top = 180
+    Width = 6
+    Caption = '2'
+    ParentColor = False
+  end
+  object Label18: TLabel
+    Left = 162
+    Height = 15
+    Top = 180
+    Width = 6
+    Caption = '1'
+    ParentColor = False
+  end
+  object Label19: TLabel
+    Left = 185
+    Height = 15
+    Top = 180
+    Width = 6
+    Caption = '0'
+    ParentColor = False
+  end
+  object Label20: TLabel
+    Left = 30
+    Height = 15
+    Top = 180
+    Width = 6
+    Caption = '7'
+    ParentColor = False
+  end
+  object btnLoadFont: TBitBtn
+    Left = 14
+    Height = 30
+    Top = 744
+    Width = 133
+    Caption = 'Load character set'
+    OnClick = LoadFontProc
+    TabOrder = 2
+  end
+  object btnSaveFont: TBitBtn
+    Left = 14
+    Height = 30
+    Top = 780
+    Width = 133
+    Caption = 'Save character set'
+    OnClick = SaveFontProc
+    TabOrder = 3
+  end
+  object grpCharOper: TGroupBox
+    Left = 12
+    Height = 184
+    Top = 534
+    Width = 181
+    Caption = 'Shift/move character data'
+    ClientHeight = 164
+    ClientWidth = 177
+    TabOrder = 4
+    object radShiftChar: TRadioButton
+      Left = 8
+      Height = 19
+      Top = 6
+      Width = 96
+      Caption = 'Shift character'
+      Checked = True
+      TabOrder = 1
+      TabStop = True
+    end
+    object radMoveChar: TRadioButton
+      Left = 8
+      Height = 19
+      Top = 32
+      Width = 102
+      Caption = 'Move character'
+      TabOrder = 0
+    end
+    object btnCharLeft: TSpeedButton
+      Left = 40
+      Height = 30
+      Hint = 'Shift character left'
+      Top = 92
+      Width = 34
+      Images = frmMain.images
+      ImageIndex = 28
+      OnClick = CharOper
+    end
+    object btnCharUp: TSpeedButton
+      Tag = 2
+      Left = 72
+      Height = 30
+      Hint = 'Shift character up'
+      Top = 64
+      Width = 34
+      Images = frmMain.images
+      ImageIndex = 30
+      OnClick = CharOper
+    end
+    object btnCharRight: TSpeedButton
+      Tag = 1
+      Left = 104
+      Height = 30
+      Hint = 'Shift character right'
+      Top = 92
+      Width = 34
+      Images = frmMain.images
+      ImageIndex = 29
+      OnClick = CharOper
+    end
+    object btnCharDown: TSpeedButton
+      Tag = 3
+      Left = 72
+      Height = 30
+      Hint = 'Shift character down'
+      Top = 120
+      Width = 34
+      Images = frmMain.images
+      ImageIndex = 31
+      OnClick = CharOper
+    end
+  end
+  object GroupBox3: TGroupBox
+    Left = 10
+    Height = 126
+    Top = 42
+    Width = 207
+    Caption = 'Selected character'
+    ClientHeight = 106
+    ClientWidth = 203
+    TabOrder = 5
+    object imgCharOrig: TImage
+      Left = 9
+      Height = 24
+      Top = 6
+      Width = 24
+    end
+    object memoInfo: TMemo
+      Left = 11
+      Height = 57
+      Top = 42
+      Width = 183
+      BorderStyle = bsNone
+      Color = clForm
+      ReadOnly = True
+      TabOrder = 0
+    end
+  end
+  object boxResize: TGroupBox
+    Left = 10
+    Height = 104
+    Top = 408
+    Width = 230
+    Caption = 'Resize screen'
+    ClientHeight = 84
+    ClientWidth = 226
+    TabOrder = 6
+    object Label21: TLabel
+      Left = 6
+      Height = 15
+      Top = 6
+      Width = 58
+      Caption = 'X max. size'
+      ParentColor = False
+    end
+    object editX: TBCTrackbarUpdown
+      Left = 6
+      Height = 22
+      Top = 24
+      Width = 50
+      AllowNegativeValues = False
+      BarExponent = 1
+      Increment = 1
+      LongTimeInterval = 400
+      MinValue = 0
+      MaxValue = 39
+      Value = 39
+      ShortTimeInterval = 100
+      Background.Color = clWindow
+      Background.Gradient1.StartColor = clWhite
+      Background.Gradient1.EndColor = clBlack
+      Background.Gradient1.GradientType = gtLinear
+      Background.Gradient1.Point1XPercent = 0
+      Background.Gradient1.Point1YPercent = 0
+      Background.Gradient1.Point2XPercent = 0
+      Background.Gradient1.Point2YPercent = 100
+      Background.Gradient2.StartColor = clWhite
+      Background.Gradient2.EndColor = clOlive
+      Background.Gradient2.GradientType = gtLinear
+      Background.Gradient2.Point1XPercent = 0
+      Background.Gradient2.Point1YPercent = 0
+      Background.Gradient2.Point2XPercent = 0
+      Background.Gradient2.Point2YPercent = 100
+      Background.Gradient2.Sinus = True
+      Background.Gradient1EndPercent = 35
+      Background.Style = bbsColor
+      ButtonBackground.Gradient1.StartColor = clBtnShadow
+      ButtonBackground.Gradient1.EndColor = clBtnFace
+      ButtonBackground.Gradient1.GradientType = gtLinear
+      ButtonBackground.Gradient1.Point1XPercent = 0
+      ButtonBackground.Gradient1.Point1YPercent = -50
+      ButtonBackground.Gradient1.Point2XPercent = 0
+      ButtonBackground.Gradient1.Point2YPercent = 50
+      ButtonBackground.Gradient1.Sinus = True
+      ButtonBackground.Gradient2.StartColor = clBtnFace
+      ButtonBackground.Gradient2.EndColor = clBtnShadow
+      ButtonBackground.Gradient2.GradientType = gtLinear
+      ButtonBackground.Gradient2.Point1XPercent = 0
+      ButtonBackground.Gradient2.Point1YPercent = 50
+      ButtonBackground.Gradient2.Point2XPercent = 0
+      ButtonBackground.Gradient2.Point2YPercent = 150
+      ButtonBackground.Gradient2.Sinus = True
+      ButtonBackground.Gradient1EndPercent = 50
+      ButtonBackground.Style = bbsGradient
+      ButtonDownBackground.Color = clBtnShadow
+      ButtonDownBackground.Gradient1.StartColor = clWhite
+      ButtonDownBackground.Gradient1.EndColor = clBlack
+      ButtonDownBackground.Gradient1.GradientType = gtLinear
+      ButtonDownBackground.Gradient1.Point1XPercent = 0
+      ButtonDownBackground.Gradient1.Point1YPercent = 0
+      ButtonDownBackground.Gradient1.Point2XPercent = 0
+      ButtonDownBackground.Gradient1.Point2YPercent = 100
+      ButtonDownBackground.Gradient2.StartColor = clWhite
+      ButtonDownBackground.Gradient2.EndColor = clBlack
+      ButtonDownBackground.Gradient2.GradientType = gtLinear
+      ButtonDownBackground.Gradient2.Point1XPercent = 0
+      ButtonDownBackground.Gradient2.Point1YPercent = 0
+      ButtonDownBackground.Gradient2.Point2XPercent = 0
+      ButtonDownBackground.Gradient2.Point2YPercent = 100
+      ButtonDownBackground.Gradient1EndPercent = 35
+      ButtonDownBackground.Style = bbsColor
+      Border.Color = clWindowText
+      Border.ColorOpacity = 100
+      Border.Style = bboSolid
+      Rounding.RoundX = 4
+      Rounding.RoundY = 4
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      HasTrackBar = True
+      ArrowColor = clWindowText
+      TabOrder = 0
+      TabStop = True
+      UseDockManager = False
+      OnMouseLeave = EditDimProc
+      OnMouseUp = editYMouseUp
+    end
+    object Label22: TLabel
+      Left = 96
+      Height = 15
+      Top = 6
+      Width = 58
+      Caption = 'Y max. size'
+      ParentColor = False
+    end
+    object editY: TBCTrackbarUpdown
+      Left = 96
+      Height = 22
+      Top = 24
+      Width = 50
+      AllowNegativeValues = False
+      BarExponent = 1
+      Increment = 1
+      LongTimeInterval = 400
+      MinValue = 0
+      MaxValue = 23
+      Value = 23
+      ShortTimeInterval = 100
+      Background.Color = clWindow
+      Background.Gradient1.StartColor = clWhite
+      Background.Gradient1.EndColor = clBlack
+      Background.Gradient1.GradientType = gtLinear
+      Background.Gradient1.Point1XPercent = 0
+      Background.Gradient1.Point1YPercent = 0
+      Background.Gradient1.Point2XPercent = 0
+      Background.Gradient1.Point2YPercent = 100
+      Background.Gradient2.StartColor = clWhite
+      Background.Gradient2.EndColor = clOlive
+      Background.Gradient2.GradientType = gtLinear
+      Background.Gradient2.Point1XPercent = 0
+      Background.Gradient2.Point1YPercent = 0
+      Background.Gradient2.Point2XPercent = 0
+      Background.Gradient2.Point2YPercent = 100
+      Background.Gradient2.Sinus = True
+      Background.Gradient1EndPercent = 35
+      Background.Style = bbsColor
+      ButtonBackground.Gradient1.StartColor = clBtnShadow
+      ButtonBackground.Gradient1.EndColor = clBtnFace
+      ButtonBackground.Gradient1.GradientType = gtLinear
+      ButtonBackground.Gradient1.Point1XPercent = 0
+      ButtonBackground.Gradient1.Point1YPercent = -50
+      ButtonBackground.Gradient1.Point2XPercent = 0
+      ButtonBackground.Gradient1.Point2YPercent = 50
+      ButtonBackground.Gradient1.Sinus = True
+      ButtonBackground.Gradient2.StartColor = clBtnFace
+      ButtonBackground.Gradient2.EndColor = clBtnShadow
+      ButtonBackground.Gradient2.GradientType = gtLinear
+      ButtonBackground.Gradient2.Point1XPercent = 0
+      ButtonBackground.Gradient2.Point1YPercent = 50
+      ButtonBackground.Gradient2.Point2XPercent = 0
+      ButtonBackground.Gradient2.Point2YPercent = 150
+      ButtonBackground.Gradient2.Sinus = True
+      ButtonBackground.Gradient1EndPercent = 50
+      ButtonBackground.Style = bbsGradient
+      ButtonDownBackground.Color = clBtnShadow
+      ButtonDownBackground.Gradient1.StartColor = clWhite
+      ButtonDownBackground.Gradient1.EndColor = clBlack
+      ButtonDownBackground.Gradient1.GradientType = gtLinear
+      ButtonDownBackground.Gradient1.Point1XPercent = 0
+      ButtonDownBackground.Gradient1.Point1YPercent = 0
+      ButtonDownBackground.Gradient1.Point2XPercent = 0
+      ButtonDownBackground.Gradient1.Point2YPercent = 100
+      ButtonDownBackground.Gradient2.StartColor = clWhite
+      ButtonDownBackground.Gradient2.EndColor = clBlack
+      ButtonDownBackground.Gradient2.GradientType = gtLinear
+      ButtonDownBackground.Gradient2.Point1XPercent = 0
+      ButtonDownBackground.Gradient2.Point1YPercent = 0
+      ButtonDownBackground.Gradient2.Point2XPercent = 0
+      ButtonDownBackground.Gradient2.Point2YPercent = 100
+      ButtonDownBackground.Gradient1EndPercent = 35
+      ButtonDownBackground.Style = bbsColor
+      Border.Color = clWindowText
+      Border.ColorOpacity = 100
+      Border.Style = bboSolid
+      Rounding.RoundX = 4
+      Rounding.RoundY = 4
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      HasTrackBar = True
+      ArrowColor = clWindowText
+      TabOrder = 1
+      TabStop = True
+      UseDockManager = False
+      OnMouseLeave = EditDimProc
+      OnMouseUp = editYMouseUp
+    end
+    object chkMaxSize: TCheckBox
+      Left = 9
+      Height = 19
+      Top = 60
+      Width = 156
+      Caption = 'Text mode maximum size'
+      OnClick = chkMaxSizeClick
+      TabOrder = 2
+    end
+  end
+  object menuAntic4: TMainMenu
+    left = 291
+    top = 796
+    object menuFile: TMenuItem
+      Caption = '&File'
+      object MenuItem7: TMenuItem
+        Caption = 'Open screen file'
+        OnClick = LoadScreenProc
+      end
+      object MenuItem8: TMenuItem
+        Caption = 'Save screen'
+        OnClick = SaveScreenProc
+      end
+      object MenuItem9: TMenuItem
+        Caption = 'Save screen as'
+        OnClick = SaveScreenAsProc
+      end
+      object MenuItem15: TMenuItem
+        Caption = '-'
+      end
+      object itemOpenAntic2Screen: TMenuItem
+        Caption = 'Open Antic mode 2 (text mode 0) file'
+        OnClick = LoadAntic2Screen
+      end
+      object MenuItem6: TMenuItem
+        Caption = '-'
+      end
+      object itemLoadFont: TMenuItem
+        Caption = 'Load custom character set'
+        OnClick = LoadFontProc
+      end
+      object itemSaveFont: TMenuItem
+        Caption = 'Save character set'
+        OnClick = SaveFontProc
+      end
+      object itemSaveFontAs: TMenuItem
+        Caption = 'Save character set as'
+        OnClick = SaveFontAsProc
+      end
+      object MenuItem16: TMenuItem
+        Caption = '-'
+      end
+      object itemClose: TMenuItem
+        Caption = 'Exit'
+        OnClick = CloseWinProc
+      end
+    end
+    object menuEdit: TMenuItem
+      Caption = '&Edit'
+      object MenuItem24: TMenuItem
+        Caption = 'Flip character horizontally'
+        OnClick = FlipXProc
+      end
+      object MenuItem25: TMenuItem
+        Caption = 'Flip character vertically'
+        OnClick = FlipYProc
+      end
+      object MenuItem26: TMenuItem
+        Caption = 'Rotate character'
+        OnClick = RotateProc
+      end
+      object MenuItem1: TMenuItem
+        Caption = 'Invert bits of character'
+        OnClick = InvertProc
+      end
+      object MenuItem23: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem20: TMenuItem
+        Caption = 'Clear screen'
+        OnClick = ClearEditorProc
+      end
+      object MenuItem13: TMenuItem
+        Caption = 'Clear character'
+        OnClick = ClearCharProc
+      end
+      object MenuItem28: TMenuItem
+        Caption = 'Fill background with character'
+        Enabled = False
+        Visible = False
+        OnClick = FillBackWithCharClick
+      end
+      object MenuItem29: TMenuItem
+        Caption = 'Fill screen with character'
+        OnClick = FillScreenWithCharProc
+      end
+      object MenuItem22: TMenuItem
+        Caption = '-'
+      end
+    end
+    object menuTools: TMenuItem
+      Caption = '&Tools'
+      object MenuItem2: TMenuItem
+        Caption = 'Source code generator'
+        OnClick = GenCodeProc
+      end
+      object MenuItem4: TMenuItem
+        Caption = 'Use default character set'
+        OnClick = DefaultSetProc
+      end
+      object itemDefaultColorPalette: TMenuItem
+        Caption = 'Load default color palette'
+        OnClick = DefaultColorPaletteProc
+      end
+    end
+    object menuView: TMenuItem
+      Caption = 'View'
+      object itemColorPalette: TMenuItem
+        Caption = 'Color palette'
+        OnClick = ColorsProc
+      end
+      object itemViewer: TMenuItem
+        Caption = 'Screen viewer'
+        OnClick = ViewerProc
+      end
+    end
+  end
+end
