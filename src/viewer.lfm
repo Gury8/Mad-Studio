@@ -1,0 +1,278 @@
+object frmViewer: TfrmViewer
+  Left = 71
+  Height = 681
+  Top = 154
+  Width = 1028
+  BorderStyle = bsSingle
+  Caption = 'The Viewer'
+  ClientHeight = 681
+  ClientWidth = 1028
+  Font.Height = -11
+  Font.Name = 'Verdana'
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.6.0'
+  object boxPlayer: TGroupBox
+    Left = 660
+    Height = 372
+    Top = 90
+    Width = 360
+    Caption = 'Player (sprite) view'
+    ClientHeight = 354
+    ClientWidth = 356
+    Enabled = False
+    TabOrder = 4
+    Visible = False
+    object Label43: TLabel
+      Left = 6
+      Height = 16
+      Top = 6
+      Width = 113
+      Caption = 'Double resolution'
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label44: TLabel
+      Left = 6
+      Height = 13
+      Top = 30
+      Width = 67
+      Caption = 'Normal size'
+      ParentColor = False
+    end
+    object Label46: TLabel
+      Left = 96
+      Height = 13
+      Top = 30
+      Width = 66
+      Caption = 'Double size'
+      ParentColor = False
+    end
+    object Label47: TLabel
+      Left = 210
+      Height = 13
+      Top = 30
+      Width = 85
+      Caption = 'Quadruple size'
+      ParentColor = False
+    end
+    object Label48: TLabel
+      Left = 6
+      Height = 16
+      Top = 222
+      Width = 108
+      Caption = 'Single resolution'
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label49: TLabel
+      Left = 6
+      Height = 13
+      Top = 246
+      Width = 67
+      Caption = 'Normal size'
+      ParentColor = False
+    end
+    object Label50: TLabel
+      Left = 96
+      Height = 13
+      Top = 246
+      Width = 66
+      Caption = 'Double size'
+      ParentColor = False
+    end
+    object Label51: TLabel
+      Left = 210
+      Height = 13
+      Top = 246
+      Width = 85
+      Caption = 'Quadruple size'
+      ParentColor = False
+    end
+    object imgP0_normal: TImage
+      Left = 6
+      Height = 160
+      Top = 48
+      Width = 32
+    end
+    object imgP0_double: TImage
+      Left = 96
+      Height = 160
+      Top = 48
+      Width = 64
+    end
+    object imgP0_quadrable: TImage
+      Left = 210
+      Height = 160
+      Top = 48
+      Width = 126
+    end
+    object imgP0_normalSr: TImage
+      Left = 6
+      Height = 80
+      Top = 264
+      Width = 32
+    end
+    object imgP0_doubleSr: TImage
+      Left = 96
+      Height = 80
+      Top = 264
+      Width = 64
+    end
+    object imgP0_quadrableSr: TImage
+      Left = 210
+      Height = 80
+      Top = 264
+      Width = 126
+    end
+  end
+  object StatusBar: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 658
+    Width = 1028
+    Panels = <>
+  end
+  object shellTreeView: TShellTreeView
+    Left = 0
+    Height = 658
+    Top = 0
+    Width = 300
+    Align = alLeft
+    ExpandSignType = tvestPlusMinus
+    FileSortType = fstFoldersFirst
+    ReadOnly = True
+    TabOrder = 0
+    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+    ObjectTypes = [otFolders]
+    ShellListView = shellListView
+  end
+  object shellListView: TShellListView
+    Left = 300
+    Height = 658
+    Top = 0
+    Width = 352
+    Align = alLeft
+    Color = clDefault
+    Mask = '*.gr7'
+    ReadOnly = True
+    RowSelect = True
+    SortColumn = 2
+    SortType = stBoth
+    TabOrder = 1
+    OnClick = ShellListViewProc
+    OnKeyUp = shellListViewKeyUp
+    ObjectTypes = [otNonFolders]
+    ShellTreeView = shellTreeView
+  end
+  object lblFilename: TLabel
+    Left = 660
+    Height = 13
+    Top = 36
+    Width = 64
+    Caption = 'lblFilename'
+    ParentColor = False
+  end
+  object lblPath: TLabel
+    Left = 660
+    Height = 13
+    Top = 55
+    Width = 38
+    Caption = 'lblPath'
+    ParentColor = False
+  end
+  object cmbFormats: TComboBox
+    Left = 660
+    Height = 21
+    Top = 6
+    Width = 320
+    DropDownCount = 14
+    ItemHeight = 13
+    ItemIndex = 0
+    Items.Strings = (
+      'Automatic'
+      'MicroPainter images (*.gr7, *.mic) - 160x96x4'
+      'Graphics mode 8 images (*.gr8) - 320x192x2'
+      'Graphics mode 3 images (*.gr3) - 40x24x4'
+      'Graphics mode 15 images (*.mic) - 160x192x4'
+      'Character sets/fonts (*.fnt, *.set)'
+      'Text mode 0 screens (*.gr0, *.an2) - 40x24x2'
+      'Text mode 1 screens (*.gr1, *.an6) - 20x24x5'
+      'Text mode 2 screens (*.gr2, *.an7) - 20x12x5'
+      'Antic mode 4 screens (*.an4) - 40x24x5'
+      'Antic mode 5 screens (*.an5) - 40x12x5'
+      'Player/sprite graphics (*.spr)'
+    )
+    OnChange = cmbFormatsChange
+    Style = csDropDownList
+    TabOrder = 2
+    Text = 'Automatic'
+  end
+  object boxView: TGroupBox
+    Left = 660
+    Height = 378
+    Top = 84
+    Width = 342
+    Caption = 'View'
+    ClientHeight = 360
+    ClientWidth = 338
+    TabOrder = 5
+    object lblView02: TLabel
+      Left = 7
+      Height = 13
+      Top = 204
+      Width = 139
+      Caption = 'Antic mode 4 characters'
+      ParentColor = False
+    end
+    object imgFontSet: TImage
+      Left = 7
+      Height = 128
+      Top = 222
+      Width = 256
+    end
+    object imgView: TImage
+      Left = 7
+      Height = 192
+      Top = 0
+      Width = 320
+      AutoSize = True
+      Proportional = True
+    end
+  end
+  object btnClose: TBCMaterialDesignButton
+    Left = 917
+    Height = 30
+    Top = 620
+    Width = 105
+    TextSize = 12
+    TextShadow = False
+    TextFont = 'default'
+    TextQuality = fqSystemClearType
+    Caption = 'Close'
+    OnClick = CloseProc
+    OnMouseEnter = btnCloseMouseEnter
+    OnMouseLeave = btnCloseMouseLeave
+  end
+  object btnOpen: TBCMaterialDesignButton
+    Left = 804
+    Height = 30
+    Top = 620
+    Width = 105
+    TextSize = 12
+    TextShadow = False
+    TextFont = 'default'
+    TextQuality = fqSystemClearType
+    Caption = 'Open'
+    OnClick = OpenProc
+    OnMouseEnter = btnOpenMouseEnter
+    OnMouseLeave = btnOpenMouseLeave
+  end
+end
