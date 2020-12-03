@@ -19,9 +19,8 @@ Mad Studio is developed with Lazarus IDE, a Free Pascal framework. Currently it 
 - Player Animator
 - Display list editor
 - Byte editor
+- The Viewer
 
 <div align="center">
     <img src="/images/madstudio_main.png"</img> 
 </div>
-
-Documentation will be prepared some time in the future!
