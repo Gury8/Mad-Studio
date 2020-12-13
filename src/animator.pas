@@ -224,7 +224,7 @@ type
   private
     { private declarations }
     btn : tMousebutton;
-    varBtn : tMousebutton;
+//    varBtn : tMousebutton;
     isDataChanged : array[0..3] of boolean;
     isEnter : array[0..16] of boolean;
     procedure Settings;
@@ -1155,11 +1155,11 @@ begin
   xf := X div factX02;
   yf := Y div factY02;
 
-  // Check if mouse button was clicked
-  if btn = mbRight then
-    varBtn := btn
-  else
-    varBtn := mbLeft;
+  //// Check if mouse button was clicked
+  //if btn = mbRight then
+  //  varBtn := btn
+  //else
+  //  varBtn := mbLeft;
 
   if (xf >= playerIndex[frame, player] - 1) or (xf >= playerIndex[frame, player]) then
 //    if not CalcPlayerWidth(player, xf, yf) then Exit;

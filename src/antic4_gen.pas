@@ -555,12 +555,13 @@ begin
                    'end;'#13#10;
     end;
 
-    if not chkUseColors.Checked then begin
-      code.line += #13#10 +
-                   'Poke(708,' + IntToStr(colorValues[1]) + '); Poke(709,' + IntToStr(colorValues[2]) + ');'#13#10 +
-                   'Poke(710,' + IntToStr(colorValues[3]) + '); Poke(711,' + IntToStr(colorValues[10]) + ');'#13#10 +
-                   'Poke(712,' + IntToStr(colorValues[0]) + ');'#13#10;
-    end;
+    if not chkUseColors.Checked then
+      code.line += #13#10'  POKE(712, ' + IntToStr(colorValues[0]) + ');'#13#10 +
+                   '  POKE(708, ' + IntToStr(colorValues[1]) + ');'#13#10 +
+                   '  POKE(709, ' + IntToStr(colorValues[2]) + ');'#13#10 +
+                   '  POKE(710, ' + IntToStr(colorValues[3]) + ');'#13#10 +
+                   '  POKE(711, ' + IntToStr(colorValues[10]) + ');'#13#10;
+
     code.line += WaitKeyCode(langIndex) +
                  'end.';
   end
@@ -580,7 +581,7 @@ begin
                    '    scr = scr + 40 - cnt'#13#10 +
                    '    cnt = 0'#13#10 +
                    '  ENDIF'#13#10 +
-                   '  POKE scr + i, screenData[i]'#13#10 +
+                   '  POKE scr + i, screenData(i)'#13#10 +
                    '  cnt=cnt+1'#13#10 +
                    'NEXT'#13#10;
     end;
@@ -804,11 +805,11 @@ begin
     code.line += '  Move(screenData, pointer(screen), ' + IntToStr(frmAntic4.maxSize) + ');'#13#10;
 
     if chkUseColors.Checked then
-      code.line += 'POKE(712, ' + IntToStr(colorValues[0]) + ');'#13#10 +
-                   'POKE(708, ' + IntToStr(colorValues[1]) + ');'#13#10 +
-                   'POKE(709, ' + IntToStr(colorValues[2]) + ');'#13#10 +
-                   'POKE(710, ' + IntToStr(colorValues[3]) + ');'#13#10 +
-                   'POKE(711, ' + IntToStr(colorValues[10]) + ');'#13#10;
+      code.line += '  POKE(712, ' + IntToStr(colorValues[0]) + ');'#13#10 +
+                   '  POKE(708, ' + IntToStr(colorValues[1]) + ');'#13#10 +
+                   '  POKE(709, ' + IntToStr(colorValues[2]) + ');'#13#10 +
+                   '  POKE(710, ' + IntToStr(colorValues[3]) + ');'#13#10 +
+                   '  POKE(711, ' + IntToStr(colorValues[10]) + ');'#13#10;
 
     code.line += WaitKeyCode(langIndex) +
                  'end.';
@@ -845,11 +846,11 @@ begin
                  'MOVE ADR(screenData), scr, ' + IntToStr(frmAntic4.maxSize) + #13#10;
 
     if chkUseColors.Checked then
-      code.line += 'POKE 712, ' + IntToStr(colorValues[0]) + ');'#13#10 +
-                   'POKE 708, ' + IntToStr(colorValues[1]) + ');'#13#10 +
-                   'POKE 709, ' + IntToStr(colorValues[2]) + ');'#13#10 +
-                   'POKE 710, ' + IntToStr(colorValues[3]) + ');'#13#10 +
-                   'POKE 711, ' + IntToStr(colorValues[10]) + ');'#13#10;
+      code.line += 'POKE 712, ' + IntToStr(colorValues[0]) + #13#10 +
+                   'POKE 708, ' + IntToStr(colorValues[1]) + #13#10 +
+                   'POKE 709, ' + IntToStr(colorValues[2]) + #13#10 +
+                   'POKE 710, ' + IntToStr(colorValues[3]) + #13#10 +
+                   'POKE 711, ' + IntToStr(colorValues[10]) + #13#10;
 
     code.line += WaitKeyCode(langIndex);
   end

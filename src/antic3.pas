@@ -291,10 +291,11 @@ begin
 
         fld[xf, n*10 + yf] := col;
 
-        if col = 1 then
-          col := 0
-        else if col = 0 then
-          col := 1;
+        //if col = 1 then
+        //  col := 0
+        //else if col = 0 then
+        //  col := 1;
+        col := 1 - col;
 
         if yf = 0 then
           row03[xf] := col;
@@ -889,10 +890,11 @@ begin
       col := fld[dx, offset*10 + dy];
 //      fldScreen[xf + dx, yf + dy] := col;
       if isInverse then begin
-        if col = 1 then
-          col := 0
-        else if col = 0 then
-          col := 1;
+        //if col = 1 then
+        //  col := 0
+        //else if col = 0 then
+        //  col := 1;
+        col := 1 - col;
       end;
 
       FillRectEx(imgEditor, coltabFont[col], (xf + dx)*factX, (yf + dy)*factY, factX, factY);
@@ -918,10 +920,11 @@ begin
       col := fld[xf, offset*10 + yf];
 
       if not isFontSetNormal then begin
-        if col = 1 then
-          col := 0
-        else if col = 0 then
-          col := 1;
+        //if col = 1 then
+        //  col := 0
+        //else if col = 0 then
+        //  col := 1;
+        col := 1 - col;
       end;
 
       fldChar[xf, yf] := col;
@@ -959,10 +962,11 @@ begin
     for xf := 0 to grX02 do begin
       col := fldChar[xf, yf];
       if not isFontSetNormal then begin
-        if col = 0 then
-          col := 1
-        else if col = 1 then
-          col := 0;
+        //if col = 0 then
+        //  col := 1
+        //else if col = 1 then
+        //  col := 0;
+        col := 1 - col;
       end;
 
       fld[xf, offset*10 + yf] := col;
@@ -972,10 +976,11 @@ begin
       FillRectEx(imgFontSet, coltabFont[col],
                  xf*factX + xoffset, yf*factY + yoffset, factX, factY);
 
-      if col = 0 then
-        col := 1
-      else if col = 1 then
-        col := 0;
+      //if col = 0 then
+      //  col := 1
+      //else if col = 1 then
+      //  col := 0;
+      col := 1 - col;
 
 //      imgFontSetInv.Canvas.Brush.Color := coltabFont[col];
 //      imgFontSetInv.Canvas.FillRect(bounds(

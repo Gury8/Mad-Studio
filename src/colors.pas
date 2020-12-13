@@ -40,9 +40,9 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure shapeColor1MouseLeave(Sender: TObject);
-    procedure shapeColorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure shapeColorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure shapeColorMouseEnter(Sender: TObject);
+    procedure shapeColorEnter(Sender: TObject);
   private
     { private declarations }
     keyScan : byte;
@@ -210,7 +210,7 @@ begin
   //TShape(Sender).Canvas.Rectangle(0, 0, TShape(Sender).width, TShape(Sender).Height);
 end;
 
-procedure TfrmColors.shapeColorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmColors.shapeColorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
   SelColor := TShape(Sender).Tag;
@@ -273,7 +273,7 @@ begin
   end;
 end;
 
-procedure TfrmColors.shapeColorMouseEnter(Sender: TObject);
+procedure TfrmColors.shapeColorEnter(Sender: TObject);
 var
   regNum : string = 'Register ';
 begin

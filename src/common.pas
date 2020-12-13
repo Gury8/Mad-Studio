@@ -32,7 +32,7 @@ type
 
 const
   programName = 'Mad Studio';
-  programVersion = ' v1.1 (x86_64-win32/win64)';
+  programVersion = ' v1.2 (x86_64-win32/win64)';
 
   // Supported graphics resolutions
   grMode40x24x4 = 3;

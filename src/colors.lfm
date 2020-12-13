@@ -24,8 +24,8 @@ object frmColors: TfrmColors
     Top = 395
     Width = 32
     ParentShowHint = False
-    OnMouseDown = shapeColorMouseDown
-    OnMouseEnter = shapeColorMouseEnter
+    OnMouseDown = shapeColorDown
+    OnMouseEnter = shapeColorEnter
     ShowHint = True
   end
   object shapeColor1: TShape
@@ -37,8 +37,8 @@ object frmColors: TfrmColors
     HelpType = htKeyword
     HelpKeyword = 'Color register 1'
     ParentShowHint = False
-    OnMouseDown = shapeColorMouseDown
-    OnMouseEnter = shapeColorMouseEnter
+    OnMouseDown = shapeColorDown
+    OnMouseEnter = shapeColorEnter
     ShowHint = True
   end
   object shapeColor2: TShape
@@ -50,8 +50,8 @@ object frmColors: TfrmColors
     HelpType = htKeyword
     HelpKeyword = 'Color register 2'
     ParentShowHint = False
-    OnMouseDown = shapeColorMouseDown
-    OnMouseEnter = shapeColorMouseEnter
+    OnMouseDown = shapeColorDown
+    OnMouseEnter = shapeColorEnter
     ShowHint = True
   end
   object shapeColor3: TShape
@@ -63,8 +63,8 @@ object frmColors: TfrmColors
     HelpType = htKeyword
     HelpKeyword = 'Color register 3'
     ParentShowHint = False
-    OnMouseDown = shapeColorMouseDown
-    OnMouseEnter = shapeColorMouseEnter
+    OnMouseDown = shapeColorDown
+    OnMouseEnter = shapeColorEnter
     ShowHint = True
   end
   object lblColor4: TLabel
@@ -119,8 +119,8 @@ object frmColors: TfrmColors
     Top = 446
     Width = 32
     ParentShowHint = False
-    OnMouseDown = shapeColorMouseDown
-    OnMouseEnter = shapeColorMouseEnter
+    OnMouseDown = shapeColorDown
+    OnMouseEnter = shapeColorEnter
     ShowHint = True
   end
   object shapeColor705: TShape
@@ -132,8 +132,8 @@ object frmColors: TfrmColors
     HelpType = htKeyword
     HelpKeyword = 'Color register 1'
     ParentShowHint = False
-    OnMouseDown = shapeColorMouseDown
-    OnMouseEnter = shapeColorMouseEnter
+    OnMouseDown = shapeColorDown
+    OnMouseEnter = shapeColorEnter
     ShowHint = True
   end
   object shapeColor706: TShape
@@ -145,8 +145,8 @@ object frmColors: TfrmColors
     HelpType = htKeyword
     HelpKeyword = 'Color register 2'
     ParentShowHint = False
-    OnMouseDown = shapeColorMouseDown
-    OnMouseEnter = shapeColorMouseEnter
+    OnMouseDown = shapeColorDown
+    OnMouseEnter = shapeColorEnter
     ShowHint = True
   end
   object shapeColor707: TShape
@@ -158,8 +158,8 @@ object frmColors: TfrmColors
     HelpType = htKeyword
     HelpKeyword = 'Color register 3'
     ParentShowHint = False
-    OnMouseDown = shapeColorMouseDown
-    OnMouseEnter = shapeColorMouseEnter
+    OnMouseDown = shapeColorDown
+    OnMouseEnter = shapeColorEnter
     ShowHint = True
   end
   object lblPcolr0: TLabel
@@ -226,8 +226,8 @@ object frmColors: TfrmColors
     HelpType = htKeyword
     HelpKeyword = 'Color register 3'
     ParentShowHint = False
-    OnMouseDown = shapeColorMouseDown
-    OnMouseEnter = shapeColorMouseEnter
+    OnMouseDown = shapeColorDown
+    OnMouseEnter = shapeColorEnter
     ShowHint = True
   end
 end

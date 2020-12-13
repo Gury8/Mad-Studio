@@ -1,40 +1,41 @@
 object frmFonts: TfrmFonts
   Tag = 1
-  Left = 100
-  Height = 707
-  Top = 148
-  Width = 1096
+  Left = 64
+  Height = 751
+  Top = 102
+  Width = 1097
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Character set editor'
-  ClientHeight = 687
-  ClientWidth = 1096
+  ClientHeight = 731
+  ClientWidth = 1097
   Font.Height = -11
   Font.Name = 'Verdana'
   KeyPreview = True
-  Menu = menuForms
+  Menu = menuFonts
   OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
+  OnMouseDown = FormMouseDown
   OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '2.0.6.0'
   object imgChar: TImage
-    Left = 25
+    Left = 28
     Height = 192
-    Top = 202
+    Top = 172
     Width = 192
-    OnMouseDown = imgCharMouseDown
-    OnMouseMove = imgCharMouseMove
-    OnMouseUp = imgCharMouseUp
+    OnMouseDown = imgCharDown
+    OnMouseMove = imgCharMove
+    OnMouseUp = imgCharUp
   end
   object imgFontSet: TImage
     Left = 300
     Height = 128
     Top = 57
     Width = 256
-    OnMouseDown = imgFontSetMouseDown
+    OnMouseDown = imgFontSetDown
   end
   object imgFontSetInv: TImage
     Tag = 1
@@ -42,7 +43,7 @@ object frmFonts: TfrmFonts
     Height = 128
     Top = 57
     Width = 256
-    OnMouseDown = imgFontSetMouseDown
+    OnMouseDown = imgFontSetDown
   end
   object Label1: TLabel
     Left = 564
@@ -75,8 +76,8 @@ object frmFonts: TfrmFonts
   object sbFont: TStatusBar
     Left = 0
     Height = 23
-    Top = 664
-    Width = 1096
+    Top = 708
+    Width = 1097
     Panels = <    
       item
         Width = 190
@@ -89,7 +90,7 @@ object frmFonts: TfrmFonts
   object toolbar: TToolBar
     Left = 0
     Top = 0
-    Width = 1096
+    Width = 1097
     ButtonHeight = 30
     ButtonWidth = 30
     Caption = 'toolbar'
@@ -133,7 +134,7 @@ object frmFonts: TfrmFonts
       ShowHint = True
     end
     object btnClear: TToolButton
-      Left = 161
+      Left = 311
       Hint = 'Clear character'
       Top = 2
       ImageIndex = 5
@@ -141,15 +142,8 @@ object frmFonts: TfrmFonts
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton2: TToolButton
-      Left = 221
-      Height = 30
-      Top = 2
-      Caption = 'ToolButton2'
-      Style = tbsDivider
-    end
     object btnFlipX: TToolButton
-      Left = 256
+      Left = 191
       Hint = 'Flip character horizontally'
       Top = 2
       Caption = 'btnFlipX'
@@ -159,7 +153,7 @@ object frmFonts: TfrmFonts
       ShowHint = True
     end
     object btnFlipY: TToolButton
-      Left = 286
+      Left = 221
       Hint = 'Flip character vertically'
       Top = 2
       Caption = 'btnFlipY'
@@ -169,7 +163,7 @@ object frmFonts: TfrmFonts
       ShowHint = True
     end
     object btnRotate: TToolButton
-      Left = 316
+      Left = 251
       Hint = 'Rotate character'
       Top = 2
       Caption = 'btnRotate'
@@ -179,11 +173,11 @@ object frmFonts: TfrmFonts
       ShowHint = True
     end
     object btnCopyChar: TToolButton
-      Left = 191
-      Hint = 'Copy drawing character to selected character set cell'
+      Left = 281
+      Hint = 'Copy edited data to selected character set cell'
       Top = 2
       Caption = 'btnCopyChar'
-      ImageIndex = 24
+      ImageIndex = 32
       OnClick = CopyCharProc
       ParentShowHint = False
       ShowHint = True
@@ -216,7 +210,7 @@ object frmFonts: TfrmFonts
       ShowHint = True
     end
     object btnInvert: TToolButton
-      Left = 226
+      Left = 161
       Hint = 'Invert bits of character'
       Top = 2
       Caption = 'btnInvert'
@@ -227,207 +221,207 @@ object frmFonts: TfrmFonts
     end
   end
   object lblNum1: TLabel
-    Left = 225
+    Left = 228
     Height = 13
-    Top = 232
+    Top = 202
     Width = 46
     Caption = 'lblNum1'
     ParentColor = False
-    OnClick = lblNum0Click
+    OnClick = NumProc
   end
   object lblNum2: TLabel
     Tag = 2
-    Left = 225
+    Left = 228
     Height = 13
-    Top = 256
+    Top = 226
     Width = 46
     Caption = 'lblNum2'
     ParentColor = False
-    OnClick = lblNum0Click
+    OnClick = NumProc
   end
   object lblNum3: TLabel
     Tag = 3
-    Left = 225
+    Left = 228
     Height = 13
-    Top = 280
+    Top = 250
     Width = 46
     Caption = 'lblNum3'
     ParentColor = False
-    OnClick = lblNum0Click
+    OnClick = NumProc
   end
   object Label5: TLabel
-    Left = 6
+    Left = 9
     Height = 13
-    Top = 232
+    Top = 202
     Width = 7
     Caption = '1'
     ParentColor = False
   end
   object Label6: TLabel
-    Left = 6
+    Left = 9
     Height = 13
-    Top = 256
+    Top = 226
     Width = 7
     Caption = '2'
     ParentColor = False
   end
   object Label7: TLabel
-    Left = 6
+    Left = 9
     Height = 13
-    Top = 280
+    Top = 250
     Width = 7
     Caption = '3'
     ParentColor = False
   end
   object Label8: TLabel
-    Left = 6
+    Left = 9
     Height = 13
-    Top = 304
+    Top = 274
     Width = 7
     Caption = '4'
     ParentColor = False
   end
   object Label9: TLabel
-    Left = 6
+    Left = 9
     Height = 13
-    Top = 328
+    Top = 298
     Width = 7
     Caption = '5'
     ParentColor = False
   end
   object Label10: TLabel
-    Left = 6
+    Left = 9
     Height = 13
-    Top = 352
+    Top = 322
     Width = 7
     Caption = '6'
     ParentColor = False
   end
   object Label11: TLabel
-    Left = 6
+    Left = 9
     Height = 13
-    Top = 376
+    Top = 346
     Width = 7
     Caption = '7'
     ParentColor = False
   end
   object Label12: TLabel
-    Left = 6
+    Left = 9
     Height = 13
-    Top = 208
+    Top = 178
     Width = 7
     Caption = '0'
     ParentColor = False
   end
   object lblNum0: TLabel
-    Left = 225
+    Left = 228
     Height = 13
-    Top = 208
+    Top = 178
     Width = 46
     Caption = 'lblNum0'
     ParentColor = False
-    OnClick = lblNum0Click
+    OnClick = NumProc
   end
   object lblNum4: TLabel
     Tag = 4
-    Left = 225
+    Left = 228
     Height = 13
-    Top = 304
+    Top = 274
     Width = 46
     Caption = 'lblNum4'
     ParentColor = False
-    OnClick = lblNum0Click
+    OnClick = NumProc
   end
   object lblNum5: TLabel
     Tag = 5
-    Left = 225
+    Left = 228
     Height = 13
-    Top = 328
+    Top = 298
     Width = 46
     Caption = 'lblNum5'
     ParentColor = False
-    OnClick = lblNum0Click
+    OnClick = NumProc
   end
   object lblNum6: TLabel
     Tag = 6
-    Left = 225
+    Left = 228
     Height = 13
-    Top = 352
+    Top = 322
     Width = 46
     Caption = 'lblNum6'
     ParentColor = False
-    OnClick = lblNum0Click
+    OnClick = NumProc
   end
   object lblNum7: TLabel
     Tag = 7
-    Left = 225
+    Left = 228
     Height = 13
-    Top = 376
+    Top = 346
     Width = 46
     Caption = 'lblNum7'
     ParentColor = False
-    OnClick = lblNum0Click
+    OnClick = NumProc
   end
   object Label13: TLabel
-    Left = 57
+    Left = 60
     Height = 13
-    Top = 180
+    Top = 150
     Width = 7
     Caption = '6'
     ParentColor = False
   end
   object Label14: TLabel
-    Left = 81
+    Left = 84
     Height = 13
-    Top = 180
+    Top = 150
     Width = 7
     Caption = '5'
     ParentColor = False
   end
   object Label15: TLabel
-    Left = 105
+    Left = 108
     Height = 13
-    Top = 180
+    Top = 150
     Width = 7
     Caption = '4'
     ParentColor = False
   end
   object Label16: TLabel
-    Left = 129
+    Left = 132
     Height = 13
-    Top = 180
+    Top = 150
     Width = 7
     Caption = '3'
     ParentColor = False
   end
   object Label17: TLabel
-    Left = 153
+    Left = 156
     Height = 13
-    Top = 180
+    Top = 150
     Width = 7
     Caption = '2'
     ParentColor = False
   end
   object Label18: TLabel
-    Left = 177
+    Left = 180
     Height = 13
-    Top = 180
+    Top = 150
     Width = 7
     Caption = '1'
     ParentColor = False
   end
   object Label19: TLabel
-    Left = 201
+    Left = 204
     Height = 13
-    Top = 180
+    Top = 150
     Width = 7
     Caption = '0'
     ParentColor = False
   end
   object Label20: TLabel
-    Left = 33
+    Left = 36
     Height = 13
-    Top = 180
+    Top = 150
     Width = 7
     Caption = '7'
     ParentColor = False
@@ -445,14 +439,14 @@ object frmFonts: TfrmFonts
     Height = 128
     Top = 57
     Width = 260
-    OnMouseDown = imgFontSetMouseDown
+    OnMouseDown = imgFontSetDown
   end
   object imgAntic6FontSet: TImage
     Left = 300
     Height = 64
     Top = 207
     Width = 512
-    OnMouseDown = imgAntic6FontSetMouseDown
+    OnMouseDown = imgAntic6FontSetDown
   end
   object imgAntic7FontSet: TImage
     Tag = 1
@@ -460,7 +454,7 @@ object frmFonts: TfrmFonts
     Height = 128
     Top = 294
     Width = 512
-    OnMouseDown = imgAntic6FontSetMouseDown
+    OnMouseDown = imgAntic6FontSetDown
   end
   object Label21: TLabel
     Left = 300
@@ -475,7 +469,7 @@ object frmFonts: TfrmFonts
     Height = 255
     Top = 207
     Width = 260
-    OnMouseDown = imgAntic5FontSetMouseDown
+    OnMouseDown = imgAntic5FontSetDown
   end
   object Label22: TLabel
     Left = 300
@@ -493,50 +487,50 @@ object frmFonts: TfrmFonts
     Caption = 'Antic mode 5 characters'
     ParentColor = False
   end
-  object GroupBox1: TGroupBox
+  object boxCharOrig: TGroupBox
     Left = 300
-    Height = 93
+    Height = 112
     Top = 468
     Width = 788
     Caption = 'Original character'
-    ClientHeight = 75
+    ClientHeight = 94
     ClientWidth = 784
     TabOrder = 2
     object imgAntic2Char: TImage
       Left = 9
-      Height = 24
-      Top = 21
-      Width = 24
+      Height = 32
+      Top = 22
+      Width = 32
     end
     object imgAntic6Char: TImage
       Left = 246
-      Height = 24
-      Top = 21
-      Width = 48
+      Height = 33
+      Top = 22
+      Width = 64
     end
     object imgAntic7Char: TImage
       Left = 339
-      Height = 48
-      Top = 21
-      Width = 48
+      Height = 64
+      Top = 22
+      Width = 64
     end
     object imgAntic4Char: TImage
       Left = 438
-      Height = 24
-      Top = 21
-      Width = 24
+      Height = 32
+      Top = 22
+      Width = 32
     end
     object imgAntic2CharInv: TImage
       Left = 105
-      Height = 24
-      Top = 21
-      Width = 24
+      Height = 32
+      Top = 22
+      Width = 32
     end
     object imgAntic5Char: TImage
       Left = 537
-      Height = 48
-      Top = 21
-      Width = 24
+      Height = 64
+      Top = 22
+      Width = 32
     end
     object Label24: TLabel
       Left = 9
@@ -593,50 +587,50 @@ object frmFonts: TfrmFonts
       ParentColor = False
     end
   end
-  object GroupBox2: TGroupBox
+  object boxCharEdit: TGroupBox
     Left = 300
-    Height = 93
-    Top = 567
+    Height = 112
+    Top = 588
     Width = 788
     Caption = 'Modified character'
-    ClientHeight = 75
+    ClientHeight = 94
     ClientWidth = 784
     TabOrder = 3
     object imgAntic2CharNew: TImage
       Left = 9
-      Height = 24
-      Top = 21
-      Width = 24
+      Height = 32
+      Top = 22
+      Width = 32
     end
     object imgAntic6CharNew: TImage
       Left = 246
-      Height = 24
-      Top = 21
-      Width = 48
+      Height = 33
+      Top = 22
+      Width = 64
     end
     object imgAntic7CharNew: TImage
       Left = 339
-      Height = 48
-      Top = 21
-      Width = 48
+      Height = 64
+      Top = 22
+      Width = 64
     end
     object imgAntic2CharNewInv: TImage
       Left = 105
-      Height = 24
-      Top = 21
-      Width = 24
+      Height = 32
+      Top = 22
+      Width = 32
     end
     object imgAntic4CharNew: TImage
       Left = 438
-      Height = 24
-      Top = 21
-      Width = 24
+      Height = 32
+      Top = 22
+      Width = 32
     end
     object imgAntic5CharNew: TImage
       Left = 537
-      Height = 48
-      Top = 21
-      Width = 24
+      Height = 64
+      Top = 22
+      Width = 32
     end
     object Label30: TLabel
       Left = 9
@@ -693,10 +687,10 @@ object frmFonts: TfrmFonts
       ParentColor = False
     end
   end
-  object grpCharOper: TGroupBox
-    Left = 6
+  object boxCharOper: TGroupBox
+    Left = 9
     Height = 184
-    Top = 422
+    Top = 396
     Width = 211
     Caption = 'Shift/move character data'
     ClientHeight = 166
@@ -764,36 +758,50 @@ object frmFonts: TfrmFonts
       TabOrder = 0
     end
   end
-  object GroupBox3: TGroupBox
+  object boxSelected: TGroupBox
     Left = 9
-    Height = 126
+    Height = 84
     Top = 42
-    Width = 207
+    Width = 265
     Caption = 'Selected character'
-    ClientHeight = 108
-    ClientWidth = 203
+    ClientHeight = 66
+    ClientWidth = 261
     TabOrder = 5
     object imgCharOrig: TImage
       Left = 9
-      Height = 24
+      Height = 32
       Top = 6
-      Width = 24
+      Width = 32
     end
-    object memoInfo: TMemo
-      Left = 11
-      Height = 57
-      Top = 42
-      Width = 183
-      BorderStyle = bsNone
-      Color = clForm
-      ReadOnly = True
-      TabOrder = 0
+    object lblCharInfo01: TLabel
+      Left = 48
+      Height = 13
+      Top = 6
+      Width = 78
+      Caption = 'lblCharInfo01'
+      ParentColor = False
+    end
+    object lblCharInfo02: TLabel
+      Left = 48
+      Height = 13
+      Top = 27
+      Width = 78
+      Caption = 'lblCharInfo02'
+      ParentColor = False
+    end
+    object lblCharInfo03: TLabel
+      Left = 48
+      Height = 13
+      Top = 48
+      Width = 78
+      Caption = 'lblCharInfo03'
+      ParentColor = False
     end
   end
-  object menuForms: TMainMenu
-    left = 24
+  object menuFonts: TMainMenu
+    left = 30
     top = 612
-    object MenuItem1: TMenuItem
+    object menuFile: TMenuItem
       Caption = '&File'
       object menuOpen: TMenuItem
         Caption = 'Open'
@@ -818,7 +826,7 @@ object frmFonts: TfrmFonts
         OnClick = CloseProc
       end
     end
-    object MenuItem19: TMenuItem
+    object menuEdit: TMenuItem
       Caption = '&Edit'
       object itemFlipX: TMenuItem
         Caption = 'Flip character horizontally'
@@ -836,6 +844,10 @@ object frmFonts: TfrmFonts
         Caption = 'Invert bits of character'
         OnClick = InvertProc
       end
+      object menuClear: TMenuItem
+        Caption = 'Clear character'
+        OnClick = ClearCharProc
+      end
       object MenuItem17: TMenuItem
         Caption = '-'
       end
@@ -843,12 +855,16 @@ object frmFonts: TfrmFonts
         Caption = 'Copy character'
         OnClick = CopyCharProc
       end
-      object menuClear: TMenuItem
-        Caption = 'Clear character'
-        OnClick = ClearCharProc
+      object MenuItem6: TMenuItem
+        Caption = 'Cancel copy operation'
+        OnClick = CancelCopyCharProc
+      end
+      object MenuItem5: TMenuItem
+        Caption = 'Restore default character data'
+        OnClick = RestoreCharProc
       end
     end
-    object MenuItem3: TMenuItem
+    object menuTools: TMenuItem
       Caption = '&Tools'
       object menuCode: TMenuItem
         Caption = 'Source code generator'
@@ -869,6 +885,45 @@ object frmFonts: TfrmFonts
         Caption = 'Character set viewer'
         OnClick = ViewerProc
       end
+    end
+  end
+  object popMenu: TPopupMenu
+    left = 102
+    top = 612
+    object MenuItem2: TMenuItem
+      Caption = 'Flip character horizontally'
+      OnClick = FlipXProc
+    end
+    object MenuItem3: TMenuItem
+      Caption = 'Flip character vertically'
+      OnClick = FlipYProc
+    end
+    object MenuItem4: TMenuItem
+      Caption = 'Rotate character'
+      OnClick = RotateProc
+    end
+    object menuInvert: TMenuItem
+      Caption = 'Invert bits of character'
+      OnClick = InvertProc
+    end
+    object menuClearChar: TMenuItem
+      Caption = 'Clear character'
+      OnClick = ClearCharProc
+    end
+    object MenuItem1: TMenuItem
+      Caption = '-'
+    end
+    object popCopyChar: TMenuItem
+      Caption = 'Copy edited data to selected character set cell'
+      OnClick = CopyCharProc
+    end
+    object popCancelCopyChar: TMenuItem
+      Caption = 'Cancel copy operation'
+      OnClick = CancelCopyCharProc
+    end
+    object menuRestoreChar: TMenuItem
+      Caption = 'Restore default character data'
+      OnClick = RestoreCharProc
     end
   end
 end

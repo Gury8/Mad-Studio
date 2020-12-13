@@ -107,8 +107,8 @@ type
     procedure chkMaxSizeClick(Sender : TObject);
   private
     { private declarations }
-    varBtn : tMousebutton;
-    btn : tMousebutton;
+    varBtn : TMousebutton;
+    btn : TMousebutton;
     offs, offsX, offsY : byte;
     isSaveAs : boolean;
     isFontSetNormal : boolean;
@@ -453,9 +453,12 @@ begin
     //end;
 
     Lines.Add('Internal code Dec: ' + IntToStr(m) + ' Hex: ' + Dec2hex(m));
-    Lines.Add('Atascii code Dec: ' + IntToStr(n) + ' Hex: ' + Dec2hex(n));
-    if not isFontSetNormal then
-      Lines.Add('Inverse character value + 128');
+    if isFontSetNormal then
+      Lines.Add('Atascii code Dec: ' + IntToStr(n) + ' Hex: ' + Dec2hex(n))
+    else
+      Lines.Add('Atascii code Dec: ' + IntToStr(n + 128) + ' Hex: ' + Dec2hex(n + 128));
+
+//      Lines.Add('Inverse character value + 128');
   end;
 
 //  if chkFillChar.Checked then begin
@@ -716,22 +719,20 @@ begin
 
     xoffset := offset*24;
 
-    for yf := 0 to grY02 do begin
+    for yf := 0 to grY02 do
       for xf := 0 to grX02 do begin
         col := fldFontSet[xf, n shl 3 + yf];
 //        col := SetColorIndex(col, true);
         FillRectEx(imgFontSet, coltabFont[col],
                    xf*factX02 + xoffset, yf*factY02 + yoffset, factX02, factY02);
 //        col := SetColorIndex(col, false);
-        if col = 1 then
-          col := 0
-        else if col = 0 then
-          col := 1;
 
+        // Inverse characters
+        col := 1 - col;
         FillRectEx(imgFontSetInv, coltabFont[col],
                    xf*factX02 + xoffset, yf*factY02 + yoffset, factX02, factY02);
       end;
-    end;
+
     Inc(offset);
   end;
 end;
@@ -789,10 +790,11 @@ begin
     for dx := 0 to 7 do begin
       col := fldFontSet[dx, dy + offset];
       if not isFontSetNormal then begin
-        if col = 1 then
-          col := 0
-        else if col = 0 then
-          col := 1;
+        //if col = 1 then
+        //  col := 0
+        //else if col = 0 then
+        //  col := 1;
+        col := 1 - col;
       end;
       fldChar[dx, dy] := col;
 //      fldScreen[xf + dx, yf + dy] := col;
@@ -834,12 +836,12 @@ begin
       col := fldFontSet[dx, dy + offset];
 //      fldScreen[xf + dx, yf + dy] := col;
 
-      if isInverse then begin
-        if col = 1 then
-          col := 0
-        else if col = 0 then
-          col := 1;
-      end;
+      if isInverse then
+        //if col = 1 then
+        //  col := 0
+        //else if col = 0 then
+        //  col := 1;
+        col := 1 - col;
 
       FillRectEx(imgEditor, coltabFont[col], (xf + dx)*factX, (yf + dy)*factY, factX, factY);
     end;
@@ -855,12 +857,13 @@ begin
   for yf := 0 to 7 do
     for xf := 0 to 7 do begin
       col := fldFontSet[xf, yf + offset];
-      if not isFontSetNormal then begin
-        if col = 1 then
-          col := 0
-        else if col = 0 then
-          col := 1;
-      end;
+      if not isFontSetNormal then
+        //if col = 1 then
+        //  col := 0
+        //else if col = 0 then
+        //  col := 1;
+        col := 1 - col;
+
       fldChar[xf, yf] := col;
       FillRectEx(imgChar, coltabFont[col], xf*factX, yf*factY, factX, factY);
     end;
