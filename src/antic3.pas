@@ -134,9 +134,7 @@ type
     procedure SaveFontProc(Sender: TObject);
     procedure ClearCharProc(Sender: TObject);
   private
-    varBtn : tMousebutton;
     btn : tMousebutton;
-    varBtn02 : tMousebutton;
     btn02 : tMousebutton;
     offs, offsX, offsY : byte;
     isSaveAs : boolean;
@@ -381,13 +379,6 @@ begin
   btn := Button;
   xf := X div factX;
   yf := Y div factY;
-
-  // Check for mouse button clicked
-  if btn = mbRight then
-    varBtn := btn
-  else
-    varBtn := mbLeft;
-
   Plot(xf, yf);
 end;
 
@@ -1060,12 +1051,6 @@ begin
   btn02 := Button;
   xf := X div factX04;
   yf := Y div factY04;
-
-  // Check for mouse button clicked
-  if btn02 = mbRight then
-    varBtn02 := btn
-  else
-    varBtn02 := mbLeft;
 
   //if not isFontSetNormal then begin
   //  setNormalMode := true;

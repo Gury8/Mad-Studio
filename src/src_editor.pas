@@ -132,7 +132,7 @@ implementation
 
 uses
   common, main, src_settings, pmg_gen, graph_gen, font_gen, antic2_gen,
-  antic6_gen, antic4_gen, dl_gen, anim_gen, antic3_gen, lib;
+  antic6_gen, antic4_gen, dl_gen, anim_gen, antic3_gen;
 
 { TfrmSrcEdit }
 
@@ -228,16 +228,10 @@ end;
 //end;
 
 procedure TfrmSrcEdit.editorChange(Sender: TObject);
-//var
-//  p1 : TPoint;
 begin
   isEdit := true;
   if Pos(' *', caption) = 0 then
     caption := caption + ' *';
-
-//  p1 := editor.LogicalCaretXY;
-//  sbEditor.Panels[0].Text := 'Line: ' + IntToStr(p1.y) + ' / Column: ' + IntToStr(p1.x);
-//  sbEditor.Panels[1].Text := '';
 end;
 
 procedure TfrmSrcEdit.editorClick(Sender: TObject);

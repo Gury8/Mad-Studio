@@ -28,7 +28,7 @@ object frmAntic4: TfrmAntic4
     ParentColor = False
   end
   object Label1: TLabel
-    Left = 618
+    Left = 619
     Height = 15
     Top = 618
     Width = 104
@@ -167,7 +167,7 @@ object frmAntic4: TfrmAntic4
       ShowHint = True
     end
     object cmbAnticMode: TComboBox
-      Left = 366
+      Left = 401
       Height = 23
       Top = 2
       Width = 146
@@ -212,6 +212,25 @@ object frmAntic4: TfrmAntic4
       ParentShowHint = False
       ShowHint = True
     end
+    object btnSettings: TToolButton
+      Left = 371
+      Hint = 'Settings'
+      Top = 2
+      Caption = 'Settings'
+      Enabled = False
+      ImageIndex = 7
+      ParentShowHint = False
+      ShowHint = True
+      Visible = False
+    end
+    object ToolButton2: TToolButton
+      Left = 366
+      Height = 30
+      Top = 2
+      Caption = 'ToolButton2'
+      Style = tbsDivider
+      Visible = False
+    end
   end
   object statusBar: TStatusBar
     Left = 0
@@ -220,13 +239,13 @@ object frmAntic4: TfrmAntic4
     Width = 1211
     Panels = <    
       item
-        Width = 250
+        Width = 200
       end    
       item
-        Width = 250
+        Width = 200
       end    
       item
-        Width = 250
+        Width = 350
       end    
       item
         Width = 250
@@ -1193,6 +1212,18 @@ object frmAntic4: TfrmAntic4
         Caption = 'Screen viewer'
         OnClick = ViewerProc
       end
+      object MenuItem18: TMenuItem
+        Caption = '-'
+      end
+      object itemShowGrid: TMenuItem
+        Caption = 'Show grid'
+        OnClick = ShowGridProc
+      end
+      object itemHideGrid: TMenuItem
+        Tag = 1
+        Caption = 'Hide grid'
+        OnClick = ShowGridProc
+      end
     end
   end
   object popMenu: TPopupMenu
@@ -1232,6 +1263,18 @@ object frmAntic4: TfrmAntic4
     object menuRestoreChar: TMenuItem
       Caption = 'Restore default character data'
       OnClick = RestoreCharProc
+    end
+    object MenuItem19: TMenuItem
+      Caption = '-'
+    end
+    object popShowGrid: TMenuItem
+      Caption = 'Show grid'
+      OnClick = ShowGridProc
+    end
+    object popHideGrid: TMenuItem
+      Tag = 1
+      Caption = 'Hide grid'
+      OnClick = ShowGridProc
     end
   end
 end

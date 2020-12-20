@@ -281,13 +281,6 @@ begin
   xf := X div factX;
   yf := Y div factY;
 
-  // Check for mouse button clicked
-  //if btn = mbRight then
-  //  varBtn := btn
-  //else begin
-//    varBtn := mbLeft;
-  //end;
-
   case modeType of
     0: PlotDl(2, xf, yf, true);
     1: PlotDl(6, xf, yf, true);

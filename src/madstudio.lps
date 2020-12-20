@@ -8,10 +8,9 @@
       <Unit0>
         <Filename Value="madstudio.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="42" Y="11"/>
         <UsageCount Value="201"/>
-        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="main.pas"/>
@@ -20,15 +19,16 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="266"/>
-        <CursorPos X="53" Y="292"/>
+        <TopLine Value="798"/>
+        <CursorPos X="80" Y="828"/>
         <UsageCount Value="201"/>
       </Unit1>
       <Unit2>
         <Filename Value="common.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="28" Y="35"/>
+        <TopLine Value="238"/>
+        <CursorPos X="68" Y="148"/>
         <UsageCount Value="201"/>
       </Unit2>
       <Unit3>
@@ -38,8 +38,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="43"/>
-        <CursorPos Y="43"/>
+        <TopLine Value="204"/>
+        <CursorPos Y="231"/>
         <UsageCount Value="200"/>
       </Unit3>
       <Unit4>
@@ -58,8 +58,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="2658"/>
-        <CursorPos Y="2572"/>
+        <TopLine Value="2269"/>
+        <CursorPos Y="2302"/>
         <UsageCount Value="204"/>
       </Unit5>
       <Unit6>
@@ -91,8 +91,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="315"/>
-        <CursorPos X="48" Y="333"/>
+        <TopLine Value="130"/>
+        <CursorPos X="48" Y="146"/>
         <UsageCount Value="200"/>
       </Unit8>
       <Unit9>
@@ -101,19 +101,15 @@
         <ComponentName Value="frmFonts"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="6"/>
-        <TopLine Value="398"/>
-        <CursorPos X="3" Y="400"/>
+        <EditorIndex Value="-1"/>
         <UsageCount Value="201"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit9>
       <Unit10>
         <Filename Value="lib.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="310"/>
-        <CursorPos X="19" Y="334"/>
+        <TopLine Value="258"/>
+        <CursorPos Y="292"/>
         <UsageCount Value="200"/>
       </Unit10>
       <Unit11>
@@ -123,11 +119,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="80"/>
-        <CursorPos Y="94"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="87"/>
+        <CursorPos X="35" Y="95"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit11>
       <Unit12>
         <Filename Value="resource02.rc"/>
@@ -143,11 +138,10 @@
         <ComponentName Value="frmFontSetGen"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="888"/>
         <CursorPos X="3" Y="208"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
       </Unit13>
       <Unit14>
         <Filename Value="antic2.pas"/>
@@ -155,12 +149,10 @@
         <ComponentName Value="frmAntic2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="415"/>
-        <CursorPos X="43" Y="388"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="158"/>
+        <CursorPos X="23" Y="183"/>
         <UsageCount Value="201"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit14>
       <Unit15>
         <Filename Value="antic2_gen.pas"/>
@@ -200,8 +192,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="914"/>
-        <CursorPos X="23" Y="929"/>
         <UsageCount Value="206"/>
       </Unit18>
       <Unit19>
@@ -233,8 +223,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="509"/>
-        <CursorPos X="3" Y="518"/>
         <UsageCount Value="203"/>
       </Unit21>
       <Unit22>
@@ -243,12 +231,10 @@
         <ComponentName Value="frmAntic4"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="577"/>
-        <CursorPos X="46" Y="589"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="756"/>
+        <CursorPos Y="789"/>
         <UsageCount Value="215"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit22>
       <Unit23>
         <Filename Value="antic4_gen.pas"/>
@@ -256,11 +242,10 @@
         <ComponentName Value="frmAntic4Gen"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="532"/>
         <CursorPos Y="564"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
       </Unit23>
       <Unit24>
         <Filename Value="dl_gen.pas"/>
@@ -301,8 +286,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="1129"/>
-        <CursorPos X="3" Y="1162"/>
+        <TopLine Value="1048"/>
+        <CursorPos X="40" Y="1061"/>
         <UsageCount Value="200"/>
       </Unit27>
       <Unit28>
@@ -331,8 +316,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="176"/>
-        <CursorPos X="19" Y="178"/>
         <UsageCount Value="207"/>
       </Unit30>
       <Unit31>
@@ -342,8 +325,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="948"/>
-        <CursorPos X="24" Y="978"/>
+        <TopLine Value="232"/>
+        <CursorPos X="54" Y="20"/>
         <UsageCount Value="200"/>
       </Unit31>
       <Unit32>
@@ -383,8 +366,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="58"/>
-        <CursorPos X="7" Y="167"/>
         <UsageCount Value="213"/>
       </Unit35>
       <Unit36>
@@ -393,9 +374,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="935"/>
-        <CursorPos X="3" Y="982"/>
-        <UsageCount Value="87"/>
+        <UsageCount Value="78"/>
       </Unit36>
       <Unit37>
         <Filename Value="graph_gen.pas"/>
@@ -405,137 +384,16 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="283"/>
         <CursorPos X="9" Y="305"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="0"/>
       </Unit37>
       <Unit38>
         <Filename Value="fonts.lfm"/>
-        <EditorIndex Value="5"/>
-        <UsageCount Value="13"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="0"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit38>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
-      <Position1>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="1008" Column="23" TopLine="975"/>
-      </Position1>
-      <Position2>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="1009" Column="23" TopLine="976"/>
-      </Position2>
-      <Position3>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="1014" Column="25" TopLine="981"/>
-      </Position3>
-      <Position4>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="1042" Column="26" TopLine="1009"/>
-      </Position4>
-      <Position5>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="1043" Column="26" TopLine="1010"/>
-      </Position5>
-      <Position6>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="1044" Column="26" TopLine="1049"/>
-      </Position6>
-      <Position7>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="1045" Column="26" TopLine="1025"/>
-      </Position7>
-      <Position8>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="1046" Column="26" TopLine="1025"/>
-      </Position8>
-      <Position9>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="1054" Column="28" TopLine="1060"/>
-      </Position9>
-      <Position10>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="1026" Column="40" TopLine="1013"/>
-      </Position10>
-      <Position11>
-        <Filename Value="antic4_gen.pas"/>
-      </Position11>
-      <Position12>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="185" Column="45" TopLine="151"/>
-      </Position12>
-      <Position13>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="186" Column="45" TopLine="152"/>
-      </Position13>
-      <Position14>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="187" Column="45" TopLine="153"/>
-      </Position14>
-      <Position15>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="188" Column="45" TopLine="154"/>
-      </Position15>
-      <Position16>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="189" Column="45" TopLine="155"/>
-      </Position16>
-      <Position17>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="453" Column="32" TopLine="419"/>
-      </Position17>
-      <Position18>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="457" Column="76" TopLine="423"/>
-      </Position18>
-      <Position19>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="458" Column="76" TopLine="424"/>
-      </Position19>
-      <Position20>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="459" Column="34" TopLine="425"/>
-      </Position20>
-      <Position21>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="477" Column="32" TopLine="444"/>
-      </Position21>
-      <Position22>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="481" Column="76" TopLine="448"/>
-      </Position22>
-      <Position23>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="482" Column="76" TopLine="449"/>
-      </Position23>
-      <Position24>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="483" Column="34" TopLine="450"/>
-      </Position24>
-      <Position25>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="513" Column="27" TopLine="480"/>
-      </Position25>
-      <Position26>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="521" Column="68" TopLine="488"/>
-      </Position26>
-      <Position27>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="523" Column="68" TopLine="490"/>
-      </Position27>
-      <Position28>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="525" Column="25" TopLine="492"/>
-      </Position28>
-      <Position29>
-        <Filename Value="antic4_gen.pas"/>
-        <Caret Line="553" Column="27" TopLine="520"/>
-      </Position29>
-      <Position30>
-        <Filename Value="antic4.pas"/>
-        <Caret Line="589" Column="46" TopLine="577"/>
-      </Position30>
-    </JumpHistory>
+    <JumpHistory HistoryIndex="-1"/>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes Count="0" ActiveMode="default"/>

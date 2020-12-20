@@ -107,7 +107,6 @@ type
     procedure chkMaxSizeClick(Sender : TObject);
   private
     { private declarations }
-    varBtn : TMousebutton;
     btn : TMousebutton;
     offs, offsX, offsY : byte;
     isSaveAs : boolean;
@@ -375,13 +374,6 @@ begin
   btn := Button;
   xf := X div factX;
   yf := Y div factY;
-
-  // Check for mouse button clicked
-  if btn = mbRight then
-    varBtn := btn
-  else
-    varBtn := mbLeft;
-
   Plot(xf, yf);
 end;
 

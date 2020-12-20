@@ -224,7 +224,6 @@ type
   private
     { private declarations }
     btn : tMousebutton;
-//    varBtn : tMousebutton;
     isDataChanged : array[0..3] of boolean;
     isEnter : array[0..16] of boolean;
     procedure Settings;
@@ -1053,7 +1052,7 @@ begin
   ci := index;
 
   for yf := 0 to _ANIM_MAX_LINES - 1 do begin
-    for xf := 0 to 7 shl 2 + 3 do begin
+    for xf := 0 to 31 do begin
       if isAnimEditorGrid and isGridShow then begin
         pm.Canvas.Pen.Color := clWhite;
         c := xf*factX shl 1;
@@ -1154,13 +1153,6 @@ begin
   btn := Button;
   xf := X div factX02;
   yf := Y div factY02;
-
-  //// Check if mouse button was clicked
-  //if btn = mbRight then
-  //  varBtn := btn
-  //else
-  //  varBtn := mbLeft;
-
   if (xf >= playerIndex[frame, player] - 1) or (xf >= playerIndex[frame, player]) then
 //    if not CalcPlayerWidth(player, xf, yf) then Exit;
     Plot(xf, yf);
@@ -1796,7 +1788,6 @@ end;
 procedure TfrmAnimator.ShiftDown(Sender: TObject; oper : byte);
 var
   i, x, y, fr : byte;
-//  fld02 : array[0..1, 0..7] of byte;
   origFrame : byte;
 begin
   origFrame := selected;
@@ -1919,14 +1910,6 @@ begin
             playerPos[selected, i, playerIndex[selected, i] + x, y];
           playerPos[selected, i, playerIndex[selected, i] + x, y] := 0;
         end;
-
-    //for i := 0 to 1 do
-    //  for x := 0 to grX do
-    //    for y := 1 to _ANIM_MAX_LINES - 1 do begin
-    //      playerPos[selected, i, playerIndex[selected, i] + x, y - 1] :=
-    //        playerPos[selected, i, playerIndex[selected, i] + x, y];
-    //      playerPos[selected, i, playerIndex[selected, i] + x, y] := 0;
-    //    end;
   end;
   for fr := 0 to oper do begin
     if oper = 16 then selected := fr;

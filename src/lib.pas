@@ -33,7 +33,6 @@ procedure DefaultFontSet(var fldFontSet : fldFontSetType);
 
 function CheckEditor : boolean;
 function AtasciiCode(offset : byte) : string;
-procedure Text(strFlag : string; isFlag : boolean);
 
 procedure FillRectEx(image : TImage; color : TColor; x, y, factX, factY : word);
 
@@ -257,14 +256,6 @@ begin
     n -= 64;
 
   result := IntToStr(n);
-end;
-
-procedure Text(strFlag : string; isFlag : boolean);
-begin
-  if isFlag then
-    showmessage(strFlag)
-  else
-    showmessage('not ' + strFlag);
 end;
 
 procedure FillRectEx(image : TImage; color : TColor; x, y, factX, factY : word);

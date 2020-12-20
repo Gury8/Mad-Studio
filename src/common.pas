@@ -32,7 +32,7 @@ type
 
 const
   programName = 'Mad Studio';
-  programVersion = ' v1.2 (x86_64-win32/win64)';
+  programVersion = ' v1.2.1 (x86_64-win32/win64)';
 
   // Supported graphics resolutions
   grMode40x24x4 = 3;
@@ -144,12 +144,11 @@ const
   _KICKC          = 8;
 
   _PM_WIDTH       = 7;  // Player dimension
+  _MAX_PLAYER_POS = 56;  // Max. X position for multi-color players
 
   pmSize : array[0..3] of string[14] = ('normal size', 'double size', '', 'quadruple size');
-
   GPRIOR : array[0..3] of byte = (1, 4, 16, 32);
 
-  _MAX_PLAYER_POS = 56;
 
   {$I 'missile_sizes.inc'}
 

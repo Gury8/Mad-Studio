@@ -422,7 +422,6 @@ type
   private
     { private declarations }
     btn : tMousebutton;
-    varBtn : tMousebutton;
     isRotate : boolean;
     tbOldX : array[0..3] of byte;
     isDataChanged : array[0..3] of boolean;
@@ -923,12 +922,6 @@ begin
 //  xf := X div factX;
 //  yf := Y div factY;
 
-  // Check for mouse button clicked
-  if btn = mbRight then
-    varBtn := btn
-  else
-    varBtn := mbLeft;
-
 //  PlotMissileMultiAll(xf, yf);
 end;
 
@@ -994,13 +987,6 @@ begin
 
   xf := X div factX;
   yf := Y div factY;
-
-  // Check for mouse button clicked
-  if btn = mbRight then
-    varBtn := btn
-  else
-    varBtn := mbLeft;
-
   Plot(xf, yf);
 end;
 
@@ -3281,13 +3267,6 @@ begin
   btn := Button;
   xf := X div factX;
   yf := Y div factY;
-
-  // Check for mouse button clicked
-  if btn = mbRight then
-    varBtn := btn
-  else
-    varBtn := mbLeft;
-
   PlotMissile(xf, yf);
 end;
 
@@ -3338,13 +3317,6 @@ begin
   btn := Button;
   xf := X div factX02;
   yf := Y div factY02;
-
-  // Check if mouse button was clicked
-  if btn = mbRight then
-    varBtn := btn
-  else
-    varBtn := mbLeft;
-
   if (xf >= playerIndex[player] - 1) then begin  //or (xf >= playerIndex[player]) then begin
 //    if not CalcPlayerWidth(player, xf, yf) then Exit;
     PlotMulti(xf, yf);

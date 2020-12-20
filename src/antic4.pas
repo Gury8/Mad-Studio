@@ -123,6 +123,12 @@ type
     MenuItem12 : TMenuItem;
     MenuItem14 : TMenuItem;
     MenuItem17 : TMenuItem;
+    MenuItem18 : TMenuItem;
+    itemShowGrid : TMenuItem;
+    itemHideGrid : TMenuItem;
+    MenuItem19 : TMenuItem;
+    popHideGrid : TMenuItem;
+    popShowGrid : TMenuItem;
     MenuItem3 : TMenuItem;
     MenuItem5 : TMenuItem;
     MenuItem6 : TMenuItem;
@@ -160,11 +166,13 @@ type
     ToolBar2: TToolBar;
     btnClearCh: TToolButton;
     btnCopyChar : TToolButton;
+    btnSettings : TToolButton;
     ToolButton17: TToolButton;
     btnLoadScreen: TToolButton;
     btnSaveScreen: TToolButton;
     btnClearScreen: TToolButton;
     btnCode: TToolButton;
+    ToolButton2 : TToolButton;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -175,15 +183,15 @@ type
     procedure DefaultColorPaletteProc(Sender : TObject);
     procedure ColorProc(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
       X, Y : Integer);
-    procedure imgBaseFontSetDown(Sender : TObject; Button : TMouseButton;
-      Shift : TShiftState; X, Y : Integer);
-    procedure imgCharAntic45Down(Sender : TObject; Button : TMouseButton;
-      Shift : TShiftState; X, Y : Integer);
-    procedure imgCharAntic45Move(Sender : TObject; Shift : TShiftState; X,
-      Y : Integer);
-    procedure imgCharAntic45Up(Sender : TObject; Button : TMouseButton;
-      Shift : TShiftState; X, Y : Integer);
+    procedure imgBaseFontSetDown(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+      X, Y : Integer);
+    procedure imgCharAntic45Down(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+      X, Y : Integer);
+    procedure imgCharAntic45Move(Sender : TObject; Shift : TShiftState; X, Y : Integer);
+    procedure imgCharAntic45Up(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+      X, Y : Integer);
     procedure InvertProc(Sender : TObject);
+    procedure ShowGridProc(Sender : TObject);
     procedure RestoreCharProc(Sender : TObject);
     procedure NumAnticMode45Proc(Sender : TObject);
     procedure LoadAntic2Screen(Sender : TObject);
@@ -238,7 +246,7 @@ type
   private
     { private declarations }
     btn : TMousebutton;
-    offsX, offsY : byte;
+    offsY : byte;
     isSaveAs, isSaveFontAs : boolean;
     isFontSetNormal : boolean;
     isEdit : boolean;
@@ -246,6 +254,8 @@ type
     ext : TExtension;
     isAntic2 : boolean;
     isCopyChar : boolean;
+    isShowGrid : boolean;
+    gridColor : TColor;
     procedure ShowFontSet;
     procedure ShowBaseFontSet;
     procedure ShowFontSet02(offset : byte);
@@ -265,6 +275,7 @@ type
     procedure MaskColor(x, y, offset : integer; isInverse : boolean);
     procedure CopyChar(isCopy : boolean);
     procedure CharInfo(offset : integer);
+    procedure SetGrid(gColor : TColor);
   public
     { public declarations }
     filename : string;
@@ -276,10 +287,10 @@ type
     fldAtascii : array[0.._ANTIC_MODE_4_SIZE - 1] of byte;
     grX, grY : integer;
     chrX, chrY : byte;
-    factX, factY,        // Character screen editor offset
-    chrFactX, chrFactY,  // Character editor pixel offsets
+    factX, factY,             // Character screen editor offset
+    chrFactX, chrFactY,       // Character editor pixel offsets
     factX02, factY02 : byte;  // Font set character offsets
-    maxX, maxY : byte;  // Maximum X and Y coordinates
+    maxX, maxY : byte;        // Maximum X and Y coordinates
     maxSize : integer;
     anticMode : byte;
     modeHeight : byte;
@@ -307,9 +318,9 @@ procedure TfrmAntic4.FormCreate(Sender: TObject);
 begin
   DoubleBuffered := true;
   btn := mbMiddle;
-
   isCreate := true;
   isCopyChar := false;
+  isShowGrid := false;
   FillByte(charEditIndex, SizeOf(charEditIndex), 0);
   SetTrackBarUpDown(editX, $00DDDDDD, clWhite);
   SetTrackBarUpDown(editY, $00DDDDDD, clWhite);
@@ -324,10 +335,10 @@ begin
   frmMain.Top := 10;
   formId := formAntic4;
   filename := getDir + 'examples\screen01.an4';
-  caption := programName + ' ' + programVersion + ' - Antic mode 4 and 5 editor (' + filename + ')';
+  caption := programName + ' ' + programVersion +
+             ' - Antic mode 4 and 5 editor (' + filename + ')';
 
   isEdit := false;
-  statusBar.Panels[1].Text := 'Cursor coordinates (x: 0, y: 0)';
 
   modeHeight := 24;
   SetXY(39, 23);
@@ -336,28 +347,36 @@ begin
   SetAnticMode(4);
   factX := 3;
   factX02 := 2;
+//  editorX := 24;
 
   // Character editor parameters
   chrX := 7; chrY := 7;
   chrFactX := 18; chrFactY := 18;
 
-  offs := 0;
   isFontSetNormal := true;
   DefaultFontSet(fldFontSet);
   DefaultFontSet(fldFontSetOrig);
   ShowBaseFontSet;
+//  FillRectEx(imgEditor, coltab[0], 0, 0, imgEditor.Width, imgEditor.Height);
   FillRectEx(imgChar, coltabFont[0], 0, 0, imgChar.Width, imgChar.Height);
   FillRectEx(imgCharAntic45, colTab[0], 0, 0, imgChar.Width, imgChar.Height);
 
   for i := 0 to 15 do
     (FindComponent('lblNum' + IntToStr(i)) as TLabel).Caption := '0';
 
+  gridColor := clred;
+  gridColor := colTab[0];
   FillScreen(0, false);
   isCreate := false;
 
-  CharInfo(-1);
+  offs := 1;
+  isFontSetNormal := true;
+  RefreshCharX(offs);
+  CharInfo(offs);
+  PlotChar(255, 255);
   ColorRegisters;
-  statusBar.Panels[3].Text := 'Font/Character set: default';
+
+  statusBar.Panels[2].Text := 'Font/Character set: default';
 end;
 
 procedure TfrmAntic4.FormActivate(Sender: TObject);
@@ -374,6 +393,8 @@ end;
 
 procedure TfrmAntic4.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  offs := 0;
+  RestoreCharProc(Sender);
   propFlagModules[6] := 0;
   formId := formMain;
 end;
@@ -383,6 +404,16 @@ begin
   case Key of
     VK_ESCAPE: CopyChar(false);
     VK_F12: frmMain.Show;
+    VK_0: SetGrid(colTab[0]);
+    VK_1: SetGrid(clWhite);
+    VK_2: SetGrid(clNavy);
+    VK_3: SetGrid(clMaroon);
+    VK_4: SetGrid(clGreen);
+    VK_5: SetGrid(clMedGray);
+    VK_6: SetGrid(clMoneyGreen);
+    VK_7: SetGrid(clSkyBlue);
+    VK_8: SetGrid(clTeal);
+    VK_9: SetGrid(clBlack);
   end;
 end;
 
@@ -447,7 +478,7 @@ begin
       if (x > 18) and (x <= charXOffset) and
          (y > 17*m) and (y < charYOffset + 17*m) then
       begin
-        offsY := m; offsX := 1;
+        offsY := m;
         offs := m shl 4 + 1;
         if not isCopyChar then
           RefreshCharX(offs)
@@ -462,7 +493,7 @@ begin
       if (x > 18*n) and (x <= charXOffset + 18*n) and
          (y > 17*m) and (y < charYOffset + 17*m) then
       begin
-        offsY := m; offsX := n;
+        offsY := m;
         offs := n + m shl 4 + 1;
         if n = 0 then Dec(offs);
         if not isCopyChar then
@@ -494,8 +525,7 @@ begin
   charEditIndex[offs] := 1;
 end;
 
-procedure TfrmAntic4.imgCharAntic45Move(Sender : TObject; Shift : TShiftState;
-  X, Y : Integer);
+procedure TfrmAntic4.imgCharAntic45Move(Sender : TObject; Shift : TShiftState; X, Y : Integer);
 var
   xf, yf : byte;
 begin
@@ -520,6 +550,15 @@ begin
       fldChar[x, y] := 1 - fldChar[x, y];
 
   RefreshChar;
+end;
+
+procedure TfrmAntic4.ShowGridProc(Sender : TObject);
+begin
+//  isGridShow := (Sender as TMenuItem).Tag = 0;
+  if (Sender as TMenuItem).Tag = 0 then
+    SetGrid(clMedGray)
+  else
+    SetGrid(colTab[0]);
 end;
 
 procedure TfrmAntic4.NumAnticMode45Proc(Sender : TObject);
@@ -581,7 +620,8 @@ begin
   editY.Value := maxY;
 
   filename := 'examples\screen01.an' + IntToStr(anticMode);
-  caption := programName + ' ' + programVersion + ' - Antic mode 4 and 5 editor (' + filename + ')';
+  caption := programName + ' ' + programVersion +
+             ' - Antic mode 4 and 5 editor (' + filename + ')';
   FillScreen(0, false);
 end;
 
@@ -712,7 +752,7 @@ begin
       if (x > 18) and (x <= charXOffset) and
          (y > charYOffset02*m) and (y < charYOffset + charYOffset02*m) then
       begin
-        offsY := m; offsX := 1;
+        offsY := m;
         offs := m shl 4 + 1;
         if not isCopyChar then
           RefreshCharX(offs)
@@ -727,7 +767,7 @@ begin
       if (x > 18*n) and (x <= charXOffset + 18*n) and
          (y > charYOffset02*m) and (y < charYOffset + charYOffset02*m) then
       begin
-        offsY := m; offsX := n;
+        offsY := m;
         offs := n + m shl 4 + 1;
         if n = 0 then Dec(offs);
         if not isCopyChar then
@@ -744,7 +784,7 @@ begin
 
   CharInfo(offs);
   PlotChar(255, 255);
-  RefreshChar;
+  ColorRegisters;
 end;
 
 procedure TfrmAntic4.lblNumProc(Sender: TObject);
@@ -765,7 +805,6 @@ begin
     end;
 
     charEditIndex[offs] := 1;
-//    DrawFontSetChar(offs);
     RefreshChar;
   end;
 end;
@@ -790,7 +829,7 @@ procedure TfrmAntic4.DefaultSetProc(Sender: TObject);
 begin
   DefaultFontSet(fldFontSet);
   fontName := '';
-  statusBar.Panels[3].Text := 'Font/Character set: default';
+  statusBar.Panels[2].Text := 'Font/Character set: default';
   ShowFontSet;
   RefreshData;
 end;
@@ -868,7 +907,8 @@ begin
   finally
     fs.Free;
     RefreshColors;
-    caption := programName + ' ' + programVersion + ' - Antic mode 4 and 5 editor (' + filename + ')';
+    caption := programName + ' ' + programVersion +
+               ' - Antic mode 4 and 5 editor (' + filename + ')';
     ShowCursor(frmViewer, frmViewer, crDefault);
   end;
 end;
@@ -961,7 +1001,8 @@ begin
     if isOk then begin
       isEdit := false;
 //      statusBar.Panels[1].Text := 'File ' + filename + ' saved';
-      caption := programName + ' ' + programVersion + ' - Antic mode 4 and 5 editor (' + filename + ')';
+      caption := programName + ' ' + programVersion +
+                 ' - Antic mode 4 and 5 editor (' + filename + ')';
     end;
   end;
 end;
@@ -996,7 +1037,7 @@ begin
     finally
       fs.Free;
       RefreshColors;
-      statusBar.Panels[3].Text := 'Font/Character set file: ' + fontName;
+      statusBar.Panels[2].Text := 'Font/Character set file: ' + fontName;
     end;
   end;
 end;
@@ -1039,7 +1080,7 @@ begin
           fs.WriteByte(bin2dec(bin));
         end;
         ShowFontSet;
-        statusBar.Panels[3].Text := 'Font/Character set file: ' + fontName;
+        statusBar.Panels[2].Text := 'Font/Character set file: ' + fontName;
       finally
         fs.Free;
       end;
@@ -1057,7 +1098,7 @@ begin
         fs.WriteByte(bin2dec(bin));
       end;
       ShowFontSet;
-      statusBar.Panels[3].Text := 'Font/Character set file: ' + fontName;
+      statusBar.Panels[2].Text := 'Font/Character set file: ' + fontName;
     finally
       fs.Free;
     end;
@@ -1111,6 +1152,7 @@ begin
       r := 0;
       Inc(m, 2);
     end;
+
     if isBackground then begin
       if fldAtascii[j] = 0 then begin
         PutChar(r, m, fldAtascii[j]);
@@ -1122,6 +1164,23 @@ begin
 
     Inc(r);
   end;
+
+  SetGrid(gridColor);
+
+  //imgEditor.Invalidate;
+  //imgEditor.Update;
+  //imgEditor.Refresh;
+end;
+
+procedure TfrmAntic4.SetGrid(gColor : TColor);
+begin
+  isShowGrid := gColor <> colTab[0];
+//  if isshowgrid then debug('is') else debug('not is');
+  gridColor := gColor;
+//  RefreshChar;
+  RefreshData;
+  RefreshChar;
+//  debug('after SetGrid');
 end;
 
 procedure TfrmAntic4.ShowFontSet;
@@ -1223,7 +1282,6 @@ begin
           else
             col := 3;
         end;
-
         FillRectEx(imgEditor, colTab[col], (x + j - 1)*factX, (y + i)*factY, factX shl 1, factY);
         cnt := 0;
       end;
@@ -1239,13 +1297,6 @@ var
   offset, offset2, offs2 : integer;
   i, j : byte;
 begin
-  case btn of
-    mbLeft : offs2 := offs;
-    mbRight: offs2 := 0;
-  else
-    exit;
-  end;
-
   if xf > grX then xf := grX;
 //  if xf mod 8 = 0 then Inc(xf, 8);
 
@@ -1268,6 +1319,13 @@ begin
 
   statusBar.Panels[1].Text := 'Cursor coordinates (x: ' +
                               inttostr(xx) + ', y: ' + inttostr(yy) + ')';
+  case btn of
+    mbLeft : offs2 := offs;
+    mbRight: offs2 := 0;
+  else
+    exit;
+  end;
+
   offset2 := offs2;
   offset := offset2 shl 3;
   if not isFontSetNormal then
@@ -1288,8 +1346,10 @@ var
   dx, dy, xf, yf : integer;
   isInverse : boolean = false;
 begin
+//  exit;
   xf := scrPos shl 3;
   yf := y shl 2;
+
   for dy := 0 to maxY do
     for dx := 0 to maxX do
       if (xf >= dx shl 3) and (xf < (dx + 1) shl 3) then begin
@@ -1303,6 +1363,7 @@ begin
   end;
 
   offset := offset shl 3;
+  ///////// ddd,kjdfklsjdfskljdfsdfsdfs
   MaskColor(xf, yf, offset, isInverse);
 end;
 
@@ -1324,6 +1385,8 @@ begin
   imgChar.Refresh;
   PlotChar(255, 255);
 
+//  debug('step 3');
+
   r := 0; m := 0;
   for j := 0 to maxSize do begin
     if (j > maxX) and (j mod (maxX + 1) = 0) then begin
@@ -1337,7 +1400,10 @@ begin
     Inc(r);
   end;
 
+//  debug('before RefreshCharX(offs);');
+
   RefreshCharX(offs);
+//  debug('after RefreshCharX(offs);');
 end;
 
 procedure TfrmAntic4.RefreshCharX(offset : integer);
@@ -1362,6 +1428,14 @@ begin
       fldChar[xf, yf] := col;
       FillRectEx(imgChar, coltabFont[col], xf*chrFactX, yf*chrFactY, chrFactX, chrFactX);
 
+      if isShowGrid then begin
+//        debug('gridColor <> colTab[0]');
+        imgChar.Canvas.Pen.Color := gridColor;
+        imgChar.Canvas.Rectangle(xf*chrFactX, yf*chrFactY,
+                                 xf*chrFactX + (xf + 1)*chrFactX + 1,
+                                 yf*chrFactY + (yf + 1)*chrFactY + 1);
+      end;
+
       if (xf = 1) or (xf = 3) or (xf = 5) or (xf = 7) then begin
         if (fldChar[xf - 1, yf] = 0) and (fldChar[xf, yf] = 0) then
           col := 0
@@ -1378,7 +1452,24 @@ begin
         fldCharAntic45[xf - 1, yf] := colTab[col];
         fldCharAntic45[xf, yf] := colTab[col];
         FillRectEx(imgCharAntic45, colTab[col], (xf - 1)*chrFactX, yf*chrFactY,
-                   chrFactX*2, chrFactY);
+                   (xf - 1)*chrFactX*2, chrFactY);
+        if isShowGrid then begin
+//          debug('isShowGrid');
+          imgCharAntic45.Canvas.Pen.Color := gridColor
+        end
+        else begin
+//          debug('not isShowGrid');
+          imgCharAntic45.Canvas.Pen.Color := colTab[col];
+        end;
+
+        if xf = 1 then
+          imgCharAntic45.Canvas.Rectangle(0, yf*chrFactY,
+                                          chrFactX*2 + 1,
+                                          yf*chrFactY + (yf + 1)*chrFactY + 1)
+        else
+          imgCharAntic45.Canvas.Rectangle((xf - 1)*chrFactX, yf*chrFactY,
+                                          (xf - 1)*chrFactX + (xf - 1)*chrFactX + 1,
+                                          yf*chrFactY + (yf + 1)*chrFactY + 1);
       end;
     end;
 
@@ -1517,21 +1608,16 @@ begin
 
   case xf of
     0, 2, 4, 6: begin
-      if col = 1 then begin
-        fldCharAntic45[xf + 1, yf] := frmColors.SelColor;
-        FillRectEx(imgCharAntic45, colTab[frmColors.SelColor],
-                   xf*chrFactX, yf*chrFactY, chrFactX*2, chrFactY);
-      end
-      else begin
+      if col = 0 then begin
         fldCharAntic45[xf + 1, yf] := 0;
         FillRectEx(imgCharAntic45, colTab[0], xf*chrFactX, yf*chrFactY, chrFactX*2, chrFactY);
-      end;
-
-      if col = 0 then begin
         fldChar[xf, yf] := 0;
         fldChar[xf + 1, yf] := 0;
       end
       else begin
+        fldCharAntic45[xf + 1, yf] := frmColors.SelColor;
+        FillRectEx(imgCharAntic45, colTab[frmColors.SelColor],
+                   xf*chrFactX, yf*chrFactY, chrFactX*2, chrFactY);
         case frmColors.SelColor of
           0: begin
             fldChar[xf, yf] := 0; fldChar[xf + 1, yf] := 0;
@@ -1549,22 +1635,17 @@ begin
       end;
     end;
     1, 3, 5, 7: begin
-      if col = 1 then begin
-        fldCharAntic45[xf - 1, yf] := frmColors.SelColor;
-        FillRectEx(imgCharAntic45, colTab[frmColors.SelColor],
-                   (xf - 1)*chrFactX, yf*chrFactY, chrFactX*2, chrFactY);
-      end
-      else begin
+      if col = 0 then begin
         fldCharAntic45[xf - 1, yf] := 0;
         FillRectEx(imgCharAntic45, colTab[0],
                    (xf - 1)*chrFactX, yf*chrFactY, chrFactX*2, chrFactY);
-      end;
-
-      if col = 0 then begin
         fldChar[xf - 1, yf] := 0;
         fldChar[xf, yf] := 0;
       end
       else begin
+        fldCharAntic45[xf - 1, yf] := frmColors.SelColor;
+        FillRectEx(imgCharAntic45, colTab[frmColors.SelColor],
+                   (xf - 1)*chrFactX, yf*chrFactY, chrFactX*2, chrFactY);
         case frmColors.SelColor of
           0: begin
             fldChar[xf - 1, yf] := 0; fldChar[xf, yf] := 0;
@@ -1852,23 +1933,42 @@ end;
  -----------------------------------------------------------------------------}
 procedure TfrmAntic4.RefreshData;
 var
-  i, r, m : word;
+  i, x, y : word;
+  xx, yy : word;
 begin
   FillRectEx(imgChar, coltabFont[0], 0, 0, imgChar.Width, imgChar.Height);
   FillRectEx(imgCharAntic45, colTab[0], 0, 0, imgChar.Width, imgChar.Height);
-
-  r := 0; m := 0;
+//  imgEditor.Canvas.Clear;
+  x := 0; y := 0;
   for i := 0 to maxSize do begin
     if (i > maxX) and (i mod (maxX + 1) = 0) then begin
-      r := 0;
-      Inc(m, 2);
+      x := 0;
+      Inc(y, 2);
     end;
-    PutChar(r, m, fldAtascii[i]);
-    Inc(r);
+    PutChar(x, y, fldAtascii[i]);
+
+    // Draw a grid
+    imgEditor.Canvas.Pen.Color := gridColor;
+    xx := x*24;
+    yy := y*modeHeight shr 1;
+//    if gridColor <> colTab[0] then begin
+    if isShowGrid then begin
+//      debug('RefreshData isShowGrid');
+      imgEditor.Canvas.Line(xx, yy, xx + 24, yy);
+      imgEditor.Canvas.Line(xx, yy + modeHeight, xx + 24, yy + modeHeight);
+      imgEditor.Canvas.Line(xx, yy, xx, yy + modeHeight);
+      imgEditor.Canvas.Line(xx + 24, yy, xx + 24, yy + modeHeight);
+    end;
+    Inc(x);
   end;
 
-//  imgEditor.Refresh;
+  //imgEditor.Invalidate;
+  //imgEditor.Update;
+  //imgEditor.Refresh;
   ShowFontSet;
+  //if isShowGrid then begin
+  //    debug('RefreshData isShowGrid');
+  //end;
 end;
 
 procedure TfrmAntic4.RefreshColors;
@@ -1909,25 +2009,30 @@ begin
   end;
 end;
 
+{-----------------------------------------------------------------------------
+ Copy character data to selected character set cell
+ -----------------------------------------------------------------------------}
 procedure TfrmAntic4.CopyChar(isCopy : boolean);
 begin
   isCopyChar := isCopy;
   if iscopy then begin
-    statusBar.Panels[2].Text := 'Copy drawing character to selected character set cell.' +
+    statusBar.Panels[3].Text := 'Copy drawing character to selected character set cell.' +
                                 ' Press ''Esc'' key to end the operation!';
     ShowCursor(frmAntic4, frmAntic4, crDrag);
   end
   else begin
-    statusBar.Panels[2].Text := '';
+    statusBar.Panels[3].Text := '';
     ShowCursor(frmAntic4, frmAntic4, crDefault);
   end;
 end;
 
+{-----------------------------------------------------------------------------
+ Restore default character data
+ -----------------------------------------------------------------------------}
 procedure TfrmAntic4.RestoreCharProc(Sender : TObject);
 var
   xf, yf, col : byte;
 begin
-//  debug('RestoreCharProc offs', offs);
   FillRectEx(imgChar, colTab[0], 0, 0, imgChar.Width, imgChar.Height);
   for yf := 0 to chrY do
     for xf := 0 to chrX do begin

@@ -92,7 +92,6 @@ type
     procedure GenCodeProc(Sender: TObject);
   private
     { private declarations }
-    varBtn : tMousebutton;
     btn : tMousebutton;
     offs : byte;   // Internal character offset
     offsX : byte;
@@ -344,13 +343,6 @@ begin
   btn := Button;
   xf := X div factX;
   yf := Y div factY;
-
-  // Check for mouse button clicked
-  if btn = mbRight then
-    varBtn := btn
-  else
-    varBtn := mbLeft;
-
   Plot(xf, yf);
 end;
 

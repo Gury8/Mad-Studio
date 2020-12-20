@@ -400,12 +400,12 @@ object frmPmg: TfrmPmg
     Height = 693
     Top = 32
     Width = 779
-    ActivePage = tabMultiPM
+    ActivePage = tabPlayers
     Align = alClient
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 3
     OnChange = tabsChange
     object tabPlayers: TTabSheet
