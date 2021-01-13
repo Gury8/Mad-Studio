@@ -11,8 +11,8 @@ unit antic2;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, ComCtrls, Menus, StdCtrls, BCTrackbarUpdown, strutils, lcltype,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
+  ComCtrls, Menus, StdCtrls, BCTrackbarUpdown, strutils, lcltype,
   common;
 
 type
@@ -232,7 +232,8 @@ var
   fs : TFileStream;
 begin
   frmMain.dlgOpen.Title := 'Open existing character set file';
-  frmMain.dlgOpen.Filter := 'Character set files (*.fnt, *.fon, *.set)|*.fnt;*.fon;*.set|All files (*.*)|*.*';
+  frmMain.dlgOpen.Filter := 'Character set files (*.fnt, *.fon, *.set)' +
+                            '|*.fnt;*.fon;*.set|All files (*.*)|*.*';
   if frmMain.dlgOpen.Execute then begin
     fontName := frmMain.dlgOpen.Filename;
     fs := TFileStream.Create(fontName, fmOpenReadWrite);
@@ -543,7 +544,8 @@ begin
     frmMain.dlgSave.Title := 'Save text mode 0 screen as';
 
     if (editX.Value = 39) and (editY.Value = 23) then
-      frmMain.dlgSave.Filter := 'Text mode 0 screen files (*.gr0, *.asc)|*.gr0;*.asc|All files (*.*)|*.*'
+      frmMain.dlgSave.Filter := 'Text mode 0 screen files (*.gr0, *.asc)' +
+                                '|*.gr0;*.asc|All files (*.*)|*.*'
     else
       frmMain.dlgSave.Filter := 'Text mode 0 screen files (*.an2)|*.an2|All files (*.*)|*.*';
 
@@ -700,9 +702,7 @@ var
 begin
   FillRectEx(imgFontSet, coltabFont[1], 0, 0, imgFontSet.Width, imgFontSet.Height);
   FillRectEx(imgFontSetInv, coltabFont[1], 0, 0, imgFontSetInv.Width, imgFontSetInv.Height);
-
   offset := 0; yoffset := 0;
-
   for n := 0 to 127 do begin
     if (n mod 16 = 0) and (n > 0) then begin
       offset := 0;
@@ -710,7 +710,6 @@ begin
     end;
 
     xoffset := offset*24;
-
     for yf := 0 to grY02 do
       for xf := 0 to grX02 do begin
         col := fldFontSet[xf, n shl 3 + yf];
@@ -781,13 +780,9 @@ begin
   for dy := 0 to 7 do
     for dx := 0 to 7 do begin
       col := fldFontSet[dx, dy + offset];
-      if not isFontSetNormal then begin
-        //if col = 1 then
-        //  col := 0
-        //else if col = 0 then
-        //  col := 1;
+      if not isFontSetNormal then
         col := 1 - col;
-      end;
+
       fldChar[dx, dy] := col;
 //      fldScreen[xf + dx, yf + dy] := col;
 //      col := SetColorIndex(col, isFontSetNormal);
@@ -829,10 +824,6 @@ begin
 //      fldScreen[xf + dx, yf + dy] := col;
 
       if isInverse then
-        //if col = 1 then
-        //  col := 0
-        //else if col = 0 then
-        //  col := 1;
         col := 1 - col;
 
       FillRectEx(imgEditor, coltabFont[col], (xf + dx)*factX, (yf + dy)*factY, factX, factY);
@@ -850,10 +841,6 @@ begin
     for xf := 0 to 7 do begin
       col := fldFontSet[xf, yf + offset];
       if not isFontSetNormal then
-        //if col = 1 then
-        //  col := 0
-        //else if col = 0 then
-        //  col := 1;
         col := 1 - col;
 
       fldChar[xf, yf] := col;
@@ -870,16 +857,6 @@ procedure TfrmAntic2.RefreshData;
 var
   i, r, m : word;
 begin
-  //r := 0; m := 0;
-  //for i := 0 to maxSize do begin
-  //  if (i > maxX) and (i mod (maxX + 1) = 0) then begin
-  //    r := 0;
-  //    Inc(m, 2);
-  //  end;
-  //  PutChar(r, m, fldAtascii[i]);
-  //  Inc(r);
-  //end;
-
   r := 0; m := 0;
   for i := 0 to maxSize do begin
     if (i > maxX) and (i mod (maxX + 1) = 0) then begin

@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Player Animator editor and player - Load frame animation data
 }
 unit anim_load_save;
@@ -71,45 +71,82 @@ procedure FillPlayers(flag, pl : byte);
 var
   temp : string;
   x, i, j : byte;
+  height : byte;
 begin
+  //if aplAnim = fixed52 then
+  //  height := 52
+  //else begin
+  //  if animFrameHeight <= _ANIM_APL_MAX_LINES then
+  //    height := _ANIM_APL_MAX_LINES
+  //  else begin
+  //    if aplAnim = extended then
+  //      height := animFrameHeight
+  //  end;
+  //end;
+
+  case aplAnim of
+    normal:
+      height := _ANIM_APL_MAX_LINES;
+    extended:
+      height := animFrameHeight;
+    fixed52: begin
+      height := 52;
+      animFrameHeight := height;
+    end;
+  end;
+
   if (flag = 1) and (pl = 1) then
     for i := 0 to 16 do
-      for j := 0 to 47 do
+      for j := 0 to height - 1 do
         if fs.Position < fs.Size then
           d := fs.ReadByte;
 
   for i := 0 to 16 do
-    // Player data, frame i (48 bytes)
-    // 17 - Player data, copy buffer (48 bytes)
-    for j := 0 to 47 do begin
+    // Player data, frame i
+    // 17 - Player data, copy buffer
+    for j := 0 to height - 1 do begin
       if fs.Position < fs.Size then begin
         d := fs.ReadByte;
         temp := dec2bin(d);
-        if flag = 0 then begin
-          if (j <= _ANIM_MAX_LINES - 1) then
+        //if flag = 0 then begin
+        //  if (j <= animFrameHeight - 1) then
             for x := 0 to 7 do begin
               frmAnimator.fld[i, pl, x, j] := StrToInt(temp[x + 1]);
               frmAnimator.playerPos[i, pl, frmAnimator.playerIndex[i, pl] + x, j] :=
                 frmAnimator.fld[i, pl, x, j];
             end;
-        end
-        else begin
-          if (j <= _ANIM_MAX_LINES - 1) then
-            for x := 0 to 7 do begin
-              frmAnimator.fld[i, pl, x, j] := StrToInt(temp[x + 1]);
-              frmAnimator.playerPos[i, pl, frmAnimator.playerIndex[i, pl] + x, j] :=
-                frmAnimator.fld[i, pl, x, j];
-            end;
-        end;
+        //end
+        //else begin
+        //  if (j <= animFrameHeight - 1) then
+        //    for x := 0 to 7 do begin
+        //      frmAnimator.fld[i, pl, x, j] := StrToInt(temp[x + 1]);
+        //      frmAnimator.playerPos[i, pl, frmAnimator.playerIndex[i, pl] + x, j] :=
+        //        frmAnimator.fld[i, pl, x, j];
+        //    end;
+        //end;
       end;
     end;
 end;
 
 begin
   with frmMain.dlgOpen do begin
-    Title := 'Open Atari Player data file';
-    Filter := 'Atari Player data files (*.apl)|*.apl|All files (*.*)|*.*';
+    Title := 'Open Atari Player Editor data file';
+    case aplAnim of
+      normal: begin
+  //      animFrameHeight := _ANIM_APL_MAX_LINES;
+        Filter := 'Atari Player Editor data file (*.apl)|*.apl;|All files (*.*)|*.*';
+      end;
+      extended: begin
+        Filter := 'Atari Player Editor data file (*.apm)|*.apm;|All files (*.*)|*.*';
+      end;
+      fixed52: begin
+//        animFrameHeight := 52;
+        Filter := 'Atari Player Editor data file (*.apl, *.apm)|*.apl;*.apm|All files (*.*)|*.*';
+      end;
+    end;
+
     if Execute then begin
+      Screen.Cursor := crHourGlass;
       filenamex := frmMain.dlgOpen.Filename;
       fs := TFileStream.Create(Filenamex, fmOpenRead);
       try
@@ -185,8 +222,9 @@ begin
           //  end;
           //end;
 
-//          frame01 := 0; frame02 := 1;
-//          showmessage(inttostr(frame01) + ' * ' + inttostr(frame02));
+          //d := fs.ReadByte;
+//          d := fs.ReadByte;
+
           FillPlayers(0, 0);
           FillPlayers(0, 1);
         end
@@ -214,6 +252,7 @@ begin
         frmAnimator.caption := programName + ' ' + programVersion +
                                ' - Player Animator (' + filenamex + ')';
       finally
+        Screen.Cursor := crDefault;
         fs.Free;
         frmAnimLoadSave.Close;
       //except

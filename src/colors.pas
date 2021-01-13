@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Color palette
 }
 unit colors;
@@ -39,7 +39,7 @@ type
     procedure FormActivate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-    procedure shapeColor1MouseLeave(Sender: TObject);
+    //procedure shapeColor1MouseLeave(Sender: TObject);
     procedure shapeColorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure shapeColorEnter(Sender: TObject);
@@ -65,7 +65,7 @@ implementation
 {$R *.lfm}
 
 uses
-  common, pmg, graph, antic6, antic4, animator, lib;
+  common, pmg, graph, antic6, antic4, animator;
 
 { TfrmColors }
 
@@ -203,12 +203,12 @@ begin
   end;
 end;
 
-procedure TfrmColors.shapeColor1MouseLeave(Sender: TObject);
-begin
-  //TShape(Sender).Canvas.Pen.Color := clDefault;
-//  TShape(Sender).Canvas.Rectangle(bounds(0, 0, TShape(Sender).width, TShape(Sender).Height));
-  //TShape(Sender).Canvas.Rectangle(0, 0, TShape(Sender).width, TShape(Sender).Height);
-end;
+//procedure TfrmColors.shapeColor1MouseLeave(Sender: TObject);
+//begin
+//  //TShape(Sender).Canvas.Pen.Color := clDefault;
+////  TShape(Sender).Canvas.Rectangle(bounds(0, 0, TShape(Sender).width, TShape(Sender).Height));
+//  //TShape(Sender).Canvas.Rectangle(0, 0, TShape(Sender).width, TShape(Sender).Height);
+//end;
 
 procedure TfrmColors.shapeColorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);

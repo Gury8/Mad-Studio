@@ -98,7 +98,7 @@ type
     grX02, grY02,
     factX02, factY02 : byte;
     filenamex : string;
-    dl : array[0..100] of byte;  // Display list program
+    dl : array[0..100] of byte;      // Display list program
     dlBits : array[0..239] of byte;  // Display list bytes
     maxX : byte;
     maxSize : integer;
@@ -168,18 +168,12 @@ begin
     Brush.Style := bsSolid;
 
     // Top part
-//    Brush.Color := colTab[0];
-//    FillRect(bounds(0, 0, imgEditor.Width, n));
     FillRectEx(imgEditor, colTab[0], 0, 0, imgEditor.Width, n);
 
     // Middle part
-//    Brush.Color := coltabFont[0];
-//    FillRect(bounds(0, n - 1, imgEditor.Width, imgEditor.Height - n));
     FillRectEx(imgEditor, coltabFont[0], 0, n - 1, imgEditor.Width, imgEditor.Height - n);
 
     // Bottom part
-//    Brush.Color := colTab[0];
-//    FillRect(bounds(0, imgEditor.Height - n - 1, imgEditor.Width, n));
     FillRectEx(imgEditor, colTab[0], 0, imgEditor.Height - n - 1, imgEditor.Width, n);
   end;
 
@@ -188,8 +182,6 @@ begin
     Brush.Style := bsSolid;
 
     // Top part of the screen
-//    Brush.Color := colTab[0];
-//    FillRect(bounds(0, 0, imgEditor.Width, n));
     FillRectEx(imgSelected, colTab[0], 0, 0, imgEditor.Width, n);
 
     // Middle part of the screen
@@ -242,9 +234,6 @@ var
 begin
   xf := X div factX;
   yf := Y div factY;
-
-//  showmessage(inttostr(anticMode));
-
   if Button = mbRight then begin
     for j := 0 to modeHeight + 6 do begin
       //for i := 0 to maxX - 1 do begin
@@ -299,7 +288,6 @@ var
 begin
   xf := X div factX;
   yf := Y div factY;
-
   statusBar.Panels[1].Text := 'Cursor coordinates' +
                               ' (x: ' + inttostr(xf) + ', y: ' + inttostr(yf) + ')';
 //  statusBar.Panels[2].Text := inttostr(dlBits[yf*8]);
@@ -371,7 +359,7 @@ begin
     Rectangle(_OFFSET + _OFFSET02*3 - 2, 1, _OFFSET + _OFFSET02*3 + _OFFSET01 + 2, 30);
 
     Rectangle(_OFFSET + _OFFSET02*3 + _OFFSET - 2, 1,
-                     _OFFSET + _OFFSET02*3 + _OFFSET + _OFFSET02 + 2, 30);
+              _OFFSET + _OFFSET02*3 + _OFFSET + _OFFSET02 + 2, 30);
 
     Rectangle(_OFFSET*2 + _OFFSET01*3 - 2, 1, _OFFSET*2 + _OFFSET01*4 + 2, 62);
   end;
@@ -804,9 +792,6 @@ begin
         if flag then begin
           dl[cnt] := dlBits[i];
           Inc(cnt);
-
-//          showmessage('blank lines cnt = ' + inttostr(cnt));
-
           flag := false;
           cnt02 := 0;
           cnt03 += AnticModes[20 + n].scanLines;
@@ -849,26 +834,19 @@ begin
           dl[cnt] := _LMS + dlBits[i];
 
         Inc(cnt);
-//        showmessage('1. cnt = ' + inttostr(cnt));
-
         if not isLMS then begin
           isLMS := true;
           LMS_offset := cnt;
           dl[cnt] := 0;
           dl[cnt + 1] := $30;
-//          showmessage('1. cnt = ' + inttostr(cnt));
           cnt += 2;
-//          showmessage('2. cnt = ' + inttostr(cnt));
-//          cnt03 += 3;
         end;
         flag := false;
         cnt02 := 0;
         cnt03 += AnticModes[dlBits[i]].scanLines;
-//        showmessage('flag dlBits[i] = ' + inttostr(dlBits[i]) + ', cnt02 = ' + inttostr(cnt02));
       end;
       Inc(cnt02);
       flag := cnt02 = AnticModes[dlBits[i]].scanLines;
-//      showmessage('dlBits[i] = ' + inttostr(dlBits[i]) + ', cnt02 = ' + inttostr(cnt02));
     end;
   end;
 
@@ -877,7 +855,6 @@ begin
   dl[cnt + 2] := 160;
 
   maxDlByte := cnt + 2;
-//  showmessage('mdl = ' + inttostr(maxDlByte) + ', cnt03 = ' + inttostr(cnt03));
 
 //  Move(dlSave, dl, Sizeof(dlSave));
 end;
@@ -930,8 +907,6 @@ begin
 //  PlotByte(xf, yf, 2, colTab[0], false);  //PlotLine01(xf, yf, 7, true);
 //  PlotByte(xf + 100, yf, 3, coltab[3], false);  //Plot3(xf, yf, true);
   factX02mm := 3;
-//  imgSelection.Canvas.Brush.Color := colTab[0];
-//  imgSelection.Canvas.FillRect(bounds(xf, yf + 3, 6*AnticModes[27].bits, 3*AnticModes[27].scanLines));
   FillRectEx(imgSelection, colTab[0], xf, yf + 3, 6*AnticModes[27].bits, 3*AnticModes[27].scanLines);
   //imgSelection.Canvas.FillRect(bounds(xf*factX02mm + xoffsetmm, yf*3*AnticModes[2].scanLines,
   //                                    factX02mm, 3*AnticModes[2].scanLines));
@@ -957,7 +932,6 @@ begin
   xf := 0; yf := 0;
   factX02mm := 6; factY02mm := 3;
   Inc(offsetmm, 72);
-
   for yf := 0 to grY02mm do
     for xf := 0 to grX02mm do begin
       col := fldFontSet[xf, offs shl 3 + yf];
@@ -981,7 +955,6 @@ begin
   xf := 0; yf := 0;
   factX02mm := 6; factY02mm := 6;
   Inc(offsetmm, 72);
-
   for yf := 0 to grY02mm do
     for xf := 0 to grX02mm do begin
       col := fldFontSet[xf, offs shl 3 + yf];
@@ -1039,26 +1012,10 @@ begin
     //end
     // Keep ANTIC mode 7 characters in bound limits
     if anticMode = 7 then
-      if yy > 14 then begin
-//      if xx + yy*9 > maxSize - 1 then begin
-//        showmessage('may y');
-        Exit;
-      end;
-
-//  showmessage('click ' + inttostr(anticMode));
+      if yy > 14 then Exit;
 
     statusBar.Panels[1].Text := 'Cursor coordinates (x: ' +
                                 inttostr(xx) + ', y: ' + inttostr(yy) + ')';
-    // ***
-    //if anticMode = 7 then
-    //  dlSave[yy + 2] := anticMode
-    //else
-    //  dlSave[yy] := anticMode;
-
-    //if nnn >= dy then
-    //  offset03 := 0
-    //else
-    //  offset03 := mmm;  //AnticModes[21].scanLines * 3;
   end;
 
   offset := offs2 shl 3;
@@ -1116,7 +1073,6 @@ var
   str : string = '';
 begin
 //  showmessage(inttostr(modeheight));
-
   xx := index;
 
   case index of
@@ -1223,10 +1179,12 @@ begin
         col := fldFontSet[dx, dy + offset];
   //      fldScreen[xf + dx, yf + dy] := col;
 
-        if isInverse then begin
-          if col = 1 then col := 0
-          else if col = 0 then col := 1;
-        end;
+        //if isInverse then begin
+        //  if col = 1 then col := 0
+        //  else if col = 0 then col := 1;
+        //end;
+        if isInverse then
+          col := 1 - col;
 
         imgEditor.Canvas.Brush.Color := coltabFont[col];
         imgEditor.Canvas.FillRect(bounds((xf + dx)*factX, (yf + dy)*factY, factX, factY));

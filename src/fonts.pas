@@ -164,8 +164,7 @@ type
     procedure imgCharDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure imgCharMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure imgCharUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
-      X, Y: Integer);
+    procedure imgCharUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure imgFontSetDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure CloseProc(Sender: TObject);
@@ -191,7 +190,7 @@ type
   private
     { private declarations }
     btn : tMousebutton;
-    offsX, offsY : byte;
+    offsY : byte;
     grX, grY, factX, factY : byte;
     grX02, grY02, factX02, factY02 : byte;
     factX06, factY06 : byte;
@@ -488,7 +487,7 @@ begin
 //  isFontSetNormal := TImage(Sender).Tag = 0;
   for m := 0 to 7 do begin
     if (x > 16) and (x <= 32) and (y > m shl 4) and (y < 20 + m shl 4) then begin
-      offsY := m; offsX := 1;
+      offsY := m;
       offs := m shl 4 + 1;
       if not isCopyChar then
         RefreshCharX(offs)
@@ -506,7 +505,7 @@ begin
       if (x > n shl 4) and (x <= 32 + n shl 4) and
          (y > m shl 4) and (y < 20 + m shl 4) then
       begin
-        offsY := m; offsX := n;
+        offsY := m;
         offs := n + m shl 4 + 1;
         if n = 0 then Dec(offs);
         if not isCopyChar then
@@ -552,7 +551,7 @@ begin
 
   for m := 0 to 7 do begin
     if (x > 16) and (x <= 32) and (y > 32*m) and (y < 32*m + 32) then begin
-      offsY := m; offsX := 1;
+      offsY := m;
       offs := m shl 4 + 1;  // 16*m
       if not isCopyChar then
         RefreshCharX(offs)
@@ -569,7 +568,7 @@ begin
       if (x > n shl 4) and (x <= 32 + n shl 4) and
          (y > m shl 5) and (y < m shl 5 + 32) then
       begin
-        offsY := m; offsX := n;
+        offsY := m;
         offs := n + m shl 4 + 1;
         if n = 0 then Dec(offs);
 
@@ -619,7 +618,7 @@ begin
        (y > (16 + factor shl 4)*m) and
        (y < (16 + factor shl 4)*(m + 1)) then
     begin
-      offsY := m; offsX := 1;
+      offsY := m;
       offs := m shl 4 + 1;  // 16*m
       if not isCopyChar then
         RefreshCharX(offs)
@@ -636,7 +635,7 @@ begin
          (y > (16 + factor shl 4)*m) and
          (y < (16 + factor shl 4)*(m + 1)) then
       begin
-        offsY := m; offsX := n;
+        offsY := m;
         offs := n + m shl 4 + 1;
         if n = 0 then Dec(offs);
 
@@ -1317,9 +1316,7 @@ procedure TfrmFonts.ShowAntic6Char(offset : word; image : TImage; fontType : fld
 var
   col, xf, yf : integer;
 begin
-  image.Canvas.Brush.Color := coltab[0];
-  image.Canvas.Brush.Style := bsSolid;
-  image.Canvas.FillRect(bounds(0, 0, image.Width, image.Height));
+  FillRectEx(image, colTab[0], 0, 0, image.Width, image.Height);
 
   // Uppercase alphabet, numbers, punctuation
   if offset <= 63 then

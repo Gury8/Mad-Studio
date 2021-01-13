@@ -234,14 +234,14 @@ type
     procedure FlipXProc(Sender: TObject);
     procedure FlipYProc(Sender: TObject);
     procedure RotateProc(Sender: TObject);
+    procedure ShiftDownProc(Sender: TObject);
+    procedure ShiftLeft(Sender: TObject);
     procedure ShiftRightProc(Sender: TObject);
     procedure ShiftUpProc(Sender: TObject);
     procedure MoveDownProc(Sender: TObject);
     procedure MoveLeftProc(Sender: TObject);
     procedure MoveRightProc(Sender: TObject);
     procedure MoveUpProc(Sender: TObject);
-    procedure ShiftDownProc(Sender: TObject);
-    procedure ShiftLeft(Sender: TObject);
     procedure MaxSizeProc(Sender : TObject);
   private
     { private declarations }
@@ -271,11 +271,11 @@ type
     procedure FillScreen(character : byte; isBackground : boolean);
     procedure SetAnticMode(mode : byte);
     procedure OpenFile(filename : string);
-    procedure ColorRegisters;
     procedure MaskColor(x, y, offset : integer; isInverse : boolean);
     procedure CopyChar(isCopy : boolean);
     procedure CharInfo(offset : integer);
     procedure SetGrid(gColor : TColor);
+    procedure ColorRegisters;
   public
     { public declarations }
     filename : string;
@@ -364,13 +364,12 @@ begin
   for i := 0 to 15 do
     (FindComponent('lblNum' + IntToStr(i)) as TLabel).Caption := '0';
 
-  gridColor := clred;
   gridColor := colTab[0];
   FillScreen(0, false);
   isCreate := false;
 
   offs := 1;
-  isFontSetNormal := true;
+//  isFontSetNormal := true;
   RefreshCharX(offs);
   CharInfo(offs);
   PlotChar(255, 255);
@@ -473,7 +472,7 @@ begin
     exit;
   end;
 
-  for m := 0 to 7 do
+  for m := 0 to _CHAR_DIM do
     for n := 0 to 15 do begin
       if (x > 18) and (x <= charXOffset) and
          (y > 17*m) and (y < charYOffset + 17*m) then
@@ -526,12 +525,12 @@ begin
 end;
 
 procedure TfrmAntic4.imgCharAntic45Move(Sender : TObject; Shift : TShiftState; X, Y : Integer);
-var
-  xf, yf : byte;
+//var
+//  xf, yf : byte;
 begin
-  xf := X div chrFactX;
-  yf := Y div chrFactY;
-  PlotCharAntic45(xf, yf);
+  //xf := X div chrFactX;
+  //yf := Y div chrFactY;
+  //PlotCharAntic45(xf, yf);
 end;
 
 procedure TfrmAntic4.imgCharAntic45Up(Sender : TObject; Button : TMouseButton;
@@ -539,17 +538,6 @@ procedure TfrmAntic4.imgCharAntic45Up(Sender : TObject; Button : TMouseButton;
 begin
   btn := mbMiddle;
 //  RefreshChar;
-end;
-
-procedure TfrmAntic4.InvertProc(Sender : TObject);
-var
-  x, y : byte;
-begin
-  for y := 0 to chrY do
-    for x := 0 to chrX do
-      fldChar[x, y] := 1 - fldChar[x, y];
-
-  RefreshChar;
 end;
 
 procedure TfrmAntic4.ShowGridProc(Sender : TObject);
@@ -747,7 +735,7 @@ begin
     exit;
   end;
 
-  for m := 0 to 7 do
+  for m := 0 to _CHAR_DIM do
     for n := 0 to 15 do begin
       if (x > 18) and (x <= charXOffset) and
          (y > charYOffset02*m) and (y < charYOffset + charYOffset02*m) then
@@ -799,7 +787,7 @@ begin
     dataValue := StrToInt(bin);
     bin := IntToBin(dataValue, 8);
     j := (Sender as TLabel).Tag;
-    for i := 0 to 7 do begin
+    for i := 0 to _CHAR_DIM do begin
       fldChar[i, j] := StrToInt(bin[i + 1]);
       fldCharAntic45[i, j] := fldChar[i, j];
     end;
@@ -843,7 +831,7 @@ var
   fs : TFileStream;
   dta : byte;
 begin
-  ShowCursor(frmViewer, frmViewer, crHourGlass);
+  ShowCursor(frmAntic4, frmAntic4, crHourGlass);
 
   filename := LowerCase(filename);
   if isAntic2 then begin
@@ -909,7 +897,7 @@ begin
     RefreshColors;
     caption := programName + ' ' + programVersion +
                ' - Antic mode 4 and 5 editor (' + filename + ')';
-    ShowCursor(frmViewer, frmViewer, crDefault);
+    ShowCursor(frmAntic4, frmAntic4, crDefault);
   end;
 end;
 
@@ -1031,7 +1019,7 @@ begin
         if fs.Position < fs.Size then begin
           r := fs.ReadByte;
           bin := IntToBin(r, 8);
-          for i := 0 to 7 do
+          for i := 0 to _CHAR_DIM do
             fldFontSet[i, j] := StrToInt(bin[i + 1]);
         end;
     finally
@@ -1074,7 +1062,7 @@ begin
       try
         for j := 0 to 1023 do begin
           bin := '';
-          for i := 0 to 7 do
+          for i := 0 to _CHAR_DIM do
             bin += IntToStr(fldFontSet[i, j]);
 
           fs.WriteByte(bin2dec(bin));
@@ -1092,7 +1080,7 @@ begin
     try
       for j := 0 to 1023 do begin
         bin := '';
-        for i := 0 to 7 do
+        for i := 0 to _CHAR_DIM do
           bin += IntToStr(fldFontSet[i, j]);
 
         fs.WriteByte(bin2dec(bin));
@@ -1266,8 +1254,8 @@ var
   i, j, col : byte;
   mask : array[0..1] of byte;
 begin
-  for i := 0 to 7 do
-    for j := 0 to 7 do begin
+  for i := 0 to _CHAR_DIM do
+    for j := 0 to _CHAR_DIM do begin
       Inc(cnt);
       col := fldFontSet[j, i + offset];
       mask[cnt - 1] := col;
@@ -1346,7 +1334,6 @@ var
   dx, dy, xf, yf : integer;
   isInverse : boolean = false;
 begin
-//  exit;
   xf := scrPos shl 3;
   yf := y shl 2;
 
@@ -1363,7 +1350,6 @@ begin
   end;
 
   offset := offset shl 3;
-  ///////// ddd,kjdfklsjdfskljdfsdfsdfs
   MaskColor(xf, yf, offset, isInverse);
 end;
 
@@ -1385,8 +1371,6 @@ begin
   imgChar.Refresh;
   PlotChar(255, 255);
 
-//  debug('step 3');
-
   r := 0; m := 0;
   for j := 0 to maxSize do begin
     if (j > maxX) and (j mod (maxX + 1) = 0) then begin
@@ -1400,10 +1384,7 @@ begin
     Inc(r);
   end;
 
-//  debug('before RefreshCharX(offs);');
-
   RefreshCharX(offs);
-//  debug('after RefreshCharX(offs);');
 end;
 
 procedure TfrmAntic4.RefreshCharX(offset : integer);
@@ -1520,6 +1501,7 @@ begin
                  chrFactX*2, chrFactY);
     end
     else begin
+//      debug('xf', xf);
       if (fldChar[xf, yf] = 0) and (fldChar[xf + 1, yf] = 0) then
         col := 0
       else if (fldChar[xf, yf] = 1) and (fldChar[xf + 1, yf] = 0) then
@@ -1539,13 +1521,13 @@ begin
   end;
 
   // Show character data information
-  for j := 0 to 7 do begin
+  for j := 0 to _CHAR_DIM do begin
     bin := '';
-    for i := 0 to 7 do
+    for i := 0 to _CHAR_DIM do
       bin += IntToStr(fldChar[i, j]);
 
     binConv := IntToStr(bin2dec(bin)) + ' $' + Dec2Hex(bin2dec(bin));
-    for n := 0 to 7 do
+    for n := 0 to _CHAR_DIM do
       case j of
         0 : begin
           lblNum0.Caption := binConv;
@@ -1679,7 +1661,7 @@ begin
   if offset < 16 then
     xoffset := offset*18;
 
-  for cnt := 1 to 7 do
+  for cnt := 1 to _CHAR_DIM do
     if (offset >= cnt shl 4) and (offset < charXOffset + (cnt - 1) shl 4) then begin
       xoffset := (offset - cnt shl 4)*18;
       break;
@@ -1802,10 +1784,8 @@ begin
 end;
 
 {-----------------------------------------------------------------------------
- Shift character
+ Shift character left
  -----------------------------------------------------------------------------}
-
-// Shift character left
 procedure TfrmAntic4.ShiftLeft(Sender: TObject);
 var
   x, y, n : byte;
@@ -1821,7 +1801,9 @@ begin
   RefreshChar;
 end;
 
-// Shift character right
+{-----------------------------------------------------------------------------
+ Shift character right
+ -----------------------------------------------------------------------------}
 procedure TfrmAntic4.ShiftRightProc(Sender: TObject);
 var
   x, y, n : byte;
@@ -1837,7 +1819,9 @@ begin
   RefreshChar;
 end;
 
-// Shift character up
+{-----------------------------------------------------------------------------
+ Shift character up
+ -----------------------------------------------------------------------------}
 procedure TfrmAntic4.ShiftUpProc(Sender: TObject);
 var
   x, y : byte;
@@ -1852,19 +1836,21 @@ begin
       fldChar[x, y] := 0;
     end;
 
-  for x := 0 to 7 do
+  for x := 0 to _CHAR_DIM do
     fldChar[x, chrY] := fld02[x];
 
   RefreshChar;
 end;
 
-// Shift character down
+{-----------------------------------------------------------------------------
+ Shift character down
+ -----------------------------------------------------------------------------}
 procedure TfrmAntic4.ShiftDownProc(Sender: TObject);
 var
   x, y : byte;
   fld02 : array[0..7] of byte;
 begin
-  for x := 0 to 7 do
+  for x := 0 to _CHAR_DIM do
     fld02[x] := fldChar[x, chrY];
 
   for x := 0 to chrX do
@@ -1879,9 +1865,6 @@ begin
   RefreshChar;
 end;
 
-{-----------------------------------------------------------------------------
- Move character
- -----------------------------------------------------------------------------}
 {-----------------------------------------------------------------------------
  Move character left
  -----------------------------------------------------------------------------}
@@ -1915,6 +1898,20 @@ end;
 procedure TfrmAntic4.MoveDownProc(Sender: TObject);
 begin
   MoveDown(chrX, chrY, fldChar);
+  RefreshChar;
+end;
+
+{-----------------------------------------------------------------------------
+ Invert character data
+ -----------------------------------------------------------------------------}
+procedure TfrmAntic4.InvertProc(Sender : TObject);
+var
+  x, y : byte;
+begin
+  for y := 0 to chrY do
+    for x := 0 to chrX do
+      fldChar[x, y] := 1 - fldChar[x, y];
+
   RefreshChar;
 end;
 

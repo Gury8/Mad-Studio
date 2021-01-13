@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Antic mode 4 & 5 editor - source code generator
 }
 unit antic4_gen;
@@ -11,8 +11,8 @@ unit antic4_gen;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, ComCtrls,
-  lcltype, BCTrackbarUpdown, BCListBox, BCMDButton, BCMaterialDesignButton, Windows,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
+  ComCtrls, lcltype, BCTrackbarUpdown, BCListBox, BCMDButton, BCMaterialDesignButton, Windows,
   common;
 
 type
@@ -140,20 +140,13 @@ begin
   listings[3, 4] := true;
 
   // Example 5
-  listings[3, 0] := true;
-  listings[3, 1] := true;
-  listings[3, 2] := true;
-  listings[3, 3] := true;
-  listings[3, 4] := true;
-
-  // Example 6
   listings[4, 0] := true;
   listings[4, 1] := true;
   listings[4, 2] := true;
   listings[4, 3] := true;
   listings[4, 4] := true;
 
-  // Example 7
+  // Example 6
   listings[5, 0] := true;
   listings[5, 1] := true;
   listings[5, 2] := true;
@@ -253,7 +246,6 @@ begin
     4: code := Example04;
     5: code := Example05;
     6: code := Example06;
-//    7: code := Example07;
   end;
 
   memo.Lines.Add(code);
@@ -582,7 +574,7 @@ begin
                    '    cnt = 0'#13#10 +
                    '  ENDIF'#13#10 +
                    '  POKE scr + i, screenData(i)'#13#10 +
-                   '  cnt=cnt+1'#13#10 +
+                   '  cnt = cnt + 1'#13#10 +
                    'NEXT'#13#10;
     end;
 
@@ -714,9 +706,9 @@ begin
    code.line += CodeLine('REM MODIFIED CHARACTER DATA');
    for i := 0 to 127 do
      if frmAntic4.charEditIndex[i] = 1 then
-       code.line += CodeLine('REM CHR$(' + AtasciiCode(i) + ')') +
-                    CodeLine('DATA ' + SetDataValues(
-                             frmAntic4.fldChar, frmAntic4.fldFontSet, i, radDataType.ItemIndex, ','));
+       code.line += CodeLine('REM CHR$(' + AtasciiCode(i) + ')');
+       code.line += CodeLine('DATA ' + SetDataValues(frmAntic4.fldChar, frmAntic4.fldFontSet,
+                                       i, radDataType.ItemIndex, ','));
 
    // Screen data
    code.line += CodeLine('REM SCREEN DATA');
@@ -833,8 +825,7 @@ begin
                   'GRAPHICS ' + grMode + strTextWindow + #13#10 +
                   'scr = DPEEK(88)'#13#10 +
                   'CHRAM = NMEMTOP*256'#13#10 +
-                  'MOVE 57344, CHRAM, 1024'#13#10 +
-                  #13#10 +
+                  'MOVE 57344, CHRAM, 1024'#13#10#13#10 +
                   ''' Custom character set data'#13#10;
     for i := 0 to 127 do
       if frmAntic4.charEditIndex[i] = 1 then
@@ -865,8 +856,8 @@ end;
  Load Antic mode 4/5 screen
  -----------------------------------------------------------------------------}
 function TfrmAntic4Gen.Example06 : string;
-var
-  screenCode : array[0..2] of string;
+//var
+//  screenCode : array[0..2] of string;
 begin
   { Atari BASIC
    ---------------------------------------------------------------------------}

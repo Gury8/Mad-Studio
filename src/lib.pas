@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Common library
 }
 unit lib;
@@ -36,7 +36,7 @@ function AtasciiCode(offset : byte) : string;
 
 procedure FillRectEx(image : TImage; color : TColor; x, y, factX, factY : word);
 
-procedure Debug(text : string); overload;
+procedure Debug(text : variant); overload;
 procedure Debug(text : string; number : integer); overload;
 procedure Debug(text : string; number01, number02 : integer); overload;
 procedure Debug(text : string; number01, number02, number03 : integer); overload;
@@ -268,7 +268,7 @@ begin
   end;
 end;
 
-procedure Debug(text : string); overload;
+procedure Debug(text : variant); overload;
 begin
   if isDebug then
     ShowMessage(text);

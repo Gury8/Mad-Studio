@@ -1,7 +1,7 @@
 object frmAnimGen: TfrmAnimGen
-  Left = 138
+  Left = 129
   Height = 713
-  Top = 109
+  Top = 141
   Width = 992
   BorderStyle = bsDialog
   Caption = 'Player Animator source code generator'
@@ -490,9 +490,9 @@ object frmAnimGen: TfrmAnimGen
     TextQuality = fqSystemClearType
     Caption = 'Copy to editor'
     OnClick = CopyToEditor
-    OnMouseUp = btnCopyToEditorMouseUp
-    OnMouseEnter = btnCopyToEditorMouseEnter
-    OnMouseLeave = btnCopyToEditorMouseLeave
+    OnMouseUp = btnCopyToEditorUp
+    OnMouseEnter = btnCopyToEditorEnter
+    OnMouseLeave = btnCopyToEditorLeave
   end
   object btnClose: TBCMaterialDesignButton
     Left = 881
@@ -505,8 +505,8 @@ object frmAnimGen: TfrmAnimGen
     TextQuality = fqSystemClearType
     Caption = 'Close'
     OnClick = CloseWin
-    OnMouseEnter = btnCloseMouseEnter
-    OnMouseLeave = btnCloseMouseLeave
+    OnMouseEnter = btnCloseEnter
+    OnMouseLeave = btnCloseLeave
   end
   object StaticText1: TStaticText
     Left = 9
@@ -543,5 +543,63 @@ object frmAnimGen: TfrmAnimGen
     Font.Name = 'Verdana'
     ParentFont = False
     TabOrder = 7
+  end
+  object boxFlip1: TGroupBox
+    Left = 612
+    Height = 90
+    Top = 120
+    Width = 148
+    Caption = 'Frame resolution'
+    ClientHeight = 72
+    ClientWidth = 144
+    TabOrder = 8
+    object btnDoubleRes: TBCMDButton
+      Left = 9
+      Height = 26
+      Top = 4
+      Width = 126
+      Animation = True
+      Alignment = taLeftJustify
+      StyleNormal.Color = 16250871
+      StyleNormal.TextColor = clBlack
+      StyleHover.Color = 14474460
+      StyleHover.TextColor = clBlack
+      StyleActive.Color = 13027014
+      StyleActive.TextColor = clBlack
+      StyleDisabled.Color = clWhite
+      StyleDisabled.TextColor = 10724259
+      Checked = True
+      Kind = mdbkToggleGroup
+      TextAutoSize = True
+      TextProportional = True
+      TextProportionalRatio = 0.5
+      BorderSpacing.InnerBorder = 5
+      Caption = 'Double resolution'
+      Color = clBlack
+      OnClick = ListExamplesProc
+    end
+    object btnSingleRes: TBCMDButton
+      Left = 9
+      Height = 25
+      Top = 36
+      Width = 126
+      Animation = True
+      Alignment = taLeftJustify
+      StyleNormal.Color = 16250871
+      StyleNormal.TextColor = clBlack
+      StyleHover.Color = 14474460
+      StyleHover.TextColor = clBlack
+      StyleActive.Color = 13027014
+      StyleActive.TextColor = clBlack
+      StyleDisabled.Color = clWhite
+      StyleDisabled.TextColor = 10724259
+      Kind = mdbkToggleGroup
+      TextAutoSize = True
+      TextProportional = True
+      TextProportionalRatio = 0.5
+      BorderSpacing.InnerBorder = 5
+      Caption = 'Single resolution'
+      OnClick = ListExamplesProc
+    end
   end
 end

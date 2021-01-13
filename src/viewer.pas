@@ -449,7 +449,6 @@ begin
 
       maxSize := maxX*maxY - 1;
 
-      r4 := 0; m4 := 0;
       for j := 0 to maxSize do
         if fs.Position < fs.Size then
           fldAtascii[j] := fs.ReadByte;
@@ -722,7 +721,6 @@ begin
   for dy := 0 to 7 do
     for dx := 0 to 7 do begin
       col := fldFontSet[dx, dy + offset shl 3];
-
       if isInverse then
         col := 1 - col;
 
@@ -852,8 +850,6 @@ begin
   else
     col02 := _CHARSET_UPPER;
 
-//  offset := offset shl 3;
-
   for dy := 0 to 7 do
     for dx := 0 to 7 do begin
       col := fldFontSet[dx, dy + offset shl 3];
@@ -863,27 +859,6 @@ begin
       end;
     end;
 end;
-
-{-----------------------------------------------------------------------------
- Set Antic mode 4 or Antic mode 5
- -----------------------------------------------------------------------------}
-//procedure TfrmViewer.SetAntic4(textModeX, _maxX, _maxY : byte);
-//begin
-//  Antic4MaxX := _maxX;
-//  Antic4maxY := _maxY;
-////  Antic4maxSize := Antic4maxX*Antic4maxY - 1;
-//
-//  factX := 1;
-//
-//  if textModeX = 4 then begin
-////    modeHeight := 24;
-//    factY := 1;
-//  end
-//  else begin
-////    modeHeight := 12;
-//    factY := 2;
-//  end;
-//end;
 
 procedure TfrmViewer.RefreshPM;
 begin

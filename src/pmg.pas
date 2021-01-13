@@ -918,10 +918,8 @@ begin
   (FindComponent('rbPlayer' + IntToStr(player)) as TRadioButton).Checked := true;
 
   btn := Button;
-
 //  xf := X div factX;
 //  yf := Y div factY;
-
 //  PlotMissileMultiAll(xf, yf);
 end;
 
@@ -948,9 +946,12 @@ end;
 
 procedure TfrmPmg.MissileLocation;
 begin
-  FillRectEx(imgMissileLocation, colTab[0], 0, 0, imgMissileLocation.Width, imgMissileLocation.Height);
-  FillRectEx(imgMissileLocation, colTab[3], 6, 18, imgMissileLocation.Width - 12, imgMissileLocation.Height - 36);
-  FillRectEx(imgMissileLocation, colTab[player + 4], tbMissileHorizontal.Position - 44, tbMissileVertical.Position, 4, 9);
+  FillRectEx(imgMissileLocation, colTab[0],
+             0, 0, imgMissileLocation.Width, imgMissileLocation.Height);
+  FillRectEx(imgMissileLocation, colTab[3],
+             6, 18, imgMissileLocation.Width - 12, imgMissileLocation.Height - 36);
+  FillRectEx(imgMissileLocation, colTab[player + 4],
+             tbMissileHorizontal.Position - 44, tbMissileVertical.Position, 4, 9);
 end;
 
 procedure TfrmPmg.editorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
@@ -1159,20 +1160,10 @@ begin
   end
   else begin
     for yy := 0 to _PM_MAX_LINES - 1 do
-//      d := 0;
       for xx := _PM_WIDTH downto 0 do begin
         value := playerPos[player, oldPos + xx, yy];
-//        if playerSize[player] = _PLAYER_SIZE_NORMAL then begin
-          playerPos[player, oldPos + xx, yy] := 0;
-          playerPos[player, playerIndex[player] + xx, yy] := value;
-        //end
-        //else if playerSize[player] = _PLAYER_SIZE_DOUBLE then begin
-        //  playerPos[player, oldPos + xx + d, yy] := 0;
-        //  playerPos[player, oldPos + xx + d + 1, yy] := 0;
-        //  playerPos[player, playerIndex[player] + xx + d, yy] := value;
-        //  playerPos[player, playerIndex[player] + xx + d + 1, yy] := value;
-        //  Inc(d);
-        //end;
+        playerPos[player, oldPos + xx, yy] := 0;
+        playerPos[player, playerIndex[player] + xx, yy] := value;
       end;
   end;
 
@@ -1183,33 +1174,6 @@ begin
 
   if chkJoinPlayers.Checked then begin
     for i := 0 to 3 do begin
-      //playerIndex[i] := (Sender as TTrackBar).Position;
-      //(FindComponent('rbPlayer' + IntToStr(player)) as TRadioButton).Checked := true;
-      //
-      //if oldPos = playerIndex[player] then
-      //  exit;
-      //
-      //if (Sender as TTrackBar).Position < oldPos then begin
-      //  for yy := 0 to _PM_MAX_LINES - 1 do begin
-      //    for xx := 0 to _PM_WIDTH do begin
-      //      value := playerPos[player, oldPos + xx, yy];
-      //      playerPos[i, oldPos + xx, yy] := 0;
-      //      playerPos[i, playerIndex[i] + xx, yy] := value;
-      //    end;
-      //  end;
-      //end
-      //else begin
-      //  for yy := 0 to _PM_MAX_LINES - 1 do begin
-      //    for xx := _PM_WIDTH downto 0 do begin
-      //      value := playerPos[player, oldPos + xx, yy];
-      //      playerPos[i, oldPos + xx, yy] := 0;
-      //      playerPos[i, playerIndex[player] + xx, yy] := value;
-      //    end;
-      //  end;
-      //end;
-      //
-      //tbOldX[i] := playerIndex[player];
-      //isDataChanged[i] := true;
       oldPos := playerIndex[i];
       playerIndex[i] := playerIndex[player];
 
@@ -1231,7 +1195,6 @@ begin
       end;
     end;
   end;
-//  refreshPM;
   RefresPM_MultiAll(editorMulti, factX02, factY02);
 end;
 
@@ -1459,7 +1422,6 @@ begin
     if fs.Position < fs.Size then begin
       x := fs.ReadByte;
       bin := Dec2Bin(x);
-  //    showmessage(bin);
       for x := 0 to 1 do
         missiles[player, x, y] := StrToInt(bin[x + 7]);
     end;
@@ -1937,14 +1899,6 @@ begin
         RefreshPM(false);
       end;
     end;
-
-//    for i := 0 to 3 do
-      //if i <> origPlayer then begin
-      //  player := i;
-      //  ReadFld(factX02, factY02);
-      //  RefreshPM;
-      //end;
-
     player := origPlayer;
 //    (FindComponent('rbPlayer' + IntToStr(player)) as TRadioButton).Checked := true;
   end;
@@ -2353,18 +2307,14 @@ begin
   imgMissile01.Canvas.Brush.Color := coltab[0];
 //  imgMissile01.Canvas.FillRect(bounds(0, 0, imgMissile01.Width, imgMissile01.Height));
   imgMissile02.Canvas.Brush.Color := coltab[0];
-//  imgMissile02.Canvas.FillRect(bounds(0, 0, imgMissile02.Width, imgMissile02.Height));
   imgMissile03.Canvas.Brush.Color := coltab[0];
-//  imgMissile03.Canvas.FillRect(bounds(0, 0, imgMissile03.Width, imgMissile03.Height));
 
   imgMissile0.Canvas.Brush.Color := coltab[0];
 //  imgMissile0.Canvas.FillRect(bounds(0, 0, imgMissile0.Width, imgMissile0.Height));
   imgMissile1.Canvas.Brush.Color := coltab[0];
 //  imgMissile1.Canvas.FillRect(bounds(0, 0, imgMissile1.Width, imgMissile1.Height));
   imgMissile2.Canvas.Brush.Color := coltab[0];
-//  imgMissile2.Canvas.FillRect(bounds(0, 0, imgMissile2.Width, imgMissile2.Height));
   imgMissile3.Canvas.Brush.Color := coltab[0];
-//  imgMissile3.Canvas.FillRect(bounds(0, 0, imgMissile3.Width, imgMissile3.Height));
 
   imgMissileSingle0.Canvas.Brush.Color := coltab[0];
 //  imgMissileSingle0.Canvas.FillRect(
@@ -2375,12 +2325,8 @@ begin
 //    bounds(0, 0, imgMissileSingle1.Width, imgMissileSingle1.Height));
 
   imgMissileSingle2.Canvas.Brush.Color := coltab[0];
-//  imgMissileSingle2.Canvas.FillRect(
-//    bounds(0, 0, imgMissileSingle2.Width, imgMissileSingle2.Height));
 
   imgMissileSingle3.Canvas.Brush.Color := coltab[0];
-//  imgMissileSingle3.Canvas.FillRect(
-//    bounds(0, 0, imgMissileSingle3.Width, imgMissileSingle3.Height));
 
   imgPlayer4.Canvas.Brush.Color := coltab[0];
 //  imgPlayer4.Canvas.FillRect(bounds(0, 0, imgPlayer4.Width, imgPlayer4.Height));
@@ -2388,9 +2334,7 @@ begin
   imgM0_normal_dr.Canvas.Brush.Color := coltab[0];
 //  imgM0_normal_dr.Canvas.FillRect(bounds(0, 0, imgM0_normal_dr.Width, imgM0_normal_dr.Height));
   imgM0_double_dr.Canvas.Brush.Color := coltab[0];
-//  imgM0_double_dr.Canvas.FillRect(bounds(0, 0, imgM0_double_dr.Width, imgM0_double_dr.Height));
   imgM0_quadrable_dr.Canvas.Brush.Color := coltab[0];
-//  imgM0_quadrable_dr.Canvas.FillRect(bounds(0, 0, imgM0_quadrable_dr.Width, imgM0_quadrable_dr.Height));
 
   imgM0_normal_sr.Canvas.Brush.Color := coltab[0];
 //  imgM0_normal_sr.Canvas.FillRect(
@@ -2401,8 +2345,6 @@ begin
 //    bounds(0, 0, imgM0_double_sr.Width, imgM0_double_sr.Height));
 
   imgM0_quadrable_sr.Canvas.Brush.Color := coltab[0];
-//  imgM0_quadrable_sr.Canvas.FillRect(
-//    bounds(0, 0, imgM0_quadrable_sr.Width, imgM0_quadrable_sr.Height));
 
   //for m := 0 to 3 do begin
   //  for i := 0 to 1 do
@@ -2542,10 +2484,8 @@ begin
     exit;
   end;
 
-  if xf > _PM_WIDTH + _MAX_PLAYER_POS then begin
+  if xf > _PM_WIDTH + _MAX_PLAYER_POS then
     xf := _PM_WIDTH + _MAX_PLAYER_POS;
-//    showmessage(inttostr(xf));
-  end;
 
   //if not CalcPlayerWidth(player, xf, yf) then
   //  Exit;

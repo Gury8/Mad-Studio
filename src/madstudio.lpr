@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
 }
 program madstudio;
 
@@ -12,8 +12,9 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, runtimetypeinfocontrols, anchordockpkg, common, main, graph, src_editor, pmg,
-  colors, fonts, antic2, antic6, antic3, antic4, dl_editor, animator, byte_editor, viewer;
+  Forms, runtimetypeinfocontrols, anchordockpkg, common, main, graph,
+  src_editor, pmg, colors, fonts, antic2, antic6, antic3, antic4, dl_editor,
+  animator, byte_editor, viewer;  //, antic4_tiles;
 
 {$R *.res}
 
@@ -35,6 +36,7 @@ begin
   Application.CreateForm(TfrmAnimator, frmAnimator);
   Application.CreateForm(TfrmByteEditor, frmByteEditor);
   Application.CreateForm(TfrmViewer, frmViewer);
+//  Application.CreateForm(TfrmAntic4Tiles, frmAntic4Tiles);
   Application.Run;
 end.
 

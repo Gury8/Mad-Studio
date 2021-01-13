@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Main application module
 }
 unit main;
@@ -11,13 +11,14 @@ unit main;
 interface
 
 uses
-  Classes, SysUtils, Windows, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, Menus, Buttons, BCMDButton, BCButton,jsonConf, StrUtils, SynHighlighterPas,
-  SynEditMiscClasses, SynHighlighterAny;
+  Classes, SysUtils, Windows, FileUtil, Forms, Controls, Graphics, Dialogs,
+  StdCtrls, ExtCtrls, Menus, Buttons, BCMDButton, BCButton,jsonConf, StrUtils,
+  SynHighlighterPas, SynEditMiscClasses, SynHighlighterAny;
 
 type
   { TfrmMain }
   TfrmMain = class(TForm)
+    btnAntic4TileEditor : TBCButton;
     btnViewer : TBCButton;
     btnSrcEditor : TBCButton;
     btnGrEditor : TBCButton;
@@ -60,6 +61,7 @@ type
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
     dlgFolder: TSelectDirectoryDialog;
+    procedure AnticMode45TileEditorProc(Sender : TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -102,8 +104,8 @@ implementation
 {$R resource.res}
 
 uses
-  common, graph, src_editor, pmg, colors, fonts, about, antic2,
-  antic6, antic3, antic4, dl_editor, animator, byte_editor, viewer;
+  common, graph, src_editor, pmg, colors, fonts, about, antic2, antic6,
+  antic3, antic4, dl_editor, animator, byte_editor, viewer;  //, antic4_tiles;
 
 { TfrmMain }
 
@@ -627,6 +629,11 @@ begin
   isAntic4 := true;
   isAntic6 := true;
   frmViewer.Show;
+end;
+
+procedure TfrmMain.AnticMode45TileEditorProc(Sender : TObject);
+begin
+//  frmAntic4Tiles.Show;
 end;
 
 procedure TfrmMain.LoadDefaultColors(Sender: TObject);

@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Player Animator editor and player
 }
 unit animator;
@@ -18,6 +18,7 @@ uses
 type
   { TfrmAnimator }
   TfrmAnimator = class(TForm)
+    boxFlip1 : TGroupBox;
     btnAnimate : TSpeedButton;
     btnApplyPlayerHeight : TButton;
     btnByteEditor : TToolButton;
@@ -30,24 +31,31 @@ type
     btnFlipX : TToolButton;
     btnFlipXAll2 : TBCMDButton;
     btnFlipXAll3 : TBCMDButton;
+    btnSingleRes : TBCMDButton;
     btnFlipXSelected2 : TBCMDButton;
     btnFlipXSelected3 : TBCMDButton;
+    btnDoubleRes : TBCMDButton;
     btnFlipY : TToolButton;
     btnInvert : TToolButton;
-    editPlayerHeight : TBCTrackbarUpdown;
     boxFlip : TGroupBox;
+    pcolr1 : TImage;
+    pcolr0 : TImage;
+    editPlayerHeight : TBCTrackbarUpdown;
+    lblFrameMaxHeight : TLabel;
     MenuItem10 : TMenuItem;
     itemByteEditor : TMenuItem;
     itemColorPalette : TMenuItem;
+    MenuItem11 : TMenuItem;
+    MenuItem12 : TMenuItem;
+    MenuItem6 : TMenuItem;
+    miLoadAPLEx : TMenuItem;
     MenuItem9 : TMenuItem;
     numFrames : TBCTrackbarUpdown;
     numIterations : TBCTrackbarUpdown;
     numAnimRate : TBCTrackbarUpdown;
     boxFrameLayer : TGroupBox;
     boxAnimation : TGroupBox;
-    boxResolution : TGroupBox;
     boxShiftMove : TGroupBox;
-    grpPlayerHeight : TGroupBox;
     imgBuffer: TImage;
     imgTemp: TImage;
     imgFrame01: TImage;
@@ -115,7 +123,7 @@ type
     MenuItem33: TMenuItem;
     MenuItem35: TMenuItem;
     MenuItem36: TMenuItem;
-    menuAnimator: TMainMenu;
+    menuAnim: TMainMenu;
     MenuItem1: TMenuItem;
     miExit: TMenuItem;
     MenuItem15: TMenuItem;
@@ -151,9 +159,6 @@ type
     lblFrame07 : TStaticText;
     lblFrame08 : TStaticText;
     statusBar: TStatusBar;
-    tbPlayer1: TTrackBar;
-    ToggleBox1 : TToggleBox;
-    ToggleBox2 : TToggleBox;
     toolbar: TToolBar;
     btnOpen: TToolButton;
     btnSave: TToolButton;
@@ -162,53 +167,50 @@ type
     btnDivider: TToolButton;
     btnNewAnimation: TToolButton;
     ToolButton1 : TToolButton;
-    procedure FlipXAllProc(Sender : TObject);
-    procedure FlipYAllProc(Sender : TObject);
-    procedure FlipXSelectedProc(Sender : TObject);
-    procedure FlipYSelectedProc(Sender : TObject);
-    procedure FrameOper(Sender : TObject);
+    procedure SingleResolutionProc(Sender : TObject);
+    procedure DoubleResolutionProc(Sender : TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure pcolr0Down(Sender : TObject; Button : TMouseButton; Shift : TShiftState; X, Y : Integer);
+    procedure editPlayerHeightLeave(Sender : TObject);
+    procedure editPlayerHeightUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState; X, Y : Integer);
+    procedure FlipXAllProc(Sender : TObject);
+    procedure FlipYAllProc(Sender : TObject);
+    procedure FlipXSelectedProc(Sender : TObject);
+    procedure FlipYSelectedProc(Sender : TObject);
+    procedure FrameOper(Sender : TObject);
     procedure ApplyPlayerHeight(Sender : TObject);
     procedure ByteEditorProc(Sender : TObject);
     procedure chkMultiColor01Change(Sender: TObject);
-    procedure imgFrameMouseLeave(Sender: TObject);
-    procedure imgFrameMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgFrameLeave(Sender: TObject);
+    procedure imgFrameDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure imgFrameMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure imgFrameMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgFrameMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure imgFrameUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure ClearAllFrames(Sender: TObject);
     procedure CloseModule(Sender: TObject);
     procedure InvertProc(Sender : TObject);
-    procedure LoadAPL(Sender: TObject);
+    procedure LoadAPLProc(Sender: TObject);
     procedure CopyFrameToAll(Sender : TObject);
     procedure CopyPlayers(Sender : TObject);
     procedure InvertBitsAll(Sender : TObject);
     procedure NewAnimation(Sender: TObject);
-    procedure SaveAPL(Sender: TObject);
+    procedure SaveAPLProc(Sender: TObject);
     procedure ShowGrid(Sender: TObject);
     procedure HideGrid(Sender: TObject);
     procedure Enable3rdColor(Sender: TObject);
     procedure Disable3rdColor(Sender: TObject);
     procedure CopyFromBuffer(Sender: TObject);
     procedure CopyToBuffer(Sender: TObject);
-    procedure Player0Change(Sender: TObject);
+    procedure FrameColorChange(Sender: TObject);
     procedure SavePlayerAs(Sender: TObject);
     procedure GenCode(Sender: TObject);
     procedure ColorPalette(Sender: TObject);
-    procedure editorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure editorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
-      X, Y: Integer);
     procedure Animate(Sender: TObject);
-    procedure tbPlayer0Click(Sender: TObject);
-    procedure tbPlayer0MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
-      X, Y: Integer);
-    procedure tbPlayer0MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure OpenClick(Sender: TObject);
     procedure SavePlayer(Sender: TObject);
     procedure ClearFrame(Sender: TObject);
     procedure MoveLeft(Sender: TObject; oper : byte);
@@ -219,8 +221,8 @@ type
     procedure FlipY(Sender: TObject);
     procedure FlipXProc(oper : byte);
     procedure FlipYProc(oper : byte);
-    procedure DoubleResolutionProc(Sender : TObject);
-    procedure SingleResolutionProc(Sender : TObject);
+//    procedure DoubleResolutionProc(Sender : TObject);
+//    procedure SingleResolutionProc(Sender : TObject);
   private
     { private declarations }
     btn : tMousebutton;
@@ -229,9 +231,7 @@ type
     procedure Settings;
     procedure Plot(xf, yf : byte);
     procedure RefreshFrames(pm : TImage; factX, factY : byte; isGridShow : boolean);
-//    function CalcPlayerWidth(index, oldx, oldy : byte) : boolean;
     function FindFldData(pl : byte) : boolean;
-    procedure RefreshValues;
     procedure SelectedFrame;
     procedure RefreshAnim(isEditorGrid : boolean);
     procedure ShiftLeft(Sender: TObject; oper : byte);
@@ -246,9 +246,8 @@ type
     fld : array[0..16] of fldType;
     fld02 : array[0..1, 0..7] of byte;
     player : byte;  // Player index
-    factX, factY : byte;      // Player editor factor
     factX02, factY02 : byte;  // Multi-color player editor factor
-    playerPos : array[0..16, 0..1, 0.._MAX_ANIM_FRAME_WIDTH, 0..40 - 1] of byte;
+    playerPos : array[0..16, 0..1, 0.._MAX_ANIM_FRAME_WIDTH, 0.._ANIM_MAX_LINES - 1] of byte;
     playerIndex : array[0..16, 0..1] of byte;
     frame, selected : byte;
     selFrame : byte;          // Selected frame
@@ -284,11 +283,6 @@ begin
   SetTrackBarUpDown(numIterations, $00DDDDDD, clWhite);
   SetTrackBarUpDown(editPlayerHeight, $00DDDDDD, clWhite);
   SetTrackBarUpDown(numAnimRate, $00DDDDDD, clWhite);
-
-  //numIterations.ButtonBackground.Gradient1.StartColor := $00CACACA;
-  //numIterations.ButtonBackground.Gradient1.EndColor := clWhite;
-  //numIterations.ButtonBackground.Gradient2.StartColor := clWhite;
-  //numIterations.ButtonBackground.Gradient2.EndColor := $00D4D4D4;
 end;
 
 procedure TfrmAnimator.FormShow(Sender: TObject);
@@ -307,17 +301,18 @@ begin
   frame := 0;
   selected := 0;
   selAnimFrameRate := 2;
+  animFrameHeight := _ANIM_APL_MAX_LINES;
+  editPlayerHeight.Value := _ANIM_APL_MAX_LINES;
   SetPlayers;
-  animFrameHeight := 40;
-  editPlayerHeight.Value := _ANIM_MAX_LINES;
+
   SetDoubleResolution(Sender);
+  NewAnimation(Sender);
   RefreshFrame(0);
 end;
 
 procedure TfrmAnimator.FormActivate(Sender: TObject);
 begin
   formId := formAnimator;
-//  SetObjects;
 end;
 
 procedure TfrmAnimator.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -325,11 +320,11 @@ begin
   case Key of
     VK_1: begin
       rbPlayer0.Checked := true;
-      Player0Change(Sender);
+//      FrameColorChange(Sender);
     end;
     VK_2: begin
       rbPlayer1.Checked := true;
-      Player0Change(Sender);
+//      FrameColorChange(Sender);
     end;
     VK_F12: frmMain.Show;
   end;
@@ -342,42 +337,39 @@ begin
 end;
 
 procedure TfrmAnimator.ApplyPlayerHeight(Sender : TObject);
-var
-  j : byte;
-  compIndex : string;
 begin
-  _ANIM_MAX_LINES := editPlayerHeight.Value;
-  imgFrame01.Height := _ANIM_MAX_LINES*factY02;
+//  _ANIM_MAX_LINES := editPlayerHeight.Value;
+  animFrameHeight := editPlayerHeight.Value;
+//  imgFrame01.Height := animFrameHeight*(factY02 + 2);
 
   //for i := 0 to 3 do
   //  isDataChanged[i] := false;
 
-  for j := 1 to 16 do begin
-    //if j < 10 then begin
-    //  (FindComponent('imgFrame0' + IntToStr(j)) as TImage).Height := imgFrame01.Height;
-    //  (FindComponent('imgFrame0' + IntToStr(j)) as TImage).Canvas.FillRect(bounds(
-    //    0, 0, imgFrame01.Width, imgFrame01.Height));
-    //end
-    //else begin
-    //  (FindComponent('imgFrame' + IntToStr(j)) as TImage).Height := imgFrame01.Height;
-    //  (FindComponent('imgFrame' + IntToStr(j)) as TImage).Canvas.FillRect(bounds(
-    //    0, 0, imgFrame01.Width, imgFrame01.Height));
-    //end;
+  //for j := 1 to 16 do begin
+  //  if j < 10 then
+  //    compIndex := '0' + IntToStr(j)
+  //  else
+  //    compIndex := IntToStr(j);
+  //
+  //  (FindComponent('imgFrame' + compIndex) as TImage).Height := imgFrame01.Height;
+  //  (FindComponent('imgFrame' + compIndex) as TImage).Canvas.FillRect(
+  //    bounds(0, 0, imgFrame01.Width, imgFrame01.Height));
+  //end;
 
-    if j < 10 then
-      compIndex := '0' + IntToStr(j)
-    else
-      compIndex := IntToStr(j);
+//  imgBuffer.Height := imgFrame01.Height;
+//  imgBuffer.Canvas.FillRect(bounds(0, 0, imgFrame01.Width, imgFrame01.Height));
 
-    (FindComponent('imgFrame' + compIndex) as TImage).Height := imgFrame01.Height;
-    (FindComponent('imgFrame' + compIndex) as TImage).Canvas.FillRect(
-      bounds(0, 0, imgFrame01.Width, imgFrame01.Height));
-  end;
-
-  imgBuffer.Height := imgFrame01.Height;
-  imgBuffer.Canvas.FillRect(bounds(0, 0, imgFrame01.Width, imgFrame01.Height));
-  shape.Height := imgFrame01.Height + 24;
+//  shape.Height := imgFrame01.Height + 24;
   RefreshAnim(isAnimEditorGrid);
+
+  if animFrameHeight <= _ANIM_APL_MAX_LINES then begin
+    aplAnim := normal;
+    statusBar.Panels[2].Text := 'Standard Atari Player Editor format';
+  end
+  else begin
+    aplAnim := extended;
+    statusBar.Panels[2].Text := 'Extended Atari Player Editor format';
+  end;
 end;
 
 procedure TfrmAnimator.ByteEditorProc(Sender : TObject);
@@ -391,15 +383,6 @@ begin
   frmByteEditor.ShowModal;
 
   if isDataExport then begin
-//    for y := 0 to maxLines - 1 do begin
-//      x := exportData[y];
-//      bin := Dec2Bin(x);
-//      for x := 0 to 7 do begin
-//        fld[player, x, y] := StrToInt(bin[x + 1]);
-//        playerPos[player, playerIndex[player] + x, y] := fld[player, x, y];
-//      end;
-//    end;
-
     ClearFrame(Sender);
 
     for i := 0 to 1 do
@@ -419,6 +402,9 @@ end;
 
 procedure TfrmAnimator.FrameOper(Sender : TObject);
 begin
+//  ShowCursor(frmAnimator, frmAnimator, crHourGlass);
+  Screen.Cursor := crHourGlass;
+
   if radShiftChar.Checked then begin
     case (Sender as TSpeedButton).Tag of
       0: ShiftLeft(Sender, 0);
@@ -451,6 +437,9 @@ begin
       3: MoveDown(Sender, 16);
     end;
   end;
+
+//  ShowCursor(frmAnimator, frmAnimator, crDefault);
+  Screen.Cursor := crDefault;
 end;
 
 procedure TfrmAnimator.FlipXSelectedProc(Sender : TObject);
@@ -468,27 +457,39 @@ begin
   FlipXProc(16);
 end;
 
+procedure TfrmAnimator.editPlayerHeightLeave(Sender : TObject);
+begin
+  if editPlayerHeight.Value <= 48 then begin
+    aplAnim := normal;
+    filename := getDir + 'examples\anim01.apl';
+  end
+  else begin
+    aplAnim := extended;
+    filename := getDir + 'examples\anim01.apm';
+  end;
+  ApplyPlayerHeight(Sender);
+end;
+
+procedure TfrmAnimator.pcolr0Down(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+  X, Y : Integer);
+begin
+  frmColors.SelColor := TShape(Sender).Tag;
+  frmColors.Show;
+
+  if frmColors.SelColor = 4 then
+    rbPlayer0.Checked := true
+  else
+    rbPlayer1.Checked := true;
+end;
+
+procedure TfrmAnimator.editPlayerHeightUp(Sender : TObject; Button : TMouseButton;
+  Shift : TShiftState; X, Y : Integer);
+begin
+end;
+
 procedure TfrmAnimator.FlipYAllProc(Sender : TObject);
 begin
   FlipYProc(16);
-end;
-
-procedure TfrmAnimator.editorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-var
-  xf, yf : byte;
-begin
-  xf := X div factX;
-  yf := Y div factY;
-  Plot(xf, yf);
-  statusBar.Panels[0].Text := 'Cursor coordinates: ' + 'x: ' +
-                              inttostr(xf) + ', y: ' + inttostr(yf);
-end;
-
-procedure TfrmAnimator.editorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
-  X, Y: Integer);
-begin
-  btn := mbMiddle;
-  RefreshFrame(0);
 end;
 
 {-----------------------------------------------------------------------------
@@ -498,6 +499,8 @@ procedure TfrmAnimator.Animate(Sender: TObject);
 var
   i, j : byte;
 begin
+  Screen.Cursor := crHourGlass;
+
   for j := 1 to numIterations.Value do
     for i := 1 to numFrames.Value do begin
       frame := i - 1;
@@ -509,146 +512,8 @@ begin
       RefreshFrames(imgP0P1_quadrableSrMultiAll, 12, 2, false);
       Sleep(100);
     end;
-end;
 
-procedure TfrmAnimator.tbPlayer0Click(Sender: TObject);
-begin
-//  tbOldX := (Sender as TTrackBar).Position;
-end;
-
-procedure TfrmAnimator.tbPlayer0MouseDown(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-begin
-//  tbPlayer0MouseMove(Sender, Shift, X, Y);
-end;
-
-procedure TfrmAnimator.tbPlayer0MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-//var
-//  xx, yy : byte;
-//  oldPos : byte;
-//  value : byte;
-begin
-//  if (ssLeft in Shift) = false then exit;
-//
-//  player := (Sender as TTrackBar).Tag;
-//  oldPos := playerIndex[frame, player];
-//  playerIndex[frame, player] := (Sender as TTrackBar).Position;
-//
-//  (FindComponent('rbPlayer' + IntToStr(player)) as TRadioButton).Checked := true;
-//
-//  if oldPos = playerIndex[frame, player] then exit;
-//
-//  if (Sender as TTrackBar).Position < oldPos then begin  //tbOldX[player] then begin
-//    for yy := 0 to _ANIM_MAX_LINES - 1 do begin
-//      for xx := 0 to grX do begin
-//        value := playerPos[frame, player, oldPos + xx, yy];
-//        playerPos[frame, player, oldPos + xx, yy] := 0;
-//        playerPos[frame, player, playerIndex[frame, player] + xx, yy] := value;
-//      end;
-//    end;
-//  end
-//  else begin
-//    for yy := 0 to _ANIM_MAX_LINES - 1 do begin
-//      for xx := grX downto 0 do begin
-//        value := playerPos[frame, player, oldPos + xx, yy];
-//        playerPos[frame, player, oldPos + xx, yy] := 0;
-//        playerPos[frame, player, playerIndex[frame, player] + xx, yy] := value;
-//      end;
-//    end;
-//  end;
-//
-////  tbOldX[player] := playerIndex[frame, player];
-//
-//  refreshPM;
-end;
-
-{-----------------------------------------------------------------------------
- Load screen from file
- -----------------------------------------------------------------------------}
-procedure TfrmAnimator.OpenClick(Sender: TObject);
-//var
-//  x, y : integer;
-//  i, j : byte;
-//  dta : char;
-//  fs : TFileStream;
-//  isMPL : boolean = false;
-begin
-//  frmMain.dlgOpen.Title := 'Open player/missile file';
-//  frmMain.dlgOpen.Filter :=
-//    'Player/missile files' +
-//    ' (*.spr, *.ply, *.pmg, *.mpl)|*.spr;*.ply;*.pmg;*.mpl|All files (*.*)|*.*';
-//
-//  if frmMain.dlgOpen.Execute then begin
-//    Cursor := crHourGlass;
-//
-//    filename := frmMain.dlgOpen.Filename;
-////    pmgFilenames[player] := filename;
-//
-//    fs := TFileStream.Create(filename, fmOpenReadWrite);
-//    try
-//      if ExtractFileExt(filename) <> '.mpl' then begin
-//        ClearPlayerClick(Sender);
-//
-//        for y := 0 to _ANIM_MAX_LINES - 1 do begin
-//          for x := 0 to 7 do begin
-//            dta := Char(fs.ReadByte);
-//            fld[frame][player, x, y] := StrToInt(dta);
-//            playerPos[frame, player, playerIndex[frame, player] + x, y] := fld[frame][player, x, y];
-//          end;
-//        end;
-//      end
-//      else begin
-//        SetPlayers;
-//        isMPL := true;
-//
-//        // Player X-position
-//        for i := 0 to 7 do begin
-//          if i < 2 then
-//            playerIndex[frame, i] := fs.ReadByte
-//          else begin
-//            j := fs.ReadByte;
-//            coltab[i] := colorMem[j div 2];
-//            colorValues[i] := j;
-//          end;
-//        end;
-//
-//        // Player data
-//        for i := 0 to 1 do begin
-//          for y := 0 to _ANIM_MAX_LINES - 1 do begin
-//            for x := 0 to 7 do begin
-//              dta := Char(fs.ReadByte);
-//              fld[frame][i, x, y] := StrToInt(dta);
-//              playerPos[frame, i, playerIndex[frame, i] + x, y] := fld[frame][i, x, y];
-//            end;
-//          end;
-//          for j := 0 to 4 do begin
-//            fs.ReadByte;
-//          end;
-//        end;
-//      end;
-//
-////      tbPlayer0.Position := playerIndex[frame, 0];
-////      tbPlayer1.Position := playerIndex[frame, 1];
-//
-////      SetObjects;
-//
-//      caption := programName + ' ' + programVersion + ' - Player/missile graphics editor (' + filename + ')';
-//    finally
-//      fs.Free;
-//
-//      if isMPL then begin
-//        RefreshPM;
-//        player := 0;
-//        rbPlayer0.Checked := true;
-//      end
-//      else begin
-//        RefreshPM;
-//      end;
-//
-//      Cursor := crDefault;
-//      frmColors.Show;
-//    end;
-//  end;
+  Screen.Cursor := crDefault;
 end;
 
 procedure TfrmAnimator.SelectedFrame;
@@ -673,44 +538,6 @@ begin
     15: imgTemp := imgFrame16;
     16: imgTemp := imgBuffer;
   end;
-end;
-
-{
-  Save screen to file
-}
-//procedure TfrmAnimator.SavePlayer(filenamexy : string);
-//var
-//  x, y : integer;
-//  dta : char;
-//  fs : TFileStream;
-//begin
-//  fs := TFileStream.Create(filenamexy, fmCreate);
-//  try
-//    for y := 0 to _ANIM_MAX_LINES - 1 do begin
-//      for x := 0 to 7 do begin
-//        dta := '0';
-//        if fld[frame][player, x, y] > 0 then dta := '1';
-//        fs.WriteByte(Byte(dta));
-//      end;
-//    end;
-//
-//    isDataChanged[player] := false;
-//  finally
-//    fs.Free;
-//  end;
-//end;
-
-procedure TfrmAnimator.SavePlayer(Sender: TObject);
-begin
-  //if isDataChanged[player] and (pmgFilenames[player] = '') then
-  //  if pmgFilenames[player] = '' then
-  //    SaveAsClick(Sender)
-  //else begin
-  //  if isDataChanged[player] then
-  //    SavePlayer(pmgFilenames[player])
-  //  else
-  //    ShowMessage('There is no data to be saved!');
-  //end;
 end;
 
 {-----------------------------------------------------------------------------
@@ -763,16 +590,16 @@ begin
         bounds(0, 0, imgFrame01.Width, imgFrame01.Height));
     end;
   end;
-  imgBuffer.Canvas.Brush.Color := colTab[0];
-  imgBuffer.Canvas.FillRect(bounds(0, 0, imgBuffer.Width, imgBuffer.Height));
+//  imgBuffer.Canvas.Brush.Color := colTab[0];
+//  imgBuffer.Canvas.FillRect(bounds(0, 0, imgBuffer.Width, imgBuffer.Height));
+  FillRectEx(imgBuffer, colTab[0], 0, 0, imgBuffer.Width, imgBuffer.Height);
 
   RefreshFrame(0);
 end;
 
 procedure TfrmAnimator.Settings;
 begin
-  factX := 20; factY := 20;
-  factX02 := 8; factY02 := 8;
+  factX02 := 8;
   isAnimEditorGrid := false;
 
   //grpPlayerHeight.Color := clRed;
@@ -782,34 +609,26 @@ end;
 procedure TfrmAnimator.SetPlayers;
 var
   i, j, n : byte;
-  compIndex : string;
 begin
-  imgFrame01.Height := _ANIM_MAX_LINES*factY02;
+//  imgFrame01.Height := animFrameHeight*(factY02 + 8);
 
   for i := 0 to 3 do
     isDataChanged[i] := false;
 
-  for j := 1 to 16 do begin
-    if j < 10 then
-      compIndex := '0' + IntToStr(j)
-    else
-      compIndex := IntToStr(j);
+  //for j := 1 to 16 do begin
+  //  if j < 10 then
+  //    compIndex := '0' + IntToStr(j)
+  //  else
+  //    compIndex := IntToStr(j);
 
-    (FindComponent('imgFrame' + compIndex) as TImage).Canvas.Brush.Color := colTab[0];
-    (FindComponent('imgFrame' + compIndex) as TImage).Height := imgFrame01.Height;
-    (FindComponent('imgFrame' + compIndex) as TImage).Canvas.FillRect(bounds(
-      0, 0, imgFrame01.Width, imgFrame01.Height));
-//    end
-    //else begin
-    //  (FindComponent('imgFrame' + IntToStr(j)) as TImage).Canvas.Brush.Color := colTab[0];
-    //  (FindComponent('imgFrame' + IntToStr(j)) as TImage).Height := imgFrame01.Height;
-    //  (FindComponent('imgFrame' + IntToStr(j)) as TImage).Canvas.FillRect(bounds(
-    //    0, 0, imgFrame01.Width, imgFrame01.Height));
-    //end;
-  end;
+    //(FindComponent('imgFrame' + compIndex) as TImage).Canvas.Brush.Color := colTab[0];
+    //(FindComponent('imgFrame' + compIndex) as TImage).Height := imgFrame01.Height;
+    //(FindComponent('imgFrame' + compIndex) as TImage).Canvas.FillRect(bounds(
+    //  0, 0, imgFrame01.Width, imgFrame01.Height));
+//  end;
 
-  imgBuffer.Height := imgFrame01.Height;
-  imgBuffer.Canvas.FillRect(bounds(0, 0, imgFrame01.Width, imgFrame01.Height));
+  //imgBuffer.Height := imgFrame01.Height;
+  //imgBuffer.Canvas.FillRect(bounds(0, 0, imgFrame01.Width, imgFrame01.Height));
 
   //imgFrame01.Canvas.Brush.Color := colTab[0];
   //imgFrame01.Canvas.FillRect(bounds(0, 0, imgFrame01.Width, imgFrame01.Height));
@@ -817,8 +636,9 @@ begin
   //imgFrame02.Canvas.FillRect(bounds(0, 0, imgFrame02.Width, imgFrame01.Height));
   //imgFrame03.Canvas.Brush.Color := clBlack;
   //imgFrame03.Canvas.FillRect(bounds(0, 0, imgFrame03.Width, imgFrame01.Height));
-  imgBuffer.Canvas.Brush.Color := colTab[0];
-  imgBuffer.Canvas.FillRect(bounds(0, 0, imgBuffer.Width, imgBuffer.Height));
+//  imgBuffer.Canvas.Brush.Color := colTab[0];
+//  imgBuffer.Canvas.FillRect(bounds(0, 0, imgBuffer.Width, imgBuffer.Height));
+  FillRectEx(imgBuffer, colTab[0], 0, 0, imgBuffer.Width, imgBuffer.Height);
 
   for n := 0 to 1 do
     for i := 0 to 7 do
@@ -838,88 +658,17 @@ begin
   playerIndex[frame, 0] := 0;
   playerIndex[frame, 1] := 0;
 
-//  tbPlayer0.Position := 0;
-//  tbPlayer1.Position := 0;
-//  tbOldX[0] := tbPlayer0.Position;
-//  tbOldX[1] := tbPlayer1.Position;
-
   with shape do begin
-    Top := imgFrame01.Top - 20;
+    Top := imgFrame01.Top - 24;
     Left := imgFrame01.Left - 4;
     Width := imgFrame01.Width + 8;
-    Height := imgFrame01.Height + 24;
+    Height := imgFrame01.Height + 28;
   end;
 
   numAnimRate.Value := selAnimFrameRate;
 
   imgFrame01.BringToFront;
 end;
-
-//procedure TfrmAnimator.Plot(xf, yf : byte);
-//var
-//  col : byte;
-//begin
-//     showmessage('1');
-//  case btn of
-//    mbLeft : col := 1;
-//    mbRight: col := 0;
-//  else
-//    exit;
-//  end;
-//
-//  if xf > grX then xf := grX;
-//
-//  fld[frame][player, xf, yf] := col;
-//  playerPos[frame, player, playerIndex[frame, player] + xf, yf] := col;
-//  col := player;
-//end;
-
-//function TfrmAnimator.CalcPlayerWidth(index, oldx, oldy : byte) : boolean;
-//var
-//  x, y, first : byte;
-//  n : byte = 0;
-//  posX : array[0.._MAX_ANIM_FRAME_WIDTH - 1] of byte;
-//  isFlag : boolean = false;
-//begin
-//  FillByte(posX, _MAX_ANIM_FRAME_WIDTH, 0);
-////  for x := 0 to _MAX_ANIM_FRAME_WIDTH do posX[x] := 0;
-//
-//  for y := 0 to _ANIM_MAX_LINES - 1 do begin
-//    for x := 0 to grX*4 + 3 do begin
-//       n := playerPos[frame, index, x, y];
-//       if n = 1 then posX[x] := 1;
-////       if x < first then first := x;
-//    end;
-//  end;
-//
-//  playerIndex[frame, index] := 0;
-//
-//  // Allow just first 8 continous bits to be filled
-//  for x := 0 to _MAX_ANIM_FRAME_WIDTH do begin
-//    n := n + posX[x];
-//    if (posX[x] = 1) and not isFlag then begin
-//      first := x;
-//      isFlag := true;
-//      playerIndex[frame, index] := x;
-//  //    (FindComponent('tbPlayer' + IntToStr(index)) as TTrackBar).Position := x;
-////      tbPlayer0.Position;
-//    end
-//    else if (posX[x] = 1) and isFlag then begin
-//      if x > first + 7 then begin
-//        playerPos[frame, index, oldx, oldy] := 0;
-//        result := false;
-//        exit;
-//      end;
-//    end;
-//  end;
-//
-//  // Check player width
-//  if n > 8 then begin
-//    playerPos[frame, index, oldx, oldy] := 0;
-//  end;
-//
-//  result := (n <= 8);
-//end;
 
 {-----------------------------------------------------------------------------
  Plot individual player pixel
@@ -935,8 +684,8 @@ begin
     exit;
   end;
 
-  if xf > 7*4 + 3 then
-    xf := 7*4 + 3;
+  if xf > 28 + 3 then
+    xf := 28 + 3;
 
   if btn = mbRight then begin
     playerPos[frame, 0, xf, yf] := 0;
@@ -961,13 +710,9 @@ begin
          FillRectEx(imgFrame01, coltab[col + 4], xf*factX02, yf*factY02, factX02, factY02);
        end;
     1: begin
-//         imgFrame02.Canvas.Brush.Color := coltab[col + 4];
-//         imgFrame02.Canvas.FillRect(bounds(xf*factX02, yf*factY02, factX02, factY02));
          FillRectEx(imgFrame02, coltab[col + 4], xf*factX02, yf*factY02, factX02, factY02);
        end;
     2: begin
-//         imgFrame03.Canvas.Brush.Color := coltab[col + 4];
-//         imgFrame03.Canvas.FillRect(bounds(xf*factX02, yf*factY02, factX02, factY02));
          FillRectEx(imgFrame03, coltab[col + 4], xf*factX02, yf*factY02, factX02, factY02);
        end;
     3: begin
@@ -1010,30 +755,9 @@ begin
          FillRectEx(imgFrame16, coltab[col + 4], xf*factX02, yf*factY02, factX02, factY02);
        end;
     16: begin
-//         imgBuffer.Canvas.Brush.Color := coltab[col + 4];
-//         imgBuffer.Canvas.FillRect(bounds(xf*factX02, yf*factY02, factX02, factY02));
          FillRectEx(imgBuffer, coltab[col + 4], xf*factX02, yf*factY02, factX02, factY02);
        end;
   end;
-
-  //for i := 0 to tabMultiPM.ControlCount - 1 do begin
-  //  if tabMultiPM.Controls[i].Name =
-  //     'lblMultiPmValue0' + inttostr(player) + inttostr(yf) then
-  //  begin
-  //    line := '';
-  //    for k := 0 to 7 do begin
-  //      line := line + IntToStr(playerPos[player, playerIndex[player] + k, yf]);
-  //    end;
-  //
-  //    if isValueDec then
-  //      line := inttostr(bin2dec(line))
-  //    else begin
-  //      line := '$' + dec2hex(bin2dec(line));
-  //    end;
-  //
-  //    tabMultiPM.Controls[i].Caption := 'P' + IntToStr(player) + ': ' + line;
-  //  end;
-  //end;
 end;
 
 procedure TfrmAnimator.RefreshFrames(pm : TImage; factX, factY : byte; isGridShow : boolean);
@@ -1043,9 +767,7 @@ var
   col, col01 : byte;
   c, d : integer;
 begin
-  pm.Canvas.Brush.Color := colTab[0];
-  pm.Canvas.Brush.Style := bsSolid;
-  pm.Canvas.FillRect(bounds(0, 0, pm.Width, pm.Height));
+  FillRectEx(pm, colTab[0], 0, 0, pm.Width, pm.Height);
 
 //  frame := selected;
   index := 0;
@@ -1107,19 +829,16 @@ begin
     RefreshFrames(imgP0P1_quadrableSrMultiAll, 12, 2, false);
   end;
 
-  //for j := 0 to _ANIM_MAX_LINES - 1 do begin
-  //  bin := '';
-  //
-  //  for i := 0 to 7 do begin
-  //    bin := bin + IntToStr(fld[player, i, j]);
-  //  end;
-  //
-  //  (FindComponent('lblNum' + IntToStr(j)) as TLabel).
-  //    Caption := IntToStr(Bin2Dec(bin)) + ' ($' + Dec2Hex(Bin2Dec(bin)) + ')';
-  //end;
+  FillRectEx(pcolr0, coltab[4], 0, 0, pcolr1.width, pcolr1.Height);
+  FillRectEx(pcolr1, coltab[5], 0, 0, pcolr1.width, pcolr1.Height);
+
+  if selected < 16 then
+    statusBar.Panels[1].Text := 'Selected frame: ' + IntToStr(selected + 1)
+  else
+    statusBar.Panels[1].Text := 'Buffer';
 end;
 
-procedure TfrmAnimator.imgFrameMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmAnimator.imgFrameDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   xf, yf : byte;
@@ -1127,14 +846,11 @@ begin
   selected := TImage(Sender).Tag;
   frame := selected;
 
-//  R := Rect(0, 0, shape.Width, shape.Height);
   with shape do begin
-    Top := TImage(Sender).Top - 20;
+    Top := TImage(Sender).Top - 24;
     Left := TImage(Sender).Left - 4;
     Width := TImage(Sender).Width + 8;
-    Height := TImage(Sender).Height + 24;
-//    Canvas.Pen.Color := clRed;
-//    Canvas.Frame3D(R, clSkyBlue, clSkyBlue, Width);
+    Height := TImage(Sender).Height + 28;
   end;
 
   SelectedFrame;
@@ -1154,49 +870,39 @@ begin
   xf := X div factX02;
   yf := Y div factY02;
   if (xf >= playerIndex[frame, player] - 1) or (xf >= playerIndex[frame, player]) then
-//    if not CalcPlayerWidth(player, xf, yf) then Exit;
     Plot(xf, yf);
-
-//  tbPlayer0.Position := playerIndex[frame, 0];
-//  tbPlayer1.Position := playerIndex[frame, 1];
 end;
 
-procedure TfrmAnimator.imgFrameMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TfrmAnimator.imgFrameMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
   xf, yf : byte;
 begin
   frame := TImage(Sender).Tag;
-  if frame < 16 then begin
-    if selected = 16 then
-      statusBar.Panels[1].Text := 'Selected frame: buffer' +
-                                  ' / Focused frame: ' + IntToStr(frame + 1)
-    else
-      statusBar.Panels[1].Text := 'Selected frame: ' + IntToStr(selected + 1) +
-                                  ' / Focused frame: ' + IntToStr(frame + 1)
-  end
-  else
-    statusBar.Panels[1].Text := 'Buffer';
+  //if frame < 16 then begin
+  //  if selected = 16 then
+  //    statusBar.Panels[1].Text := 'Selected frame: buffer';
+  //                                //' / Focused frame: ' + IntToStr(frame + 1)
+  //  else
+  //    statusBar.Panels[1].Text := 'Selected frame: ' + IntToStr(selected + 1);
+  //                                //' / Focused frame: ' + IntToStr(frame + 1)
+  //end
+  //else
+  //  statusBar.Panels[1].Text := 'Buffer';
 
   xf := X div factX02;
   yf := Y div factY02;
 
   if (xf >= playerIndex[frame, player] - 1) or (xf >= playerIndex[frame, player]) then
-//    if not CalcPlayerWidth(player, xf, yf) then Exit;
     Plot(xf, yf);
 
   statusBar.Panels[0].Text := '';
   statusBar.Panels[0].Text := 'Cursor coordinates: ' +
-                              'x: ' + inttostr(xf) + ', y: ' + inttostr(yf);
+                              'x: ' + IntToStr(xf) + ', y: ' + IntToStr(yf);
 end;
 
-procedure TfrmAnimator.imgFrameMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmAnimator.imgFrameUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
-  if selected < 16 then
-    statusBar.Panels[1].Text := 'Selected frame: ' + IntToStr(selected + 1)
-  else
-    statusBar.Panels[1].Text := 'Buffer';
-
   btn := mbMiddle;
   RefreshFrame(0);
 end;
@@ -1206,7 +912,7 @@ begin
   RefreshFrame(0);
 end;
 
-procedure TfrmAnimator.imgFrameMouseLeave(Sender: TObject);
+procedure TfrmAnimator.imgFrameLeave(Sender: TObject);
 begin
   isEnter[TImage(Sender).tag] := false;
 end;
@@ -1225,46 +931,54 @@ begin
       end;
 end;
 
-procedure TfrmAnimator.RefreshValues;
-//var
-//  i, j, k, pl : byte;
-//  line : string;
-begin
-  //for i := 0 to tabMultiPM.ControlCount - 1 do begin
-  //  for pl := 0 to 3 do begin
-  //    for j := 0 to _ANIM_MAX_LINES - 1 do begin
-  //      if tabMultiPM.Controls[i].Name = 'lblMultiPmValue0' + inttostr(pl) + inttostr(j) then begin
-  //        tabMultiPM.Controls[i].Visible := true;
-  //        line := '';
-  //
-  //        for k := 0 to 7 do begin
-  //          line := line + IntToStr(playerPos[pl, playerIndex[frame, pl] + k, j]);
-  //        end;
-  //
-  //        if isValueDec then
-  //          line := inttostr(bin2dec(line))
-  //        else begin
-  //          line := '$' + dec2hex(bin2dec(line));
-  //
-  //          if Trim(line) = '$' then line := '$0';
-  //        end;
-  //
-  //        tabMultiPM.Controls[i].Caption := 'P' + IntToStr(pl) + ': ' + line;
-  //      end;
-  //    end;
-  //  end;
-  //end;
-end;
-
-//procedure TfrmAnimator.ClearAllFramesClick(Sender: TObject);
-//begin
-////  SetPlayers;
-////  refreshPM;
-//end;
-
 procedure TfrmAnimator.CloseModule(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TfrmAnimator.LoadAPLProc(Sender: TObject);
+begin
+  if Sender is TMenuItem then begin
+//    debug('Sender is TMenuItem');
+    case (Sender as TMenuItem).Tag of
+      0: begin
+        aplAnim := normal;
+        statusBar.Panels[2].Text := 'Standard Atari Player Editor format';
+      end;
+      1: begin
+        aplAnim := extended;
+        statusBar.Panels[2].Text := 'Extended Atari Player Editor format';
+      end;
+      2: begin
+        aplAnim := fixed52;
+        statusBar.Panels[2].Text := 'Fixed 52-height pixel Atari Player Editor format';
+      end;
+    end;
+  end
+  else begin
+//    debug('Sender is not TMenuItem');
+    aplAnim := normal;
+    statusBar.Panels[2].Text := 'Standard Atari Player Editor format';
+  end;
+
+  frmAnimLoadSave := TfrmAnimLoadSave.Create(Self);
+  with frmAnimLoadSave do
+    try
+      ShowModal;
+    finally
+      Free;
+    end;
+
+  HideGrid(Sender);
+  RefreshFrame(0);
+  player := 0;
+  rbPlayer0.Checked := true;
+  numFrames.Value := animFrames;
+  numAnimRate.Value := selAnimFrameRate;
+  editPlayerHeight.Value := animFrameHeight;
+
+//  _ANIM_MAX_LINES := animFrameHeight;
+//  frmColors.Show;
 end;
 
 procedure TfrmAnimator.InvertProc(Sender : TObject);
@@ -1282,25 +996,6 @@ begin
         playerPos[selected, j, m, n] := 1 - playerPos[selected, j, m, n];
 
   RefreshFrame(0);
-end;
-
-procedure TfrmAnimator.LoadAPL(Sender: TObject);
-begin
-  frmAnimLoadSave := TfrmAnimLoadSave.Create(Self);
-  with frmAnimLoadSave do
-    try
-      ShowModal;
-    finally
-      Free;
-    end;
-
-  HideGrid(Sender);
-  RefreshFrame(0);
-  player := 0;
-  rbPlayer0.Checked := true;
-  numFrames.Value := animFrames;
-  numAnimRate.Value := selAnimFrameRate;
-  frmColors.Show;
 end;
 
 procedure TfrmAnimator.CopyFrameToAll(Sender : TObject);
@@ -1341,7 +1036,8 @@ var
   i, j, m, n : byte;
   origFrame : byte;
 begin
-  ShowCursor(frmAnimator, frmAnimator, crHourGlass);
+//  ShowCursor(frmAnimator, frmAnimator, crHourGlass);
+  Screen.Cursor := crHourGlass;
 
   origFrame := selected;
   for i := 0 to 16 do begin
@@ -1362,7 +1058,8 @@ begin
   end;
   selected := origFrame;
 
-  ShowCursor(frmAnimator, frmAnimator, crDefault);
+//  ShowCursor(frmAnimator, frmAnimator, crDefault);
+  Screen.Cursor := crDefault;
 end;
 
 procedure TfrmAnimator.NewAnimation(Sender: TObject);
@@ -1373,7 +1070,7 @@ begin
 //  statusBar.Panels[0].Text := 'Cursor coordinates: x: 0, y: 0';
 end;
 
-procedure TfrmAnimator.SaveAPL(Sender: TObject);
+procedure TfrmAnimator.SaveAPLProc(Sender: TObject);
 var
   filenamexy : string;
   i : integer;
@@ -1384,43 +1081,94 @@ var
   bin : string;
   n, i, j : byte;
 begin
-  for i := 0 to 16 do
-    // Player data, frame i (48 bytes)
-    // 17 - Player data, copy buffer (48 bytes)
-    for j := 0 to 47 do begin
-      if j <= _ANIM_MAX_LINES - 1 then begin
+  if aplAnim = normal then begin
+    for i := 0 to 16 do
+      // Player data, frame length
+      // 17 - Player data, copy buffer
+      for j := 0 to _ANIM_APL_MAX_LINES - 1 do begin
+        if j <= animFrameHeight - 1 then begin
+          bin := '';
+          for n := 0 to 7 do
+            bin += IntToStr(fld[i][pl, n, j]);
+
+          fs.WriteByte(Bin2Dec(bin));
+        end
+        else
+          fs.WriteByte(0);
+      end;
+  end
+  else begin
+    for i := 0 to 16 do
+      // Player data, frame length
+      // 17 - Player data, copy buffer
+      for j := 0 to animFrameHeight - 1 do begin
         bin := '';
         for n := 0 to 7 do
-          bin := bin + IntToStr(fld[i][pl, n, j]);
+          bin += IntToStr(fld[i][pl, n, j]);
 
         fs.WriteByte(Bin2Dec(bin));
-      end
-      else
-        fs.WriteByte(0);
-    end;
+      end;
+  end;
 end;
 
 begin
-  frmMain.dlgSave.Filter := 'Atari Player data file (*.apl)|*.apl;|All files (*.*)|*.*';
+  if Sender is TMenuItem then begin
+    case (Sender as TMenuItem).Tag of
+      0: aplAnim := normal;
+      1: aplAnim := extended;
+      2: aplAnim := fixed52;
+    end;
+  end
+  else
+    aplAnim := normal;
+
+  case aplAnim of
+    normal: begin
+//      animFrameHeight := _ANIM_APL_MAX_LINES;
+      frmMain.dlgSave.Filter := 'Atari Player Editor data file (*.apl)|*.apl;|All files (*.*)|*.*';
+      statusBar.Panels[2].Text := 'Standard Atari Player Editor format';
+    end;
+    extended: begin
+      frmMain.dlgSave.Filter := 'Atari Player Editor data file (*.apm)|*.apm;|All files (*.*)|*.*';
+      statusBar.Panels[2].Text := 'Extended Atari Player Editor format';
+    end;
+    fixed52: begin
+      animFrameHeight := 52;
+      frmMain.dlgSave.Filter := 'Atari Player Editor data file' +
+                                ' (*.apl, *.apm)|*.apl;*.apm|All files (*.*)|*.*';
+      statusBar.Panels[2].Text := 'Fixed 52-height pixel Atari Player Editor format';
+    end;
+  end;
+
+  //if editPlayerHeight.Value <= 48 then
+  //  frmMain.dlgSave.Filter := 'Atari Player Editor data file (*.apl)|*.apl;|All files (*.*)|*.*'
+  //else
+  //  frmMain.dlgSave.Filter := 'Atari Player Editor extended data file (*.apm)|*.apm;|All files (*.*)|*.*';
+
+  //debug('animFrameHeight', animFrameHeight);
+  //if animFrameHeight <= _ANIM_APL_MAX_LINES then
+  //  animFrameHeight := _ANIM_APL_MAX_LINES;
+
   frmMain.dlgSave.Title := 'Save Atari Player data file as';
   frmMain.dlgSave.Filename := filename;
   if frmMain.dlgSave.Execute then begin
+    Screen.Cursor := crHourGlass;
     filenamexy := frmMain.dlgSave.Filename;
     fs := TFileStream.Create(filenamexy, fmCreate);
     try
-      // file version identifier
+      // File version identifier
       fs.WriteByte($9a);
       fs.WriteByte($f8);
       fs.WriteByte($39);
       fs.WriteByte($21);
 
-      // number of frames
+      // Number of frames
       fs.WriteByte(numFrames.Value);
 
-      // height
+      // Height
       fs.WriteByte(animFrameHeight);
 
-      // gap
+      // Gap
       fs.WriteByte(0);
 
       // P0 colour, frames 1..16
@@ -1438,7 +1186,7 @@ begin
       // P1 colour, copy buffer
       fs.WriteByte(colorValues[5]);
 
-      // background colour
+      // Background colour
       fs.WriteByte(colorValues[0]);
 
       FillPlayer(0);
@@ -1458,6 +1206,7 @@ begin
 
       //isDataChanged[player] := false;
     finally
+      Screen.Cursor := crDefault;
       fs.Free;
     end;
   end;
@@ -1501,7 +1250,7 @@ end;
 procedure TfrmAnimator.Enable3rdColor(Sender: TObject);
 begin
   isPmMixedColor := true;
-  statusBar.Panels[2].Text := 'Player mixed (3rd) color enabled';
+  statusBar.Panels[3].Text := 'Player mixed (3rd) color enabled';
   isChange := true;
   RefreshFrame(0);
   RefreshAnim(isAnimEditorGrid);
@@ -1510,17 +1259,11 @@ end;
 procedure TfrmAnimator.Disable3rdColor(Sender: TObject);
 begin
   isPmMixedColor := false;
-  statusBar.Panels[2].Text := 'Player mixed (3rd) color disabled';
+  statusBar.Panels[3].Text := 'Player mixed (3rd) color disabled';
   isChange := true;
   RefreshFrame(0);
   RefreshAnim(isAnimEditorGrid);
 end;
-
-//procedure TfrmAnimator.MenuItem31Click(Sender: TObject);
-//begin
-//  isValueDec := true;
-//  RefreshValues;
-//end;
 
 procedure TfrmAnimator.CopyFromBuffer(Sender: TObject);
 var
@@ -1554,7 +1297,7 @@ begin
   RefreshFrame(0);
 end;
 
-procedure TfrmAnimator.Player0Change(Sender: TObject);
+procedure TfrmAnimator.FrameColorChange(Sender: TObject);
 begin
   RefreshFrame(0);
 
@@ -1753,33 +1496,6 @@ begin
     refreshFrame(oper);
   end;
   selected := origFrame;
-  //else begin
-  //  for fr := 0 to 16 do begin
-  //    for i := 0 to 1 do begin
-  //      for x := 0 to 7 do
-  //        fld02[i, x] := fld[fr][i, x, 0];
-  //
-  //      for x := 0 to grX do
-  //        for y := 1 to _ANIM_MAX_LINES - 1 do begin
-  //          fld[fr][i, x, y - 1] := fld[fr][i, x, y];
-  //          fld[fr][i, x, y] := 0;
-  //          playerPos[fr, i, playerIndex[fr, i] + x, y - 1] :=
-  //            playerPos[fr, i, playerIndex[fr, i] + x, y];
-  //          playerPos[fr, i, playerIndex[fr, i] + x, y] := 0;
-  //        end;
-  //
-  //      for x := 0 to 7 do begin
-  //        fld[fr][i, x, _ANIM_MAX_LINES - 1] := fld02[i, x];
-  //        playerPos[fr, i, playerIndex[fr, i] + x, _ANIM_MAX_LINES - 1] := fld02[i, x];
-  //      end;
-  //    end;
-  //
-  //    selected := fr;
-  //    SelectedFrame;
-  //    RefreshFrames(imgTemp, factX02, factY02, true);
-  //  end;
-  //end;
-  //refreshPM;
 end;
 
 {-----------------------------------------------------------------------------
@@ -1959,7 +1675,8 @@ var
   i, x, y, m, n, fr : byte;
   origFrame : byte;
 begin
-  ShowCursor(frmAnimator, frmAnimator, crHourGlass);
+//  ShowCursor(frmAnimator, frmAnimator, crHourGlass);
+  Screen.Cursor := crHourGlass;
 
   origFrame := selected;
   for fr := 0 to oper do begin
@@ -1982,7 +1699,8 @@ begin
   end;
   selected := origFrame;
 
-  ShowCursor(frmAnimator, frmAnimator, crDefault);
+//  ShowCursor(frmAnimator, frmAnimator, crDefault);
+  Screen.Cursor := crDefault;
 end;
 
 {-----------------------------------------------------------------------------
@@ -1997,22 +1715,25 @@ procedure TfrmAnimator.FlipYProc(oper : byte);
 var
   i, x, y, m, n, fr : byte;
   origFrame : byte;
+  divFactor : byte;
 begin
-  ShowCursor(frmAnimator, frmAnimator, crHourGlass);
+//  ShowCursor(frmAnimator, frmAnimator, crHourGlass);
+  Screen.Cursor := crHourGlass;
 
   origFrame := selected;
+  divFactor := animFrameHeight div 2;
   for fr := 0 to oper do begin
     if oper = 16 then selected := fr;
     for i := 0 to 1 do
       for x := 0 to 7 do
-        for y := _ANIM_MAX_LINES - 1 downto 20 do begin
+        for y := animFrameHeight - 1 downto divFactor do begin
           n := fld[selected][i, x, y];
           m := playerPos[selected, i, playerIndex[selected, i] + x, y];
-          fld[selected][i, x, y] := fld[selected][i, x, _ANIM_MAX_LINES - 1 - y];
-          fld[selected][i, x, _ANIM_MAX_LINES - 1 - y] := n;
+          fld[selected][i, x, y] := fld[selected][i, x, animFrameHeight - 1 - y];
+          fld[selected][i, x, animFrameHeight - 1 - y] := n;
           playerPos[selected, i, playerIndex[selected, i] + x, y] :=
-            playerPos[selected, i, playerIndex[selected, i] + x, _ANIM_MAX_LINES - 1 - y];
-          playerPos[selected, i, playerIndex[selected, i] + x, _ANIM_MAX_LINES - 1 - y] := m;
+            playerPos[selected, i, playerIndex[selected, i] + x, animFrameHeight - 1 - y];
+          playerPos[selected, i, playerIndex[selected, i] + x, animFrameHeight - 1 - y] := m;
         end;
   end;
   for fr := 0 to oper do begin
@@ -2021,21 +1742,34 @@ begin
   end;
   selected := origFrame;
 
-  ShowCursor(frmAnimator, frmAnimator, crDefault);
+//  ShowCursor(frmAnimator, frmAnimator, crDefault);
+  Screen.Cursor := crDefault;
 end;
+
+//procedure TfrmAnimator.DoubleResolutionProc(Sender : TObject);
+//begin
+////  glDoubleRes.State := cbGrayed;
+////  tglSingleRes.State := cbUnchecked;
+//  SetDoubleResolution(Sender);
+//  ApplyPlayerHeight(Sender);
+//end;
+//
+//procedure TfrmAnimator.SingleResolutionProc(Sender : TObject);
+//begin
+////  tglDoubleRes.State := cbUnchecked;
+////  tglSingleRes.State := cbGrayed;
+//  SetSingleResolution(Sender);
+//  ApplyPlayerHeight(Sender);
+//end;
 
 procedure TfrmAnimator.DoubleResolutionProc(Sender : TObject);
 begin
-  Togglebox1.State := cbGrayed;
-  Togglebox2.State := cbUnchecked;
   SetDoubleResolution(Sender);
   ApplyPlayerHeight(Sender);
 end;
 
 procedure TfrmAnimator.SingleResolutionProc(Sender : TObject);
 begin
-  Togglebox1.State := cbUnchecked;
-  Togglebox2.State := cbGrayed;
   SetSingleResolution(Sender);
   ApplyPlayerHeight(Sender);
 end;
@@ -2043,15 +1777,50 @@ end;
 procedure TfrmAnimator.SetSingleResolution(Sender: TObject);
 begin
   pmResolution := singleResolution;
-  statusBar.Panels[1].Text := 'Player/missile single resolution';
+//  statusBar.Panels[1].Text := 'Player/missile single resolution';
   factY02 := 4;
 end;
 
 procedure TfrmAnimator.SetDoubleResolution(Sender: TObject);
 begin
   pmResolution := doubleResolution;
-  statusBar.Panels[1].Text := 'Player/missile double resolution';
+//  statusBar.Panels[1].Text := 'Player/missile double resolution';
   factY02 := 8;
+end;
+
+//procedure TfrmAnimator.SavePlayer(filenamexy : string);
+//var
+//  x, y : integer;
+//  dta : char;
+//  fs : TFileStream;
+//begin
+//  fs := TFileStream.Create(filenamexy, fmCreate);
+//  try
+//    for y := 0 to _ANIM_MAX_LINES - 1 do begin
+//      for x := 0 to 7 do begin
+//        dta := '0';
+//        if fld[frame][player, x, y] > 0 then dta := '1';
+//        fs.WriteByte(Byte(dta));
+//      end;
+//    end;
+//
+//    isDataChanged[player] := false;
+//  finally
+//    fs.Free;
+//  end;
+//end;
+
+procedure TfrmAnimator.SavePlayer(Sender: TObject);
+begin
+  //if isDataChanged[player] and (pmgFilenames[player] = '') then
+  //  if pmgFilenames[player] = '' then
+  //    SaveAsClick(Sender)
+  //else begin
+  //  if isDataChanged[player] then
+  //    SavePlayer(pmgFilenames[player])
+  //  else
+  //    ShowMessage('There is no data to be saved!');
+  //end;
 end;
 
 end.

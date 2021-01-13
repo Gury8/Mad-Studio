@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
 }
 unit common;
 
@@ -30,9 +30,13 @@ type
   TListings = array[0..9, 0..7] of boolean;
   TListingsEx = array[0..9, 0..7, 0..3] of boolean;
 
+  TAplAnim = (normal, extended, fixed52);
+
 const
   programName = 'Mad Studio';
-  programVersion = ' v1.2.1 (x86_64-win32/win64)';
+//  programVersion = ' v1.3 (x86_64-win32/win64)';
+//  programVersion = ' v1.2.2 (x86_64-win32/win64)';
+  programVersion = ' v1.2.2 (x86_64-Win64)';
 
   // Supported graphics resolutions
   grMode40x24x4 = 3;
@@ -63,6 +67,7 @@ const
   formAnimator = 9;
   formAntic3 = 10;
   formByteEditor = 11;
+  formAntic4TileEditor = 12;
 
   tabPmgIndex = 0;
   tabDlIndex = 1;
@@ -131,6 +136,8 @@ const
     _LMS + _ANTIC_MODE_8);
 
   _MAX_ANIM_FRAME_WIDTH = 15;
+  _ANIM_MAX_LINES = 58;
+  _ANIM_APL_MAX_LINES = 48;
 
   // Supported languages
   _ATARI_BASIC    = 0;
@@ -149,6 +156,7 @@ const
   pmSize : array[0..3] of string[14] = ('normal size', 'double size', '', 'quadruple size');
   GPRIOR : array[0..3] of byte = (1, 4, 16, 32);
 
+  _CHAR_DIM       = 7;
 
   {$I 'missile_sizes.inc'}
 
@@ -251,7 +259,7 @@ var
 
   // Module view
   propModules : TStringList;
-  propFlagModules : array[0..11] of byte;
+  propFlagModules : array[0..12] of byte;
 
   // Selected computer language
   langIndex : byte = 0;
@@ -260,15 +268,17 @@ var
 //  playerSize : TPlayerSize;
 
   _PM_MAX_LINES : byte = 40;
-  _ANIM_MAX_LINES : byte = 40;
+//  _ANIM_MAX_LINES : byte = 60;
 
-  exportData : array[0..400000] of byte;
+  exportData : array[0..500000] of byte;
   isDataExport : boolean;
   maxLines : word;
   beType : byte;
 
   isAntic4 : boolean;
   isAntic6 : boolean;
+
+  aplAnim : TAplAnim;
 
 implementation
 

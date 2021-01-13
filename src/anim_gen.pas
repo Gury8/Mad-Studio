@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Player Animator editor - source code generator
 }
 unit anim_gen;
@@ -18,8 +18,11 @@ uses
 type
   { TfrmAnimGen }
   TfrmAnimGen = class(TForm)
+    boxFlip1 : TGroupBox;
     btnCopyToEditor : TBCMaterialDesignButton;
     btnClose : TBCMaterialDesignButton;
+    btnSingleRes : TBCMDButton;
+    btnDoubleRes : TBCMDButton;
     panelLang : TBCPaperPanel;
     boxStartLine : TGroupBox;
     btnAtariBASIC : TBCMDButton;
@@ -51,14 +54,19 @@ type
       X, Y : Integer);
     procedure CloseWin(Sender: TObject);
     procedure CreateCodeProc(Sender : TObject);
-    procedure btnCloseMouseEnter(Sender : TObject);
-    procedure btnCloseMouseLeave(Sender : TObject);
-    procedure btnCopyToEditorMouseEnter(Sender : TObject);
-    procedure btnCopyToEditorMouseLeave(Sender : TObject);
-    procedure btnCopyToEditorMouseUp(Sender : TObject; Button : TMouseButton;
-      Shift : TShiftState; X, Y : Integer);
+    procedure btnCloseEnter(Sender : TObject);
+    procedure btnCloseLeave(Sender : TObject);
+    procedure btnCopyToEditorEnter(Sender : TObject);
+    procedure btnCopyToEditorLeave(Sender : TObject);
+    procedure btnCopyToEditorUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+      X, Y : Integer);
   private
     listings : TListings;
+    playerPageSize : string;
+    PlayerMemSize : string;
+    PMBASEStart : string;
+    SDMCTL : string;
+    PMBASE : string;
     function GenData : string;
     function Example01 : string;
     function Example02 : string;
@@ -684,13 +692,13 @@ begin
     code.line += CodeLine('GRAPHICS 0');
     code.line += CodeLine('POKE 710,0:POKE 712,0');
     code.line += CodeLine('? "Set P/M graphics"');
-    code.line += CodeLine('PMGMEM=PEEK(106)-8');
+    code.line += CodeLine('PMGMEM=PEEK(106)-' + playerPageSize);
     code.line += CodeLine('POKE 54279,PMGMEM');
     code.line += CodeLine('PMGMEM=PMGMEM*256');
     code.line += CodeLine('REM P/M graphics double resolution');
-    code.line += CodeLine('POKE 559,46');
+    code.line += CodeLine('POKE 559,' + SDMCTL);
     code.line += CodeLine('? "Clear player memory"');
-    code.line += CodeLine('FOR I=0 TO 512+128-1:POKE PMGMEM+384+I,0:NEXT I');
+    code.line += CodeLine('FOR I=0 TO ' + PMBASE + '+' + PlayerMemSize + '-1:POKE PMGMEM+' + PMBASEStart + '+I,0:NEXT I');
     code.line += CodeLine('REM Enable third color');
     code.line += CodeLine('POKE 623,33');
     code.line += CodeLine('REM Player normal size');
@@ -723,8 +731,8 @@ begin
     code.line += CodeLine('POKE 704,PL0COL(FRAME)');
     code.line += CodeLine('POKE 705,PL1COL(FRAME)');
     code.line += CodeLine('FOR I=0 TO HEIGHT-1');
-    code.line += CodeLine('POKE PMGMEM+512+PY0+I,PL0(I+FRAME*HEIGHT)');
-    code.line += CodeLine('POKE PMGMEM+512+128+PY1+I,PL1(I+FRAME*HEIGHT)');
+    code.line += CodeLine('POKE PMGMEM+' + PMBASE + '+PY0+I,PL0(I+FRAME*HEIGHT)');
+    code.line += CodeLine('POKE PMGMEM+' + PMBASE + '+' + PlayerMemSize + '+PY1+I,PL1(I+FRAME*HEIGHT)');
     code.line += CodeLine('NEXT I');
     code.line += CodeLine('NEXT FRAME');
     code.line += CodeLine('NEXT ITER');
@@ -755,16 +763,16 @@ begin
     for i := 1 to frmAnimator.numFrames.Value do begin
       if i = 1 then
         code.line += '  if frame = 1 then begin'#13#10 +
-                     '    Move(p0Frame' + IntToStr(i) + ', Pointer(PMGMEM + 512 + py0), _HEIGHT);' +
+                     '    Move(p0Frame' + IntToStr(i) + ', Pointer(PMGMEM + ' + PMBASE + ' + py0), _HEIGHT);' +
                      #13#10 +
-                     '    Move(p1Frame' + IntToStr(i) + ', Pointer(PMGMEM + 512 + 128 + py1), _HEIGHT);' +
+                     '    Move(p1Frame' + IntToStr(i) + ', Pointer(PMGMEM + ' + PMBASE + ' + ' + PlayerMemSize + ' + py1), _HEIGHT);' +
                      #13#10 +
                      '  end'
       else
         code.line += '  else if frame = ' + IntToStr(i) + ' then begin'#13#10 +
-                     '    Move(p0Frame' + IntToStr(i) + ', Pointer(PMGMEM + 512 + PY0), _HEIGHT);' +
+                     '    Move(p0Frame' + IntToStr(i) + ', Pointer(PMGMEM + ' + PMBASE + ' + PY0), _HEIGHT);' +
                      #13#10 +
-                     '    Move(p1Frame' + IntToStr(i) + ', Pointer(PMGMEM + 512 + 128 + PY1), _HEIGHT);' +
+                     '    Move(p1Frame' + IntToStr(i) + ', Pointer(PMGMEM + ' + PMBASE + ' + ' + PlayerMemSize + ' + PY1), _HEIGHT);' +
                      #13#10 +
                      '  end';
 
@@ -784,13 +792,13 @@ begin
                 '  Poke(710, 0); Poke(712, 0);'#13#10#13#10 +
                 '  // Set P/M graphics'#13#10 +
                 '  Poke(53277, 0);'#13#10 +
-                '  PMGMEM := Peek(106) - 8;'#13#10 +
+                '  PMGMEM := Peek(106) - ' + playerPageSize + ';'#13#10 +
                 '  Poke(54279, PMGMEM);'#13#10 +
                 '  PMGMEM := PMGMEM * 256;'#13#10#13#10 +
                 '  // P/M graphics double resolution'#13#10 +
-                '  Poke(559, 46);'#13#10#13#10 +
+                '  Poke(559, ' + SDMCTL + ');'#13#10#13#10 +
                 '  // Clear player memory'#13#10 +
-                '  FillByte(pointer(PMGMEM + 384), 512 - 1 + 128, 0);'#13#10#13#10 +
+                '  FillByte(pointer(PMGMEM + ' + PMBASEStart + '), ' + PMBASE + ' - 1 + ' + PlayerMemSize + ', 0);'#13#10#13#10 +
                 '  // Enable third color'#13#10 +
                 '  Poke(623, 33);'#13#10#13#10 +
                 '  // Player normal size'#13#10 +
@@ -842,15 +850,15 @@ begin
     for i := 1 to frmAnimator.numFrames.Value do begin
       if i = 1 then
         code.line += 'IF frame = 1 THEN'#13#10 +
-                      '  MoveBlock(PMGMEM + 512 + 70, p0Frame' + IntToStr(i) + ', height)' +
+                      '  MoveBlock(PMGMEM + ' + PMBASE + ' + 70, p0Frame' + IntToStr(i) + ', height)' +
                       #13#10 +
-                      '  MoveBlock(PMGMEM + 512 + 128 + 70, p1Frame' + IntToStr(i) + ', height)' +
+                      '  MoveBlock(PMGMEM + ' + PMBASE + ' + ' + PlayerMemSize + ' + 70, p1Frame' + IntToStr(i) + ', height)' +
                       #13#10
       else
         code.line += 'ELSEIF frame = ' + IntToStr(i) + ' THEN'#13#10 +
-                     '  MoveBlock(PMGMEM + 512 + 70, p0Frame' + IntToStr(i) + ', height)' +
+                     '  MoveBlock(PMGMEM + ' + PMBASE + ' + 70, p0Frame' + IntToStr(i) + ', height)' +
                      #13#10 +
-                     '  MoveBlock(PMGMEM + 512 + 128 + 70, p1Frame' + IntToStr(i) + ', height)' +
+                     '  MoveBlock(PMGMEM + ' + PMBASE + ' + ' + PlayerMemSize + ' + 70, p1Frame' + IntToStr(i) + ', height)' +
                      #13#10;
     end;
     code.line += 'FI'#13#10#13#10;
@@ -864,13 +872,13 @@ begin
                 'Poke(710, 0) Poke(712, 0)'#13#10#13#10 +
                 '; Set P/M graphics'#13#10 +
                 'GRACTL = 0'#13#10 +
-                'PMGMEM = RAMTOP - 8'#13#10 +
+                'PMGMEM = RAMTOP - ' + playerPageSize + #13#10 +
                 'PMBASE = PMGMEM'#13#10 +
                 'PMGMEM ==* 256'#13#10#13#10 +
                 '; P/M graphics double resolution'#13#10 +
                 'SDMCTL = 46'#13#10#13#10 +
                 '; Clear player memory'#13#10 +
-                'Zero(PMGMEM + 384, 512 - 1 + 128)'#13#10#13#10 +
+                'Zero(PMGMEM + ' + PMBASEStart + ', ' + PMBASE + ' - 1 + ' + PlayerMemSize + ')'#13#10#13#10 +
                 '; Enable third color'#13#10 +
                 'PRIOR = 33'#13#10#13#10 +
                 '; Player normal size'#13#10 +
@@ -908,40 +916,31 @@ begin
     code.line += #13#10;
     code.line += ''' Player position'#13#10 +
                 'PX0 = 90 : PY0 = 40'#13#10 +
-                'PX1 = 90 : PY1 = 40'#13#10 +
-                #13#10 +
+                'PX1 = 90 : PY1 = 40'#13#10#13#10 +
                 ''' Set environment'#13#10 +
                 'GRAPHICS 0'#13#10 +
-                'POKE 710, 0 : POKE 712, 0'#13#10 +
-                #13#10 +
+                'POKE 710, 0 : POKE 712, 0'#13#10#13#10 +
                 ''' Set P/M graphics'#13#10 +
                 'POKE 53277, 0'#13#10 +
-                'PMGMEM = PEEK(106) - 8'#13#10 +
+                'PMGMEM = PEEK(106) - ' + playerPageSize + #13#10 +
                 'POKE 54279, PMGMEM'#13#10 +
-                'PMGMEM = PMGMEM * 256'#13#10 +
-                #13#10 +
+                'PMGMEM = PMGMEM * 256'#13#10#13#10 +
                 ''' P/M graphics double resolution'#13#10 +
-                'POKE 559, 46'#13#10 +
-                #13#10 +
+                'POKE 559, ' + SDMCTL + #13#10#13#10 +
                 ''' Clear player memory'#13#10 +
-                'MSET PMGMEM + 384, 512 - 1 + 128, 0'#13#10 +
+                'MSET PMGMEM + ' + PMBASEStart + ', ' + PMBASE + ' - 1 + ' + PlayerMemSize + ', 0'#13#10 +
                 //'POKE PMGMEM + 384, 0
-                //'MOVE PMGMEM + 384, PMGMEM + 384 + 1, 512 - 1 + 128
+                //'MOVE PMGMEM + 384, PMGMEM + 384 + 1, ' + PMBASE + ' - 1 + 128
                 #13#10 +
                 ''' Enable third color'#13#10 +
-                'POKE 623, 33'#13#10 +
-                #13#10 +
+                'POKE 623, 33'#13#10#13#10 +
                 ''' Player normal size'#13#10 +
-                'POKE 53256, 0 : POKE 53257, 0'#13#10 +
-                #13#10 +
+                'POKE 53256, 0 : POKE 53257, 0'#13#10#13#10 +
                 ''' Turn on P/M graphics'#13#10 +
-                'POKE 53277, 3'#13#10 +
-                #13#10 +
-                'FRAME=1'#13#10 +
-                #13#10 +
+                'POKE 53277, 3'#13#10#13#10 +
+                'FRAME=1'#13#10#13#10 +
                 '? "Player animation"'#13#10 +
-                'POKE 53248, PX0 : POKE 53249, PX1'#13#10 +
-                #13#10 +
+                'POKE 53248, PX0 : POKE 53249, PX1'#13#10#13#10 +
                 'FOR I = 1 TO 50'#13#10 +
                 '  EXEC NextFrame'#13#10 +
                 '  POKE 704, p0Color(0)'#13#10 +
@@ -955,24 +954,22 @@ begin
                 //'UNTIL Key()'#13#10 +
                 WaitKeyCode(langIndex) +
                 #13#10 +
-                'END'#13#10 +
-                #13#10 +
-                'PROC NextFrame'#13#10 +
-                #13#10;
+                'END'#13#10#13#10 +
+                'PROC NextFrame'#13#10#13#10;
 
       for i := 1 to frmAnimator.numFrames.Value do begin
         if i = 1 then begin
           code.line += 'IF FRAME = 1'#13#10 +
-                       '  MOVE ADR(p0Frame' + IntToStr(i) + '), PMGMEM + 512 + 70, ' +
+                       '  MOVE ADR(p0Frame' + IntToStr(i) + '), PMGMEM + ' + PMBASE + ' + 70, ' +
                        IntToStr(animFrameHeight) + #13#10 +
-                       '  MOVE ADR(p1Frame' + IntToStr(i) + '), PMGMEM + 512 + 128 + 70, ' +
+                       '  MOVE ADR(p1Frame' + IntToStr(i) + '), PMGMEM + ' + PMBASE + ' + ' + PlayerMemSize + ' + 70, ' +
                        IntToStr(animFrameHeight) + #13#10;
         end
         else begin
           code.line += 'ELIF FRAME = ' + IntToStr(i) + #13#10 +
-                       '  MOVE ADR(p0Frame' + IntToStr(i) + '), PMGMEM + 512 + 70, ' +
+                       '  MOVE ADR(p0Frame' + IntToStr(i) + '), PMGMEM + ' + PMBASE + ' + 70, ' +
                        IntToStr(animFrameHeight) + #13#10 +
-                       '  MOVE ADR(p1Frame' + IntToStr(i) + '), PMGMEM + 512 + 128 + 70, ' +
+                       '  MOVE ADR(p1Frame' + IntToStr(i) + '), PMGMEM + ' + PMBASE + ' + ' + PlayerMemSize + ' + 70, ' +
                        IntToStr(animFrameHeight) + #13#10;
         end;
       end;
@@ -1071,13 +1068,13 @@ begin
     code.line += CodeLine('GRAPHICS 0');
     code.line += CodeLine('POKE 710,0:POKE 712,0');
     code.line += CodeLine('? "Set P/M graphics"');
-    code.line += CodeLine('PMGMEM=PEEK(106)-8');
+    code.line += CodeLine('PMGMEM=PEEK(106)-' + playerPageSize);
     code.line += CodeLine('POKE 54279,PMGMEM');
     code.line += CodeLine('PMGMEM=PMGMEM*256');
     code.line += CodeLine('REM P/M graphics double resolution');
-    code.line += CodeLine('POKE 559,46');
+    code.line += CodeLine('POKE 559,' + SDMCTL);
     code.line += CodeLine('? "Clear player memory"');
-    code.line += CodeLine('FOR I=0 TO 512+128-1:POKE PMGMEM+384+I,0:NEXT I');
+    code.line += CodeLine('FOR I=0 TO ' + PMBASE + '+' + PlayerMemSize + '-1:POKE PMGMEM+' + PMBASEStart + '+I,0:NEXT I');
     code.line += CodeLine('REM Enable third color');
     code.line += CodeLine('POKE 623,33');
     code.line += CodeLine('REM Player normal size');
@@ -1111,8 +1108,8 @@ begin
     code.line += CodeLine('POKE 704,PL0COL(FRAME)');
     code.line += CodeLine('POKE 705,PL1COL(FRAME)');
     code.line += CodeLine('FOR I=0 TO HEIGHT-1');
-    code.line += CodeLine('POKE PMGMEM+512+PY0+I,PL0(I+FRAME*HEIGHT)');
-    code.line += CodeLine('POKE PMGMEM+512+128+PY1+I,PL1(I+FRAME*HEIGHT)');
+    code.line += CodeLine('POKE PMGMEM+' + PMBASE + '+PY0+I,PL0(I+FRAME*HEIGHT)');
+    code.line += CodeLine('POKE PMGMEM+' + PMBASE + '+' + PlayerMemSize + '+PY1+I,PL1(I+FRAME*HEIGHT)');
     code.line += CodeLine('NEXT I');
     code.line += CodeLine('REM Move player horizontally');
     code.line += CodeLine('POKE 53248,PX0:POKE 53249,PX1');
@@ -1146,16 +1143,16 @@ begin
     for i := 1 to frmAnimator.numFrames.Value do begin
       if i = 1 then
         code.line += '  if frame = 1 then begin'#13#10 +
-                     '    Move(p0Frame' + IntToStr(i) + ', Pointer(PMGMEM + 512 + py0), _HEIGHT);' +
+                     '    Move(p0Frame' + IntToStr(i) + ', Pointer(PMGMEM + ' + PMBASE + ' + py0), _HEIGHT);' +
                      #13#10 +
-                     '    Move(p1Frame' + IntToStr(i) + ', Pointer(PMGMEM + 512 + 128 + py1), _HEIGHT);' +
+                     '    Move(p1Frame' + IntToStr(i) + ', Pointer(PMGMEM + ' + PMBASE + ' + ' + PlayerMemSize + ' + py1), _HEIGHT);' +
                      #13#10 +
                      '  end'
       else
         code.line += '  else if frame = ' + IntToStr(i) + ' then begin'#13#10 +
-                     '    Move(p0Frame' + IntToStr(i) + ', Pointer(PMGMEM + 512 + py0), _HEIGHT);' +
+                     '    Move(p0Frame' + IntToStr(i) + ', Pointer(PMGMEM + ' + PMBASE + ' + py0), _HEIGHT);' +
                      #13#10 +
-                     '    Move(p1Frame' + IntToStr(i) + ', Pointer(PMGMEM + 512 + 128 + py1), _HEIGHT);' +
+                     '    Move(p1Frame' + IntToStr(i) + ', Pointer(PMGMEM + ' + PMBASE + ' + ' + PlayerMemSize + ' + py1), _HEIGHT);' +
                      #13#10 +
                      '  end';
 
@@ -1178,15 +1175,15 @@ begin
                 #13#10 +
                 '  // Set P/M graphics'#13#10 +
                 '  Poke(53277, 0);'#13#10 +
-                '  PMGMEM := Peek(106) - 8;'#13#10 +
+                '  PMGMEM := Peek(106) - ' + playerPageSize + ';'#13#10 +
                 '  Poke(54279, PMGMEM);'#13#10 +
                 '  PMGMEM := PMGMEM * 256;'#13#10 +
                 #13#10 +
                 '  // P/M graphics double resolution'#13#10 +
-                '  Poke(559, 46);'#13#10 +
+                '  Poke(559, ' + SDMCTL + ');'#13#10 +
                 #13#10 +
                 '  // Clear player memory'#13#10 +
-                '  FillByte(pointer(PMGMEM + 384), 512 - 1 + 128, 0);'#13#10 +
+                '  FillByte(pointer(PMGMEM + ' + PMBASEStart + '), ' + PMBASE + ' - 1 + ' + PlayerMemSize + ', 0);'#13#10 +
                 #13#10 +
                 '  // Enable third color'#13#10 +
                 '  Poke(623, 33);'#13#10 +
@@ -1249,15 +1246,15 @@ begin
     for i := 1 to frmAnimator.numFrames.Value do begin
       if i = 1 then
         code.line += 'IF frame = 1 THEN'#13#10 +
-                     '  MoveBlock(PMGMEM + 512 + 70, p0Frame' + IntToStr(i) + ', height)' +
+                     '  MoveBlock(PMGMEM + ' + PMBASE + ' + 70, p0Frame' + IntToStr(i) + ', height)' +
                      #13#10 +
-                     '  MoveBlock(PMGMEM + 512 + 128 + 70, p1Frame' + IntToStr(i) + ', height)' +
+                     '  MoveBlock(PMGMEM + ' + PMBASE + ' + ' + PlayerMemSize + ' + 70, p1Frame' + IntToStr(i) + ', height)' +
                      #13#10
       else
         code.line += 'ELSEIF frame = ' + IntToStr(i) + ' THEN'#13#10 +
-                     '  MoveBlock(PMGMEM + 512 + 70, p0Frame' + IntToStr(i) + ', height)' +
+                     '  MoveBlock(PMGMEM + ' + PMBASE + ' + 70, p0Frame' + IntToStr(i) + ', height)' +
                      #13#10 +
-                     '  MoveBlock(PMGMEM + 512 + 128 + 70, p1Frame' + IntToStr(i) + ', height)' +
+                     '  MoveBlock(PMGMEM + ' + PMBASE + ' + ' + PlayerMemSize + ' + 70, p1Frame' + IntToStr(i) + ', height)' +
                      #13#10;
     end;
     code.line += 'FI'#13#10 +
@@ -1272,7 +1269,7 @@ begin
                 #13#10 +
                 '; Set P/M graphics'#13#10 +
                 'GRACTL = 0'#13#10 +
-                'PMGMEM = RAMTOP - 8'#13#10 +
+                'PMGMEM = RAMTOP - ' + playerPageSize + #13#10 +
                 'PMBASE = PMGMEM'#13#10 +
                 'PMGMEM ==* 256'#13#10 +
                 #13#10 +
@@ -1280,7 +1277,7 @@ begin
                 'SDMCTL = 46'#13#10 +
                 #13#10 +
                 '; Clear player memory'#13#10 +
-                'Zero(PMGMEM + 384, 512 - 1 + 128)'#13#10 +
+                'Zero(PMGMEM + ' + PMBASEStart + ', ' + PMBASE + ' - 1 + ' + PlayerMemSize + ')'#13#10 +
                 #13#10 +
                 '; Enable third color'#13#10 +
                 'PRIOR = 33'#13#10 +
@@ -1332,15 +1329,15 @@ begin
                  'POKE 710, 0 : POKE 712, 0'#13#10#13#10 +
                  ''' Set P/M graphics'#13#10 +
                  'POKE 53277, 0'#13#10 +
-                 'PMGMEM = PEEK(106) - 8'#13#10 +
+                 'PMGMEM = PEEK(106) - ' + playerPageSize + #13#10 +
                  'POKE 54279, PMGMEM'#13#10 +
                  'PMGMEM = PMGMEM * 256'#13#10#13#10 +
                  ''' P/M graphics double resolution'#13#10 +
-                 'POKE 559, 46'#13#10#13#10 +
+                 'POKE 559, ' + SDMCTL + #13#10#13#10 +
                  ''' Clear player memory'#13#10 +
-                 'MSET PMGMEM + 384, 512 - 1 + 128, 0'#13#10 +
+                 'MSET PMGMEM + ' + PMBASEStart + ', ' + PMBASE + ' - 1 + ' + PlayerMemSize + ', 0'#13#10 +
                  //'POKE PMGMEM + 384, 0
-                 //'MOVE PMGMEM + 384, PMGMEM + 384 + 1, 512 - 1 + 128
+                 //'MOVE PMGMEM + 384, PMGMEM + 384 + 1, ' + PMBASE + ' - 1 + ' + PlayerMemSize + '
                  #13#10''' Enable third color'#13#10 +
                  'POKE 623, 33'#13#10#13#10 +
                  ''' Player normal size'#13#10 +
@@ -1371,15 +1368,15 @@ begin
        for i := 1 to frmAnimator.numFrames.Value do begin
          if i = 1 then
            code.line += 'IF FRAME = 1'#13#10 +
-                        '  MOVE ADR(p0Frame' + IntToStr(i) + '), PMGMEM + 512 + 70, ' +
+                        '  MOVE ADR(p0Frame' + IntToStr(i) + '), PMGMEM + ' + PMBASE + ' + 70, ' +
                         IntToStr(animFrameHeight) + #13#10 +
-                        '  MOVE ADR(p1Frame' + IntToStr(i) + '), PMGMEM + 512 + 128 + 70, ' +
+                        '  MOVE ADR(p1Frame' + IntToStr(i) + '), PMGMEM + ' + PMBASE + ' + ' + PlayerMemSize + ' + 70, ' +
                         IntToStr(animFrameHeight) + #13#10
          else
            code.line += 'ELIF FRAME = ' + IntToStr(i) + #13#10 +
-                        '  MOVE ADR(p0Frame' + IntToStr(i) + '), PMGMEM + 512 + 70, ' +
+                        '  MOVE ADR(p0Frame' + IntToStr(i) + '), PMGMEM + ' + PMBASE + ' + 70, ' +
                         IntToStr(animFrameHeight) + #13#10 +
-                        '  MOVE ADR(p1Frame' + IntToStr(i) + '), PMGMEM + 512 + 128 + 70, ' +
+                        '  MOVE ADR(p1Frame' + IntToStr(i) + '), PMGMEM + ' + PMBASE + ' + ' + PlayerMemSize + ' + 70, ' +
                         IntToStr(animFrameHeight) + #13#10;
        end;
        code.line += 'ENDIF'#13#10#13#10 +
@@ -1401,14 +1398,30 @@ begin
 end;
 
 procedure TfrmAnimGen.ListExamplesProc(Sender: TObject);
-//var
-//  i : byte;
 begin
 //  for i := 0 to radLang.Items.Count - 1 do begin
 //    radLang.Controls[i].Enabled := listings[ListExamples.ItemIndex, i];
 ////    radLang.Controls[i].Visible := listings[ListExamples.ItemIndex, i];
 //  end;
 //  radLang.ItemIndex := langIndex;
+
+  if btnDoubleRes.Checked then begin
+    pmResolution := doubleResolution;
+    playerPageSize := '8';
+    PMBASEStart := '384';
+    SDMCTL := '46';
+    PMBASE := '512';
+    PlayerMemSize := '128';
+  end
+  else begin
+    pmResolution := singleResolution;
+    playerPageSize := '16';
+    PMBASEStart := '768';
+    SDMCTL := '62';
+    PMBASE := '1024';
+    PlayerMemSize := '256';
+  end;
+
   CreateCode;
 end;
 
@@ -1418,31 +1431,31 @@ begin
   CreateCode;
 end;
 
-procedure TfrmAnimGen.btnCopyToEditorMouseLeave(Sender : TObject);
+procedure TfrmAnimGen.btnCopyToEditorLeave(Sender : TObject);
 begin
   btnCopyToEditor.NormalColor := clWhite;
   btnCopyToEditor.NormalColorEffect := clSilver;
 end;
 
-procedure TfrmAnimGen.btnCopyToEditorMouseEnter(Sender : TObject);
+procedure TfrmAnimGen.btnCopyToEditorEnter(Sender : TObject);
 begin
   btnCopyToEditor.NormalColor := $00CECECE;
   btnCopyToEditor.NormalColorEffect := clWhite;
 end;
 
-procedure TfrmAnimGen.btnCloseMouseEnter(Sender : TObject);
+procedure TfrmAnimGen.btnCloseEnter(Sender : TObject);
 begin
   btnClose.NormalColor := $00CECECE;
   btnClose.NormalColorEffect := clWhite;
 end;
 
-procedure TfrmAnimGen.btnCloseMouseLeave(Sender : TObject);
+procedure TfrmAnimGen.btnCloseLeave(Sender : TObject);
 begin
   btnClose.NormalColor := clWhite;
   btnClose.NormalColorEffect := clSilver;
 end;
 
-procedure TfrmAnimGen.btnCopyToEditorMouseUp(Sender : TObject;
+procedure TfrmAnimGen.btnCopyToEditorUp(Sender : TObject;
   Button : TMouseButton; Shift : TShiftState; X, Y : Integer);
 begin
 

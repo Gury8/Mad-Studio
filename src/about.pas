@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: About
 }
 unit about;
@@ -100,7 +100,7 @@ uses
 procedure TfrmAbout.FormShow(Sender: TObject);
 begin
   lblVersion.Caption := programVersion;
-  lblReleaseYear.Caption := '(c) 2020';
+  lblReleaseYear.Caption := '(c) 2021';
   textLazarus.Caption := 'Lazarus 2.0.8 x86_64-win64-win32/win64';
   textFreePascal.Caption := 'Free Pascal Compiler 3.0.4';
   textMadsVer.Caption := 'Mad Assembler 2.1.0 build 8';

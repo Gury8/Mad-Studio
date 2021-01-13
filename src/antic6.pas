@@ -94,7 +94,6 @@ type
     { private declarations }
     btn : tMousebutton;
     offs : byte;   // Internal character offset
-    offsX : byte;
     offsY : byte;
     offsAbs : byte;  // Absolute offset
     isSaveAs : boolean;
@@ -164,7 +163,8 @@ begin
 
   cmbTextModeChange(Sender);
   filename := getDir + 'examples\screen01.gr' + IntToStr(textMode);
-  caption := programName + ' ' + programVersion + ' - Text mode 1 and 2 editor (' + filename + ')';
+  caption := programName + ' ' + programVersion +
+             ' - Text mode 1 and 2 editor (' + filename + ')';
 //  statusBar.Panels[0].Text := 'Cursor coordinates: x: 0, y: 0';
 
   FillScreen(0);
@@ -372,13 +372,13 @@ begin
   for m := 0 to 8 do
     for n := 0 to 19 do begin
       if (x > 48) and (x <= 100) and (y > 24*m) and (y < 28 + 24*m) then begin
-        offsY := m; offsX := 1;
+        offsY := m;
         offs := 20*m + 1;
         RefreshCharX(offs);
         break;
       end;
       if (x > 48*n) and (x <= 100 + 48*n) and (y > 24*m) and (y < 28 + 24*m) then begin
-        offsY := m; offsX := n;
+        offsY := m;
         offs := n + 20*m + 1;
         if n = 0 then Dec(offs);
         RefreshCharX(offs);
@@ -582,7 +582,6 @@ var
   m, r : byte;
 begin
   FillByte(fldAtascii, SizeOf(fldAtascii), character);
-
   r := 0; m := 0;
   for j := 0 to modeSize - 1 do begin
     if (j > 19) and (j mod 20 = 0) then begin
@@ -592,15 +591,6 @@ begin
     PutChar(r, m, fldAtascii[j]);
     Inc(r);
   end;
-  //r := 0; m := 0;
-  //for j := 20 to modeSize do begin
-  //  PutChar(r, m, fldAtascii[j]);
-  //  Inc(r);
-  //    if (*(j > 39) and*) (j mod 20 = 0) then begin
-  //      r := 0;
-  //      Inc(m, 2);
-  //    end;
-  //end;
 end;
 
 //procedure TfrmAntic6.ShowFontSet;
@@ -934,12 +924,6 @@ begin
   for yf := 0 to 7 do begin
     for xf := 0 to 7 do begin
       col := fldFontSet[xf, yf + offset];
-
-      //if not isFontSetNormal then begin
-      //  if col = 1 then col := 0
-      //  else if col = 0 then col := 1;
-      //end;
-
 //      fldChar[xf, yf] := col;
       imgChar.Canvas.Brush.Color := coltabFont[col];
       imgChar.Canvas.FillRect(bounds(xf*3, yf*3, 3, 3));

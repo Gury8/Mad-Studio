@@ -189,7 +189,6 @@ begin
   isCreate := true;
   FillByte(charEditIndex, SizeOf(charEditIndex), 0);
   FillByte(fldChar, SizeOf(fldChar), 0);
-
   DefaultFontSet(fldFontSet);
 end;
 
@@ -288,26 +287,17 @@ begin
           row02[xf] := col;
 
         fld[xf, n*10 + yf] := col;
-
-        //if col = 1 then
-        //  col := 0
-        //else if col = 0 then
-        //  col := 1;
         col := 1 - col;
 
         if yf = 0 then
-          row03[xf] := col;
-
-        if yf = 1 then
+          row03[xf] := col
+        else if yf = 1 then
           row04[xf] := col;
 
         FillRectEx(imgFontSetInv, coltabFont[col],
                    xf*factX + xoffset, yf*factY + yoffset, factX, factY);
-
-//        if isDefault then begin
         FillRectEx(imgFontSet, coltabFont[0],
                    xf*factX + xoffset, factY shl 3 + yoffset, factX, factY);
-
         FillRectEx(imgFontSet, coltabFont[0],
                    xf*factX + xoffset, 9*factY + yoffset, factX, factY);
           //imgFontSetInv.Canvas.Brush.Color := coltabFont[1];
@@ -435,16 +425,6 @@ begin
     Clear;
 
     // Calculate code number
-    //if (offs >= 0) and (offs <= 63) then begin
-    //  n := offs + 32;
-    //end
-    //else if (offs >= 64) and (offs <= 95) then begin
-    //  n := offs - 64;
-    //end
-    //else begin
-    //  n := offs;
-    //end;
-
     atascii := AtasciiCode(offs);
     n := StrToInt(atascii);
     m := offs;
@@ -828,22 +808,7 @@ begin
 
   for dy := 0 to 9 do begin
     for dx := 0 to 7 do begin
-//      col := fldFontSet[dx, dy + offset];
-//      col := fld[dx, dy + offset];
       col := fldChar[dx, dy];
-
-      //if not isFontSetNormal then begin
-      //  if col = 1 then
-      //    col := 0
-      //  else if col = 0 then begin
-      //    col := 1;
-      //  end;
-      //end;
-
-//      fldChar[dx, dy] := col;
-
-//      fldScreen[xf + dx, yf + dy] := col;
-//      col := SetColorIndex(col, isFontSetNormal);
       imgEditor.Canvas.Brush.Color := coltabFont[col];
       imgEditor.Canvas.FillRect(bounds((xf + dx)*factX, (yf + dy)*factY, factX, factY));
     end;
@@ -880,13 +845,8 @@ begin
       //col := fld[dx, dy + offset];
       col := fld[dx, offset*10 + dy];
 //      fldScreen[xf + dx, yf + dy] := col;
-      if isInverse then begin
-        //if col = 1 then
-        //  col := 0
-        //else if col = 0 then
-        //  col := 1;
+      if isInverse then
         col := 1 - col;
-      end;
 
       FillRectEx(imgEditor, coltabFont[col], (xf + dx)*factX, (yf + dy)*factY, factX, factY);
     end;
@@ -909,23 +869,11 @@ begin
     for xf := 0 to grX02 do begin
       //col := fldFontSet[xf, yf + offset];
       col := fld[xf, offset*10 + yf];
-
-      if not isFontSetNormal then begin
-        //if col = 1 then
-        //  col := 0
-        //else if col = 0 then
-        //  col := 1;
+      if not isFontSetNormal then
         col := 1 - col;
-      end;
 
       fldChar[xf, yf] := col;
-//      imgChar.Canvas.Brush.Color := coltabFont[col];
-//      imgChar.Canvas.FillRect(bounds(xf*factX03, yf*factY03, factX03, factY03));
       FillRectEx(imgChar, coltabFont[col], xf*factX03, yf*factY03, factX03, factY03);
-
-//      fldChar02[xf, yf] := col;
-//      imgCharEdit.Canvas.Brush.Color := coltabFont[col];
-//      imgCharEdit.Canvas.FillRect(bounds(xf*factX04, yf*factY04, factX04, factY04));
       FillRectEx(imgCharEdit, coltabFont[col], xf*factX04, yf*factY04, factX04, factY04);
     end;
 
@@ -952,30 +900,13 @@ begin
   for yf := 0 to grY02 do
     for xf := 0 to grX02 do begin
       col := fldChar[xf, yf];
-      if not isFontSetNormal then begin
-        //if col = 0 then
-        //  col := 1
-        //else if col = 1 then
-        //  col := 0;
+      if not isFontSetNormal then
         col := 1 - col;
-      end;
 
       fld[xf, offset*10 + yf] := col;
-//      imgFontSet.Canvas.Brush.Color := coltabFont[col];
-//      imgFontSet.Canvas.FillRect(bounds(
-//        xf*factX + xoffset, yf*factY + yoffset, factX, factY));
       FillRectEx(imgFontSet, coltabFont[col],
                  xf*factX + xoffset, yf*factY + yoffset, factX, factY);
-
-      //if col = 0 then
-      //  col := 1
-      //else if col = 1 then
-      //  col := 0;
       col := 1 - col;
-
-//      imgFontSetInv.Canvas.Brush.Color := coltabFont[col];
-//      imgFontSetInv.Canvas.FillRect(bounds(
-//        xf*factX + xoffset, yf*factY + yoffset, factX, factY));
       FillRectEx(imgFontSetInv, coltabFont[col],
                  xf*factX + xoffset, yf*factY + yoffset, factX, factY);
     end;
@@ -1031,8 +962,6 @@ begin
 
     fldChar[xf, yf] := col;
 //    fld[xf, yf + offs shl 3] := col;
-//    imgCharEdit.Canvas.Brush.Color := coltabFont[col];
-//    imgCharEdit.Canvas.FillRect(bounds(xf*factX04, yf*factY04, factX04, factY04));
     FillRectEx(imgCharEdit, coltabFont[col], xf*factX04, yf*factY04, factX04, factY04);
   end;
 
@@ -1051,11 +980,6 @@ begin
   btn02 := Button;
   xf := X div factX04;
   yf := Y div factY04;
-
-  //if not isFontSetNormal then begin
-  //  setNormalMode := true;
-  //end;
-
   PlotChar(xf, yf);
   charEditIndex[offs] := 1;
 end;
@@ -1157,101 +1081,6 @@ begin
     //end;
   end;
 end;
-
-//procedure TfrmAntic3.LoadFontProc02(Sender: TObject);
-//var
-//  bin : string[9];
-//  fs : TFileStream;
-////  cnt : word = 0;
-//begin
-//  frmMain.dlgOpen.Title := 'Open existing character set file';
-//  frmMain.dlgOpen.Filter := 'Character set files (*.fnt, *.fon, *.set)' +
-//                            '|*.fnt;*.fon;*.set|All files (*.*)|*.*';
-//  if frmMain.dlgOpen.Execute then begin
-//    filename := frmMain.dlgOpen.Filename;
-//    fs := TFileStream.Create(Filename, fmOpenReadWrite);
-//    try
-//      (*
-//      for j := 0 to 1023 do begin
-//        r := fs.ReadByte;
-//        bin := IntToBin(r, 8);
-//        if j < 768 then begin
-////          if j mod 7 = 0 then begin
-////            cnt02 := j;
-//            for i := 0 to 7 do
-//              fld[i, j + cnt02] := StrToInt(bin[i + 1]);
-////          end;
-//        end;
-//        if j mod 8 = 0 then begin
-//          cnt02 := 2;
-////          Inc(cnt02, 2);
-//        end
-//        else
-//          cnt02 := 0;
-//      end;*)
-//      for j := 0 to 1023 do begin
-//        r := fs.ReadByte;
-//        bin := IntToBin(r, 8);
-//        for n := 0 to 127 do begin
-//          if ((j >= n*8) and (j <= n*8 + 8)) then begin
-//            for i := 0 to 7 do begin
-////              fld[i, cnt] := StrToInt(bin[i + 1]);
-//              fldFontSet[i, j] := StrToInt(bin[i + 1]);
-//            end;
-//            (*
-//            if (j < 776) and (j = n*8 + 8) then begin
-//              for i := 0 to 7 do begin
-//                fld[i, cnt + 1] := 0;
-//                fld[i, cnt + 2] := 0;
-//              end;
-//              Inc(cnt, 2);
-//            end
-//            else if (j >= 776) and (j = n*8 + 8) then begin
-//              //for i := 0 to 7 do begin
-//              //  fld[i, cnt - 8] := 0;
-//              //  fld[i, cnt - 7] := 0;
-//              //  fld[i, cnt - 1] := 0;
-//              //  fld[i, cnt] := 0;
-//              //end;
-//              //Inc(cnt, 2);
-//            end
-//            else
-//              Inc(cnt);
-//            *)
-//          end;
-//        end;
-//        //if ((j >= 8) and (j <= 15)) then begin
-//        //  for i := 0 to 7 do begin
-//        //    fld[i, cnt] := StrToInt(bin[i + 1]);
-//        //  end;
-//        //  if j = 15 then begin
-//        //    fld[i, cnt + 1] := 0;
-//        //    fld[i, cnt + 2] := 0;
-//        //    Inc(cnt, 2);
-//        //  end
-//        //  else
-//        //    Inc(cnt);
-//        //end;
-//        (*
-//        if (j mod 8 = 0) and (j > 0) then begin
-//          showmessage(inttostr(j) + ' * ' + InttoStr((j mod 8)));
-//          fld[i, j + cnt + 1] := 0;
-//          fld[i, j + cnt + 2] := 0;
-////          cnt := 0;
-//        end
-//        else
-//          cnt := j;
-//        *)
-//      end;
-//      Caption := programName + ' ' + programVersion + ' - Antic mode 3 editor (' + filename + ')';
-////      ShowFontSet(false);
-//      //for i := 0 to 127 do
-//      //  DrawFontSetChar(i);
-//    finally
-//      fs.Free;
-//    end;
-//  end;
-//end;
 
 procedure TfrmAntic3.SaveFontProc(Sender: TObject);
 var

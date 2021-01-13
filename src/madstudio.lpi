@@ -50,7 +50,7 @@
         <PackageName Value="LCL"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="36">
+    <Units Count="37">
       <Unit0>
         <Filename Value="madstudio.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -283,6 +283,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit35>
+      <Unit36>
+        <Filename Value="antic4_tiles.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAntic4Tiles"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit36>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -306,6 +313,8 @@
         <IOChecks Value="True"/>
         <StackChecks Value="True"/>
       </Checks>
+      <TargetCPU Value="x86_64"/>
+      <TargetOS Value="win64"/>
       <Optimizations>
         <OptimizationLevel Value="2"/>
       </Optimizations>
@@ -330,6 +339,7 @@
         <ShowDebugInfo Value="True"/>
         <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
       </Verbosity>
+      <CompilerPath Value="C:\lazarus\fpc\3.0.4\bin\x86_64-win64\fpc.exe"/>
     </Other>
   </CompilerOptions>
   <Debugging>

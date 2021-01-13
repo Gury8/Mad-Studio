@@ -478,7 +478,7 @@ object frmAntic4: TfrmAntic4
     ClientWidth = 230
     TabOrder = 2
     object radShiftChar: TRadioButton
-      Left = 8
+      Left = 12
       Height = 19
       Top = 6
       Width = 96
@@ -488,7 +488,7 @@ object frmAntic4: TfrmAntic4
       TabStop = True
     end
     object radMoveChar: TRadioButton
-      Left = 8
+      Left = 12
       Height = 19
       Top = 32
       Width = 102

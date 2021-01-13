@@ -323,7 +323,6 @@ begin
   SetGrMode;
   FillRectEx(imgEditor, coltab[0], 0, 0, imgEditor.Width, imgEditor.Height);
   NewFileProc(Sender);
-//  debug('in 2', grMode);
 end;
 
 procedure TfrmGraph.btnTextDisableProc(Sender : TObject);
@@ -1116,9 +1115,7 @@ begin
 
   isNormalPlot := btnNormal.Down;
 
-  if btnText.Down then begin
-  end
-  else begin
+  if not btnText.Down then begin
     textOper.isInit := false;
     if btnNormal.Down then begin
 //      undoType := 1;
@@ -1159,13 +1156,6 @@ begin
         frmColors.SelColor := 9
       else if is01bit then
         frmColors.SelColor := 1;
-
-      //case btn of
-      //  mbLeft : col := frmColors.SelColor;
-      //  mbRight: col := 0;
-      //else
-      //  exit;
-      //end;
 
       col := frmColors.SelColor;
       if (grX < 319) and (col > 3) then col := 3;

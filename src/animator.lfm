@@ -1,15 +1,15 @@
 object frmAnimator: TfrmAnimator
-  Left = -1476
-  Height = 775
-  Top = 139
-  Width = 1004
+  Left = 16
+  Height = 908
+  Top = 18
+  Width = 1205
   Caption = 'Player Animator/editor'
-  ClientHeight = 755
-  ClientWidth = 1004
+  ClientHeight = 888
+  ClientWidth = 1205
   Font.Height = -11
   Font.Name = 'Verdana'
   KeyPreview = True
-  Menu = menuAnimator
+  Menu = menuAnim
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
@@ -18,51 +18,51 @@ object frmAnimator: TfrmAnimator
   LCLVersion = '2.0.6.0'
   object imgFrame01: TImage
     Left = 8
-    Height = 324
-    Top = 58
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame02: TImage
     Tag = 1
     Left = 78
-    Height = 324
-    Top = 58
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame03: TImage
     Tag = 2
     Left = 148
-    Height = 324
-    Top = 58
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame04: TImage
     Tag = 3
     Left = 218
-    Height = 324
-    Top = 58
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object Label57: TLabel
-    Left = 648
+    Left = 605
     Height = 13
-    Top = 458
+    Top = 554
     Width = 67
     Caption = 'Normal size'
     Font.Height = -11
@@ -71,21 +71,21 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
   end
   object imgP0P1_normalMultiAll: TImage
-    Left = 649
-    Height = 120
-    Top = 474
+    Left = 606
+    Height = 174
+    Top = 570
     Width = 24
   end
   object imgP0P1_doubleMultiAll: TImage
-    Left = 728
-    Height = 120
-    Top = 474
+    Left = 685
+    Height = 174
+    Top = 570
     Width = 48
   end
   object Label58: TLabel
-    Left = 728
+    Left = 685
     Height = 13
-    Top = 458
+    Top = 554
     Width = 66
     Caption = 'Double size'
     Font.Height = -11
@@ -94,15 +94,15 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
   end
   object imgP0P1_quadrableMultiAll: TImage
-    Left = 825
-    Height = 120
-    Top = 474
+    Left = 782
+    Height = 174
+    Top = 570
     Width = 96
   end
   object Label59: TLabel
-    Left = 826
+    Left = 783
     Height = 13
-    Top = 458
+    Top = 554
     Width = 85
     Caption = 'Quadruple size'
     Font.Height = -11
@@ -111,15 +111,15 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
   end
   object imgP0P1_normalSrMultiAll: TImage
-    Left = 649
-    Height = 80
-    Top = 644
+    Left = 925
+    Height = 116
+    Top = 570
     Width = 24
   end
   object Label61: TLabel
-    Left = 648
+    Left = 925
     Height = 13
-    Top = 628
+    Top = 554
     Width = 67
     Caption = 'Normal size'
     Font.Height = -11
@@ -128,9 +128,9 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
   end
   object Label60: TLabel
-    Left = 648
+    Left = 925
     Height = 16
-    Top = 608
+    Top = 534
     Width = 151
     Caption = 'Frame single resolution'
     Font.Height = -13
@@ -139,9 +139,9 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
   end
   object Label45: TLabel
-    Left = 648
+    Left = 605
     Height = 16
-    Top = 438
+    Top = 534
     Width = 157
     Caption = 'Frame double resolution'
     Font.Height = -13
@@ -150,9 +150,9 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
   end
   object Label62: TLabel
-    Left = 728
+    Left = 1005
     Height = 13
-    Top = 628
+    Top = 554
     Width = 66
     Caption = 'Double size'
     Font.Height = -11
@@ -161,15 +161,15 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
   end
   object imgP0P1_doubleSrMultiAll: TImage
-    Left = 728
-    Height = 80
-    Top = 644
+    Left = 1005
+    Height = 116
+    Top = 570
     Width = 48
   end
   object Label63: TLabel
-    Left = 826
+    Left = 1103
     Height = 13
-    Top = 628
+    Top = 554
     Width = 85
     Caption = 'Quadruple size'
     Font.Height = -11
@@ -180,205 +180,195 @@ object frmAnimator: TfrmAnimator
   object statusBar: TStatusBar
     Left = 0
     Height = 23
-    Top = 732
-    Width = 1004
+    Top = 865
+    Width = 1205
     Panels = <    
       item
         Width = 250
       end    
       item
-        Width = 300
+        Width = 200
+      end    
+      item
+        Width = 250
       end    
       item
         Width = 200
       end>
     SimplePanel = False
   end
-  object tbPlayer1: TTrackBar
-    Tag = 1
-    Left = 810
-    Height = 20
-    Top = 102
-    Width = 178
-    LineSize = 0
-    Max = 7
-    Position = 0
-    Enabled = False
-    TabOrder = 1
-    Visible = False
-  end
   object imgP0P1_quadrableSrMultiAll: TImage
-    Left = 825
-    Height = 80
-    Top = 644
+    Left = 1102
+    Height = 116
+    Top = 570
     Width = 96
   end
   object imgFrame05: TImage
     Tag = 4
     Left = 288
-    Height = 324
-    Top = 58
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame06: TImage
     Tag = 5
     Left = 358
-    Height = 324
-    Top = 58
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame07: TImage
     Tag = 6
     Left = 428
-    Height = 324
-    Top = 58
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame08: TImage
     Tag = 7
     Left = 498
-    Height = 324
-    Top = 58
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame09: TImage
     Tag = 8
-    Left = 8
-    Height = 324
-    Top = 406
+    Left = 569
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame14: TImage
     Tag = 13
-    Left = 358
-    Height = 324
-    Top = 406
+    Left = 921
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame15: TImage
     Tag = 14
-    Left = 428
-    Height = 324
-    Top = 406
+    Left = 992
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame16: TImage
     Tag = 15
-    Left = 498
-    Height = 324
-    Top = 406
+    Left = 1062
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame10: TImage
     Tag = 9
-    Left = 78
-    Height = 324
-    Top = 406
+    Left = 640
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame11: TImage
     Tag = 10
-    Left = 148
-    Height = 324
-    Top = 406
+    Left = 710
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame12: TImage
     Tag = 11
-    Left = 218
-    Height = 324
-    Top = 406
+    Left = 780
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgFrame13: TImage
     Tag = 12
-    Left = 288
-    Height = 324
-    Top = 406
+    Left = 850
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object imgTemp: TImage
-    Left = 654
+    Left = 912
     Height = 22
-    Top = 402
+    Top = 828
     Width = 22
   end
   object imgBuffer: TImage
     Tag = 16
-    Left = 568
-    Height = 324
-    Top = 406
+    Left = 1134
+    Height = 464
+    Top = 61
     Width = 64
-    OnMouseDown = imgFrameMouseDown
-    OnMouseLeave = imgFrameMouseLeave
-    OnMouseMove = imgFrameMouseMove
-    OnMouseUp = imgFrameMouseUp
+    OnMouseDown = imgFrameDown
+    OnMouseLeave = imgFrameLeave
+    OnMouseMove = imgFrameMove
+    OnMouseUp = imgFrameUp
   end
   object toolbar: TToolBar
     Left = 0
     Height = 34
     Top = 0
-    Width = 1004
+    Width = 1205
     ButtonHeight = 30
     ButtonWidth = 30
     Caption = 'toolbar'
     Images = frmMain.images
-    TabOrder = 2
+    TabOrder = 1
     object btnOpen: TToolButton
       Left = 31
       Hint = 'Load animation (Atari Player Editor) data'
       Top = 2
       Caption = 'btnOpen'
       ImageIndex = 1
-      OnClick = LoadAPL
+      OnClick = LoadAPLProc
       ParentShowHint = False
       ShowHint = True
     end
@@ -388,7 +378,7 @@ object frmAnimator: TfrmAnimator
       Top = 2
       Caption = 'btnSave'
       ImageIndex = 2
-      OnClick = SaveAPL
+      OnClick = SaveAPLProc
       ParentShowHint = False
       ShowHint = True
     end
@@ -451,7 +441,7 @@ object frmAnimator: TfrmAnimator
     end
     object btnFlipX: TToolButton
       Left = 281
-      Hint = 'Flip player horizontally'
+      Hint = 'Flip frame horizontally'
       Top = 2
       Caption = 'btnFlipX'
       ImageIndex = 22
@@ -461,7 +451,7 @@ object frmAnimator: TfrmAnimator
     end
     object btnFlipY: TToolButton
       Left = 311
-      Hint = 'Flip player vertically'
+      Hint = 'Flip frame vertically'
       Top = 2
       Caption = 'btnFlipY'
       ImageIndex = 21
@@ -498,9 +488,9 @@ object frmAnimator: TfrmAnimator
     end
   end
   object shape: TShape
-    Left = 690
+    Left = 948
     Height = 37
-    Top = 390
+    Top = 816
     Width = 65
     Brush.Color = clSkyBlue
     Brush.Style = bsClear
@@ -509,14 +499,14 @@ object frmAnimator: TfrmAnimator
     Pen.Width = 3
   end
   object boxShiftMove: TGroupBox
-    Left = 756
+    Left = 8
     Height = 126
-    Top = 162
-    Width = 240
+    Top = 732
+    Width = 238
     Caption = 'Shift/move frames'
     ClientHeight = 108
-    ClientWidth = 236
-    TabOrder = 3
+    ClientWidth = 234
+    TabOrder = 2
     object radShiftChar: TRadioButton
       Left = 9
       Height = 19
@@ -595,155 +585,78 @@ object frmAnimator: TfrmAnimator
       OnClick = FrameOper
     end
   end
-  object grpPlayerHeight: TGroupBox
-    Left = 570
-    Height = 50
-    Top = 120
-    Width = 178
-    BorderSpacing.Around = 4
-    BorderSpacing.InnerBorder = 2
-    Caption = 'Player height'
-    ClientHeight = 32
-    ClientWidth = 174
-    TabOrder = 4
-    object btnApplyPlayerHeight: TButton
-      Left = 110
-      Height = 23
-      Top = 2
-      Width = 59
-      Caption = 'Apply'
-      OnClick = ApplyPlayerHeight
-      TabOrder = 0
-    end
-    object editPlayerHeight: TBCTrackbarUpdown
-      Left = 6
-      Height = 22
-      Top = 3
-      Width = 42
-      AllowNegativeValues = False
-      BarExponent = 1
-      Increment = 1
-      LongTimeInterval = 400
-      MinValue = 1
-      MaxValue = 40
-      Value = 10
-      ShortTimeInterval = 100
-      Background.Color = clWindow
-      Background.Gradient1.StartColor = clWhite
-      Background.Gradient1.EndColor = clBlack
-      Background.Gradient1.GradientType = gtLinear
-      Background.Gradient1.Point1XPercent = 0
-      Background.Gradient1.Point1YPercent = 0
-      Background.Gradient1.Point2XPercent = 0
-      Background.Gradient1.Point2YPercent = 100
-      Background.Gradient2.StartColor = clWhite
-      Background.Gradient2.EndColor = clOlive
-      Background.Gradient2.GradientType = gtLinear
-      Background.Gradient2.Point1XPercent = 0
-      Background.Gradient2.Point1YPercent = 0
-      Background.Gradient2.Point2XPercent = 0
-      Background.Gradient2.Point2YPercent = 100
-      Background.Gradient2.Sinus = True
-      Background.Gradient1EndPercent = 35
-      Background.Style = bbsColor
-      ButtonBackground.Gradient1.StartColor = 14540253
-      ButtonBackground.Gradient1.EndColor = clBtnFace
-      ButtonBackground.Gradient1.GradientType = gtLinear
-      ButtonBackground.Gradient1.Point1XPercent = 0
-      ButtonBackground.Gradient1.Point1YPercent = -50
-      ButtonBackground.Gradient1.Point2XPercent = 0
-      ButtonBackground.Gradient1.Point2YPercent = 50
-      ButtonBackground.Gradient1.Sinus = True
-      ButtonBackground.Gradient2.StartColor = clBtnFace
-      ButtonBackground.Gradient2.EndColor = clBtnShadow
-      ButtonBackground.Gradient2.GradientType = gtLinear
-      ButtonBackground.Gradient2.Point1XPercent = 0
-      ButtonBackground.Gradient2.Point1YPercent = 50
-      ButtonBackground.Gradient2.Point2XPercent = 0
-      ButtonBackground.Gradient2.Point2YPercent = 150
-      ButtonBackground.Gradient2.Sinus = True
-      ButtonBackground.Gradient1EndPercent = 50
-      ButtonBackground.Style = bbsGradient
-      ButtonDownBackground.Color = clBtnShadow
-      ButtonDownBackground.Gradient1.StartColor = clWhite
-      ButtonDownBackground.Gradient1.EndColor = clBlack
-      ButtonDownBackground.Gradient1.GradientType = gtLinear
-      ButtonDownBackground.Gradient1.Point1XPercent = 0
-      ButtonDownBackground.Gradient1.Point1YPercent = 0
-      ButtonDownBackground.Gradient1.Point2XPercent = 0
-      ButtonDownBackground.Gradient1.Point2YPercent = 100
-      ButtonDownBackground.Gradient2.StartColor = clWhite
-      ButtonDownBackground.Gradient2.EndColor = clBlack
-      ButtonDownBackground.Gradient2.GradientType = gtLinear
-      ButtonDownBackground.Gradient2.Point1XPercent = 0
-      ButtonDownBackground.Gradient2.Point1YPercent = 0
-      ButtonDownBackground.Gradient2.Point2XPercent = 0
-      ButtonDownBackground.Gradient2.Point2YPercent = 100
-      ButtonDownBackground.Gradient1EndPercent = 35
-      ButtonDownBackground.Style = bbsColor
-      Border.Color = clWindowText
-      Border.ColorOpacity = 100
-      Border.Style = bboSolid
-      Rounding.RoundX = 4
-      Rounding.RoundY = 4
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Verdana'
-      HasTrackBar = True
-      ArrowColor = clWindowText
-      TabOrder = 1
-      TabStop = True
-      UseDockManager = False
-    end
-  end
   object boxFrameLayer: TGroupBox
-    Left = 570
-    Height = 78
-    Top = 36
-    Width = 178
+    Left = 256
+    Height = 90
+    Top = 540
+    Width = 212
     Caption = 'Selected layer'
-    ClientHeight = 60
-    ClientWidth = 174
-    TabOrder = 5
+    ClientHeight = 72
+    ClientWidth = 208
+    TabOrder = 3
     object rbPlayer0: TRadioButton
-      Left = 6
+      Left = 39
       Height = 19
-      Top = 6
+      Top = 8
       Width = 161
       Caption = 'Frame layer 0 (player 0)'
       Checked = True
       Font.Height = -11
       Font.Name = 'Verdana'
-      OnChange = Player0Change
+      OnChange = FrameColorChange
       ParentFont = False
       TabOrder = 0
       TabStop = True
     end
     object rbPlayer1: TRadioButton
       Tag = 1
-      Left = 6
+      Left = 39
       Height = 19
-      Top = 30
+      Top = 38
       Width = 161
       Caption = 'Frame layer 1 (player 1)'
       Font.Height = -11
       Font.Name = 'Verdana'
-      OnChange = Player0Change
+      OnChange = FrameColorChange
       ParentFont = False
       TabOrder = 1
     end
+    object pcolr0: TImage
+      Tag = 4
+      Left = 9
+      Height = 24
+      Hint = 'Background color'
+      Top = 6
+      Width = 24
+      BorderSpacing.Around = 1
+      OnMouseDown = pcolr0Down
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object pcolr1: TImage
+      Tag = 5
+      Left = 9
+      Height = 24
+      Hint = 'Color register 0'
+      Top = 36
+      Width = 24
+      BorderSpacing.Around = 1
+      OnMouseDown = pcolr0Down
+      ParentShowHint = False
+      ShowHint = True
+    end
   end
   object boxAnimation: TGroupBox
-    Left = 756
-    Height = 124
-    Top = 36
-    Width = 240
+    Left = 8
+    Height = 180
+    Top = 540
+    Width = 238
     Caption = 'Animation settings'
-    ClientHeight = 106
-    ClientWidth = 236
-    TabOrder = 6
+    ClientHeight = 162
+    ClientWidth = 234
+    TabOrder = 4
     object btnAnimate: TSpeedButton
-      Left = 138
+      Left = 144
       Height = 32
       Top = 6
       Width = 63
@@ -826,7 +739,7 @@ object frmAnimator: TfrmAnimator
       OnClick = Animate
     end
     object Label18: TLabel
-      Left = 6
+      Left = 10
       Height = 13
       Top = 6
       Width = 104
@@ -834,7 +747,7 @@ object frmAnimator: TfrmAnimator
       ParentColor = False
     end
     object Label19: TLabel
-      Left = 6
+      Left = 10
       Height = 13
       Top = 60
       Width = 117
@@ -842,7 +755,7 @@ object frmAnimator: TfrmAnimator
       ParentColor = False
     end
     object Label20: TLabel
-      Left = 138
+      Left = 144
       Height = 13
       Top = 60
       Width = 84
@@ -850,7 +763,7 @@ object frmAnimator: TfrmAnimator
       ParentColor = False
     end
     object numFrames: TBCTrackbarUpdown
-      Left = 6
+      Left = 10
       Height = 22
       Top = 24
       Width = 42
@@ -930,7 +843,7 @@ object frmAnimator: TfrmAnimator
       UseDockManager = False
     end
     object numIterations: TBCTrackbarUpdown
-      Left = 6
+      Left = 10
       Height = 22
       Top = 77
       Width = 42
@@ -1010,7 +923,7 @@ object frmAnimator: TfrmAnimator
       UseDockManager = False
     end
     object numAnimRate: TBCTrackbarUpdown
-      Left = 138
+      Left = 144
       Height = 22
       Top = 77
       Width = 42
@@ -1089,46 +1002,116 @@ object frmAnimator: TfrmAnimator
       TabStop = True
       UseDockManager = False
     end
-  end
-  object boxResolution: TGroupBox
-    Left = 570
-    Height = 90
-    Top = 180
-    Width = 179
-    Caption = 'Player/missile resolution size'
-    ClientHeight = 72
-    ClientWidth = 175
-    TabOrder = 7
-    object ToggleBox1: TToggleBox
-      Left = 34
-      Height = 25
-      Top = 6
-      Width = 108
-      Caption = 'Double resolution'
-      Checked = True
-      OnChange = DoubleResolutionProc
-      State = cbChecked
-      TabOrder = 0
+    object editPlayerHeight: TBCTrackbarUpdown
+      Left = 10
+      Height = 22
+      Top = 132
+      Width = 42
+      AllowNegativeValues = False
+      BarExponent = 1
+      Increment = 1
+      LongTimeInterval = 400
+      MinValue = 1
+      MaxValue = 58
+      Value = 58
+      ShortTimeInterval = 100
+      Background.Color = clWindow
+      Background.Gradient1.StartColor = clWhite
+      Background.Gradient1.EndColor = clBlack
+      Background.Gradient1.GradientType = gtLinear
+      Background.Gradient1.Point1XPercent = 0
+      Background.Gradient1.Point1YPercent = 0
+      Background.Gradient1.Point2XPercent = 0
+      Background.Gradient1.Point2YPercent = 100
+      Background.Gradient2.StartColor = clWhite
+      Background.Gradient2.EndColor = clOlive
+      Background.Gradient2.GradientType = gtLinear
+      Background.Gradient2.Point1XPercent = 0
+      Background.Gradient2.Point1YPercent = 0
+      Background.Gradient2.Point2XPercent = 0
+      Background.Gradient2.Point2YPercent = 100
+      Background.Gradient2.Sinus = True
+      Background.Gradient1EndPercent = 35
+      Background.Style = bbsColor
+      ButtonBackground.Gradient1.StartColor = 14540253
+      ButtonBackground.Gradient1.EndColor = clBtnFace
+      ButtonBackground.Gradient1.GradientType = gtLinear
+      ButtonBackground.Gradient1.Point1XPercent = 0
+      ButtonBackground.Gradient1.Point1YPercent = -50
+      ButtonBackground.Gradient1.Point2XPercent = 0
+      ButtonBackground.Gradient1.Point2YPercent = 50
+      ButtonBackground.Gradient1.Sinus = True
+      ButtonBackground.Gradient2.StartColor = clBtnFace
+      ButtonBackground.Gradient2.EndColor = clBtnShadow
+      ButtonBackground.Gradient2.GradientType = gtLinear
+      ButtonBackground.Gradient2.Point1XPercent = 0
+      ButtonBackground.Gradient2.Point1YPercent = 50
+      ButtonBackground.Gradient2.Point2XPercent = 0
+      ButtonBackground.Gradient2.Point2YPercent = 150
+      ButtonBackground.Gradient2.Sinus = True
+      ButtonBackground.Gradient1EndPercent = 50
+      ButtonBackground.Style = bbsGradient
+      ButtonDownBackground.Color = clBtnShadow
+      ButtonDownBackground.Gradient1.StartColor = clWhite
+      ButtonDownBackground.Gradient1.EndColor = clBlack
+      ButtonDownBackground.Gradient1.GradientType = gtLinear
+      ButtonDownBackground.Gradient1.Point1XPercent = 0
+      ButtonDownBackground.Gradient1.Point1YPercent = 0
+      ButtonDownBackground.Gradient1.Point2XPercent = 0
+      ButtonDownBackground.Gradient1.Point2YPercent = 100
+      ButtonDownBackground.Gradient2.StartColor = clWhite
+      ButtonDownBackground.Gradient2.EndColor = clBlack
+      ButtonDownBackground.Gradient2.GradientType = gtLinear
+      ButtonDownBackground.Gradient2.Point1XPercent = 0
+      ButtonDownBackground.Gradient2.Point1YPercent = 0
+      ButtonDownBackground.Gradient2.Point2XPercent = 0
+      ButtonDownBackground.Gradient2.Point2YPercent = 100
+      ButtonDownBackground.Gradient1EndPercent = 35
+      ButtonDownBackground.Style = bbsColor
+      Border.Color = clWindowText
+      Border.ColorOpacity = 100
+      Border.Style = bboSolid
+      Rounding.RoundX = 4
+      Rounding.RoundY = 4
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Verdana'
+      HasTrackBar = True
+      ArrowColor = clWindowText
+      TabOrder = 3
+      TabStop = True
+      UseDockManager = False
+      OnMouseLeave = editPlayerHeightLeave
+      OnMouseUp = editPlayerHeightUp
     end
-    object ToggleBox2: TToggleBox
-      Left = 34
-      Height = 25
-      Top = 36
+    object lblFrameMaxHeight: TLabel
+      Left = 10
+      Height = 13
+      Top = 114
       Width = 108
-      Caption = 'Single resolution'
-      OnChange = SingleResolutionProc
-      TabOrder = 1
+      Caption = 'Frame max. height'
+      ParentColor = False
+    end
+    object btnApplyPlayerHeight: TButton
+      Left = 144
+      Height = 23
+      Top = 131
+      Width = 59
+      Caption = 'Apply'
+      Enabled = False
+      TabOrder = 4
+      Visible = False
     end
   end
   object boxFlip: TGroupBox
-    Left = 756
-    Height = 148
-    Top = 288
-    Width = 240
+    Left = 256
+    Height = 90
+    Top = 768
+    Width = 398
     Caption = 'Flip frames'
-    ClientHeight = 130
-    ClientWidth = 236
-    TabOrder = 8
+    ClientHeight = 72
+    ClientWidth = 394
+    TabOrder = 5
     object btnFlipXSelected2: TBCMDButton
       Left = 9
       Height = 26
@@ -1154,7 +1137,7 @@ object frmAnimator: TfrmAnimator
     object btnFlipXAll2: TBCMDButton
       Left = 9
       Height = 25
-      Top = 35
+      Top = 36
       Width = 180
       Animation = True
       Alignment = taLeftJustify
@@ -1174,9 +1157,9 @@ object frmAnimator: TfrmAnimator
       OnClick = FlipXAllProc
     end
     object btnFlipXSelected3: TBCMDButton
-      Left = 9
+      Left = 204
       Height = 26
-      Top = 65
+      Top = 4
       Width = 180
       Animation = True
       Alignment = taLeftJustify
@@ -1196,9 +1179,9 @@ object frmAnimator: TfrmAnimator
       OnClick = FlipYSelectedProc
     end
     object btnFlipXAll3: TBCMDButton
-      Left = 9
+      Left = 204
       Height = 25
-      Top = 96
+      Top = 36
       Width = 180
       Animation = True
       Alignment = taLeftJustify
@@ -1221,7 +1204,7 @@ object frmAnimator: TfrmAnimator
   object lblFrame01: TStaticText
     Left = 8
     Height = 17
-    Top = 39
+    Top = 42
     Width = 64
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1229,12 +1212,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 9
+    TabOrder = 6
   end
   object lblFrame02: TStaticText
     Left = 78
     Height = 17
-    Top = 39
+    Top = 42
     Width = 64
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1242,12 +1225,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 10
+    TabOrder = 7
   end
   object lblFrame03: TStaticText
     Left = 148
     Height = 17
-    Top = 39
+    Top = 42
     Width = 64
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1255,12 +1238,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 11
+    TabOrder = 8
   end
   object lblFrame04: TStaticText
     Left = 218
     Height = 17
-    Top = 39
+    Top = 42
     Width = 64
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1268,12 +1251,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 12
+    TabOrder = 9
   end
   object lblFrame05: TStaticText
     Left = 288
     Height = 17
-    Top = 39
+    Top = 42
     Width = 64
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1281,12 +1264,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 13
+    TabOrder = 10
   end
   object lblFrame06: TStaticText
     Left = 358
     Height = 17
-    Top = 39
+    Top = 42
     Width = 64
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1294,12 +1277,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 14
+    TabOrder = 11
   end
   object lblFrame07: TStaticText
     Left = 428
     Height = 17
-    Top = 39
+    Top = 42
     Width = 64
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1307,12 +1290,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 15
+    TabOrder = 12
   end
   object lblFrame08: TStaticText
     Left = 498
     Height = 17
-    Top = 39
+    Top = 42
     Width = 64
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1320,12 +1303,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 16
+    TabOrder = 13
   end
   object StaticText10: TStaticText
-    Left = 568
+    Left = 1134
     Height = 17
-    Top = 386
+    Top = 42
     Width = 64
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1333,12 +1316,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 17
+    TabOrder = 14
   end
   object StaticText11: TStaticText
-    Left = 8
+    Left = 570
     Height = 17
-    Top = 386
+    Top = 42
     Width = 64
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1346,12 +1329,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 18
+    TabOrder = 15
   end
   object StaticText12: TStaticText
-    Left = 78
+    Left = 640
     Height = 17
-    Top = 386
+    Top = 42
     Width = 64
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1359,12 +1342,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 19
+    TabOrder = 16
   end
   object StaticText13: TStaticText
-    Left = 148
+    Left = 710
     Height = 17
-    Top = 386
+    Top = 42
     Width = 64
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1372,12 +1355,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 20
+    TabOrder = 17
   end
   object StaticText14: TStaticText
-    Left = 218
+    Left = 780
     Height = 17
-    Top = 386
+    Top = 42
     Width = 64
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1385,12 +1368,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 21
+    TabOrder = 18
   end
   object StaticText15: TStaticText
-    Left = 290
+    Left = 852
     Height = 17
-    Top = 386
+    Top = 42
     Width = 62
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1398,12 +1381,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 22
+    TabOrder = 19
   end
   object StaticText16: TStaticText
-    Left = 360
+    Left = 922
     Height = 17
-    Top = 386
+    Top = 42
     Width = 62
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1411,12 +1394,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 23
+    TabOrder = 20
   end
   object StaticText17: TStaticText
-    Left = 430
+    Left = 992
     Height = 17
-    Top = 386
+    Top = 42
     Width = 62
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1424,12 +1407,12 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 24
+    TabOrder = 21
   end
   object StaticText18: TStaticText
-    Left = 500
+    Left = 1062
     Height = 17
-    Top = 386
+    Top = 42
     Width = 62
     Alignment = taCenter
     BorderStyle = sbsSingle
@@ -1437,36 +1420,115 @@ object frmAnimator: TfrmAnimator
     Font.Height = -11
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 25
+    TabOrder = 22
   end
-  object menuAnimator: TMainMenu
-    left = 942
-    top = 510
+  object boxFlip1: TGroupBox
+    Left = 256
+    Height = 90
+    Top = 642
+    Width = 212
+    Caption = 'Frame resolution'
+    ClientHeight = 72
+    ClientWidth = 208
+    TabOrder = 23
+    object btnDoubleRes: TBCMDButton
+      Left = 9
+      Height = 26
+      Top = 4
+      Width = 126
+      Animation = True
+      Alignment = taLeftJustify
+      StyleNormal.Color = 16250871
+      StyleNormal.TextColor = clBlack
+      StyleHover.Color = 14474460
+      StyleHover.TextColor = clBlack
+      StyleActive.Color = 13027014
+      StyleActive.TextColor = clBlack
+      StyleDisabled.Color = clWhite
+      StyleDisabled.TextColor = 10724259
+      Checked = True
+      Kind = mdbkToggleGroup
+      TextAutoSize = True
+      TextProportional = True
+      TextProportionalRatio = 0.5
+      BorderSpacing.InnerBorder = 5
+      Caption = 'Double resolution'
+      Color = clBlack
+      OnClick = DoubleResolutionProc
+    end
+    object btnSingleRes: TBCMDButton
+      Left = 7
+      Height = 25
+      Top = 36
+      Width = 126
+      Animation = True
+      Alignment = taLeftJustify
+      StyleNormal.Color = 16250871
+      StyleNormal.TextColor = clBlack
+      StyleHover.Color = 14474460
+      StyleHover.TextColor = clBlack
+      StyleActive.Color = 13027014
+      StyleActive.TextColor = clBlack
+      StyleDisabled.Color = clWhite
+      StyleDisabled.TextColor = 10724259
+      Kind = mdbkToggleGroup
+      TextAutoSize = True
+      TextProportional = True
+      TextProportionalRatio = 0.5
+      BorderSpacing.InnerBorder = 5
+      Caption = 'Single resolution'
+      OnClick = SingleResolutionProc
+    end
+  end
+  object menuAnim: TMainMenu
+    left = 1140
+    top = 810
     object MenuItem1: TMenuItem
       Caption = '&File'
       object miNewAnimation: TMenuItem
         Caption = 'New animation'
+        ShortCut = 16462
         OnClick = NewAnimation
       end
       object miLoadAPL: TMenuItem
-        Caption = 'Load animation (Atari Player Editor) data'
+        Caption = 'Load animation data (Atari Player Editor format)'
         ShortCut = 16460
-        OnClick = LoadAPL
+        OnClick = LoadAPLProc
+      end
+      object miLoadAPLEx: TMenuItem
+        Tag = 1
+        Caption = 'Load animation data (extended format)'
+        ShortCut = 16453
+        OnClick = LoadAPLProc
+      end
+      object MenuItem6: TMenuItem
+        Tag = 2
+        Caption = 'Load animation data (fixed 52-pixel height format)'
+        OnClick = LoadAPLProc
       end
       object miLoad: TMenuItem
         Caption = 'Load player data'
         Enabled = False
         ShortCut = 16463
         Visible = False
-        OnClick = OpenClick
       end
       object MenuItem15: TMenuItem
         Caption = '-'
       end
       object miSaveAPL: TMenuItem
-        Caption = 'Save animation (Atari Player Editor) data'
+        Caption = 'Save animation data (Atari Player Editor format)'
         ShortCut = 16467
-        OnClick = SaveAPL
+        OnClick = SaveAPLProc
+      end
+      object MenuItem11: TMenuItem
+        Tag = 1
+        Caption = 'Save animation data (extended format)'
+        OnClick = SaveAPLProc
+      end
+      object MenuItem12: TMenuItem
+        Tag = 2
+        Caption = 'Save animation data (fixed 52-pixel height format)'
+        OnClick = SaveAPLProc
       end
       object miSave: TMenuItem
         Caption = 'Save player data'
@@ -1618,8 +1680,8 @@ object frmAnimator: TfrmAnimator
     end
   end
   object popMenu: TPopupMenu
-    left = 942
-    top = 450
+    left = 1068
+    top = 810
     object popMenuCopyToBuffer: TMenuItem
       Caption = 'Copy selected frame data to buffer'
       OnClick = CopyToBuffer
