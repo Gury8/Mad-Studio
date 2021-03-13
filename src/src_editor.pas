@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Source code editor
 }
 unit src_editor;
@@ -131,8 +131,8 @@ implementation
 {$R *.lfm}
 
 uses
-  common, main, src_settings, pmg_gen, graph_gen, font_gen, antic2_gen,
-  antic6_gen, antic4_gen, dl_gen, anim_gen, antic3_gen;
+  common, main, src_settings, pmg_gen, graph_gen, font_gen, antic2_gen, antic6_gen, antic4_gen,
+  dl_gen, anim_gen, antic3_gen;
 
 { TfrmSrcEdit }
 
@@ -1023,12 +1023,11 @@ begin
 //       AProcess.Executable := 'd:' + DirectorySeparator + 'atari' + DirectorySeparator + 'appl' + DirectorySeparator +
 //       'kickc' + DirectorySeparator + 'bin' + DirectorySeparator + 'kickc.bat';
 //       filename := ExpandFileName(filename);
-       filename := 'examples' + DirectorySeparator + ExtractFileName(filename);
+//       filename := //'examples' + DirectorySeparator + ExtractFileName(filename);
 //       ..\examples\atarixl\rasterbars.c
-       AProcess.Parameters.Add(filename);
-//       AProcess.Parameters.Add(AnsiQuotedStr(filename, '"'));
-
+//       AProcess.Parameters.Add(filename);
 //       AProcess.Parameters.Add('-a');
+       AProcess.Parameters.Add(AnsiQuotedStr(filename, '"'));
 //       debug(AnsiQuotedStr(filename, '"'));
 //       AProcess.Parameters.Add(ExtractFileNameWithoutExt(filename) + '.xex');
 

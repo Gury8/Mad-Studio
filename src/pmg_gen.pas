@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Player/missile graphics editor - source code generator
 }
 unit pmg_gen;
@@ -77,16 +77,16 @@ type
     procedure editMissilePosYChange(Sender: TObject);
     procedure editPosYChange(Sender: TObject);
     procedure CreateCodeProc(Sender : TObject);
-    procedure editMissilePosXMouseUp(Sender : TObject; Button : TMouseButton;
-      Shift : TShiftState; X, Y : Integer);
-    procedure editMissilePosYMouseUp(Sender : TObject; Button : TMouseButton;
-      Shift : TShiftState; X, Y : Integer);
-    procedure editPosXMouseUp(Sender : TObject; Button : TMouseButton;
-      Shift : TShiftState; X, Y : Integer);
-    procedure editPosYMouseUp(Sender : TObject; Button : TMouseButton;
-      Shift : TShiftState; X, Y : Integer);
-    procedure editStartLineMouseUp(Sender : TObject; Button : TMouseButton;
-      Shift : TShiftState; X, Y : Integer);
+    procedure editMissilePosXMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+      X, Y : Integer);
+    procedure editMissilePosYMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+      X, Y : Integer);
+    procedure editPosXMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+      X, Y : Integer);
+    procedure editPosYMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+      X, Y : Integer);
+    procedure editStartLineMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+      X, Y : Integer);
     procedure chkPriorityItem(Sender: TObject; Index: integer);
     procedure CloseWin(Sender: TObject);
     procedure CopyToEditor(Sender: TObject);

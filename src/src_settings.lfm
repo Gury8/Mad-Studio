@@ -14,15 +14,15 @@ object frmSrcSettings: TfrmSrcSettings
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object tabs: TPageControl
     Left = 168
     Height = 579
     Top = 0
     Width = 604
-    ActivePage = tabKickC
+    ActivePage = tabCC65
     Align = alRight
-    TabIndex = 7
+    TabIndex = 5
     TabOrder = 0
     object tabGeneral: TTabSheet
       Caption = 'General'
@@ -1146,8 +1146,6 @@ object frmSrcSettings: TfrmSrcSettings
         RowCount = 13
         ScrollBars = ssNone
         TabOrder = 4
-        TitleFont.Color = clBlack
-        TitleFont.Height = -11
         UseXORFeatures = True
         OnDrawCell = gridAtariBASICDrawCell
         OnSelectCell = gridAtariBASICSelectCell
@@ -1333,8 +1331,6 @@ object frmSrcSettings: TfrmSrcSettings
         ParentFont = False
         ScrollBars = ssNone
         TabOrder = 7
-        TitleFont.Color = clBlack
-        TitleFont.Height = -11
         UseXORFeatures = True
         OnDrawCell = gridMadPascalDrawCell
         OnSelectCell = gridMadPascalSelectCell
@@ -1370,8 +1366,6 @@ object frmSrcSettings: TfrmSrcSettings
         RowCount = 17
         ScrollBars = ssNone
         TabOrder = 9
-        TitleFont.Color = clBlack
-        TitleFont.Height = -11
         UseXORFeatures = True
         OnDrawCell = gridMadsMpDrawCell
         OnSelectCell = gridMadsMpSelectCell
@@ -1503,8 +1497,6 @@ object frmSrcSettings: TfrmSrcSettings
         RowCount = 17
         ScrollBars = ssNone
         TabOrder = 4
-        TitleFont.Color = clBlack
-        TitleFont.Height = -11
         UseXORFeatures = True
         OnDrawCell = gridMadsDrawCell
         OnSelectCell = gridMadsSelectCell
@@ -1865,7 +1857,6 @@ object frmSrcSettings: TfrmSrcSettings
         RowCount = 3
         ScrollBars = ssNone
         TabOrder = 1
-        TitleFont.Color = clBlack
         UseXORFeatures = True
         OnDrawCell = gridEffectusDrawCell
         OnSelectCell = gridEffectusSelectCell
@@ -1885,9 +1876,9 @@ object frmSrcSettings: TfrmSrcSettings
         TabOrder = 1
       end
       object gridKickC: TStringGrid
-        Left = 468
+        Left = 466
         Height = 52
-        Top = 72
+        Top = 10
         Width = 120
         BorderStyle = bsNone
         ColCount = 1
@@ -1904,7 +1895,6 @@ object frmSrcSettings: TfrmSrcSettings
         RowCount = 3
         ScrollBars = ssNone
         TabOrder = 0
-        TitleFont.Color = clBlack
         UseXORFeatures = True
         Visible = False
         OnDrawCell = gridKickCDrawCell
@@ -2212,7 +2202,7 @@ object frmSrcSettings: TfrmSrcSettings
       'ColorS=F0FBFF'
       'ColorT=A4A0A0'
     )
-    left = 18
-    top = 372
+    Left = 18
+    Top = 372
   end
 end

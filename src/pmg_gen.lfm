@@ -15,7 +15,7 @@ object frmPmgGen: TfrmPmgGen
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object radDataType: TRadioGroup
     Left = 9
     Height = 72

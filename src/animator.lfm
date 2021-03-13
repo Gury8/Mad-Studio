@@ -1305,7 +1305,7 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
     TabOrder = 13
   end
-  object StaticText10: TStaticText
+  object lblFrameBuffer: TStaticText
     Left = 1134
     Height = 17
     Top = 42
@@ -1318,7 +1318,7 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
     TabOrder = 14
   end
-  object StaticText11: TStaticText
+  object lblFrame09: TStaticText
     Left = 570
     Height = 17
     Top = 42
@@ -1331,7 +1331,7 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
     TabOrder = 15
   end
-  object StaticText12: TStaticText
+  object lblFrame10: TStaticText
     Left = 640
     Height = 17
     Top = 42
@@ -1344,7 +1344,7 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
     TabOrder = 16
   end
-  object StaticText13: TStaticText
+  object lblFrame11: TStaticText
     Left = 710
     Height = 17
     Top = 42
@@ -1357,7 +1357,7 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
     TabOrder = 17
   end
-  object StaticText14: TStaticText
+  object lblFrame12: TStaticText
     Left = 780
     Height = 17
     Top = 42
@@ -1370,7 +1370,7 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
     TabOrder = 18
   end
-  object StaticText15: TStaticText
+  object lblFrame13: TStaticText
     Left = 852
     Height = 17
     Top = 42
@@ -1383,7 +1383,7 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
     TabOrder = 19
   end
-  object StaticText16: TStaticText
+  object lblFrame14: TStaticText
     Left = 922
     Height = 17
     Top = 42
@@ -1396,7 +1396,7 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
     TabOrder = 20
   end
-  object StaticText17: TStaticText
+  object lblFrame15: TStaticText
     Left = 992
     Height = 17
     Top = 42
@@ -1409,7 +1409,7 @@ object frmAnimator: TfrmAnimator
     ParentFont = False
     TabOrder = 21
   end
-  object StaticText18: TStaticText
+  object lblFrame16: TStaticText
     Left = 1062
     Height = 17
     Top = 42

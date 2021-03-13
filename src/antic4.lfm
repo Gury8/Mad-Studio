@@ -18,7 +18,7 @@ object frmAntic4: TfrmAntic4
   OnMouseDown = FormMouseDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object lblAnticMode45: TLabel
     Left = 12
     Height = 15
@@ -1087,8 +1087,8 @@ object frmAntic4: TfrmAntic4
     ShowHint = True
   end
   object menuAntic4: TMainMenu
-    left = 1098
-    top = 810
+    Left = 1098
+    Top = 810
     object menuFile: TMenuItem
       Caption = '&File'
       object MenuItem7: TMenuItem
@@ -1227,8 +1227,8 @@ object frmAntic4: TfrmAntic4
     end
   end
   object popMenu: TPopupMenu
-    left = 1026
-    top = 810
+    Left = 1026
+    Top = 810
     object MenuItem3: TMenuItem
       Caption = 'Flip character horizontally'
       OnClick = FlipXProc

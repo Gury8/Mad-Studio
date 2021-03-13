@@ -4,12 +4,12 @@
     <PathDelim Value="\"/>
     <Version Value="11"/>
     <BuildModes Active="Default"/>
-    <Units Count="38">
+    <Units Count="40">
       <Unit0>
         <Filename Value="madstudio.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="32" Y="17"/>
+        <CursorPos X="54" Y="14"/>
         <UsageCount Value="201"/>
       </Unit0>
       <Unit1>
@@ -26,7 +26,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="6"/>
-        <CursorPos X="45" Y="39"/>
+        <CursorPos X="23" Y="40"/>
         <UsageCount Value="201"/>
       </Unit2>
       <Unit3>
@@ -36,8 +36,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="204"/>
-        <CursorPos Y="231"/>
+        <TopLine Value="1148"/>
+        <CursorPos X="3" Y="135"/>
         <UsageCount Value="200"/>
       </Unit3>
       <Unit4>
@@ -56,8 +56,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="766"/>
-        <CursorPos X="47" Y="776"/>
+        <TopLine Value="3950"/>
+        <CursorPos X="3" Y="3885"/>
         <UsageCount Value="204"/>
       </Unit5>
       <Unit6>
@@ -67,8 +67,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="420"/>
-        <CursorPos X="28" Y="428"/>
+        <TopLine Value="1643"/>
+        <CursorPos X="7" Y="102"/>
         <UsageCount Value="205"/>
       </Unit6>
       <Unit7>
@@ -78,8 +78,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="773"/>
-        <CursorPos X="20" Y="787"/>
+        <TopLine Value="274"/>
+        <CursorPos X="28" Y="4"/>
         <UsageCount Value="200"/>
       </Unit7>
       <Unit8>
@@ -108,7 +108,8 @@
         <Filename Value="lib.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="28" Y="4"/>
+        <TopLine Value="280"/>
+        <CursorPos X="42" Y="337"/>
         <UsageCount Value="200"/>
       </Unit10>
       <Unit11>
@@ -117,8 +118,10 @@
         <ComponentName Value="frmAbout"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="47" Y="192"/>
+        <TopLine Value="70"/>
+        <CursorPos X="45" Y="91"/>
         <UsageCount Value="200"/>
       </Unit11>
       <Unit12>
@@ -233,8 +236,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="424"/>
-        <CursorPos X="52" Y="445"/>
+        <TopLine Value="1399"/>
+        <CursorPos X="46" Y="1410"/>
         <UsageCount Value="215"/>
       </Unit22>
       <Unit23>
@@ -244,8 +247,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="825"/>
-        <CursorPos X="50" Y="828"/>
+        <TopLine Value="1289"/>
+        <CursorPos X="3" Y="1323"/>
         <UsageCount Value="200"/>
       </Unit23>
       <Unit24>
@@ -286,10 +289,7 @@
         <ComponentName Value="frmAnimator"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="622"/>
-        <CursorPos X="57" Y="649"/>
         <UsageCount Value="200"/>
       </Unit27>
       <Unit28>
@@ -318,8 +318,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="792"/>
-        <CursorPos X="63" Y="810"/>
+        <CursorPos X="28" Y="4"/>
         <UsageCount Value="207"/>
       </Unit30>
       <Unit31>
@@ -381,20 +380,33 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="1467"/>
-        <CursorPos X="21" Y="1489"/>
+        <TopLine Value="383"/>
+        <CursorPos X="100" Y="640"/>
         <UsageCount Value="205"/>
       </Unit36>
       <Unit37>
+        <Filename Value="char_set.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmCharSet"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="69"/>
+      </Unit37>
+      <Unit38>
         <Filename Value="graph.pas"/>
         <ComponentName Value="frmGraph"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="46"/>
-        <CursorPos X="70" Y="58"/>
-        <UsageCount Value="58"/>
-      </Unit37>
+        <CursorPos X="39" Y="13"/>
+        <UsageCount Value="41"/>
+      </Unit38>
+      <Unit39>
+        <Filename Value="D:\zx\projects\zx-manager\common.pas"/>
+        <UnitName Value="Common"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="1"/>
+      </Unit39>
     </Units>
     <JumpHistory HistoryIndex="-1"/>
     <RunParams>

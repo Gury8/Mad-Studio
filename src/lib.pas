@@ -319,11 +319,10 @@ begin
   //colTabCopy := Assign(colTab);
   //colorValuesCopy := Assign(colorValues);
 
-  for i := 0 to 10 do
+  for i := 0 to 10 do begin
     colTabCopy[i] := colTab[i];
-
-  for i := 0 to 10 do
     colorValuesCopy[i] := colorValues[i];
+  end;
 end;
 
 procedure RetrieveColors;
@@ -333,11 +332,10 @@ begin
   //colTabCopy := Assign(colTab);
   //colorValuesCopy := Assign(colorValues);
 
-  for i := 0 to 10 do
+  for i := 0 to 10 do begin
     colTab[i] := colTabCopy[i];
-
-  for i := 0 to 10 do
     colorValues[i] := colorValuesCopy[i];
+  end;
 end;
 
 end.

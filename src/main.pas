@@ -12,7 +12,7 @@ interface
 
 uses
   Classes, SysUtils, Windows, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, Menus, Buttons, BCMDButton, BCButton,jsonConf, StrUtils,
+  StdCtrls, ExtCtrls, Menus, Buttons, BCMDButton, BCButton, jsonConf, StrUtils,
   SynHighlighterPas, SynEditMiscClasses, SynHighlighterAny;
 
 type
@@ -105,7 +105,7 @@ implementation
 
 uses
   common, graph, src_editor, pmg, colors, fonts, about, antic2, antic6,
-  antic3, antic4, dl_editor, animator, byte_editor, viewer;  //, antic4_tiles;
+  antic3, antic4, dl_editor, animator, byte_editor, viewer, antic4_tiles;
 
 { TfrmMain }
 
@@ -590,7 +590,9 @@ end;
 
 procedure TfrmMain.PmgEditorProc(Sender: TObject);
 begin
+//  frmPmg.Cursor := crHourGlass;
   frmPmg.Show;
+//  frmPmg.Cursor := crDefault;
 end;
 
 procedure TfrmMain.CharSetEditorProc(Sender: TObject);
@@ -633,7 +635,7 @@ end;
 
 procedure TfrmMain.AnticMode45TileEditorProc(Sender : TObject);
 begin
-//  frmAntic4Tiles.Show;
+  frmAntic4Tiles.Show;
 end;
 
 procedure TfrmMain.LoadDefaultColors(Sender: TObject);

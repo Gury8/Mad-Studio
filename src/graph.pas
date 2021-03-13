@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Graphics editor
 }
 unit graph;

@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
 }
 unit settings;
 
@@ -10,8 +10,8 @@ unit settings;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, DividerBevel, Forms, Controls,
-  Graphics, Dialogs, StdCtrls, ExtCtrls, lcltype;
+  Classes, SysUtils, FileUtil, DividerBevel, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  ExtCtrls, lcltype;
 
 type
   { TfrmGrSettings }

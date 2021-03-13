@@ -101,15 +101,15 @@ procedure TfrmAbout.FormShow(Sender: TObject);
 begin
   lblVersion.Caption := programVersion;
   lblReleaseYear.Caption := '(c) 2021';
-  textLazarus.Caption := 'Lazarus 2.0.8 x86_64-win64-win32/win64';
-  textFreePascal.Caption := 'Free Pascal Compiler 3.0.4';
+  textLazarus.Caption := 'Lazarus 2.0.10 x86_64-win64';  //-win64-win32/win64';
+  textFreePascal.Caption := 'Free Pascal Compiler 3.2';
   textMadsVer.Caption := 'Mad Assembler 2.1.0 build 8';
   textMadPascalVer.Caption := 'Mad Pascal Compiler version 1.6.4';
   textBasicParserVer.Caption := 'TurboBasic XL Parser Tool 10';
   textFastBasic.Caption := 'FastBasic 4.4 - Fast BASIC interpreter';
   textCC65.Caption := 'cc65 - the 6502 C Compiler';
   textEffectus.Caption := 'Effectus 0.5.3 - Action! parser/cross-compiler';
-  textKickC.Caption := 'KickC 0.8.4 - C compiler for optimized 6502 code';
+  textKickC.Caption := 'KickC 0.8.5 - C compiler for optimized 6502 code';
   textBGRABitmap.Caption := 'BGRABitmap';
   textBGRAControls.Caption := 'BGRA Controls';
 end;

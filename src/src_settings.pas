@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Source code editor settings
 }
 unit src_settings;
@@ -11,9 +11,9 @@ unit src_settings;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  lcltype, Buttons, ComCtrls, CheckLst, Grids, BCMDButton, BCMaterialDesignButton, types,
-  StrUtils, SynEdit, SynHighlighterPas, SynHighlighterAny, AnchorDockPanel;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, lcltype,
+  Buttons, ComCtrls, CheckLst, Grids, BCMDButton, BCMaterialDesignButton, types, StrUtils, SynEdit,
+  SynHighlighterPas, SynHighlighterAny, AnchorDockPanel;
 
 type
   { TfrmSrcSettings }

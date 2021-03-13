@@ -22,7 +22,7 @@ object frmGraph: TfrmGraph
   OnMouseWheelUp = FormMouseWheelUp
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object imgEditor: TImage
     Left = 3
     Height = 576
@@ -537,8 +537,8 @@ object frmGraph: TfrmGraph
     end
   end
   object menuGr: TMainMenu
-    left = 891
-    top = 519
+    Left = 891
+    Top = 519
     object MenuItem1: TMenuItem
       Caption = '&File'
       object miNewImage: TMenuItem
@@ -662,8 +662,8 @@ object frmGraph: TfrmGraph
     end
   end
   object images: TImageList
-    left = 891
-    top = 462
+    Left = 891
+    Top = 462
     Bitmap = {
       4C69190000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00EAC39DFFE6BF96FFE4BB92FFE4BB92FFD1A06CF5D09E6DF6CC96

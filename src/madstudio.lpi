@@ -50,7 +50,7 @@
         <PackageName Value="LCL"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="37">
+    <Units Count="38">
       <Unit0>
         <Filename Value="madstudio.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -290,6 +290,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit36>
+      <Unit37>
+        <Filename Value="char_set.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmCharSet"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit37>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -302,11 +308,6 @@
       <IncludeFiles Value="$(ProjOutDir)"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
-    <Parsing>
-      <SyntaxOptions>
-        <IncludeAssertionCode Value="True"/>
-      </SyntaxOptions>
-    </Parsing>
     <CodeGeneration>
       <SmartLinkUnit Value="True"/>
       <Checks>
@@ -323,6 +324,7 @@
     <Linking>
       <Debugging>
         <GenerateDebugInfo Value="False"/>
+        <UseLineInfoUnit Value="False"/>
         <StripSymbols Value="True"/>
       </Debugging>
       <LinkSmart Value="True"/>

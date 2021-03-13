@@ -1,0 +1,8 @@
+object frmCharSet: TfrmCharSet
+  Left = 400
+  Height = 240
+  Top = 250
+  Width = 380
+  Caption = 'Character set'
+  LCLVersion = '2.0.10.0'
+end

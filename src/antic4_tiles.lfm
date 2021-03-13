@@ -1,68 +1,80 @@
 object frmAntic4Tiles: TfrmAntic4Tiles
-  Left = 84
-  Height = 802
-  Top = 79
-  Width = 1137
+  Left = 33
+  Height = 859
+  Top = 47
+  Width = 1150
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = 'Antic mode 4 and 5 tile editor'
-  ClientHeight = 782
-  ClientWidth = 1137
+  Caption = 'Antic mode 4 tile editor (experimental)'
+  ClientHeight = 839
+  ClientWidth = 1150
   KeyPreview = True
   Menu = menuAntic4Tiles
   OnCreate = FormCreate
   OnShow = FormShow
+  PopupMenu = popMenu
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
-  object imgChar0000: TImage
-    Left = 12
-    Height = 112
+  LCLVersion = '2.0.10.0'
+  object shapeEditor: TShape
+    Left = 466
+    Height = 389
     Top = 78
+    Width = 642
+    Brush.Color = clGray
+    Pen.EndCap = pecSquare
+    Pen.JoinStyle = pjsBevel
+    Pen.Mode = pmMask
+    Pen.Width = 3
+  end
+  object imgChar0000: TImage
+    Left = 10
+    Height = 112
+    Top = 126
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar0100: TImage
     Tag = 1
-    Left = 124
+    Left = 122
     Height = 112
-    Top = 78
+    Top = 126
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar0010: TImage
     Tag = 2
-    Left = 236
+    Left = 234
     Height = 112
-    Top = 78
+    Top = 126
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar1000: TImage
     Tag = 4
-    Left = 12
+    Left = 10
     Height = 112
-    Top = 190
+    Top = 238
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar1100: TImage
     Tag = 5
-    Left = 124
+    Left = 122
     Height = 112
-    Top = 190
+    Top = 238
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar1010: TImage
     Tag = 6
-    Left = 236
+    Left = 234
     Height = 112
-    Top = 190
+    Top = 238
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
@@ -71,7 +83,7 @@ object frmAntic4Tiles: TfrmAntic4Tiles
     Left = 0
     Height = 34
     Top = 0
-    Width = 1137
+    Width = 1150
     ButtonHeight = 30
     ButtonWidth = 30
     Caption = 'toolBar'
@@ -98,8 +110,8 @@ object frmAntic4Tiles: TfrmAntic4Tiles
       ShowHint = True
     end
     object btnClearTiles: TToolButton
-      Left = 121
-      Hint = 'Clear tiles'
+      Left = 436
+      Hint = 'Clear all tiles'
       Top = 2
       Caption = 'btnClearTiles'
       ImageIndex = 5
@@ -118,76 +130,14 @@ object frmAntic4Tiles: TfrmAntic4Tiles
       ShowHint = True
     end
     object ToolButton17: TToolButton
-      Left = 151
+      Left = 186
       Height = 30
       Top = 2
-      Caption = 'ToolButton17'
       Style = tbsDivider
     end
-    object btnFillTile: TToolButton
-      Left = 336
-      Hint = 'Fill tile with selected color'
-      Top = 2
-      Caption = 'btnFillTile'
-      Grouped = True
-      ImageIndex = 24
-      ParentShowHint = False
-      ShowHint = True
-      Style = tbsCheck
-    end
-    object btnInvert: TToolButton
-      Left = 246
-      Hint = 'Invert bits of tile'
-      Top = 2
-      Grouped = True
-      ImageIndex = 27
-      Style = tbsCheck
-    end
-    object btnFlipX: TToolButton
-      Left = 186
-      Hint = 'Flip tile horizontally'
-      Top = 2
-      Grouped = True
-      ImageIndex = 22
-      ParentShowHint = False
-      ShowHint = True
-      Style = tbsCheck
-    end
-    object btnFlipY: TToolButton
-      Left = 216
-      Hint = 'Flip tile vertically'
-      Top = 2
-      Caption = 'FlipY'
-      Grouped = True
-      ImageIndex = 21
-      ParentShowHint = False
-      ShowHint = True
-      Style = tbsCheck
-    end
-    object btnRotate: TToolButton
-      Left = 276
-      Hint = 'Rotate tile'
-      Top = 2
-      Grouped = True
-      ImageIndex = 15
-      ParentShowHint = False
-      ShowHint = True
-      Style = tbsCheck
-    end
-    object btnClearTile: TToolButton
-      Left = 306
-      Hint = 'Clear selected tile'
-      Top = 2
-      Caption = 'btnClearTile'
-      Grouped = True
-      ImageIndex = 23
-      ParentShowHint = False
-      ShowHint = True
-      Style = tbsCheck
-    end
     object btnSelectTile: TToolButton
-      Left = 156
-      Hint = 'Draw pixels in tile'
+      Left = 191
+      Hint = 'Select tile'
       Top = 2
       Grouped = True
       ImageIndex = 6
@@ -195,8 +145,85 @@ object frmAntic4Tiles: TfrmAntic4Tiles
       ShowHint = True
       Style = tbsCheck
     end
-    object cmbAnticMode: TComboBox
+    object btnDraw: TToolButton
+      Left = 221
+      Hint = 'Draw pixels in tile'
+      Top = 2
+      Grouped = True
+      ImageIndex = 11
+      OnClick = btnFlipXClick
+      ParentShowHint = False
+      ShowHint = True
+      Style = tbsCheck
+    end
+    object btnFillTile: TToolButton
+      Left = 371
+      Hint = 'Fill tile with selected color'
+      Top = 2
+      Grouped = True
+      ImageIndex = 9
+      OnClick = btnFlipXClick
+      ParentShowHint = False
+      ShowHint = True
+      Style = tbsCheck
+    end
+    object btnInvert: TToolButton
+      Left = 311
+      Hint = 'Invert bits of tile'
+      Top = 2
+      Grouped = True
+      ImageIndex = 27
+      OnClick = btnFlipXClick
+      ParentShowHint = False
+      ShowHint = True
+      Style = tbsCheck
+    end
+    object btnFlipX: TToolButton
+      Left = 251
+      Hint = 'Flip tile horizontally'
+      Top = 2
+      Grouped = True
+      ImageIndex = 22
+      OnClick = btnFlipXClick
+      ParentShowHint = False
+      ShowHint = True
+      Style = tbsCheck
+    end
+    object btnFlipY: TToolButton
+      Left = 281
+      Hint = 'Flip tile vertically'
+      Top = 2
+      Grouped = True
+      ImageIndex = 21
+      OnClick = btnFlipXClick
+      ParentShowHint = False
+      ShowHint = True
+      Style = tbsCheck
+    end
+    object btnRotate: TToolButton
+      Left = 341
+      Hint = 'Rotate tile'
+      Top = 2
+      Grouped = True
+      ImageIndex = 15
+      OnClick = btnFlipXClick
+      ParentShowHint = False
+      ShowHint = True
+      Style = tbsCheck
+    end
+    object btnClearTile: TToolButton
       Left = 401
+      Hint = 'Clear selected tile'
+      Top = 2
+      Grouped = True
+      ImageIndex = 10
+      OnClick = btnFlipXClick
+      ParentShowHint = False
+      ShowHint = True
+      Style = tbsCheck
+    end
+    object cmbAnticMode: TComboBox
+      Left = 496
       Height = 23
       Top = 2
       Width = 146
@@ -219,15 +246,15 @@ object frmAntic4Tiles: TfrmAntic4Tiles
       Caption = 'The Viewer'
       Enabled = False
       ImageIndex = 25
+      OnClick = ViewerProc
       ParentShowHint = False
       ShowHint = True
       Visible = False
     end
     object btnSettings: TToolButton
-      Left = 371
+      Left = 466
       Hint = 'Settings'
       Top = 2
-      Caption = 'Settings'
       Enabled = False
       ImageIndex = 7
       ParentShowHint = False
@@ -235,20 +262,41 @@ object frmAntic4Tiles: TfrmAntic4Tiles
       Visible = False
     end
     object ToolButton2: TToolButton
-      Left = 366
+      Left = 431
       Height = 30
       Top = 2
-      Caption = 'ToolButton2'
-      Enabled = False
       Style = tbsDivider
-      Visible = False
+    end
+    object btnUndo: TToolButton
+      Left = 126
+      Hint = 'Undo previous action'
+      Top = 2
+      ImageIndex = 34
+      OnClick = UndoProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object ToolButton18: TToolButton
+      Left = 121
+      Height = 30
+      Top = 2
+      Style = tbsDivider
+    end
+    object btnRedo: TToolButton
+      Left = 156
+      Hint = 'Redo action'
+      Top = 2
+      ImageIndex = 35
+      OnClick = RedoProc
+      ParentShowHint = False
+      ShowHint = True
     end
   end
   object statusBar: TStatusBar
     Left = 0
     Height = 23
-    Top = 759
-    Width = 1137
+    Top = 816
+    Width = 1150
     Panels = <    
       item
         Width = 200
@@ -265,10 +313,10 @@ object frmAntic4Tiles: TfrmAntic4Tiles
     SimplePanel = False
   end
   object color4: TImage
-    Left = 12
+    Left = 314
     Height = 24
     Hint = 'Background color'
-    Top = 48
+    Top = 96
     Width = 24
     BorderSpacing.Around = 1
     OnMouseDown = ColorProc
@@ -277,10 +325,10 @@ object frmAntic4Tiles: TfrmAntic4Tiles
   end
   object color0: TImage
     Tag = 1
-    Left = 42
+    Left = 344
     Height = 24
     Hint = 'Color register 0'
-    Top = 48
+    Top = 96
     Width = 24
     BorderSpacing.Around = 1
     OnMouseDown = ColorProc
@@ -289,10 +337,10 @@ object frmAntic4Tiles: TfrmAntic4Tiles
   end
   object color1: TImage
     Tag = 2
-    Left = 72
+    Left = 374
     Height = 24
     Hint = 'Color register 1'
-    Top = 48
+    Top = 96
     Width = 24
     BorderSpacing.Around = 1
     OnMouseDown = ColorProc
@@ -301,10 +349,10 @@ object frmAntic4Tiles: TfrmAntic4Tiles
   end
   object color2: TImage
     Tag = 3
-    Left = 102
+    Left = 404
     Height = 24
     Hint = 'Color register 2'
-    Top = 48
+    Top = 96
     Width = 24
     BorderSpacing.Around = 1
     OnMouseDown = ColorProc
@@ -313,10 +361,10 @@ object frmAntic4Tiles: TfrmAntic4Tiles
   end
   object color3: TImage
     Tag = 10
-    Left = 132
+    Left = 434
     Height = 24
     Hint = 'Color register 3'
-    Top = 48
+    Top = 96
     Width = 24
     BorderSpacing.Around = 1
     OnMouseDown = ColorProc
@@ -324,13 +372,13 @@ object frmAntic4Tiles: TfrmAntic4Tiles
     ShowHint = True
   end
   object boxResize: TGroupBox
-    Left = 468
-    Height = 102
-    Top = 648
-    Width = 234
-    Caption = 'Tile matrix'
-    ClientHeight = 82
-    ClientWidth = 230
+    Left = 10
+    Height = 74
+    Top = 42
+    Width = 158
+    Caption = 'Tile dimension matrix'
+    ClientHeight = 54
+    ClientWidth = 154
     TabOrder = 2
     object Label21: TLabel
       Left = 6
@@ -514,13 +562,13 @@ object frmAntic4Tiles: TfrmAntic4Tiles
     end
   end
   object boxCharOper: TGroupBox
-    Left = 714
-    Height = 102
-    Top = 648
-    Width = 192
-    Caption = 'Shift tile data'
-    ClientHeight = 82
-    ClientWidth = 188
+    Left = 10
+    Height = 110
+    Top = 696
+    Width = 194
+    Caption = 'Shift/move selected tile'
+    ClientHeight = 90
+    ClientWidth = 190
     TabOrder = 3
     object radShiftChar: TRadioButton
       Left = 12
@@ -586,120 +634,134 @@ object frmAntic4Tiles: TfrmAntic4Tiles
   end
   object imgChar2000: TImage
     Tag = 8
-    Left = 12
+    Left = 10
     Height = 112
-    Top = 302
+    Top = 350
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar2100: TImage
     Tag = 9
-    Left = 124
+    Left = 122
     Height = 112
-    Top = 302
+    Top = 350
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar2010: TImage
     Tag = 10
-    Left = 236
+    Left = 234
     Height = 112
-    Top = 302
+    Top = 350
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar0001: TImage
     Tag = 3
-    Left = 348
+    Left = 346
     Height = 112
-    Top = 78
+    Top = 126
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar1001: TImage
     Tag = 7
-    Left = 348
+    Left = 346
     Height = 112
-    Top = 190
+    Top = 238
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar2001: TImage
     Tag = 11
-    Left = 348
+    Left = 346
     Height = 112
-    Top = 302
+    Top = 350
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar3000: TImage
     Tag = 12
-    Left = 12
+    Left = 10
     Height = 112
-    Top = 414
+    Top = 462
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar3100: TImage
     Tag = 13
-    Left = 124
+    Left = 122
     Height = 112
-    Top = 414
+    Top = 462
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar3010: TImage
     Tag = 14
-    Left = 236
+    Left = 234
     Height = 112
-    Top = 414
+    Top = 462
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar3001: TImage
     Tag = 15
-    Left = 348
+    Left = 346
     Height = 112
-    Top = 414
+    Top = 462
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
-  object scrlBox: TScrollBox
+  object scrollBox: TScrollBox
     Left = 468
-    Height = 96
-    Top = 540
-    Width = 660
-    HorzScrollBar.Increment = 64
-    HorzScrollBar.Page = 646
+    Height = 234
+    Top = 474
+    Width = 672
+    HorzScrollBar.Increment = 66
+    HorzScrollBar.Page = 668
     HorzScrollBar.Smooth = True
     HorzScrollBar.Tracking = True
     VertScrollBar.Increment = 7
     VertScrollBar.Page = 1
     VertScrollBar.Visible = False
-    ClientHeight = 92
-    ClientWidth = 656
+    ClientHeight = 213
+    ClientWidth = 668
     TabOrder = 4
+    object shape: TShape
+      Left = 6
+      Height = 92
+      Top = 0
+      Width = 76
+      Brush.Color = clSkyBlue
+      Brush.Style = bsClear
+      Pen.Color = clTeal
+      Pen.Mode = pmXor
+      Pen.Width = 3
+      Visible = False
+    end
     object imgTile01: TImage
       Tag = 1
-      Left = 6
+      Left = 12
       Height = 80
       Top = 6
       Width = 64
       OnClick = SelectTileProc
+      StretchOutEnabled = False
+      StretchInEnabled = False
     end
     object imgTile02: TImage
       Tag = 2
-      Left = 78
+      Left = 92
       Height = 80
       Top = 6
       Width = 64
@@ -707,7 +769,7 @@ object frmAntic4Tiles: TfrmAntic4Tiles
     end
     object imgTile03: TImage
       Tag = 3
-      Left = 150
+      Left = 172
       Height = 80
       Top = 6
       Width = 64
@@ -715,143 +777,739 @@ object frmAntic4Tiles: TfrmAntic4Tiles
     end
     object imgTile04: TImage
       Tag = 4
-      Left = 222
+      Left = 258
       Height = 80
       Top = 6
       Width = 64
       OnClick = SelectTileProc
     end
     object imgTile05: TImage
-      Tag = 4
-      Left = 294
+      Tag = 5
+      Left = 342
       Height = 80
       Top = 6
       Width = 64
       OnClick = SelectTileProc
     end
     object imgTile06: TImage
-      Tag = 4
-      Left = 366
+      Tag = 6
+      Left = 426
       Height = 80
       Top = 6
       Width = 64
       OnClick = SelectTileProc
     end
     object imgTile07: TImage
-      Tag = 4
-      Left = 438
-      Height = 80
-      Top = 6
-      Width = 64
-      OnClick = SelectTileProc
-    end
-    object imgTile08: TImage
-      Tag = 4
+      Tag = 7
       Left = 510
       Height = 80
       Top = 6
       Width = 64
       OnClick = SelectTileProc
     end
-    object imgTile09: TImage
-      Tag = 4
-      Left = 582
+    object imgTile08: TImage
+      Tag = 8
+      Left = 594
       Height = 80
       Top = 6
       Width = 64
       OnClick = SelectTileProc
     end
+    object lblTiles01Dim: TLabel
+      Left = 18
+      Height = 15
+      Top = 93
+      Width = 70
+      Caption = 'lblTiles01Dim'
+      ParentColor = False
+    end
+    object lblTiles02Dim: TLabel
+      Left = 96
+      Height = 15
+      Top = 93
+      Width = 70
+      Caption = 'lblTiles02Dim'
+      ParentColor = False
+    end
+    object lblTiles03Dim: TLabel
+      Left = 180
+      Height = 15
+      Top = 93
+      Width = 70
+      Caption = 'lblTiles03Dim'
+      ParentColor = False
+    end
+    object lblTiles04Dim: TLabel
+      Left = 264
+      Height = 15
+      Top = 93
+      Width = 70
+      Caption = 'lblTiles04Dim'
+      ParentColor = False
+    end
+    object lblTiles05Dim: TLabel
+      Left = 348
+      Height = 15
+      Top = 93
+      Width = 70
+      Caption = 'lblTiles05Dim'
+      ParentColor = False
+    end
+    object lblTiles06Dim: TLabel
+      Left = 432
+      Height = 15
+      Top = 93
+      Width = 70
+      Caption = 'lblTiles06Dim'
+      ParentColor = False
+    end
+    object lblTiles07Dim: TLabel
+      Left = 516
+      Height = 15
+      Top = 93
+      Width = 70
+      Caption = 'lblTiles07Dim'
+      ParentColor = False
+    end
+    object lblTiles08Dim: TLabel
+      Left = 600
+      Height = 15
+      Top = 93
+      Width = 70
+      Caption = 'lblTiles08Dim'
+      ParentColor = False
+    end
+    object imgTile01Char0000: TImage
+      Left = 6
+      Height = 18
+      Top = 126
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char0100: TImage
+      Left = 24
+      Height = 18
+      Top = 126
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char0010: TImage
+      Left = 42
+      Height = 18
+      Top = 126
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char0001: TImage
+      Left = 60
+      Height = 18
+      Top = 126
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char1000: TImage
+      Left = 6
+      Height = 18
+      Top = 144
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char1100: TImage
+      Left = 24
+      Height = 18
+      Top = 144
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char1010: TImage
+      Left = 42
+      Height = 18
+      Top = 144
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char1001: TImage
+      Left = 60
+      Height = 18
+      Top = 144
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char2000: TImage
+      Left = 6
+      Height = 18
+      Top = 162
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char2100: TImage
+      Left = 24
+      Height = 18
+      Top = 162
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char2010: TImage
+      Left = 42
+      Height = 18
+      Top = 162
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char2001: TImage
+      Left = 60
+      Height = 18
+      Top = 162
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char3000: TImage
+      Left = 6
+      Height = 18
+      Top = 180
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char3100: TImage
+      Left = 24
+      Height = 18
+      Top = 180
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char3010: TImage
+      Left = 42
+      Height = 18
+      Top = 180
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char3001: TImage
+      Left = 60
+      Height = 18
+      Top = 180
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char4000: TImage
+      Left = 6
+      Height = 18
+      Top = 198
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char4100: TImage
+      Left = 24
+      Height = 18
+      Top = 198
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char4010: TImage
+      Left = 42
+      Height = 18
+      Top = 198
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char4001: TImage
+      Left = 60
+      Height = 18
+      Top = 198
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char0000: TImage
+      Left = 88
+      Height = 18
+      Top = 126
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char0100: TImage
+      Left = 106
+      Height = 18
+      Top = 126
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char0010: TImage
+      Left = 124
+      Height = 18
+      Top = 126
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char0001: TImage
+      Left = 142
+      Height = 18
+      Top = 126
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char1000: TImage
+      Left = 88
+      Height = 18
+      Top = 144
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char1100: TImage
+      Left = 106
+      Height = 18
+      Top = 144
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char1010: TImage
+      Left = 124
+      Height = 18
+      Top = 144
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char1001: TImage
+      Left = 142
+      Height = 18
+      Top = 144
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char2000: TImage
+      Left = 88
+      Height = 18
+      Top = 162
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char2100: TImage
+      Left = 106
+      Height = 18
+      Top = 162
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char2010: TImage
+      Left = 124
+      Height = 18
+      Top = 162
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char2001: TImage
+      Left = 142
+      Height = 18
+      Top = 162
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char3002: TImage
+      Left = 88
+      Height = 18
+      Top = 179
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char3101: TImage
+      Left = 106
+      Height = 18
+      Top = 179
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char3011: TImage
+      Left = 124
+      Height = 18
+      Top = 179
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile01Char3003: TImage
+      Left = 142
+      Height = 18
+      Top = 179
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char3000: TImage
+      Left = 88
+      Height = 18
+      Top = 180
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char3100: TImage
+      Left = 106
+      Height = 18
+      Top = 180
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char3010: TImage
+      Left = 124
+      Height = 18
+      Top = 180
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char3001: TImage
+      Left = 142
+      Height = 18
+      Top = 180
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char4000: TImage
+      Left = 88
+      Height = 18
+      Top = 198
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char4100: TImage
+      Left = 106
+      Height = 18
+      Top = 198
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char4010: TImage
+      Left = 124
+      Height = 18
+      Top = 198
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile02Char4001: TImage
+      Left = 142
+      Height = 18
+      Top = 198
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char0100: TImage
+      Left = 188
+      Height = 18
+      Top = 126
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char0010: TImage
+      Left = 206
+      Height = 18
+      Top = 126
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char0001: TImage
+      Left = 224
+      Height = 18
+      Top = 126
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char1000: TImage
+      Left = 170
+      Height = 18
+      Top = 144
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char1100: TImage
+      Left = 188
+      Height = 18
+      Top = 144
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char1010: TImage
+      Left = 206
+      Height = 18
+      Top = 144
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char1001: TImage
+      Left = 224
+      Height = 18
+      Top = 144
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char2000: TImage
+      Left = 170
+      Height = 18
+      Top = 162
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char2100: TImage
+      Left = 188
+      Height = 18
+      Top = 162
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char2010: TImage
+      Left = 206
+      Height = 18
+      Top = 162
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char2001: TImage
+      Left = 224
+      Height = 18
+      Top = 162
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char3000: TImage
+      Left = 170
+      Height = 18
+      Top = 180
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char3100: TImage
+      Left = 188
+      Height = 18
+      Top = 180
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char3010: TImage
+      Left = 206
+      Height = 18
+      Top = 180
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char3001: TImage
+      Left = 224
+      Height = 18
+      Top = 180
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char4000: TImage
+      Left = 170
+      Height = 18
+      Top = 198
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char4100: TImage
+      Left = 188
+      Height = 18
+      Top = 198
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char4010: TImage
+      Left = 206
+      Height = 18
+      Top = 198
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char4001: TImage
+      Left = 224
+      Height = 18
+      Top = 198
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
+    object imgTile03Char0000: TImage
+      Left = 170
+      Height = 18
+      Top = 126
+      Width = 18
+      OnClick = CharSetProc
+      Stretch = True
+    end
   end
   object imgChar4000: TImage
     Tag = 16
-    Left = 12
+    Left = 10
     Height = 112
-    Top = 526
+    Top = 574
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar4100: TImage
     Tag = 17
-    Left = 124
+    Left = 122
     Height = 112
-    Top = 526
+    Top = 574
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar4010: TImage
     Tag = 18
-    Left = 236
+    Left = 234
     Height = 112
-    Top = 526
+    Top = 574
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object imgChar4001: TImage
     Tag = 19
-    Left = 348
+    Left = 346
     Height = 112
-    Top = 526
+    Top = 574
     Width = 112
     OnMouseDown = imgCharDown
     OnMouseUp = imgCharUp
   end
   object paintBox: TPaintBox
     Left = 468
-    Height = 456
-    Top = 78
-    Width = 663
+    Height = 384
+    Top = 81
+    Width = 638
     Color = clGreen
     ParentColor = False
     OnMouseDown = paintBoxDown
     OnPaint = paintBoxPaint
   end
+  object shapeTileGrid: TShape
+    Left = 1068
+    Height = 43
+    Top = 732
+    Width = 65
+    Brush.Color = clSkyBlue
+    Brush.Style = bsClear
+    Pen.Color = clTeal
+    Pen.Mode = pmXor
+    Pen.Width = 3
+    Shape = stSquare
+    Visible = False
+  end
   object popMenu: TPopupMenu
-    left = 1086
-    top = 702
-    object MenuItem3: TMenuItem
-      Caption = 'Flip character horizontally'
+    Left = 984
+    Top = 732
+    object popDraw: TMenuItem
+      Caption = 'Draw in tile'
+      Visible = False
+      OnClick = btnFlipXClick
     end
-    object MenuItem5: TMenuItem
-      Caption = 'Flip character vertically'
+    object popFlipTileX: TMenuItem
+      Caption = 'Flip tile horizontally'
+      OnClick = FlipXProc
     end
-    object MenuItem10: TMenuItem
-      Caption = 'Rotate character'
+    object popFlipTileY: TMenuItem
+      Caption = 'Flip tile vertically'
+      OnClick = FlipYProc
     end
-    object menuInvert: TMenuItem
-      Caption = 'Invert bits of character'
+    object popRotateTile: TMenuItem
+      Caption = 'Rotate tile'
+      OnClick = RotateProc
     end
-    object menuClearChar: TMenuItem
-      Caption = 'Clear character'
+    object popInvertTile: TMenuItem
+      Caption = 'Invert bits of tile'
+      OnClick = InvertProc
     end
-    object MenuItem11: TMenuItem
+    object popFillTile: TMenuItem
+      Caption = 'Fill tile with selected color'
+    end
+    object popClearTile: TMenuItem
+      Caption = 'Clear tile'
+      OnClick = ClearTileProc
+    end
+    object popDelim01: TMenuItem
       Caption = '-'
+      Visible = False
     end
     object popCopyChar: TMenuItem
       Caption = 'Copy edited data to selected character set cell'
+      Visible = False
     end
     object popCancelCopyChar: TMenuItem
       Caption = 'Cancel copy operation'
+      Visible = False
     end
-    object menuRestoreChar: TMenuItem
-      Caption = 'Restore default character data'
-    end
-    object MenuItem19: TMenuItem
+    object popDelim02: TMenuItem
       Caption = '-'
     end
     object popShowGrid: TMenuItem
-      Caption = 'Show grid'
+      Caption = 'Show grid in tiles editor'
+      OnClick = ShowGridProc
     end
     object popHideGrid: TMenuItem
       Tag = 1
-      Caption = 'Hide grid'
+      Caption = 'Hide grid in tiles editor'
+      OnClick = ShowGridProc
     end
   end
   object menuAntic4Tiles: TMainMenu
-    left = 1002
-    top = 702
+    Left = 900
+    Top = 732
     object menuFile: TMenuItem
       Caption = '&File'
       object itemOpenTile: TMenuItem
@@ -892,6 +1550,10 @@ object frmAntic4Tiles: TfrmAntic4Tiles
         Caption = 'Invert bits of tile'
         OnClick = InvertProc
       end
+      object itemFillTile: TMenuItem
+        Caption = 'Fill tile with selected color'
+        OnClick = FillTileProc
+      end
       object MenuItem17: TMenuItem
         Caption = '-'
       end
@@ -900,8 +1562,19 @@ object frmAntic4Tiles: TfrmAntic4Tiles
         OnClick = ClearTileProc
       end
       object itemClearTiles: TMenuItem
-        Caption = 'Clear tiles'
+        Caption = 'Clear all tiles'
         OnClick = ClearTilesProc
+      end
+      object MenuItem2: TMenuItem
+        Caption = '-'
+      end
+      object itemUndo: TMenuItem
+        Caption = 'Undo'
+        OnClick = UndoProc
+      end
+      object itemRedo: TMenuItem
+        Caption = 'Redo'
+        OnClick = RedoProc
       end
     end
     object menuTools: TMenuItem
@@ -928,6 +1601,8 @@ object frmAntic4Tiles: TfrmAntic4Tiles
       end
       object itemViewer: TMenuItem
         Caption = 'Screen viewer'
+        Enabled = False
+        Visible = False
       end
       object MenuItem18: TMenuItem
         Caption = '-'

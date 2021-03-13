@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Player/missile graphics editor
 }
 unit pmg;
@@ -222,8 +222,8 @@ type
     mnuClearAllPlayers: TMenuItem;
     mnuClearAllMissiles: TMenuItem;
     MenuItem25: TMenuItem;
-    miShowGrid: TMenuItem;
-    miHideGrid: TMenuItem;
+    itemShowGrid: TMenuItem;
+    itemHideGrid: TMenuItem;
     MenuItem28: TMenuItem;
     miMultiColorEnable: TMenuItem;
     miMultiColorDisable: TMenuItem;
@@ -299,6 +299,12 @@ type
     btnSaveDataAll: TToolButton;
     btnGenCode: TToolButton;
     btnByteEditor : TToolButton;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure ViewerProc(Sender : TObject);
     procedure btnFlipXAll1Click(Sender : TObject);
     procedure btnFlipXAllClick(Sender : TObject);
     procedure btnFlipXSelected1Click(Sender : TObject);
@@ -312,12 +318,6 @@ type
       X, Y : Integer);
     procedure editPosYMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
       X, Y : Integer);
-    procedure FormCreate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
-    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-    procedure ViewerProc(Sender : TObject);
     procedure ApplyMissileHeightProc(Sender : TObject);
     procedure ApplyPlayerHeightProc(Sender : TObject);
     procedure chkJoinPlayersChange(Sender : TObject);
@@ -340,10 +340,10 @@ type
     procedure tbMissileVerticalChange(Sender: TObject);
     procedure SavePlayerDataAll(Sender: TObject);
     procedure chkMultiColor01Change(Sender: TObject);
-    procedure editorMultiMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure editorMultiDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure editorMultiMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure editorMultiMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure editorMultiMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure editorMultiUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure editPosXChange(Sender: TObject);
     procedure editPosYChange(Sender: TObject);
@@ -498,13 +498,17 @@ var
   i, j : word;
   labelx : TLabel;
 begin
+//  ShowCursor(frmPmg, frmPmg, crHourGlass);
+//  Cursor := crHourGlass;
   DoubleBuffered := true;
   btn := mbMiddle;
   FillByte(playerSize, SizeOf(playerSize), 0);
+
   grY := _PM_MAX_LINES - 1;
   factX := 16;
   factX02 := 12; factY02 := 12;
   factX03 := 12;
+
 //  playerSize[0] := playerSizeNormal;
   missileMaxY := 34;
   for i := 0 to _PM_MAX_LINES - 1 do
@@ -580,10 +584,12 @@ begin
   sbPmg.Panels[0].Text := 'Cursor coordinates: x: 0, y: 0';
   InitPmValues;
   tabs.TabIndex := 0;
+
   for i := 0 to 3 do begin
     (FindComponent('imgMissile' + IntToStr(i)) as TImage).Canvas.Brush.Color := coltab[0];
     (FindComponent('imgMissileSingle' + IntToStr(i)) as TImage).Canvas.Brush.Color := coltab[0];
   end;
+
   SetObjects;
   ClearData(mnuClearAllMissiles);
   player := 0;
@@ -603,6 +609,9 @@ begin
   end;
 
   SetDoubleResolution(Sender);
+//  Cursor := crDefault;
+
+//  ShowCursor(frmPmg, frmPmg, crDefault);
 end;
 
 procedure TfrmPmg.FormActivate(Sender: TObject);
@@ -644,6 +653,8 @@ begin
     factY02 := 6;
   end;
 
+  ShowCursor(frmPmg, frmPmg, crHourGlass);
+
   InitPmValues;
   refreshPM(true);
   ShowMissileData(3);
@@ -651,6 +662,8 @@ begin
   FillRectEx(imgPlayer4, coltab[0], 0, 0, imgPlayer4.Width, imgPlayer4.Height);
   RedrawPlayer4;
   RefresPM_MultiAll(editorMulti, factX02, factY02);
+
+  ShowCursor(frmPmg, frmPmg, crDefault);
 end;
 
 procedure TfrmPmg.PlayerOper(Sender : TObject);
@@ -862,9 +875,8 @@ begin
       end;
     end;
   end
-  else begin
+  else
     ShowMessage('There is no missile data to be saved!');
-  end;
 end;
 
 procedure TfrmPmg.tbMissileHorizontalChange(Sender: TObject);
@@ -901,13 +913,12 @@ begin
     if pmResolution = doubleResolution then begin
       (FindComponent('lblNum' + IntToStr(j)) as TLabel).Top := 18 + j shl 4;
       (FindComponent('lblNum' + IntToStr(j)) as TLabel).Font.Size := 8;
-      (FindComponent('lblNum' + IntToStr(j)) as TLabel).Font.Style := [];
     end
     else begin
       (FindComponent('lblNum' + IntToStr(j)) as TLabel).Top := 18 + j shl 3;
       (FindComponent('lblNum' + IntToStr(j)) as TLabel).Font.Size := 6;
-      (FindComponent('lblNum' + IntToStr(j)) as TLabel).Font.Style := [];
     end;
+    (FindComponent('lblNum' + IntToStr(j)) as TLabel).Font.Style := [];
   end;
 end;
 
@@ -1172,7 +1183,7 @@ begin
 
   sbPmg.Panels[0].Text := inttostr(playerIndex[player]);
 
-  if chkJoinPlayers.Checked then begin
+  if chkJoinPlayers.Checked then
     for i := 0 to 3 do begin
       oldPos := playerIndex[i];
       playerIndex[i] := playerIndex[player];
@@ -1194,7 +1205,7 @@ begin
           end;
       end;
     end;
-  end;
+
   RefresPM_MultiAll(editorMulti, factX02, factY02);
 end;
 
@@ -2595,7 +2606,7 @@ begin
         Brush.Color := coltab[7];
     end;
 
-    FillRect(bounds(xf*factX02, yf*factY02, factX03, factY02));
+    FillRect(bounds(xf*factX02 + 1, yf*factY02 + 1, factX03, factY02));
   end;
 
   FillRectEx(imgP0_normal, coltab[mem], xf*6, yf*6, 6, 6);
@@ -2883,7 +2894,7 @@ begin
         if col03 = 1 then
           pm.Canvas.Brush.Color := coltab[7];
       end;
-      pm.Canvas.FillRect(bounds(xf*factX + 1, yf*factY + 1, factX03, factY - 1));
+      pm.Canvas.FillRect(bounds(xf*factX + 1, yf*factY + 1, factX03, factY));
     end;
   end;
   pm.Refresh;
@@ -2936,7 +2947,7 @@ begin
         d := yf*factY shl 1;
         if c = 0 then c := factX;
         if d = 0 then d := factY;
-        editorMulti.Canvas.Rectangle(xf*factX, yf*factY, c, d);
+        editorMulti.Canvas.Rectangle(xf*factX02, yf*factY02, c, d);
       end;
 
       col := playerPos[0, xf, yf];      // Player 0 value
@@ -2978,7 +2989,7 @@ begin
           editorMulti.Canvas.Brush.Color := coltab[7];
       end;
 
-      editorMulti.Canvas.FillRect(bounds(xf*factX + 1, yf*factY + 1, factX03, factY - 1));
+      editorMulti.Canvas.FillRect(bounds(xf*factX02 + 1, yf*factY02 + 1, factX03, factY));
     end;
   end;
   editorMulti.Refresh;
@@ -3073,7 +3084,7 @@ begin
   end;
 
   for i := 0 to tabPlayers.ControlCount - 1 do
-    for j := 0 to 39 do begin
+    for j := 0 to 39 do
       if (tabPlayers.Controls[i].Name = 'lblPlayerLine' + inttostr(j)) then begin
         if j <= _PM_MAX_LINES - 1 then
           tabPlayers.Controls[i].Caption := IntToStr(j)
@@ -3090,7 +3101,6 @@ begin
         end;
         break;
       end;
-    end;
 end;
 
 procedure TfrmPmg.RefreshAll;
@@ -3246,7 +3256,7 @@ begin
   end
 end;
 
-procedure TfrmPmg.editorMultiMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmPmg.editorMultiDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   xf, yf : integer;
@@ -3272,7 +3282,7 @@ begin
 //  sbPmg.Panels[1].Text := 'index, xf ' + inttostr(playerIndex[player]) + ' ' + inttostr(xf);
 end;
 
-procedure TfrmPmg.editorMultiMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TfrmPmg.editorMultiMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
   xf, yf : integer;
 begin
@@ -3285,7 +3295,7 @@ begin
   //sbPmg.Panels[0].Text := '';
 end;
 
-procedure TfrmPmg.editorMultiMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmPmg.editorMultiUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
   btn := mbMiddle;
@@ -3740,16 +3750,28 @@ end;
 
 procedure TfrmPmg.ToggleBox1Change(Sender : TObject);
 begin
+  //ShowCursor(frmPmg, frmPmg, crHourGlass);
   Togglebox1.State := cbGrayed;
   Togglebox2.State := cbUnchecked;
+  Togglebox1.Refresh;
+  Togglebox2.Refresh;
+//  frmPmg.Cursor := crHourGlass;
   SetDoubleResolution(Sender);
+//  frmPmg.Cursor := crDefault;
+//  ShowCursor(frmPmg, frmPmg, crDefault);
 end;
 
 procedure TfrmPmg.ToggleBox2Change(Sender : TObject);
 begin
+//  ShowCursor(frmPmg, frmPmg, crHourGlass);
   Togglebox1.State := cbUnchecked;
   Togglebox2.State := cbGrayed;
+  Togglebox1.Refresh;
+  Togglebox2.Refresh;
+//  frmPmg.Cursor := crHourGlass;
   SetSingleResolution(Sender);
+//  frmPmg.Cursor := crDefault;
+//  ShowCursor(frmPmg, frmPmg, crDefault);
 end;
 
 procedure TfrmPmg.ByteEditorProc(Sender : TObject);

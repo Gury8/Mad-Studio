@@ -14,7 +14,7 @@ object frmSrcEdit: TfrmSrcEdit
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   inline editor: TSynEdit
     Left = 0
     Height = 506
@@ -733,8 +733,8 @@ object frmSrcEdit: TfrmSrcEdit
     Caption = 'ToolButton11'
   end
   object menuTextEditor: TMainMenu
-    left = 141
-    top = 135
+    Left = 141
+    Top = 135
     object MenuItem1: TMenuItem
       Caption = '&File'
       object MenuItem5: TMenuItem
@@ -890,18 +890,18 @@ object frmSrcEdit: TfrmSrcEdit
   object dlgFind: TFindDialog
     Options = [frDown, frFindNext, frEntireScope]
     OnFind = dlgFindFind
-    left = 141
-    top = 60
+    Left = 141
+    Top = 60
   end
   object dlgReplace: TReplaceDialog
     Options = [frDown, frFindNext, frReplace, frReplaceAll, frEntireScope, frHidePromptOnReplace]
     OnReplace = dlgReplaceReplace
-    left = 234
-    top = 63
+    Left = 234
+    Top = 63
   end
   object SynJScriptSyn: TSynJScriptSyn
     Enabled = False
-    left = 231
-    top = 135
+    Left = 231
+    Top = 135
   end
 end

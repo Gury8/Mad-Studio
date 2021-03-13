@@ -16,7 +16,7 @@ object frmPmg: TfrmPmg
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object toolbar: TToolBar
     Left = 0
     Top = 0
@@ -1391,9 +1391,9 @@ object frmPmg: TfrmPmg
         Height = 480
         Top = 2
         Width = 672
-        OnMouseDown = editorMultiMouseDown
-        OnMouseMove = editorMultiMouseMove
-        OnMouseUp = editorMultiMouseUp
+        OnMouseDown = editorMultiDown
+        OnMouseMove = editorMultiMove
+        OnMouseUp = editorMultiUp
       end
       object tbPlayer0: TTrackBar
         Left = 48
@@ -2710,8 +2710,8 @@ object frmPmg: TfrmPmg
     end
   end
   object menuPmg: TMainMenu
-    left = 126
-    top = 612
+    Left = 126
+    Top = 612
     object MenuItem1: TMenuItem
       Caption = '&File'
       object mnuPlayerLoad: TMenuItem
@@ -2884,12 +2884,12 @@ object frmPmg: TfrmPmg
     end
     object MenuItem25: TMenuItem
       Caption = '&View'
-      object miShowGrid: TMenuItem
+      object itemShowGrid: TMenuItem
         Caption = 'Show editor grid'
         ShortCut = 16455
         OnClick = ShowGrid
       end
-      object miHideGrid: TMenuItem
+      object itemHideGrid: TMenuItem
         Caption = 'Hide editor grid'
         ShortCut = 49223
         OnClick = HideGrid
@@ -2933,8 +2933,8 @@ object frmPmg: TfrmPmg
     end
   end
   object popMenu: TPopupMenu
-    left = 114
-    top = 672
+    Left = 114
+    Top = 672
     object mnuCopyPlayer0: TMenuItem
       Caption = 'Copy player 0 data to selected player'
       OnClick = CopyPlayer0

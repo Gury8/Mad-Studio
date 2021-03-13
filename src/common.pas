@@ -32,11 +32,34 @@ type
 
   TAplAnim = (normal, extended, fixed52);
 
+  TAntic4CharType = record
+    dimX, dimY : byte;  // Antic mode 4 tile dimension
+    selected : byte;    // Selected tile
+  end;
+
+  TAntic4CharValueType = record
+    tileSelected : byte;  // Selected tile
+    x, y : byte;          // Tile value coordinates
+    value : byte;         // Tile value
+  end;
+
+  //TAntic4CharValueExType = record
+  //  tileSelected : byte;      // Selected tile
+  //  x : array[0..7] of byte;  // Tile value coordinates
+  //  y : array[0..7] of byte;  // Tile value coordinates
+  //  value : byte;             // Tile value
+  //end;
+
+//  TAntic4CharValueExType = record
+//    tileSelected : byte;      // Selected tile
+//    xy : array[0..49] of byte;  // Tile value coordinates
+////    value : byte;             // Tile value
+//  end;
+
 const
   programName = 'Mad Studio';
-//  programVersion = ' v1.3 (x86_64-win32/win64)';
-//  programVersion = ' v1.2.2 (x86_64-win32/win64)';
-  programVersion = ' v1.2.2 (x86_64-Win64)';
+//  programVersion = ' v1.2.3 (x86_64-win32/win64)';
+  programVersion = ' v1.2.3 x86_64-win64';
 
   // Supported graphics resolutions
   grMode40x24x4 = 3;
@@ -136,8 +159,8 @@ const
     _LMS + _ANTIC_MODE_8);
 
   _MAX_ANIM_FRAME_WIDTH = 15;
-  _ANIM_MAX_LINES = 58;
-  _ANIM_APL_MAX_LINES = 48;
+  _ANIM_MAX_LINES       = 58;
+  _ANIM_APL_MAX_LINES   = 48;
 
   // Supported languages
   _ATARI_BASIC    = 0;
@@ -150,13 +173,15 @@ const
   _CC65           = 7;
   _KICKC          = 8;
 
-  _PM_WIDTH       = 7;  // Player dimension
+  _PM_WIDTH       = 7;   // Player line dimension - 1
   _MAX_PLAYER_POS = 56;  // Max. X position for multi-color players
 
   pmSize : array[0..3] of string[14] = ('normal size', 'double size', '', 'quadruple size');
   GPRIOR : array[0..3] of byte = (1, 4, 16, 32);
 
   _CHAR_DIM       = 7;
+
+  _MAX_TILES      = 8;
 
   {$I 'missile_sizes.inc'}
 
