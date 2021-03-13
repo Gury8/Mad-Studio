@@ -1,9 +1,9 @@
 {
   "General" : {
     "outputLog" : true,
-    "showPmEditorGrid" : true,
+    "showPmEditorGrid" : false,
     "pmMixedColor" : true,
-    "laguageIndex" : 0
+    "laguageIndex" : 2
   },
   "SourceCodeEditor" : {
     "fontName" : "Courier New",
