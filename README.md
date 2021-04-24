@@ -1,6 +1,6 @@
 # Mad-Studio
 
-This application is a set of utilities to help you to develop for your Atari 8-bit home computer (from 400/800 to XL and XE range of these computers). You can draw in supported text and graphics modes, create new and edit existing character sets, working with player/missile graphics (sprites) and even create your own display lists. Also, the program automatically creates source code listing for you for any supported languages.
+This application is a set of utilities to help you to develop for your Atari 8-bit home computer (from 400/800 to XL and XE range of these computers). You can draw in supported text and graphics modes, create new and edit existing character sets, working with player/missile graphics (sprites) and even create your own display lists. Also, the program automatically creates source code listings for supported languages.
 
 # Development
 
@@ -24,7 +24,7 @@ Mad Studio is developed with Lazarus IDE, a Free Pascal framework. Currently it 
 
 <div align="center">
     <img src="/images/mad_studio_main.png"</img>
-    <img src="/images/madstudio_anim.png"</img>
+    <img src="/images/mad_studio_anim.png"</img>
     <img src="/images/madstudio_graphics.png"</img>
     <img src="/images/madstudio_pmg.png"</img>
     <img src="/images/madstudio_antic4_tiles.png"</img>
