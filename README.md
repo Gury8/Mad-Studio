@@ -26,5 +26,6 @@ Mad Studio is developed with Lazarus IDE, a Free Pascal framework. Currently it 
     <img src="/images/madstudio_animator.png"</img>
     <img src="/images/madstudio_graphics.png"</img>
     <img src="/images/madstudio_pmg.png"</img>
+    <img src="/images/madstudio_antic4_tiles.png"</img>
     <img src="/images/madstudio_chrset.png"</img>
 </div>
