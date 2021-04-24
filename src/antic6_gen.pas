@@ -52,7 +52,7 @@ type
     StaticText1 : TStaticText;
     StaticText2 : TStaticText;
     StaticText3 : TStaticText;
-    procedure chkUseColorsChange(Sender : TObject);
+//    procedure chkUseColorsChange(Sender : TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure CloseWinProc(Sender: TObject);
@@ -63,10 +63,8 @@ type
       X, Y : Integer);
     procedure listExamplesProc(Sender: TObject);
     procedure radLangProc(Sender: TObject);
-    procedure btnCloseMouseEnter(Sender : TObject);
-    procedure btnCloseMouseLeave(Sender : TObject);
-    procedure btnCopyToEditorMouseEnter(Sender : TObject);
-    procedure btnCopyToEditorMouseLeave(Sender : TObject);
+    procedure ButtonHoverEnter(Sender : TObject);
+    procedure ButtonHoverLeave(Sender : TObject);
   private
     { private declarations }
     listings : TListings;
@@ -525,10 +523,11 @@ begin
                  CodeLine('POKE SCR+I,BYTE') +
                  CodeLine('NEXT I') +
                  CodeLine('CLOSE #1');
-    if not chkUseColors.Checked then
-      code.line += CodeLine('POKE 708,' + IntToStr(colorValues[1]) + ':POKE 709,' + IntToStr(colorValues[2])) +
-                   CodeLine('POKE 710,' + IntToStr(colorValues[3]) + ':POKE 711,' + IntToStr(colorValues[10])) +
-                   CodeLine('POKE 712,' + IntToStr(colorValues[0]));
+    if chkUseColors.Checked then
+      code.line += GenSetColors(_ATARI_BASIC);
+      //code.line += CodeLine('POKE 708,' + IntToStr(colorValues[1]) + ':POKE 709,' + IntToStr(colorValues[2])) +
+      //             CodeLine('POKE 710,' + IntToStr(colorValues[3]) + ':POKE 711,' + IntToStr(colorValues[10])) +
+      //             CodeLine('POKE 712,' + IntToStr(colorValues[0]));
 
     code.line += WaitKeyCode(_ATARI_BASIC);
   end
@@ -552,10 +551,11 @@ begin
                  //'60 POKE SCR+I,BYTE'#13#10 +
                  //'70 NEXT I'#13#10 +
                  CodeLine('60 CLOSE #%1');
-    if not chkUseColors.Checked then begin
-      code.line += CodeLine('POKE 708,' + IntToStr(colorValues[1]) + ':POKE 709,' + IntToStr(colorValues[2])) +
-                   CodeLine('POKE 710,' + IntToStr(colorValues[3]) + ':POKE 711,' + IntToStr(colorValues[10])) +
-                   CodeLine('POKE 712,' + IntToStr(colorValues[0]));
+    if chkUseColors.Checked then begin
+      code.line += GenSetColors(_TURBO_BASIC_XL);
+      //code.line += CodeLine('POKE 708,' + IntToStr(colorValues[1]) + ':POKE 709,' + IntToStr(colorValues[2])) +
+      //             CodeLine('POKE 710,' + IntToStr(colorValues[3]) + ':POKE 711,' + IntToStr(colorValues[10])) +
+      //             CodeLine('POKE 712,' + IntToStr(colorValues[0]));
     end;
 //    lineNum := 90;
     code.line += WaitKeyCode(_TURBO_BASIC_XL);
@@ -583,11 +583,12 @@ begin
                  '  BlockRead(f, buf, fileSize);'#13#10#13#10 +
                  '  // Close file'#13#10 +
                  '  Close(f);'#13#10;
-    if not chkUseColors.Checked then begin
-      code.line += #13#10 +
-                   'Poke(708,' + IntToStr(colorValues[1]) + '); Poke(709,' + IntToStr(colorValues[2]) + ');'#13#10 +
-                   'Poke(710,' + IntToStr(colorValues[3]) + '); Poke(711,' + IntToStr(colorValues[10]) + ');'#13#10 +
-                   'Poke(712,' + IntToStr(colorValues[0]) + ');'#13#10;
+    if chkUseColors.Checked then begin
+      code.line += GenSetColors(_MAD_PASCAL);
+      //code.line += #13#10 +
+      //             'Poke(708,' + IntToStr(colorValues[1]) + '); Poke(709,' + IntToStr(colorValues[2]) + ');'#13#10 +
+      //             'Poke(710,' + IntToStr(colorValues[3]) + '); Poke(711,' + IntToStr(colorValues[10]) + ');'#13#10 +
+      //             'Poke(712,' + IntToStr(colorValues[0]) + ');'#13#10;
     end;
     code.line += WaitKeyCode(_MAD_PASCAL) +
                  'end.';
@@ -615,13 +616,14 @@ begin
                  'OD'#13#10#13#10 +
                  '; Close channel 2'#13#10 +
                  'Close(2)';
-     if not chkUseColors.Checked then
-       code.line += #13#10 +
-                    'POKE(708,' + IntToStr(colorValues[1]) + ') POKE(709,' +
-                    IntToStr(colorValues[2]) + ')'#13#10 +
-                    'POKE(710,' + IntToStr(colorValues[3]) + ') POKE(711,' +
-                    IntToStr(colorValues[10]) + ')'#13#10 +
-                    'POKE(712,' + IntToStr(colorValues[0]) + ')'#13#10;
+     if chkUseColors.Checked then
+       code.line += GenSetColors(_ACTION);
+       //code.line += #13#10 +
+       //             'POKE(708,' + IntToStr(colorValues[1]) + ') POKE(709,' +
+       //             IntToStr(colorValues[2]) + ')'#13#10 +
+       //             'POKE(710,' + IntToStr(colorValues[3]) + ') POKE(711,' +
+       //             IntToStr(colorValues[10]) + ')'#13#10 +
+       //             'POKE(712,' + IntToStr(colorValues[0]) + ')'#13#10;
      //code += #13#10 +
      //       '; Press any key to exit'#13#10 +
      //       'ch=255'#13#10 +
@@ -659,13 +661,14 @@ begin
                   'NEXT'#13#10 +
                   #13#10 +
                   'CLOSE #1'#13#10;
-     if not chkUseColors.Checked then
-       code.line += #13#10 +
-                    'POKE 708, ' + IntToStr(colorValues[1]) +
-                    ' : POKE 709, ' + IntToStr(colorValues[2]) + #13#10 +
-                    'POKE 710, ' + IntToStr(colorValues[3]) +
-                    ' : POKE 711, ' + IntToStr(colorValues[10]) + #13#10 +
-                    'POKE 712, ' + IntToStr(colorValues[0]) + #13#10;
+     if chkUseColors.Checked then
+       code.line += GenSetColors(_FAST_BASIC);
+       //code.line += #13#10 +
+       //             'POKE 708, ' + IntToStr(colorValues[1]) +
+       //             ' : POKE 709, ' + IntToStr(colorValues[2]) + #13#10 +
+       //             'POKE 710, ' + IntToStr(colorValues[3]) +
+       //             ' : POKE 711, ' + IntToStr(colorValues[10]) + #13#10 +
+       //             'POKE 712, ' + IntToStr(colorValues[0]) + #13#10;
 
      code.line += WaitKeyCode(_FAST_BASIC);
   end
@@ -757,11 +760,12 @@ begin
                  CodeLine('POKE SCR+I,BYTE') +
                  CodeLine('NEXT I');
     if chkUseColors.Checked then
-      code.line += CodeLine('POKE 712,' + IntToStr(colorValues[0]) + ':' +
-                            'POKE 708,' + IntToStr(colorValues[1]) + ':' +
-                            'POKE 709,' + IntToStr(colorValues[2]) + ':' +
-                            'POKE 710,' + IntToStr(colorValues[3]) + ':' +
-                            'POKE 711,' + IntToStr(colorValues[10]));
+      code.line += GenSetColors(_ATARI_BASIC);
+      //code.line += CodeLine('POKE 712,' + IntToStr(colorValues[0]) + ':' +
+      //                      'POKE 708,' + IntToStr(colorValues[1]) + ':' +
+      //                      'POKE 709,' + IntToStr(colorValues[2]) + ':' +
+      //                      'POKE 710,' + IntToStr(colorValues[3]) + ':' +
+      //                      'POKE 711,' + IntToStr(colorValues[10]));
 
     code.line += WaitKeyCode(langIndex);
 
@@ -781,11 +785,12 @@ begin
                  CodeLine('POKE SCR+I,BYTE') +
                  CodeLine('NEXT I');
     if chkUseColors.Checked then
-      code.line += CodeLine('POKE 712,' + IntToStr(colorValues[0]) + ':' +
-                            'POKE 708,' + IntToStr(colorValues[1]) + ':' +
-                            'POKE 709,' + IntToStr(colorValues[2]) + ':' +
-                            'POKE 710,' + IntToStr(colorValues[3]) + ':' +
-                            'POKE 711,' + IntToStr(colorValues[10]));
+      code.line += GenSetColors(_TURBO_BASIC_XL);
+      //code.line += CodeLine('POKE 712,' + IntToStr(colorValues[0]) + ':' +
+      //                      'POKE 708,' + IntToStr(colorValues[1]) + ':' +
+      //                      'POKE 709,' + IntToStr(colorValues[2]) + ':' +
+      //                      'POKE 710,' + IntToStr(colorValues[3]) + ':' +
+      //                      'POKE 711,' + IntToStr(colorValues[10]));
 
     code.line += WaitKeyCode(langIndex);
 
@@ -807,11 +812,12 @@ begin
                  'Graphics(' + grMode + strTextWindow + ')'#13#10#13#10 +
                  'MoveBlock(SCREEN, screenData, ' + IntToStr(frmAntic6.modeSize) + ')'#13#10;
     if chkUseColors.Checked then
-      code.line += 'POKE(712, ' + IntToStr(colorValues[0]) + ')'#13#10 +
-                   'POKE(708, ' + IntToStr(colorValues[1]) + ')'#13#10 +
-                   'POKE(709, ' + IntToStr(colorValues[2]) + ')'#13#10 +
-                   'POKE(710, ' + IntToStr(colorValues[3]) + ')'#13#10 +
-                   'POKE(711, ' + IntToStr(colorValues[10]) + ')'#13#10;
+      code.line += GenSetColors(_ACTION);
+      //code.line += 'POKE(712, ' + IntToStr(colorValues[0]) + ')'#13#10 +
+      //             'POKE(708, ' + IntToStr(colorValues[1]) + ')'#13#10 +
+      //             'POKE(709, ' + IntToStr(colorValues[2]) + ')'#13#10 +
+      //             'POKE(710, ' + IntToStr(colorValues[3]) + ')'#13#10 +
+      //             'POKE(711, ' + IntToStr(colorValues[10]) + ')'#13#10;
 
     code.line += WaitKeyCode(langIndex) +
                  #13#10'RETURN';
@@ -831,11 +837,12 @@ begin
                  '  InitGraph(' + grMode + strTextWindow +');'#13#10#13#10 +
                  '  Move(screenData, pointer(screen), ' + IntToStr(frmAntic6.modeSize) + ');'#13#10;
     if chkUseColors.Checked then
-      code.line += 'POKE(712, ' + IntToStr(colorValues[0]) + ');'#13#10 +
-                   'POKE(708, ' + IntToStr(colorValues[1]) + ');'#13#10 +
-                   'POKE(709, ' + IntToStr(colorValues[2]) + ');'#13#10 +
-                   'POKE(710, ' + IntToStr(colorValues[3]) + ');'#13#10 +
-                   'POKE(711, ' + IntToStr(colorValues[10]) + ');'#13#10;
+      code.line += GenSetColors(_MAD_PASCAL);
+      //code.line += 'POKE(712, ' + IntToStr(colorValues[0]) + ');'#13#10 +
+      //             'POKE(708, ' + IntToStr(colorValues[1]) + ');'#13#10 +
+      //             'POKE(709, ' + IntToStr(colorValues[2]) + ');'#13#10 +
+      //             'POKE(710, ' + IntToStr(colorValues[3]) + ');'#13#10 +
+      //             'POKE(711, ' + IntToStr(colorValues[10]) + ');'#13#10;
 
     code.line += WaitKeyCode(langIndex) +
                  'end.';
@@ -849,11 +856,12 @@ begin
                  'scr = DPEEK(88)'#13#10 +
                  'MOVE ADR(screenData), scr, ' + IntToStr(frmAntic6.modeSize) + #13#10;
     if chkUseColors.Checked then
-      code.line += 'POKE 712, ' + IntToStr(colorValues[0]) + ');'#13#10 +
-                   'POKE 708, ' + IntToStr(colorValues[1]) + ');'#13#10 +
-                   'POKE 709, ' + IntToStr(colorValues[2]) + ');'#13#10 +
-                   'POKE 710, ' + IntToStr(colorValues[3]) + ');'#13#10 +
-                   'POKE 711, ' + IntToStr(colorValues[10]) + ');'#13#10;
+      code.line += GenSetColors(_FAST_BASIC);
+      //code.line += 'POKE 712, ' + IntToStr(colorValues[0]) + ');'#13#10 +
+      //             'POKE 708, ' + IntToStr(colorValues[1]) + ');'#13#10 +
+      //             'POKE 709, ' + IntToStr(colorValues[2]) + ');'#13#10 +
+      //             'POKE 710, ' + IntToStr(colorValues[3]) + ');'#13#10 +
+      //             'POKE 711, ' + IntToStr(colorValues[10]) + ');'#13#10;
 
     code.line += WaitKeyCode(langIndex);
   end
@@ -896,34 +904,20 @@ begin
   CreateCode;
 end;
 
-procedure TfrmAntic6Gen.btnCopyToEditorMouseEnter(Sender : TObject);
+procedure TfrmAntic6Gen.ButtonHoverEnter(Sender : TObject);
 begin
-  btnCopyToEditor.NormalColor := $00CECECE;
-  btnCopyToEditor.NormalColorEffect := clWhite;
+  SetButton(Sender as TBCMaterialDesignButton, true);
 end;
 
-procedure TfrmAntic6Gen.btnCloseMouseEnter(Sender : TObject);
+procedure TfrmAntic6Gen.ButtonHoverLeave(Sender : TObject);
 begin
-  btnClose.NormalColor := $00CECECE;
-  btnClose.NormalColorEffect := clWhite;
+  SetButton(Sender as TBCMaterialDesignButton, false);
 end;
 
-procedure TfrmAntic6Gen.btnCloseMouseLeave(Sender : TObject);
-begin
-  btnClose.NormalColor := clWhite;
-  btnClose.NormalColorEffect := clSilver;
-end;
-
-procedure TfrmAntic6Gen.btnCopyToEditorMouseLeave(Sender : TObject);
-begin
-  btnCopyToEditor.NormalColor := clWhite;
-  btnCopyToEditor.NormalColorEffect := clSilver;
-end;
-
-procedure TfrmAntic6Gen.chkUseColorsChange(Sender : TObject);
-begin
-  CreateCode;
-end;
+//procedure TfrmAntic6Gen.chkUseColorsChange(Sender : TObject);
+//begin
+//  CreateCode;
+//end;
 
 end.
 

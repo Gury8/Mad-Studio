@@ -14,7 +14,7 @@ object frmGraphGen: TfrmGraphGen
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object grpFilename: TGroupBox
     Left = 612
     Height = 45
@@ -577,8 +577,8 @@ object frmGraphGen: TfrmGraphGen
     TextQuality = fqSystemClearType
     Caption = 'Copy to editor'
     OnClick = CopyToEditorProc
-    OnMouseEnter = btnCopyToEditorMouseEnter
-    OnMouseLeave = btnCopyToEditorMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object btnClose: TBCMaterialDesignButton
     Left = 801
@@ -591,8 +591,8 @@ object frmGraphGen: TfrmGraphGen
     TextQuality = fqSystemClearType
     Caption = 'Close'
     OnClick = CloseWinProc
-    OnMouseEnter = btnCloseMouseEnter
-    OnMouseLeave = btnCloseMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object StaticText1: TStaticText
     Left = 9

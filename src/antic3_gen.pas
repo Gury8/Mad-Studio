@@ -47,8 +47,8 @@ type
     procedure radLangProc(Sender: TObject);
     procedure btnCloseMouseEnter(Sender : TObject);
     procedure btnCloseMouseLeave(Sender : TObject);
-    procedure btnCopyToEditorMouseEnter(Sender : TObject);
-    procedure btnCopyToEditorMouseLeave(Sender : TObject);
+    procedure ButtonHoverEnter(Sender : TObject);
+    procedure ButtonHoverLeave(Sender : TObject);
     procedure editStartLineMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
       X, Y : Integer);
     procedure CloseWinProc(Sender: TObject);
@@ -561,28 +561,32 @@ begin
   CreateCode;
 end;
 
-procedure TfrmAntic3Gen.btnCopyToEditorMouseEnter(Sender : TObject);
+procedure TfrmAntic3Gen.ButtonHoverEnter(Sender : TObject);
 begin
-  btnCopyToEditor.NormalColor := $00CECECE;
-  btnCopyToEditor.NormalColorEffect := clWhite;
+//  btnCopyToEditor.NormalColor := $00CECECE;
+//  btnCopyToEditor.NormalColorEffect := clWhite;
+  SetButton(btnCopyToEditor, true);
+end;
+
+procedure TfrmAntic3Gen.ButtonHoverLeave(Sender : TObject);
+begin
+//  btnCopyToEditor.NormalColor := clWhite;
+//  btnCopyToEditor.NormalColorEffect := clSilver;
+  SetButton(btnCopyToEditor, false);
 end;
 
 procedure TfrmAntic3Gen.btnCloseMouseEnter(Sender : TObject);
 begin
-  btnClose.NormalColor := $00CECECE;
-  btnClose.NormalColorEffect := clWhite;
+//  btnClose.NormalColor := $00CECECE;
+//  btnClose.NormalColorEffect := clWhite;
+  SetButton(btnClose, true);
 end;
 
 procedure TfrmAntic3Gen.btnCloseMouseLeave(Sender : TObject);
 begin
-  btnClose.NormalColor := clWhite;
-  btnClose.NormalColorEffect := clSilver;
-end;
-
-procedure TfrmAntic3Gen.btnCopyToEditorMouseLeave(Sender : TObject);
-begin
-  btnCopyToEditor.NormalColor := clWhite;
-  btnCopyToEditor.NormalColorEffect := clSilver;
+//  btnClose.NormalColor := clWhite;
+//  btnClose.NormalColorEffect := clSilver;
+  SetButton(btnClose, false);
 end;
 
 procedure TfrmAntic3Gen.CloseWinProc(Sender: TObject);

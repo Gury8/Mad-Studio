@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Antic mode 3 editor
 }
 unit antic3;
@@ -111,17 +111,17 @@ type
     procedure GenCodeProc(Sender: TObject);
     procedure ClearScreenProc(Sender: TObject);
     procedure FillScreenProc(Sender: TObject);
-    procedure imgCharEditMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgCharEditDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure imgCharEditMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure imgCharEditMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgCharEditMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure imgCharEditUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure imgEditorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgEditorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure imgEditorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure imgEditorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure imgEditorUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure imgFontSetMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgFontSetDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure LoadScreenProc(Sender: TObject);
     procedure itemLoadFontClick(Sender: TObject);
@@ -225,7 +225,7 @@ begin
   isCreate := false;
 
   imgChar.Visible := true;
-  imgFontSetMouseDown(self, mbLeft, [ssMiddle], 3, 3);
+  imgFontSetDown(self, mbLeft, [ssMiddle], 3, 3);
 
   for i := 0 to 9 do
     (FindComponent('lblNum' + IntToStr(i)) as TLabel).Caption := '0';
@@ -361,7 +361,7 @@ begin
 //                              ', max Y coord.: ' + IntToStr(_maxY);
 end;
 
-procedure TfrmAntic3.imgEditorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmAntic3.imgEditorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   xf, yf : integer;
@@ -372,7 +372,7 @@ begin
   Plot(xf, yf);
 end;
 
-procedure TfrmAntic3.imgEditorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TfrmAntic3.imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
   xf, yf : integer;
 begin
@@ -387,13 +387,13 @@ begin
 //                              ' (x: ' + inttostr(xf) + ', y: ' + inttostr(yf) + ')';
 end;
 
-procedure TfrmAntic3.imgEditorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmAntic3.imgEditorUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
   btn := mbMiddle;
 end;
 
-procedure TfrmAntic3.imgFontSetMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmAntic3.imgFontSetDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   n, m : byte;
@@ -972,7 +972,7 @@ begin
     DrawFontSetChar(offs);
 end;
 
-procedure TfrmAntic3.imgCharEditMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmAntic3.imgCharEditDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   xf, yf : byte;
@@ -984,7 +984,7 @@ begin
   charEditIndex[offs] := 1;
 end;
 
-procedure TfrmAntic3.imgCharEditMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TfrmAntic3.imgCharEditMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
   xf, yf : byte;
 begin
@@ -995,7 +995,7 @@ begin
                               'x: ' + inttostr(xf) + ', y: ' + inttostr(yf);
 end;
 
-procedure TfrmAntic3.imgCharEditMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmAntic3.imgCharEditUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
   btn02 := mbMiddle;

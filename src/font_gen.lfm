@@ -14,7 +14,7 @@ object frmFontSetGen: TfrmFontSetGen
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object editFilename: TLabeledEdit
     Left = 612
     Height = 21
@@ -520,8 +520,8 @@ object frmFontSetGen: TfrmFontSetGen
     TextQuality = fqSystemClearType
     Caption = 'Copy to editor'
     OnClick = CopyToEditorProc
-    OnMouseEnter = btnCopyToEditorMouseEnter
-    OnMouseLeave = btnCopyToEditorMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object btnClose: TBCMaterialDesignButton
     Left = 759

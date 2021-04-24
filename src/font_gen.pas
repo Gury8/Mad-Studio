@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Character set editor - source code generator
 }
 unit font_gen;
@@ -52,8 +52,8 @@ type
     procedure ExamplesClick(Sender: TObject);
     procedure editStartLineMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
       X, Y : Integer);
-    procedure btnCopyToEditorMouseEnter(Sender : TObject);
-    procedure btnCopyToEditorMouseLeave(Sender : TObject);
+    procedure ButtonHoverEnter(Sender : TObject);
+    procedure ButtonHoverLeave(Sender : TObject);
     procedure btnCloseMouseEnter(Sender : TObject);
     procedure btnCloseMouseLeave(Sender : TObject);
   private
@@ -204,7 +204,7 @@ begin
   if langIndex < 2 then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-    code.line := CodeLine('DATA REM CHR$(' + AtasciiCode(frmFonts.offs) + ')');
+    code.line := CodeLine('REM CHR$(' + AtasciiCode(frmFonts.offs) + ')');
 //    Inc(code.number, code.step);
     code.line += IntToStr(code.number) + ' DATA ' +
                  SetDataValues(frmFonts.fldChar, frmFonts.fld, 255, radDataType.ItemIndex, ',') +
@@ -627,13 +627,13 @@ begin
       if frmFonts.charEditIndex[i] = 1 then
         code.line += 'MOVEBLOCK(TOPMEM+' + IntToStr(i) + '*8,char' + IntToStr(i) + ',8)' + #13#10;
 
-   code.line += #13#10 +
-                'PRINTF("%E%E%EPRESS ANY KEY TO EXIT!%E")'#13#10 +
-                //'CH=255'#13#10 +
-                //'DO UNTIL CH<255 OD'#13#10 +
-                //'CH=255'#13#10 +
-                WaitKeyCode(_ACTION) + #13#10 +
-                'RETURN';
+    code.line += #13#10 +
+                 'PRINTF("%E%E%EPRESS ANY KEY TO EXIT!%E")'#13#10 +
+                 //'CH=255'#13#10 +
+                 //'DO UNTIL CH<255 OD'#13#10 +
+                 //'CH=255'#13#10 +
+                 WaitKeyCode(_ACTION) + #13#10 +
+                 'RETURN';
   end
   { Mad Pascal
    ---------------------------------------------------------------------------}
@@ -932,13 +932,13 @@ begin
   CreateCode;
 end;
 
-procedure TfrmFontSetGen.btnCopyToEditorMouseEnter(Sender : TObject);
+procedure TfrmFontSetGen.ButtonHoverEnter(Sender : TObject);
 begin
   btnCopyToEditor.NormalColor := $00CECECE;
   btnCopyToEditor.NormalColorEffect := clWhite;
 end;
 
-procedure TfrmFontSetGen.btnCopyToEditorMouseLeave(Sender : TObject);
+procedure TfrmFontSetGen.ButtonHoverLeave(Sender : TObject);
 begin
   btnCopyToEditor.NormalColor := clWhite;
   btnCopyToEditor.NormalColorEffect := clSilver;

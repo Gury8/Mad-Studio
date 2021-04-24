@@ -39,7 +39,6 @@ type
     procedure FormActivate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-    //procedure shapeColor1MouseLeave(Sender: TObject);
     procedure shapeColorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure shapeColorEnter(Sender: TObject);
@@ -65,7 +64,7 @@ implementation
 {$R *.lfm}
 
 uses
-  common, pmg, graph, antic6, antic4, animator;
+  common, pmg, graph, antic6, antic4, animator, antic4_tiles;
 
 { TfrmColors }
 
@@ -268,6 +267,9 @@ begin
       end;
       formAnimator: begin
         frmAnimator.RefreshFrame(0);
+      end;
+      formAntic4TileEditor: begin
+        frmAntic4Tiles.RefreshColors;
       end;
     end;
   end;

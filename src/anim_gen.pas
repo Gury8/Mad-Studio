@@ -50,16 +50,12 @@ type
     procedure ListExamplesProc(Sender: TObject);
     procedure CreateCode;
     procedure radLangProc(Sender: TObject);
-    procedure editStartLineMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+    procedure editStartLineUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
       X, Y : Integer);
     procedure CloseWin(Sender: TObject);
     procedure CreateCodeProc(Sender : TObject);
-    procedure btnCloseEnter(Sender : TObject);
-    procedure btnCloseLeave(Sender : TObject);
-    procedure btnCopyToEditorEnter(Sender : TObject);
-    procedure btnCopyToEditorLeave(Sender : TObject);
-    procedure btnCopyToEditorUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
+    procedure ButtonHoverEnter(Sender : TObject);
+    procedure ButtonHoverLeave(Sender : TObject);
   private
     listings : TListings;
     playerPageSize : string;
@@ -287,7 +283,7 @@ begin
           if count = 0 then begin
             if j = 0 then
               codex += 'p' + IntToStr(pl) + 'Frame' + IntToStr(i + 1) +
-                      ' : array[0.._HEIGHT - 1] of byte = ('#13#10;
+                       ' : array[0.._HEIGHT - 1] of byte = ('#13#10;
 
             if j > 0 then
               codex += intToStr(Bin2Dec(bin)) + ', '
@@ -1425,40 +1421,20 @@ begin
   CreateCode;
 end;
 
-procedure TfrmAnimGen.editStartLineMouseUp(Sender : TObject; Button : TMouseButton;
-  Shift : TShiftState; X, Y : Integer);
+procedure TfrmAnimGen.editStartLineUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+  X, Y : Integer);
 begin
   CreateCode;
 end;
 
-procedure TfrmAnimGen.btnCopyToEditorLeave(Sender : TObject);
+procedure TfrmAnimGen.ButtonHoverEnter(Sender : TObject);
 begin
-  btnCopyToEditor.NormalColor := clWhite;
-  btnCopyToEditor.NormalColorEffect := clSilver;
+  SetButton(Sender as TBCMaterialDesignButton, true);
 end;
 
-procedure TfrmAnimGen.btnCopyToEditorEnter(Sender : TObject);
+procedure TfrmAnimGen.ButtonHoverLeave(Sender : TObject);
 begin
-  btnCopyToEditor.NormalColor := $00CECECE;
-  btnCopyToEditor.NormalColorEffect := clWhite;
-end;
-
-procedure TfrmAnimGen.btnCloseEnter(Sender : TObject);
-begin
-  btnClose.NormalColor := $00CECECE;
-  btnClose.NormalColorEffect := clWhite;
-end;
-
-procedure TfrmAnimGen.btnCloseLeave(Sender : TObject);
-begin
-  btnClose.NormalColor := clWhite;
-  btnClose.NormalColorEffect := clSilver;
-end;
-
-procedure TfrmAnimGen.btnCopyToEditorUp(Sender : TObject;
-  Button : TMouseButton; Shift : TShiftState; X, Y : Integer);
-begin
-
+  SetButton(Sender as TBCMaterialDesignButton, false);
 end;
 
 end.

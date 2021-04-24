@@ -13,7 +13,7 @@ object frmAntic3Gen: TfrmAntic3Gen
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object editFilename: TLabeledEdit
     Left = 614
     Height = 21
@@ -494,8 +494,8 @@ object frmAntic3Gen: TfrmAntic3Gen
     TextQuality = fqSystemClearType
     Caption = 'Copy to editor'
     OnClick = CopyToEditorProc
-    OnMouseEnter = btnCopyToEditorMouseEnter
-    OnMouseLeave = btnCopyToEditorMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object btnClose: TBCMaterialDesignButton
     Left = 840

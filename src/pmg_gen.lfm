@@ -1157,8 +1157,8 @@ object frmPmgGen: TfrmPmgGen
     TextQuality = fqSystemClearType
     Caption = 'Copy to editor'
     OnClick = CopyToEditor
-    OnMouseEnter = btnCopyToEditorMouseEnter
-    OnMouseLeave = btnCopyToEditorMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object btnClose: TBCMaterialDesignButton
     Left = 881
@@ -1171,8 +1171,8 @@ object frmPmgGen: TfrmPmgGen
     TextQuality = fqSystemClearType
     Caption = 'Close'
     OnClick = CloseWin
-    OnMouseEnter = btnCloseMouseEnter
-    OnMouseLeave = btnCloseMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object StaticText1: TStaticText
     Left = 9

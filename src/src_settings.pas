@@ -11,9 +11,9 @@ unit src_settings;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, lcltype,
-  Buttons, ComCtrls, CheckLst, Grids, BCMDButton, BCMaterialDesignButton, types, StrUtils, SynEdit,
-  SynHighlighterPas, SynHighlighterAny, AnchorDockPanel;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
+  lcltype, Buttons, ComCtrls, CheckLst, Grids, BCMDButton, BCMaterialDesignButton, types,
+  StrUtils, SynEdit, SynHighlighterPas, SynHighlighterAny, AnchorDockPanel;
 
 type
   { TfrmSrcSettings }
@@ -116,6 +116,8 @@ type
     tabFastBasic: TTabSheet;
     tabEffectus: TTabSheet;
     tabKickC : TTabSheet;
+    procedure ButtonHoverEnter(Sender : TObject);
+    procedure ButtonHoverLeave(Sender : TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -130,11 +132,11 @@ type
     procedure LineHighlightColorsProc(Sender: TObject);
     procedure MADSLocation(Sender: TObject);
     procedure SelectedTextBackColorsProc(Sender: TObject);
-    procedure chkAtariBASICClickCheck(Sender: TObject);
+    procedure chkAtariBASICCheck(Sender: TObject);
     procedure chkAtariBASICLocationChange(Sender: TObject);
     procedure chkCC65LocationChange(Sender: TObject);
     procedure chkFastBasicLocationChange(Sender: TObject);
-    procedure chkMADSClickCheck(Sender: TObject);
+    procedure chkMADSCheck(Sender: TObject);
     procedure chkMADSLocation02Change(Sender: TObject);
     procedure chkMadsLocationChange(Sender: TObject);
     procedure chkMPLocationChange(Sender: TObject);
@@ -148,7 +150,8 @@ type
       aState: TGridDrawState);
     procedure gridAtariBASICSelectCell(Sender: TObject; aCol, aRow: Integer;
       var CanSelect: Boolean);
-    procedure gridEffectusSelectCell(Sender: TObject; aCol, aRow: Integer; var CanSelect: Boolean);
+    procedure gridEffectusSelectCell(Sender: TObject; aCol, aRow: Integer;
+      var CanSelect: Boolean);
     procedure gridMadPascalDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
       aState: TGridDrawState);
     procedure gridMadPascalSelectCell(Sender: TObject; aCol, aRow: Integer;
@@ -164,7 +167,7 @@ type
       aState: TGridDrawState);
     procedure chkKickCLocationChange(Sender : TObject);
     procedure KickCLocationProc(Sender : TObject);
-    procedure pageChange(Sender : TObject);
+//    procedure pageChange(Sender : TObject);
   private
     { private declarations }
     procedure SetParams(props, flags : TStringList; checkList : TCheckListBox; grid : TStringGrid);
@@ -405,7 +408,7 @@ begin
   end;
 end;
 
-procedure TfrmSrcSettings.chkAtariBASICClickCheck(Sender: TObject);
+procedure TfrmSrcSettings.chkAtariBASICCheck(Sender: TObject);
 begin
 //  editMaxLineLen.Enabled := chkAtariBASIC.Checked[0];
 //  editOutput.Enabled := chkAtariBASIC.Checked[9];
@@ -413,7 +416,7 @@ begin
 //  if chkAtariBASIC.Checked[9] then
 end;
 
-procedure TfrmSrcSettings.chkMADSClickCheck(Sender: TObject);
+procedure TfrmSrcSettings.chkMADSCheck(Sender: TObject);
 begin
   //editMADSBinAddr.Enabled := chkMADS.Checked[0];
   //editMADSMacroDef.Enabled := chkMADS.Checked[6];
@@ -835,7 +838,7 @@ begin
       propFlagKickC[i] := '0'
   end;
 
-  debug(strKickCUserLocation);
+//  debug(strKickCUserLocation);
 
   Close;
 end;
@@ -868,10 +871,20 @@ begin
   editor.SelectedColor.Background := shapeSelectedTextBackColor.Brush.Color;
 end;
 
-procedure TfrmSrcSettings.pageChange(Sender : TObject);
+procedure TfrmSrcSettings.ButtonHoverEnter(Sender : TObject);
 begin
-
+  SetButton(Sender as TBCMaterialDesignButton, true);
 end;
+
+procedure TfrmSrcSettings.ButtonHoverLeave(Sender : TObject);
+begin
+  SetButton(Sender as TBCMaterialDesignButton, false);
+end;
+
+//procedure TfrmSrcSettings.pageChange(Sender : TObject);
+//begin
+//
+//end;
 
 end.
 

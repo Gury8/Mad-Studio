@@ -12,30 +12,31 @@ interface
 
 uses
   Classes, SysUtils, Windows, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, Menus, Buttons, BCMDButton, BCButton, jsonConf, StrUtils,
+  StdCtrls, ExtCtrls, Menus, Buttons, BCImageButton, jsonConf, StrUtils,
   SynHighlighterPas, SynEditMiscClasses, SynHighlighterAny;
 
 type
   { TfrmMain }
   TfrmMain = class(TForm)
-    btnAntic4TileEditor : TBCButton;
-    btnViewer : TBCButton;
-    btnSrcEditor : TBCButton;
-    btnGrEditor : TBCButton;
-    btnByteEditor : TBCButton;
-    btnPmgEditor : TBCButton;
-    btnChrSetEditor : TBCButton;
-    btnAntic2Editor : TBCButton;
-    btnAntic6Editor : TBCButton;
-    btnAntic3Editor : TBCButton;
-    btnAntic4Editor : TBCButton;
-    btnDlEditor : TBCButton;
-    btnPlayerAnimator : TBCButton;
+    btnCodeEditor10 : TBCImageButton;
+    btnCodeEditor11 : TBCImageButton;
+    btnCodeEditor12 : TBCImageButton;
+    btnCodeEditor13 : TBCImageButton;
+    btnCodeEditor14 : TBCImageButton;
+    btnCodeEditor15 : TBCImageButton;
+    btnCodeEditor16 : TBCImageButton;
+    btnCodeEditor17 : TBCImageButton;
+    btnCodeEditor18 : TBCImageButton;
+    btnCodeEditor19 : TBCImageButton;
+    btnCodeEditor7 : TBCImageButton;
+    btnCodeEditor8 : TBCImageButton;
+    btnCodeEditor9 : TBCImageButton;
     dlgColors: TColorDialog;
     Image1: TImage;
     images: TImageList;
     MenuItem12 : TMenuItem;
     MenuItem5 : TMenuItem;
+    MenuItem7 : TMenuItem;
     mnuAntic3: TMenuItem;
     MenuItem18: TMenuItem;
     menuMain: TMainMenu;
@@ -61,13 +62,13 @@ type
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
     dlgFolder: TSelectDirectoryDialog;
-    procedure AnticMode45TileEditorProc(Sender : TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure PmgAnimatorProc(Sender: TObject);
     procedure SrcEditorProc(Sender: TObject);
+    procedure AnticMode45TileEditorProc(Sender : TObject);
     procedure GrEditorProc(Sender: TObject);
     procedure PmgEditorProc(Sender: TObject);
     procedure CharSetEditorProc(Sender: TObject);
@@ -87,7 +88,6 @@ type
   private
     { private declarations }
     procedure LoadOptions;
-    procedure SetButton(button : TBCButton);
   public
     { public declarations }
     procedure SaveOptions;
@@ -101,7 +101,6 @@ var
 implementation
 
 {$R *.lfm}
-{$R resource.res}
 
 uses
   common, graph, src_editor, pmg, colors, fonts, about, antic2, antic6,
@@ -112,10 +111,20 @@ uses
 procedure TfrmMain.FormCreate(Sender: TObject);
 var
   i : byte;
-//  regn: HRGN;
 begin
-  //regn := CreateRoundRectRgn(0, 0, ClientWidth, ClientHeight, 18, 18);
-  //SetWindowRgn(Handle, regn, True);
+  btnCodeEditor7.LoadFromBitmapResource('BUTTON_GRAY');
+  btnCodeEditor8.LoadFromBitmapResource('BUTTON_GRAY');
+  btnCodeEditor9.LoadFromBitmapResource('BUTTON_GRAY');
+  btnCodeEditor10.LoadFromBitmapResource('BUTTON_GRAY');
+  btnCodeEditor11.LoadFromBitmapResource('BUTTON_GRAY');
+  btnCodeEditor12.LoadFromBitmapResource('BUTTON_GRAY');
+  btnCodeEditor13.LoadFromBitmapResource('BUTTON_GRAY');
+  btnCodeEditor14.LoadFromBitmapResource('BUTTON_GRAY');
+  btnCodeEditor15.LoadFromBitmapResource('BUTTON_GRAY');
+  btnCodeEditor16.LoadFromBitmapResource('BUTTON_GRAY');
+  btnCodeEditor17.LoadFromBitmapResource('BUTTON_GRAY');
+  btnCodeEditor18.LoadFromBitmapResource('BUTTON_GRAY');
+  btnCodeEditor19.LoadFromBitmapResource('BUTTON_GRAY');
 
   dlgOpen.InitialDir := getDir + 'examples\';
 
@@ -380,6 +389,7 @@ begin
     Add('ColorPalette');
     Add('AnticMode3Editor');
     Add('ByteEditor');
+    Add('AnticMode4TileEditor');
   end;
 
   //pmSize[0].bit := 0
@@ -395,19 +405,10 @@ begin
   //btnChrSetEditor.StateNormal := btnSrcEditor.StateNormal;
   //btnChrSetEditor.StateHover := btnSrcEditor.StateHover;
   //btnChrSetEditor.StateClicked := btnSrcEditor.StateClicked;
-  SetButton(btnChrSetEditor);
-  SetButton(btnAntic3Editor);
-  SetButton(btnAntic4Editor);
-  SetButton(btnAntic2Editor);
-  SetButton(btnAntic6Editor);
-  SetButton(btnByteEditor);
-  SetButton(btnViewer);
-  SetButton(btnDlEditor);
-  SetButton(btnPlayerAnimator);
-  SetButton(btnGrEditor);
-  SetButton(btnPmgEditor);
 
 //  isViewerModal := false;
+
+  imgCharList := TList.Create;
 end;
 
 procedure TfrmMain.FormShow(Sender: TObject);
@@ -421,7 +422,7 @@ begin
   isGrMicPalette := true;
   getDir := ExtractFilePath(Application.ExeName);
 
-  for i := 0 to 10 do
+  for i := 0 to 12 do
     if propFlagModules[i] = 1 then
        case i of
          0: SrcEditorProc(Sender);
@@ -436,6 +437,7 @@ begin
          9: ColorPaletteProc(Sender);
          10: AnticMode3EditorProc(Sender);
          11: ByteEditorProc(Sender);
+         12: AnticMode45TileEditorProc(Sender);
        end;
 end;
 
@@ -474,16 +476,8 @@ begin
   editorSelectedTextBackColor.Free;
 
   propModules.Free;
-end;
 
-{-----------------------------------------------------------------------------
- Button settings
- -----------------------------------------------------------------------------}
-procedure TfrmMain.SetButton(button : TBCButton);
-begin
-  button.StateNormal := btnSrcEditor.StateNormal;
-  button.StateHover := btnSrcEditor.StateHover;
-  button.StateClicked := btnSrcEditor.StateClicked;
+  imgCharList.Free;
 end;
 
 {-----------------------------------------------------------------------------
@@ -927,4 +921,10 @@ begin
 end;
 
 end.
+
+(*var
+//  regn: HRGN;
+begin
+  //regn := CreateRoundRectRgn(0, 0, ClientWidth, ClientHeight, 18, 18);
+  //SetWindowRgn(Handle, regn, True);*)
 

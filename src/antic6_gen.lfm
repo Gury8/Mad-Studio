@@ -13,7 +13,7 @@ object frmAntic6Gen: TfrmAntic6Gen
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object boxColors: TGroupBox
     Left = 612
     Height = 204
@@ -30,7 +30,7 @@ object frmAntic6Gen: TfrmAntic6Gen
       Width = 183
       Caption = 'Use colors in program listing'
       Checked = True
-      OnChange = chkUseColorsChange
+      OnClick = CreateCodeProc
       State = cbChecked
       TabOrder = 0
     end
@@ -542,8 +542,8 @@ object frmAntic6Gen: TfrmAntic6Gen
     TextQuality = fqSystemClearType
     Caption = 'Copy to editor'
     OnClick = CopyToEditorProc
-    OnMouseEnter = btnCopyToEditorMouseEnter
-    OnMouseLeave = btnCopyToEditorMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object btnClose: TBCMaterialDesignButton
     Left = 816
@@ -556,8 +556,8 @@ object frmAntic6Gen: TfrmAntic6Gen
     TextQuality = fqSystemClearType
     Caption = 'Close'
     OnClick = CloseWinProc
-    OnMouseEnter = btnCloseMouseEnter
-    OnMouseLeave = btnCloseMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object memo: TMemo
     Tag = 3

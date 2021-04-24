@@ -12,6 +12,11 @@ interface
 uses
   Classes, SysUtils, FileUtil, Controls, Graphics, ExtCtrls, LCLIntf, SynEditMiscClasses;
 
+const
+  programName = 'Mad Studio';
+//  programVersion = ' v1.2.4 (x86_64-win32/win64)';
+  programVersion = ' v1.2.4 x86_64-win64';
+
 type
   TPlayerResolution = (singleResolution, doubleResolution);
 
@@ -32,15 +37,24 @@ type
 
   TAplAnim = (normal, extended, fixed52);
 
-  TAntic4CharType = record
+  TAntic4TileType = record
     dimX, dimY : byte;  // Antic mode 4 tile dimension
     selected : byte;    // Selected tile
+    filename : string;  // Tile filename
+    charValues : array[0..19] of byte;      // ATASCII values
+    charInverse : array[0..19] of boolean;  // Inverse character flag
   end;
 
   TAntic4CharValueType = record
     tileSelected : byte;  // Selected tile
     x, y : byte;          // Tile value coordinates
     value : byte;         // Tile value
+  end;
+
+  TTileType = record
+    tileIndex : byte;          // Tile index
+    coordX, coordY : integer;  // Tile coordinates on Antic mode 4 screen
+    x, y : byte;               // Tile character coordinates on Antic mode 4 screen
   end;
 
   //TAntic4CharValueExType = record
@@ -50,17 +64,7 @@ type
   //  value : byte;             // Tile value
   //end;
 
-//  TAntic4CharValueExType = record
-//    tileSelected : byte;      // Selected tile
-//    xy : array[0..49] of byte;  // Tile value coordinates
-////    value : byte;             // Tile value
-//  end;
-
 const
-  programName = 'Mad Studio';
-//  programVersion = ' v1.2.3 (x86_64-win32/win64)';
-  programVersion = ' v1.2.3 x86_64-win64';
-
   // Supported graphics resolutions
   grMode40x24x4 = 3;
   grMode80x48x2 = 4;
@@ -71,10 +75,12 @@ const
   grMode160x192x4 = 15;
   grMode320x192x2 = 8;
 
+  // Player sizes
   _PLAYER_SIZE_NORMAL = 0;
   _PLAYER_SIZE_DOUBLE = 1;
   _PLAYER_SIZE_QUADRUPLE = 3;
 
+  // Character set normal/inverse flag
   fontSetNormal = true;
   fontSetInverse = false;
 
@@ -101,6 +107,7 @@ const
   _CHARSET_UPPER_INV = 3;
   _CHARSET_LOWER_INV = 10;
 
+  // Text mode sizes
   _TEXT_MODE_1_SIZE = 480;
   _TEXT_MODE_2_SIZE = 240;
   _ANTIC_MODE_4_SIZE = 960;
@@ -180,8 +187,13 @@ const
   GPRIOR : array[0..3] of byte = (1, 4, 16, 32);
 
   _CHAR_DIM       = 7;
-
   _MAX_TILES      = 8;
+  _MAX_TILE_CHARS = 20;
+
+  _TILE_FUNCTION : array[0..9] of string[40] = (
+    'Tile region select', 'Tile draw', 'Flip tile horizontally', 'Flip tile vertically',
+    'Invert bits of tile', 'Rotate tile', 'Fill tile character with color', 'Clear tile character',
+    'Clear tile', 'Fill tile with color');
 
   {$I 'missile_sizes.inc'}
 
@@ -305,18 +317,9 @@ var
 
   aplAnim : TAplAnim;
 
+  imgCharList: TList;
+
 implementation
 
 end.
 
-//If not FileExists(YourFileName) then
-//  SynEdit1.lines.savetofile (YourFileName) else  //no dialog
-//begin
-//  SaveDialog1.Filename := YourFilename;
-//  SaveDialog1.Options + [ofOverwritePrompt];  // shows the file exists and prompts the dialog
-//  if Savedialog1.execute then
-//  begin
-//    SynEdit1.lines.savetofile (savedialog1.filename);
-//    SynEdit1.setfocus;
-//  end;
-//end;

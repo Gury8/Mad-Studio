@@ -426,7 +426,7 @@ type
     tbOldX : array[0..3] of byte;
     isDataChanged : array[0..3] of boolean;
     isMissileDataChanged : array[0..3] of boolean;
-    isValueDec : boolean;
+//    isValueDec : boolean;
     fs : TFileStream;
     procedure PmgSettings;
     procedure SetMissiles;
@@ -511,16 +511,17 @@ begin
 
 //  playerSize[0] := playerSizeNormal;
   missileMaxY := 34;
-  for i := 0 to _PM_MAX_LINES - 1 do
-    for j := 0 to 3 do begin
-      labelx := TLabel.Create(tabMultiPM);
-      labelx.Parent := tabMultiPM;
-      labelx.Name := 'lblMultiPmValue0' + inttostr(j) + inttostr(i);
-      labelx.Left := 770 + 46*j;
-      labelx.Font.Name := 'Verdana';
-//      labelx.Font.Size := 8;
-//      labelx.Caption := 'P' + inttostr(j) + ': 0';
-    end;
+
+//  for i := 0 to _PM_MAX_LINES - 1 do
+//    for j := 0 to 3 do begin
+//      labelx := TLabel.Create(tabMultiPM);
+//      labelx.Parent := tabMultiPM;
+//      labelx.Name := 'lblMultiPmValue0' + inttostr(j) + inttostr(i);
+//      labelx.Left := 770 + 46*j;
+//      labelx.Font.Name := 'Verdana';
+////      labelx.Font.Size := 8;
+////      labelx.Caption := 'P' + inttostr(j) + ': 0';
+//    end;
 
   for j := 0 to 3 do begin
     // Missile line values
@@ -559,7 +560,7 @@ begin
 
 //  pmResolution := [doubleResolution];
 //  PmgSettings;
-  isValueDec := true;
+//  isValueDec := true;
 
   SetTrackBarUpDown(editPlayerHeight, $00DDDDDD, clWhite);
   SetTrackBarUpDown(editMissileHeight, $00DDDDDD, clWhite);
@@ -3574,29 +3575,29 @@ end;
 
 procedure TfrmPmg.ShowDec(Sender: TObject);
 begin
-  isValueDec := true;
+//  isValueDec := true;
 //  RefreshValues;
 end;
 
 procedure TfrmPmg.ShowHex(Sender: TObject);
 begin
-  isValueDec := false;
+//  isValueDec := false;
 //  RefreshValues;
 end;
 
 procedure TfrmPmg.HideValues(Sender: TObject);
-var
-  i, j, pl : byte;
+//var
+//  i, j, pl : byte;
 begin
-  for i := 0 to tabMultiPM.ControlCount - 1 do
-    for pl := 0 to 3 do
-      for j := 0 to _PM_MAX_LINES - 1 do begin
-        //if tabMultiPM.Controls[i].Name = 'lblMultiPM' + inttostr(j) then begin
-        //  tabMultiPM.Controls[i].Visible := false;
-        //end;
-        if tabMultiPM.Controls[i].Name = 'lblMultiPmValue0' + inttostr(pl) + inttostr(j) then
-          tabMultiPM.Controls[i].Visible := false;
-      end;
+  //for i := 0 to tabMultiPM.ControlCount - 1 do
+  //  for pl := 0 to 3 do
+  //    for j := 0 to _PM_MAX_LINES - 1 do begin
+  //      //if tabMultiPM.Controls[i].Name = 'lblMultiPM' + inttostr(j) then begin
+  //      //  tabMultiPM.Controls[i].Visible := false;
+  //      //end;
+  //      if tabMultiPM.Controls[i].Name = 'lblMultiPmValue0' + inttostr(pl) + inttostr(j) then
+  //        tabMultiPM.Controls[i].Visible := false;
+  //    end;
 end;
 
 procedure TfrmPmg.SelectMissile;

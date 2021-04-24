@@ -14,6 +14,11 @@
         <DpiAware Value="True"/>
       </XPManifest>
       <Icon Value="0"/>
+      <Resources Count="3">
+        <Resource_0 FileName="examples\fonts\DEFAULT.FNT" Type="RCDATA" ResourceName="CHRSET"/>
+        <Resource_1 FileName="palettes\real.pal" Type="RCDATA" ResourceName="PALETTE"/>
+        <Resource_2 FileName="images\button_gray06.png" Type="RCDATA" ResourceName="BUTTON_GRAY"/>
+      </Resources>
     </General>
     <i18n>
       <EnableI18N LFM="False"/>
@@ -50,7 +55,7 @@
         <PackageName Value="LCL"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="38">
+    <Units Count="40">
       <Unit0>
         <Filename Value="madstudio.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -294,8 +299,23 @@
         <Filename Value="char_set.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCharSet"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit37>
+      <Unit38>
+        <Filename Value="antic4_tiles_gen.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmAntic4TilesGen"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit38>
+      <Unit39>
+        <Filename Value="tiles_resize.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmTilesResize"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit39>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -341,7 +361,7 @@
         <ShowDebugInfo Value="True"/>
         <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
       </Verbosity>
-      <CompilerPath Value="C:\lazarus\fpc\3.0.4\bin\x86_64-win64\fpc.exe"/>
+      <CompilerPath Value="C:\lazarus64\fpc\3.2.0\bin\x86_64-win64\fpc.exe"/>
     </Other>
   </CompilerOptions>
   <Debugging>

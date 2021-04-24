@@ -12,7 +12,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StrUtils,
-  ExtCtrls, Menus, ComCtrls, StdCtrls, Buttons, BCTrackbarUpdown,
+  ExtCtrls, Menus, ComCtrls, StdCtrls, Buttons, SpinEx,
   common;
 
 type
@@ -23,26 +23,25 @@ type
     btnCharLeft : TSpeedButton;
     btnCharRight : TSpeedButton;
     btnCharUp : TSpeedButton;
+    btnClearTileChar : TToolButton;
     btnClearTile : TToolButton;
-    btnClearTiles : TToolButton;
     btnGenCode : TToolButton;
-    btnFillTile : TToolButton;
+    btnFillTileChar : TToolButton;
     btnFlipX : TToolButton;
     btnFlipY : TToolButton;
     btnLoadScreen : TToolButton;
-    btnRotate : TToolButton;
+    btnRotateTileChar : TToolButton;
     btnSaveScreen : TToolButton;
     btnDraw : TToolButton;
-    btnSettings : TToolButton;
     btnViewer : TToolButton;
+    chkTileDimAuto : TCheckBox;
     cmbAnticMode : TComboBox;
     color0 : TImage;
     color1 : TImage;
     color2 : TImage;
     color3 : TImage;
     color4 : TImage;
-    editX : TBCTrackbarUpdown;
-    editY : TBCTrackbarUpdown;
+    editY : TSpinEditEx;
     boxCharOper : TGroupBox;
     imgChar0000 : TImage;
     imgChar0100 : TImage;
@@ -64,73 +63,8 @@ type
     imgChar4100 : TImage;
     imgChar4010 : TImage;
     imgChar4001 : TImage;
-    imgTile01Char0000 : TImage;
-    imgTile02Char0000 : TImage;
-    imgTile02Char1 : TImage;
-    imgTile02Char1000 : TImage;
-    imgTile02Char1001 : TImage;
-    imgTile02Char0100 : TImage;
-    imgTile03Char1000 : TImage;
-    imgTile03Char1001 : TImage;
-    imgTile03Char0100 : TImage;
-    imgTile02Char1010 : TImage;
-    imgTile02Char0010 : TImage;
-    imgTile03Char0000 : TImage;
-    imgTile03Char1010 : TImage;
-    imgTile03Char0010 : TImage;
-    imgTile02Char1100 : TImage;
-    imgTile02Char0001 : TImage;
-    imgTile03Char1100 : TImage;
-    imgTile03Char0001 : TImage;
-    imgTile02Char2000 : TImage;
-    imgTile02Char2001 : TImage;
-    imgTile03Char2000 : TImage;
-    imgTile03Char2001 : TImage;
-    imgTile02Char2010 : TImage;
-    imgTile01Char2100 : TImage;
-    imgTile01Char2010 : TImage;
-    imgTile01Char2001 : TImage;
-    imgTile03Char2010 : TImage;
-    imgTile02Char2100 : TImage;
-    imgTile01Char3000 : TImage;
-    imgTile01Char3002 : TImage;
-    imgTile01Char3003 : TImage;
-    imgTile01Char3011 : TImage;
-    imgTile01Char3100 : TImage;
-    imgTile01Char3010 : TImage;
-    imgTile01Char3001 : TImage;
-    imgTile01Char3101 : TImage;
-    imgTile01Char4000 : TImage;
-    imgTile03Char2100 : TImage;
-    imgTile02Char3000 : TImage;
-    imgTile02Char3001 : TImage;
-    imgTile03Char3000 : TImage;
-    imgTile03Char3001 : TImage;
-    imgTile03Char3010 : TImage;
-    imgTile03Char3100 : TImage;
-    imgTile02Char4000 : TImage;
-    imgTile02Char4001 : TImage;
-    imgTile02Char3010 : TImage;
-    imgTile03Char4000 : TImage;
-    imgTile03Char4001 : TImage;
-    imgTile02Char4010 : TImage;
-    imgTile01Char4100 : TImage;
-    imgTile01Char4010 : TImage;
-    imgTile01Char0100 : TImage;
-    imgTile01Char4001 : TImage;
-    imgTile01Char0010 : TImage;
-    imgTile01Char0001 : TImage;
-    imgTile01Char1000 : TImage;
-    imgTile01Char1100 : TImage;
-    imgTile01Char1010 : TImage;
-    imgTile01Char1001 : TImage;
-    imgTile01Char2000 : TImage;
     imgTile01 : TImage;
-    imgTile02Char3100 : TImage;
-    imgTile03Char4010 : TImage;
-    imgTile02Char4100 : TImage;
     imgTile02 : TImage;
-    imgTile03Char4100 : TImage;
     imgTile03 : TImage;
     imgTile04 : TImage;
     imgTile05 : TImage;
@@ -143,80 +77,113 @@ type
     itemHideGrid : TMenuItem;
     itemShowGrid : TMenuItem;
     itemViewer : TMenuItem;
+    Label1 : TLabel;
+    lblFunc : TLabel;
+    lblTile01Dim : TLabel;
+    lblTile02Dim : TLabel;
+    lblTile03Dim : TLabel;
+    lblTile04Dim : TLabel;
+    lblTileRepo : TLabel;
+    lblTileMatrix : TLabel;
+    lblTileMatrix1 : TLabel;
     lblTiles01Dim : TLabel;
     lblTiles02Dim : TLabel;
     lblTiles03Dim : TLabel;
-    lblTiles08Dim : TLabel;
-    lblTiles07Dim : TLabel;
-    lblTiles06Dim : TLabel;
-    lblTiles05Dim : TLabel;
+    lblTile08Dim : TLabel;
+    lblTile07Dim : TLabel;
+    lblTile06Dim : TLabel;
+    lblTile05Dim : TLabel;
     lblTiles04Dim : TLabel;
     Label21 : TLabel;
     Label22 : TLabel;
     menuAntic4Tiles : TMainMenu;
     itemUndo : TMenuItem;
+    itemTileDraw : TMenuItem;
+    itemFillTiles : TMenuItem;
+    itemClearScreen : TMenuItem;
+    MenuItem1 : TMenuItem;
+    itemResizeTiles : TMenuItem;
+    MenuItem4 : TMenuItem;
+    MenuItem5 : TMenuItem;
+    popFillTile : TMenuItem;
+    popClearScreen : TMenuItem;
+    MenuItem3 : TMenuItem;
+    popClearTilesAll : TMenuItem;
+    popCopyTileToAll : TMenuItem;
+    popClearTiles : TMenuItem;
     MenuItem2 : TMenuItem;
     itemRedo : TMenuItem;
     popClearTile : TMenuItem;
     menuEdit : TMenuItem;
     menuFile : TMenuItem;
-    popInvertTile : TMenuItem;
+    popInvertTileChar : TMenuItem;
     itemInvertTile : TMenuItem;
     itemFillTile : TMenuItem;
-    popDraw : TMenuItem;
-    popFillTile : TMenuItem;
-    popRotateTile : TMenuItem;
-    popDelim01 : TMenuItem;
-    itemClearTile : TMenuItem;
+    popDrawTileChar : TMenuItem;
+    popFillTileChar : TMenuItem;
+    popRotateTileChar : TMenuItem;
+    itemClearTileChar : TMenuItem;
     MenuItem16 : TMenuItem;
     MenuItem17 : TMenuItem;
     MenuItem18 : TMenuItem;
     popDelim02 : TMenuItem;
     itemCodeGen : TMenuItem;
-    itemClearTiles : TMenuItem;
+    itemClearTile : TMenuItem;
     itemFlipTileX : TMenuItem;
     itemFlipTileY : TMenuItem;
     itemRotateTile : TMenuItem;
-    popFlipTileX : TMenuItem;
-    MenuItem4 : TMenuItem;
-    popFlipTileY : TMenuItem;
+    popFlipTileCharX : TMenuItem;
+    popFlipTileCharY : TMenuItem;
     itemOpenTile : TMenuItem;
     itemSaveTile : TMenuItem;
     itemSaveTileAs : TMenuItem;
     menuTools : TMenuItem;
     menuView : TMenuItem;
     paintBox : TPaintBox;
-    popCancelCopyChar : TMenuItem;
-    popCopyChar : TMenuItem;
     popHideGrid : TMenuItem;
     popMenu : TPopupMenu;
     popShowGrid : TMenuItem;
     radMoveChar : TRadioButton;
     radShiftChar : TRadioButton;
+    radShiftTile : TRadioButton;
     scrollBox : TScrollBox;
     shape : TShape;
     shapeTileGrid : TShape;
     shapeEditor : TShape;
+    editX : TSpinEditEx;
     statusBar : TStatusBar;
     toolBar : TToolBar;
-    btnSelectTile : TToolButton;
+    btnSelectTileChar : TToolButton;
     btnUndo : TToolButton;
     btnRedo : TToolButton;
     ToolButton17 : TToolButton;
     ToolButton18 : TToolButton;
+    ToolButton19 : TToolButton;
     ToolButton2 : TToolButton;
-    btnInvert : TToolButton;
+    btnInvertTileChar : TToolButton;
+    procedure ClearScreenProc(Sender : TObject);
     procedure FormCreate(Sender : TObject);
+    procedure FormDeactivate(Sender : TObject);
     procedure FormShow(Sender : TObject);
-    procedure btnFlipXClick(Sender : TObject);
-    procedure ClearTileProc(Sender : TObject);
+    procedure FormActivate(Sender : TObject);
+    procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
+    procedure CopyTileToAllProc(Sender : TObject);
+    procedure itemTileDrawProc(Sender : TObject);
+    procedure MenuItem5Click(Sender : TObject);
+    procedure MiscOper(Sender : TObject);
+    procedure ClearTileCharProc(Sender : TObject);
     procedure CharOper(Sender : TObject);
-    procedure ColorProc(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+    procedure ColorDown(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
       X, Y : Integer);
-    procedure FlipXProc(Sender : TObject);
-    procedure FlipYProc(Sender : TObject);
+    procedure FlipTileCharXProc(Sender : TObject);
+    procedure FlipTileCharYProc(Sender : TObject);
+    procedure FillTileProc(Sender : TObject);
     procedure ColorPaletteProc(Sender : TObject);
-    procedure CharSetProc(Sender : TObject);
+    procedure paintBoxMove(Sender : TObject; Shift : TShiftState; X, Y : Integer);
+    procedure paintBoxUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+      X, Y : Integer);
+    procedure ClearTilesProc(Sender : TObject);
+    procedure popFunc(Sender : TObject);
     procedure SelectTileProc(Sender : TObject);
     procedure UndoProc(Sender : TObject);
     procedure RedoProc(Sender : TObject);
@@ -226,14 +193,12 @@ type
     procedure paintBoxDown(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
       X, Y : Integer);
     procedure paintBoxPaint(Sender : TObject);
-    procedure RotateProc(Sender : TObject);
-    procedure InvertProc(Sender : TObject);
+    procedure RotateTileCharProc(Sender : TObject);
+    procedure InvertTileCharProc(Sender : TObject);
     procedure GenCodeProc(Sender : TObject);
-    procedure ClearTilesProc(Sender : TObject);
-    procedure FillTileProc(Sender : TObject);
+    procedure ClearTileProc(Sender : TObject);
+    procedure FillTileCharProc(Sender : TObject);
     procedure editXLeave(Sender : TObject);
-    procedure editXUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
     procedure CloseWinProc(Sender : TObject);
     procedure LoadTileProc(Sender : TObject);
     procedure SaveTileAsProc(Sender : TObject);
@@ -247,27 +212,38 @@ type
     procedure ShiftLeftProc(Sender: TObject);
     procedure ShiftRightProc(Sender: TObject);
     procedure ShiftUpProc(Sender: TObject);
+
+    procedure ShiftTileDownProc(Sender: TObject);
+    procedure ShiftTileLeftProc(Sender: TObject);
+    procedure ShiftTileRightProc(Sender: TObject);
+    procedure ShiftTileUpProc(Sender: TObject);
+
     procedure MoveDownProc(Sender: TObject);
     procedure MoveLeftProc(Sender: TObject);
     procedure MoveRightProc(Sender: TObject);
     procedure MoveUpProc(Sender: TObject);
+    procedure MenuOper(Sender : TObject);
+    procedure OnMouseDown(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+      X, Y : Integer);
+    procedure ResizeTilesProc(Sender : TObject);
   private
     btn : TMousebutton;
     isSaveAs : boolean;
-    isFontSetNormal : boolean;
     isCreate : boolean;
     isShow : boolean;
     isCopyChar : boolean;
     isShowGrid : boolean;
     isSelectTile : boolean;
+    isSizeEdit : boolean;
     mouseIsDown: boolean;
     coordX, coordY : integer;
     imageObject : TObject;
     fld02 : array[0..7] of byte;
-    undoValues : array[0..2] of TAntic4CharValueType;
-//    undoValuesEx : TAntic4CharValueExType;
-    undoValuesEx : array[0..19, 0..7, 0..7] of byte;
-    redoValuesEx : array[0..19, 0..7, 0..7] of byte;
+    isPaintBoxMove : boolean;
+    isLoadTile : boolean;
+    undoValues : array[0..2] of TAntic4CharValueType;  // Undo values for normal draw
+    undoValuesEx : array[0.._MAX_TILE_CHARS - 1, 0..7, 0..7] of byte;   // Undo values for misc draw
+    redoValuesEx : array[0.._MAX_TILE_CHARS - 1, 0..7, 0..7] of byte;   // Redo values
     procedure SetXY(_maxX, _maxY : byte);
     procedure SetAnticMode(mode : byte);
     procedure PlotCharAntic45(Sender : TObject; xf, yf : byte);
@@ -275,41 +251,40 @@ type
     procedure OpenFile(filename : string);
     procedure MaskColor(image : TImage; index : byte);
     procedure RefreshChar(image : TImage; index, selColor : byte);
-    function CheckInverse(index : byte) : boolean;
     procedure SetCell(image : TImage; isActive : boolean);
     procedure SetCells;
-    procedure RefreshTiles(index : byte);
-    procedure PutChar(scrPos, y, offset : byte);
+    procedure RefreshTiles;
+    procedure DrawTile(scrPos, y, offset : byte);
     procedure ShowTilesDim;
     procedure RefreshCharX(imgChar : TImage; offset : integer);
     procedure ShowTileChars;
+    procedure ColorProc(image : TImage);
+    procedure CreateObjects(index : byte);
+    procedure RefreshScreen;
   public
-    filename : string;
-    fontName : string;
     fldFontSet : fldFontSetType;
-    fldChar : array[0..19, 0..7, 0..7] of byte;
-//    fldCharMem : array[0..2, 0..19, 0..7, 0..7] of byte;
-    fldCharAntic45 : array[0..19, 0..7, 0..7] of byte;
-    fldCharAntic45Ex : array[1.._MAX_TILES, 0..19, 0..7, 0..7] of byte;
-    inverseIndex : array[0..19] of boolean;
-    cellIndex : array[0..19] of boolean;
-    charColor : array[0..19] of byte;
+    fldChar : array[0.._MAX_TILE_CHARS - 1, 0..7, 0..7] of byte;
+    fldCharAntic45 : array[0.._MAX_TILE_CHARS - 1, 0..7, 0..7] of byte;
+    fldCharAntic45Ex : array[1.._MAX_TILES, 0.._MAX_TILE_CHARS - 1, 0..7, 0..7] of byte;
+    cellIndex : array[0.._MAX_TILE_CHARS - 1] of boolean;
+    charColor : array[0.._MAX_TILE_CHARS - 1] of byte;
     factX, factY : byte;        // Character screen editor offset
     chrFactX, chrFactY : byte;  // Character editor pixel offsets
-//    factX02, factY02 : byte;    // Font set character offsets
     maxXX, maxYY : byte;        // Maximum X and Y coordinates
     maxSize : integer;
     anticMode : byte;
     modeHeight : byte;
-    isTextModeChanged : boolean;
-    selectTile : byte;   // Selected tile part
-//    selectTiles : byte;  // Selected tiles group
-//    charXOffset, charYOffset, charYOffset02 : word;
-    antic4Tile : TAntic4CharType;
-    antic4TileArray : array[1.._MAX_TILES] of TAntic4CharType;
-    procedure RefreshData;
-    procedure RefreshGrid;
-    procedure UpdateColors;
+    //isTextModeChanged : boolean;
+    selectTileChar : byte;         // Selected tile character
+    antic4Tile : TAntic4TileType;  // Selected tile
+    antic4TileArray : array[1.._MAX_TILES] of TAntic4TileType;
+    tiles : array[0.._ANTIC_MODE_4_SIZE - 1] of TTileType;  // Tiles pointer
+    charOffset : byte;
+    isCharConfirm : boolean;
+    isTilesResizeProc : boolean;
+    procedure RefreshGridData;
+    procedure UpdateCharColors;
+    procedure RefreshColors;
   end;
 
 var
@@ -320,39 +295,51 @@ implementation
 {$R *.lfm}
 
 uses
-  main, lib, colors, char_set;
+  main, lib, colors, char_set, antic4_tiles_gen, viewer, tiles_resize;
 
 { TfrmAntic4Tiles }
 
 procedure TfrmAntic4Tiles.FormCreate(Sender : TObject);
+var
+  i : word;
 begin
   DoubleBuffered := true;
   btn := mbMiddle;
   isCreate := true;
+  isSizeEdit := false;
   isShow := true;
   isCopyChar := false;
   isShowGrid := true;
+  isLoadTile := false;
+
+  isPaintBoxMove := false;
+
   isSelectTile := false;
-//  FillByte(charEditIndex, SizeOf(charEditIndex), 0);
   FillByte(fldChar, SizeOf(fldChar), 0);
   FillByte(fldCharAntic45, SizeOf(fldCharAntic45), 0);
   FillByte(fldCharAntic45Ex, SizeOf(fldCharAntic45Ex), 0);
-//  debug('SizeOf', SizeOf(charEditIndex), SizeOf(fldChar), SizeOf(fldCharAntic45));
-  SetTrackBarUpDown(editX, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editY, $00DDDDDD, clWhite);
+
+  // Clear tile pointers
+  for i := 0 to _ANTIC_MODE_4_SIZE - 1 do begin
+    tiles[i].tileIndex := 0;
+    tiles[i].coordX := 0;
+    tiles[i].coordY := 0;
+    tiles[i].x := 0;
+    tiles[i].y := 0;
+  end;
+
+  imgCharList.Clear;
+  for i := 1 to _MAX_TILES do CreateObjects(i);
 end;
 
 procedure TfrmAntic4Tiles.FormShow(Sender : TObject);
 var
-  i : byte;
+  i, j : byte;
 begin
   propFlagModules[12] := 1;
   isChange := true;
   frmMain.Top := 10;
   formId := formAntic4TileEditor;
-  filename := getDir + 'examples\tile01.tl4';
-  caption := programName + ' ' + programVersion +
-             ' - Antic mode 4 tile editor (' + filename + ')';
 
   modeHeight := 24;
   SetXY(4, 5);
@@ -360,28 +347,14 @@ begin
   editY.Value := antic4Tile.dimY;
   SetAnticMode(4);
   factX := 2;
-//  factX02 := 2;
 
-  maxXX := 4;
-  maxYY := 5;
+  // Set maximum tile dimensions
+  maxXX := 4; maxYY := 5;
 
-  // Character editor parameters
-  chrFactX := 14; chrFactY := 14;
+  // Tile character editor parameters
+  chrFactX := 14; chrFactY := chrFactX;
 
-//  PaintBox.Canvas.Pen.Width:=2; // or any width, the settings will respect
-//  PaintBox.Canvas.Pen.Color:=clBlack;
-////  PaintBox.Canvas.Pen.JoinStyle:=pjsMiter;// remove rounded borders
-////  PaintBox.Canvas.Pen.Style:=psInsideframe; // draw border inside rectangle
-//  PaintBox.Canvas.Rectangle(0, 0, PaintBox.Width, PaintBox.Height);
-
-//PaintBox.Canvas.Brush.Style := bsClear;
-//PaintBox.Canvas.Pen.Color := clRed;
-//PaintBox.Canvas.Rectangle(PaintBox.ClientRect);
-//PaintBox.Invalidate;
-
-  isFontSetNormal := true;
   DefaultFontSet(fldFontSet);
-//  ShowBaseFontSet;
 
   btnDraw.Down := true;
 
@@ -394,51 +367,71 @@ begin
   FillRectEx(imgTile07, coltab[0], 0, 0, imgTile07.Width, imgTile07.Height);
   FillRectEx(imgTile08, coltab[0], 0, 0, imgTile08.Width, imgTile08.Height);
 
-//  SetCell(imgChar0000, true);
-//  SetCell(imgChar0100, true);
-
-  //cellIndex[0] := true;
-  //cellIndex[1] := true;
-//  for i := 0 to SizeOf(cellIndex) - 1 do
-//    cellIndex[i] := true;
-
   shapeEditor.Brush.Color := colTab[0];
 
-  selectTile := 0;
-
-  //  selectTiles := 1;
+  selectTileChar := 0;
   antic4Tile.selected := 1;
   for i := 1 to _MAX_TILES do begin
-    antic4TileArray[i].dimX := 4;
-    antic4TileArray[i].dimY := 5;
+    if i < 3 then begin
+      antic4TileArray[i].dimX := 4;
+      antic4TileArray[i].dimY := 5;
+    end
+    else if i < 5 then begin
+      antic4TileArray[i].dimX := 3;
+      antic4TileArray[i].dimY := 3;
+    end
+    else if i < 7 then begin
+      antic4TileArray[i].dimX := 2;
+      antic4TileArray[i].dimY := 2;
+    end
+    else begin
+      antic4TileArray[i].dimX := 1;
+      antic4TileArray[i].dimY := 1;
+    end;
+
+    for j := 0 to 19 do
+      antic4TileArray[i].charInverse[j] := false;
+
+    antic4TileArray[i].filename := getDir + 'examples\tile0' + IntToStr(i) + '.tl4';
   end;
 
-  isCreate := false;
-  editXLeave(Sender);
+  caption := programName + ' ' + programVersion +
+             ' - Antic mode 4 tile editor (' + antic4TileArray[1].filename + ')';
 
-  //for i := 0 to 15 do
-  //  (FindComponent('lblNum' + IntToStr(i)) as TLabel).Caption := '0';
-
-  //gridColor := colTab[0];
-//  FillScreen(0, false);
-//  FillByte(fldAtascii, SizeOf(fldAtascii), 97);
-
-//  offs := 1;
-  isFontSetNormal := true;
-//  RefreshCharX(offs);
-//  PlotChar(255, 255);
   ColorRegisters;
 
-//  ShowTilesDim;
+  ShowTilesDim;
+  SelectTileProc(imgTile02);
+  SelectTileProc(imgTile03);
+  SelectTileProc(imgTile04);
+  SelectTileProc(imgTile05);
+  SelectTileProc(imgTile06);
+  SelectTileProc(imgTile07);
+  SelectTileProc(imgTile08);
   SelectTileProc(imgTile01);
-
-  //fldAtascii[4 + 6*(maxX + 1)] := 97;
-  //fldAtascii[5 + 6*(maxX + 1)] := 97;
-
   ShowTileChars;
 
-  imgTile01Char4001.Canvas.Pen.Color := clBlack;
-  imgTile01Char4001.Canvas.Pen.Width := 1;
+  ColorProc(color0);
+
+  isCreate := false;
+
+  lblFunc.Caption := 'Function: ' + _TILE_FUNCTION[1];
+end;
+
+procedure TfrmAntic4Tiles.FormActivate(Sender : TObject);
+begin
+  formId := formAntic4TileEditor;
+end;
+
+procedure TfrmAntic4Tiles.FormDeactivate(Sender : TObject);
+begin
+  FormStyle := fsNormal;
+end;
+
+procedure TfrmAntic4Tiles.FormClose(Sender : TObject; var CloseAction : TCloseAction);
+begin
+  propFlagModules[12] := 0;
+  formId := formMain;
 end;
 
 procedure TfrmAntic4Tiles.SetCell(image : TImage; isActive : boolean);
@@ -451,8 +444,37 @@ begin
     FillRectEx(image, clGray, 0, 0, image.Width, image.Height);
 end;
 
+procedure TfrmAntic4Tiles.FillTileProc(Sender : TObject);
+var
+  i, x, y : byte;
+begin
+  for i := 0 to _MAX_TILE_CHARS - 1 do begin
+    for y := 0 to _CHAR_DIM do
+      for x := 0 to _CHAR_DIM do
+        if (x = 1) or (x = 3) or (x = 5) or (x = 7) then begin
+          fldChar[i, x - 1, y] := 0;
+          fldChar[i, x, y] := 0;
+          case frmColors.SelColor of
+            1: begin
+              fldChar[i, x, y] := 1;
+            end;
+            2: begin
+              fldChar[i, x - 1, y] := 1;
+            end;
+            3, 10: begin
+              fldChar[i, x - 1, y] := 1;
+              fldChar[i, x, y] := 1;
+            end;
+          end;
+        end;
+  end;
+  UpdateCharColors;
+  RefreshGridData;
+  RefreshTiles;
+end;
+
 {-----------------------------------------------------------------------------
- Load Antic 4/5 tile from file - actual reading data
+ Load Antic 4 tile from file
  -----------------------------------------------------------------------------}
 procedure TfrmAntic4Tiles.OpenFile(filename : string);
 var
@@ -469,37 +491,32 @@ begin
   fs := TFileStream.Create(filename, fmOpenReadWrite);
   try
     // Dimension x, y
-//    maxX := fs.ReadByte;
-//    maxY := fs.ReadByte;
-//    debug('maxx, maxy', maxx, maxy);
     antic4Tile.dimX := fs.ReadByte;
     antic4Tile.dimY := fs.ReadByte;
     antic4TileArray[antic4Tile.selected].dimX := antic4Tile.dimX;
     antic4TileArray[antic4Tile.selected].dimY := antic4Tile.dimY;
 
-    SetXY(antic4Tile.dimX, antic4Tile.dimY);
+//    debug('1 antic4Tile.dimX, antic4Tile.dimY', antic4Tile.dimX, antic4Tile.dimY);
+//    debug('1 editX, editY', editX.Value, editY.Value);
+
+    maxSize := (antic4Tile.dimX + 1)*(antic4Tile.dimY + 1) - 1;
+
+//    SetXY(antic4Tile.dimX, antic4Tile.dimY);
+//    debug('2 editX, editY', editX.Value, editY.Value);
     editX.Value := antic4Tile.dimX;
     editY.Value := antic4Tile.dimY;
+//    debug('2 antic4Tile.dimX, antic4Tile.dimY', antic4Tile.dimX, antic4Tile.dimY);
+//    debug('3 editX, editY', editX.Value, editY.Value);
     editX.Invalidate;
     editY.Invalidate;
+//    editX.Value := antic4Tile.dimX;
+    editY.Value := antic4Tile.dimY;
     FillByte(fldCharAntic45, SizeOf(fldCharAntic45), 0);
 
     // Read data
-//    for j := 0 to maxSize do
-//      if fs.Position < fs.Size then
-//        fldAtascii[j] := fs.ReadByte;
-
-    //for y := 0 to maxY - 1 do
-    //  for x := 0 to maxX - 1 do begin
-    //    for j := 0 to 7 do
-    //      for i := 0 to 7 do
-    //        fldCharAntic45[cnt, i, j] := fs.ReadByte;
-    //  end;
-
     for y := 0 to antic4Tile.dimY - 1 do
       for x := 0 to antic4Tile.dimX - 1 do begin
         index := x + y shl 2;
-//        debug('index', index);
         for i := 0 to _CHAR_DIM do
           if fs.Position < fs.Size then begin
             r := fs.ReadByte;
@@ -511,32 +528,48 @@ begin
 
         r := fs.ReadByte;
         if r = 0 then
-          inverseIndex[index] := false
+          antic4TileArray[antic4Tile.selected].charInverse[index] := false
         else
-          inverseIndex[index] := true;
+          antic4TileArray[antic4Tile.selected].charInverse[index] := true;
       end;
   finally
     fs.Free;
-    RefreshGrid;
-    UpdateColors;
-    editXLeave(Application);
+
+    UpdateCharColors;
+
+    case antic4Tile.selected of
+      1: SelectTileProc(imgTile01);
+      2: SelectTileProc(imgTile02);
+      3: SelectTileProc(imgTile03);
+      4: SelectTileProc(imgTile04);
+      5: SelectTileProc(imgTile05);
+      6: SelectTileProc(imgTile06);
+      7: SelectTileProc(imgTile07);
+      8: SelectTileProc(imgTile08);
+    end;
+
+    ShowTilesDim;
+    ShowTileChars;
+
     caption := programName + ' ' + programVersion +
-               ' - Antic mode 4/5 tile editor (' + filename + ')';
+               ' - Antic mode 4 tile editor (' + filename + ')';
     ShowCursor(frmAntic4Tiles, frmAntic4Tiles, crDefault);
+    isLoadTile := false;
   end;
 end;
 
 procedure TfrmAntic4Tiles.LoadTileProc(Sender : TObject);
 begin
-  frmMain.dlgOpen.Title := 'Open existing Antic mode 4/5 tile file';
-  frmMain.dlgOpen.Filter := 'Antic mode 4/5 tile files' +
+  frmMain.dlgOpen.Title := 'Open existing Antic mode 4 tile file';
+  frmMain.dlgOpen.Filter := 'Antic mode 4 tile files' +
                             ' (*.tl4)|*.tl4|All files (*.*)|*.*';
-  if filename <> '' then
-    frmMain.dlgOpen.Filename := filename;
+  if antic4TileArray[antic4Tile.selected].filename <> '' then
+    frmMain.dlgOpen.Filename := antic4TileArray[antic4Tile.selected].filename;
 
   if frmMain.dlgOpen.Execute then begin
-    filename := frmMain.dlgOpen.Filename;
-    OpenFile(filename);
+    isLoadTile := true;
+    antic4TileArray[antic4Tile.selected].filename := frmMain.dlgOpen.Filename;
+    OpenFile(antic4TileArray[antic4Tile.selected].filename);
   end;
 end;
 
@@ -552,7 +585,7 @@ begin
 end;
 
 {-----------------------------------------------------------------------------
- Save Antic mode 4/5 tile
+ Save Antic mode 4 tile
  -----------------------------------------------------------------------------}
 procedure TfrmAntic4Tiles.SaveTile;
 var
@@ -564,8 +597,7 @@ var
   i, j, x, y, index : byte;
   bin : string;
 begin
-//  debug('maxx, maxy', maxx, maxy);
-  fs := TFileStream.Create(filename, fmCreate);
+  fs := TFileStream.Create(antic4TileArray[antic4Tile.selected].filename, fmCreate);
   try
     // Dimension x, y
     fs.WriteByte(antic4Tile.dimX);
@@ -582,13 +614,6 @@ begin
 //        Inc(cnt);
 //      end;
 
-//for j := 0 to 1023 do begin
-//  bin := '';
-//  for i := 0 to 7 do
-//    bin += IntToStr(fldFontSet[i, j]);
-//
-//  fs.WriteByte(bin2dec(bin));
-//end;
 //    index := 0;
     for y := 0 to antic4Tile.dimY - 1 do
 //      index := x;
@@ -603,7 +628,7 @@ begin
           fs.WriteByte(bin2dec(bin));
         end;
 
-        if CheckInverse(index) then
+        if antic4TileArray[antic4Tile.selected].charInverse[index] then
           fs.WriteByte(1)
         else
           fs.WriteByte(0);
@@ -618,11 +643,11 @@ end;
 begin
   try
     if isSaveAs then begin
-      frmMain.dlgSave.Filter := 'Antic mode 4/5 tile files (*.tl4)' +
+      frmMain.dlgSave.Filter := 'Antic mode 4 tile files (*.tl4)' +
                                 '|*.tl4|All files (*.*)|*.*';
-      frmMain.dlgSave.Filename := filename;
+      frmMain.dlgSave.Filename := antic4TileArray[antic4Tile.selected].filename;
       if frmMain.dlgSave.Execute then begin
-        filename := frmMain.dlgSave.Filename;
+        antic4TileArray[antic4Tile.selected].filename := frmMain.dlgSave.Filename;
         SaveData;
       end;
     end
@@ -631,8 +656,8 @@ begin
   finally
     if isOk then begin
 //      isEdit := false;
-      caption := programName + ' ' + programVersion +
-                 ' - Antic mode 4&5 tile editor (' + filename + ')';
+      caption := programName + ' ' + programVersion + ' - Antic mode 4 tile editor (' +
+                 antic4TileArray[antic4Tile.selected].filename + ')';
     end;
   end;
 end;
@@ -641,12 +666,19 @@ procedure TfrmAntic4Tiles.imgCharDown(Sender : TObject; Button : TMouseButton; S
   X, Y : Integer);
 var
   xf, yf : byte;
+  i : byte;
 begin
+  //debug('imgCharDown');
   btn := Button;
+  //if btn = mbRight then begin
+  //  popMenu.Popup(x + TControl(Sender).Left + 30, y + TControl(Sender).Top + 30);
+  //  exit;
+  //end;
+
   xf := X div chrFactX;
   yf := Y div chrFactY;
 
-  if btnSelectTile.Down then
+  if btnSelectTileChar.Down then
     with shapeTileGrid do begin
       Visible := true;
 //      BringToFront;
@@ -657,48 +689,86 @@ begin
     end;
 
   mouseIsDown := True;
-  selectTile := TImage(Sender).Tag;
+  selectTileChar := TImage(Sender).Tag;
 
-  if ((antic4Tile.dimY = 1) and (selectTile > 3)) or
-     ((antic4Tile.dimY = 2) and (selectTile > 7)) or
-     ((antic4Tile.dimY = 3) and (selectTile > 11)) or
-     ((antic4Tile.dimY = 4) and (selectTile > 15)) then begin
+  if ((antic4Tile.dimY = 1) and (selectTileChar > 3)) or
+     ((antic4Tile.dimY = 2) and (selectTileChar > 7)) or
+     ((antic4Tile.dimY = 3) and (selectTileChar > 11)) or
+     ((antic4Tile.dimY = 4) and (selectTileChar > 15)) then
+  begin
     exit;
   end;
 
-  if btnDraw.Down then
-    PlotCharAntic45(Sender, xf, yf);
+  if (btn = mbRight) and (Sender is TImage) then begin
+//    debug('imgCharDown popMenu pre');
+    popMenu.Popup(x + TControl(Sender).Left + 30, y + TControl(Sender).Top + 30);
 
-//  charEditIndex[offs] := 1;
+    for i := 1 to 30 do
+      Application.ProcessMessages;
+
+    btn := mbMiddle;
+
+    for y := 0 to _CHAR_DIM do
+      for x := 0 to _CHAR_DIM do
+        undoValuesEx[selectTileChar, x, y] := fldChar[selectTileChar, x, y];
+
+    if btnDraw.Down then begin
+      ColorProc(color4);
+//      PlotCharAntic45(Sender, xf, yf);
+    end
+    else if btnRotateTileChar.Down then
+      RotateTileCharProc(Sender)
+    else if btnFlipX.Down then
+      FlipTileCharXProc(Sender)
+    else if btnFlipY.Down then
+      FlipTileCharYProc(Sender)
+    else if btnInvertTileChar.Down then
+      InvertTileCharProc(Sender)
+    else if btnClearTileChar.Down then
+      ClearTileCharProc(Sender)
+    else if btnFillTileChar.Down then
+      FillTileCharProc(Sender);
+
+    MouseIsDown := false;
+  end
+  else begin
+    if btnDraw.Down then
+      PlotCharAntic45(Sender, xf, yf);
+  end;
 end;
 
 procedure TfrmAntic4Tiles.imgCharUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
   X, Y : Integer);
 begin
+//  debug('imgCharUp');
   btn := mbMiddle;
   if MouseIsDown then begin
     for y := 0 to _CHAR_DIM do
       for x := 0 to _CHAR_DIM do
-        undoValuesEx[selectTile, x, y] := fldChar[selectTile, x, y];
+        undoValuesEx[selectTileChar, x, y] := fldChar[selectTileChar, x, y];
 
-    if btnRotate.Down then
-      RotateProc(Sender)
-    else if btnFlipX.Down then
-      FlipXProc(Sender)
-    else if btnFlipY.Down then
-      FlipYProc(Sender)
-    else if btnInvert.Down then
-      InvertProc(Sender)
-    else if btnClearTile.Down then
-      ClearTileProc(Sender)
-    else if btnFillTile.Down then
-      FillTileProc(Sender)
+    if btnRotateTileChar.Down then begin
+//      lblFunc.Caption := 'Function: ' + _TILE_FUNCTION[5];
+      RotateTileCharProc(Sender);
+    end
+    else if btnFlipX.Down then begin
+      FlipTileCharXProc(Sender);
+    end
+    else if btnFlipY.Down then begin
+      FlipTileCharYProc(Sender);
+    end
+    else if btnInvertTileChar.Down then
+      InvertTileCharProc(Sender)
+    else if btnClearTileChar.Down then
+      ClearTileCharProc(Sender)
+    else if btnFillTileChar.Down then
+      FillTileCharProc(Sender)
   end;
   MouseIsDown := false;
 end;
 
 {-----------------------------------------------------------------------------
- Draw Antic 4/5 pixel inside character editor
+ Draw Antic 4 pixel inside character editor
  -----------------------------------------------------------------------------}
 procedure TfrmAntic4Tiles.PlotCharAntic45(Sender : TObject; xf, yf : byte);
 var
@@ -715,25 +785,96 @@ begin
 //  selectTile := TImage(Sender).Tag;
 //  statusBar.Panels[2].Text := 'Index: ' + inttostr(index);
 
-  fldCharAntic45[selectTile, xf, yf] := frmColors.SelColor;
-  fldCharAntic45Ex[antic4Tile.selected, selectTile, xf, yf] := frmColors.SelColor;
+  fldCharAntic45[selectTileChar, xf, yf] := frmColors.SelColor;
+  fldCharAntic45Ex[antic4Tile.selected, selectTileChar, xf, yf] := frmColors.SelColor;
+
+  //tileChar.tileSelected := selectTileChar;
+  //tileChar.x := xf;
+  //tileChar.y := yf;
+  //tileChar.value := fldCharAntic45[selectTileChar, xf, yf];
+
+//  if (i > _MAX_TILE_CHARS - 1) and (i mod _MAX_TILE_CHARS = 0) then begin
+
+//  debug(selectTileChar + (antic4Tile.selected - 1)*_MAX_TILE_CHARS);
+(*
+  // Show standard/inverse characters only for 4x5 tiles
+//  if antic4Tile.dimX*antic4Tile.dimY = _MAX_TILE_CHARS then begin
+    // Inverse character
+    if frmColors.SelColor = 10 then begin
+      if antic4TileArray[antic4Tile.selected].charValues[selectTileChar] < 128 then
+        antic4TileArray[antic4Tile.selected].charValues[selectTileChar] :=
+          antic4TileArray[antic4Tile.selected].charValues[selectTileChar] + 128;
+      (*
+      if sel = 4 then begin
+        debug(selectTileChar);
+        debug(antic4Tile.selected - 1);
+        debug(antic4Tile.dimX);
+  //      debug(selectTileChar + (antic4Tile.selected - 1)*_MAX_TILE_CHARS);
+
+        RefreshCharX(
+          TImage(imgCharList[sel + (antic4Tile.selected - 1)*_MAX_TILE_CHARS + (antic4Tile.dimX - 4)]),
+          antic4TileArray[antic4Tile.selected].charValues[sel])
+      end
+      else if sel = 5 then
+        RefreshCharX(
+          TImage(imgCharList[44]),
+          antic4TileArray[antic4Tile.selected].charValues[sel])
+      else*)
+        //RefreshCharX(
+        //  TImage(imgCharList[selectTileChar + (antic4Tile.selected - 1)*_MAX_TILE_CHARS]),
+        //  antic4TileArray[antic4Tile.selected].charValues[sel]);
+
+      //if sel < 4 then
+      //  RefreshCharX(
+      //    TImage(imgCharList[sel + (antic4Tile.selected - 1)*_MAX_TILE_CHARS]),
+      //    antic4TileArray[antic4Tile.selected].charValues[sel])
+      //else if sel < 8 then
+      //  RefreshCharX(
+      //    TImage(imgCharList[sel + (antic4Tile.selected - 1)*_MAX_TILE_CHARS + (antic4Tile.dimX - 4)]),
+      //    antic4TileArray[antic4Tile.selected].charValues[sel])
+
+      RefreshCharX(
+        TImage(imgCharList[selectTileChar + (antic4Tile.selected - 1)*_MAX_TILE_CHARS]),
+        antic4TileArray[antic4Tile.selected].charValues[selectTileChar]);
+    end
+    // Standard character
+    else if frmColors.SelColor = 3 then begin
+      if antic4TileArray[antic4Tile.selected].charValues[selectTileChar] > 127 then
+        antic4TileArray[antic4Tile.selected].charValues[selectTileChar] :=
+          antic4TileArray[antic4Tile.selected].charValues[selectTileChar] - 128;
+
+      RefreshCharX(
+        TImage(imgCharList[selectTileChar + (antic4Tile.selected - 1)*_MAX_TILE_CHARS]),
+        antic4TileArray[antic4Tile.selected].charValues[selectTileChar])
+    end;
+//  end;
+*)
+
+  if frmColors.SelColor = 10 then begin
+  //  if antic4TileArray[antic4Tile.selected].charValues[selectTileChar] < 128 then
+  //    antic4TileArray[antic4Tile.selected].charValues[selectTileChar] :=
+  //      antic4TileArray[antic4Tile.selected].charValues[selectTileChar] + 128;
+    antic4TileArray[antic4Tile.selected].charInverse[selectTileChar] := true;
+  end
+  // Standard character
+  else if frmColors.SelColor = 3 then begin
+  //  if antic4TileArray[antic4Tile.selected].charValues[selectTileChar] > 127 then
+  //    antic4TileArray[antic4Tile.selected].charValues[selectTileChar] :=
+  //      antic4TileArray[antic4Tile.selected].charValues[selectTileChar] - 128;
+    antic4TileArray[antic4Tile.selected].charInverse[selectTileChar] := false;
+  end;
 
   case xf of
     0, 2, 4, 6: begin
-      undoValues[0].tileSelected := selectTile;
+      undoValues[0].tileSelected := selectTileChar;
       undoValues[0].x := xf;
       undoValues[0].y := yf;
-      undoValues[0].value := fldChar[selectTile, xf, yf];
-      undoValues[1].tileSelected := selectTile;
+      undoValues[0].value := fldChar[selectTileChar, xf, yf];
+      undoValues[1].tileSelected := selectTileChar;
       undoValues[1].x := xf + 1;
       undoValues[1].y := yf;
-      undoValues[1].value := fldChar[selectTile, xf + 1, yf];
+      undoValues[1].value := fldChar[selectTileChar, xf + 1, yf];
       if col = 0 then begin
-//        fldCharMem[0, selectTile, xf, yf] := fldChar[selectTile, xf, yf];
-//        fldCharMem[0, selectTile, xf + 1, yf] := fldChar[selectTile, xf + 1, yf];
-//        fldCharMemEx[0, selectTile, 0] := fldChar[selectTile, xf, yf];
-//        fldCharMemEx[0, selectTile, 1] := fldChar[selectTile, xf + 1, yf];
-
         //fldCharMemEx[0, selectTile, 0] := fldChar[selectTile, xf, yf];
         //fldCharMemEx[0, selectTile, 1] := xf;
         //fldCharMemEx[0, selectTile, 2] := yf;
@@ -741,92 +882,87 @@ begin
         //fldCharMemEx[0, selectTile, 4] := xf + 1;
         //fldCharMemEx[0, selectTile, 5] := yf;
 
-        fldCharAntic45[selectTile, xf + 1, yf] := 0;
-        fldCharAntic45Ex[antic4Tile.selected, selectTile, xf + 1, yf] := 0;
+        fldCharAntic45[selectTileChar, xf + 1, yf] := 0;
+        fldCharAntic45Ex[antic4Tile.selected, selectTileChar, xf + 1, yf] := 0;
         FillRectEx(TImage(Sender), colTab[0], xf*chrFactX + 1, yf*chrFactY + 1,
                    chrFactX*2 - 1, chrFactY - 1);
-        fldChar[selectTile, xf, yf] := 0;
-        fldChar[selectTile, xf + 1, yf] := 0;
+        fldChar[selectTileChar, xf, yf] := 0;
+        fldChar[selectTileChar, xf + 1, yf] := 0;
       end
       else begin
-        fldCharAntic45[selectTile, xf + 1, yf] := frmColors.SelColor;
-        fldCharAntic45Ex[antic4Tile.selected, selectTile, xf + 1, yf] := frmColors.SelColor;
+        fldCharAntic45[selectTileChar, xf + 1, yf] := frmColors.SelColor;
+        fldCharAntic45Ex[antic4Tile.selected, selectTileChar, xf + 1, yf] := frmColors.SelColor;
         FillRectEx(TImage(Sender), colTab[frmColors.SelColor],
                    xf*chrFactX + 1, yf*chrFactY + 1, chrFactX*2 - 1, chrFactY - 1);
         case frmColors.SelColor of
           0: begin
-            fldChar[selectTile, xf, yf] := 0;
-            fldChar[selectTile, xf + 1, yf] := 0;
+            fldChar[selectTileChar, xf, yf] := 0;
+            fldChar[selectTileChar, xf + 1, yf] := 0;
           end;
           1: begin
-            fldChar[selectTile, xf, yf] := 0;
-            fldChar[selectTile, xf + 1, yf] := 1;
+            fldChar[selectTileChar, xf, yf] := 0;
+            fldChar[selectTileChar, xf + 1, yf] := 1;
           end;
           2: begin
-            fldChar[selectTile, xf, yf] := 1;
-            fldChar[selectTile, xf + 1, yf] := 0;
+            fldChar[selectTileChar, xf, yf] := 1;
+            fldChar[selectTileChar, xf + 1, yf] := 0;
           end;
           3, 10: begin
-            fldChar[selectTile, xf, yf] := 1;
-            fldChar[selectTile, xf + 1, yf] := 1;
+            fldChar[selectTileChar, xf, yf] := 1;
+            fldChar[selectTileChar, xf + 1, yf] := 1;
           end;
         end;
       end;
     end;
     1, 3, 5, 7: begin
-      undoValues[0].tileSelected := selectTile;
+      undoValues[0].tileSelected := selectTileChar;
       undoValues[0].x := xf - 1;
       undoValues[0].y := yf;
-      undoValues[0].value := fldChar[selectTile, xf - 1, yf];
-      undoValues[1].tileSelected := selectTile;
+      undoValues[0].value := fldChar[selectTileChar, xf - 1, yf];
+      undoValues[1].tileSelected := selectTileChar;
       undoValues[1].x := xf;
       undoValues[1].y := yf;
-      undoValues[1].value := fldChar[selectTile, xf, yf];
+      undoValues[1].value := fldChar[selectTileChar, xf, yf];
       if col = 0 then begin
-//        fldCharMem[0, selectTile, xf - 1, yf] := fldChar[selectTile, xf - 1, yf];
-//        fldCharMem[0, selectTile, xf, yf] := fldChar[selectTile, xf, yf];
-//        fldCharMemEx[0, selectTile, 0] := fldChar[selectTile, xf - 1, yf];
-//        fldCharMemEx[0, selectTile, 1] := fldChar[selectTile, xf, yf];
-        fldCharAntic45[selectTile, xf - 1, yf] := 0;
-        fldCharAntic45Ex[antic4Tile.selected, selectTile, xf - 1, yf] := 0;
+        fldCharAntic45[selectTileChar, xf - 1, yf] := 0;
+        fldCharAntic45Ex[antic4Tile.selected, selectTileChar, xf - 1, yf] := 0;
         FillRectEx(TImage(Sender), colTab[0],
                    (xf - 1)*chrFactX + 1, yf*chrFactY + 1, chrFactX*2 - 1, chrFactY - 1);
-        fldChar[selectTile, xf - 1, yf] := 0;
-        fldChar[selectTile, xf, yf] := 0;
+        fldChar[selectTileChar, xf - 1, yf] := 0;
+        fldChar[selectTileChar, xf, yf] := 0;
       end
       else begin
 //        fldCharMem[0, selectTile, xf - 1, yf] := fldChar[selectTile, xf - 1, yf];
 //        fldCharMem[0, selectTile, xf, yf] := fldChar[selectTile, xf, yf];
 //        fldCharMemEx[0, selectTile, 0] := fldChar[selectTile, xf - 1, yf];
 //        fldCharMemEx[0, selectTile, 1] := fldChar[selectTile, xf, yf];
-        fldCharAntic45[selectTile, xf - 1, yf] := frmColors.SelColor;
-        fldCharAntic45Ex[antic4Tile.selected, selectTile, xf - 1, yf] := frmColors.SelColor;
+        fldCharAntic45[selectTileChar, xf - 1, yf] := frmColors.SelColor;
+        fldCharAntic45Ex[antic4Tile.selected, selectTileChar, xf - 1, yf] := frmColors.SelColor;
         FillRectEx(TImage(Sender), colTab[frmColors.SelColor],
                    (xf - 1)*chrFactX + 1, yf*chrFactY + 1, chrFactX*2 - 1, chrFactY - 1);
         case frmColors.SelColor of
           0: begin
-            fldChar[selectTile, xf - 1, yf] := 0;
-            fldChar[selectTile, xf, yf] := 0;
+            fldChar[selectTileChar, xf - 1, yf] := 0;
+            fldChar[selectTileChar, xf, yf] := 0;
           end;
           1: begin
-            fldChar[selectTile, xf - 1, yf] := 0;
-            fldChar[selectTile, xf, yf] := 1;
+            fldChar[selectTileChar, xf - 1, yf] := 0;
+            fldChar[selectTileChar, xf, yf] := 1;
           end;
           2: begin
-            fldChar[selectTile, xf - 1, yf] := 1;
-            fldChar[selectTile, xf, yf] := 0;
+            fldChar[selectTileChar, xf - 1, yf] := 1;
+            fldChar[selectTileChar, xf, yf] := 0;
           end;
           3, 10: begin
-            fldChar[selectTile, xf - 1, yf] := 1;
-            fldChar[selectTile, xf, yf] := 1;
+            fldChar[selectTileChar, xf - 1, yf] := 1;
+            fldChar[selectTileChar, xf, yf] := 1;
           end;
         end;
       end;
     end;
   end;
 
-//  statusBar.Panels[1].Text := 'Indexxx: ' + inttostr(index);
-  RefreshChar(TImage(Sender), selectTile, frmColors.SelColor);
+  RefreshChar(TImage(Sender), selectTileChar, frmColors.SelColor);
 
   //for i := 0 to _CHAR_DIM do
   //  for j := 0 to _CHAR_DIM do begin
@@ -835,16 +971,15 @@ begin
   //    fldCharAntic45[2, j, i] := fldCharAntic45Ex[selectTiles, 2, j, i];
   //  end;
 
-  RefreshTiles(selectTile);
+  RefreshTiles;
 end;
 
 // Refresh screen
-procedure TfrmAntic4Tiles.RefreshTiles(index : byte);
+procedure TfrmAntic4Tiles.RefreshTiles;
 var
   i, j : integer;
   m, r : byte;
 begin
-//  debug(maxx);
   r := 0; m := 0;
   for j := 0 to maxSize do begin
 //    if (j > maxX - 1) and (j mod (maxX - 1) = 0) then begin
@@ -858,15 +993,17 @@ begin
       end;
 
 //    if (fldAtascii[j] = index) or (fldAtascii[j] = index + 128) then begin
-    PutChar(r, m, j);  //fldAtascii[j]);
+    DrawTile(r, m, j);  //fldAtascii[j]);
     Inc(r);
   end;
+
+  RefreshScreen;
 end;
 
 {-----------------------------------------------------------------------------
- Draw character on screen
+ Draw tile character on screen
  -----------------------------------------------------------------------------}
-procedure TfrmAntic4Tiles.PutChar(scrPos, y, offset : byte);
+procedure TfrmAntic4Tiles.DrawTile(scrPos, y, offset : byte);
 var
   xf, yf : integer;
   //isInverse : boolean = false;
@@ -903,25 +1040,15 @@ begin
         else if (mask[0] = 1) and (mask[1] = 0) then
           col := 2
         else if (mask[0] = 1) and (mask[1] = 1) then begin
-//          if isInverse then
-//            col := frmColors.SelColor;
-//          else
-          if inverseIndex[offset] then
+          if antic4TileArray[antic4Tile.selected].charInverse[offset] then
             col := 10
           else
             col := 3;
         end;
 //        col := frmColors.SelColor;
 
-//        case antic4Tile.selected of
         FillRectEx((FindComponent('imgTile0' + IntToStr(antic4Tile.selected)) as TImage),
                    colTab[col], (xf + j - 1)*factX, (yf + i)*factY, factX shl 1, factY);
-(*          2: FillRectEx(imgTile02, colTab[col], (xf + j - 1)*factX, (yf + i)*factY,
-                        factX shl 1, factY);
-          3: FillRectEx(imgTile03, colTab[col], (xf + j - 1)*factX, (yf + i)*factY,
-                        factX shl 1, factY);
-        end;*)
-
         cnt := 0;
       end;
     end;
@@ -932,15 +1059,15 @@ var
   oldColor : byte;
   i, j : byte;
 begin
-  // Check color3 or inverse color
+  // Check inverse flag color
   if (selColor = 3) or (selColor = 10) then begin
     if selColor = 3 then begin
       oldColor := 10;
-      inverseIndex[index] := false;
+      antic4TileArray[antic4Tile.selected].charInverse[index] := false;
     end
     else begin
       oldColor := 3;
-      inverseIndex[index] := true;
+      antic4TileArray[antic4Tile.selected].charInverse[index] := true;
     end;
 
     for i := 0 to _CHAR_DIM do
@@ -975,7 +1102,6 @@ begin
 //  imgTile01.Invalidate;
 //  statusBar.Panels[0].Text := 'Max X coord.: ' + IntToStr(maxX) +
 //                              ', max Y coord.: ' + IntToStr(maxY);
-//  debug(maxsize);
 end;
 
 procedure TfrmAntic4Tiles.SetAnticMode(mode : byte);
@@ -987,25 +1113,17 @@ begin
   if anticMode = 4 then begin
     modeHeight := 24;
     factY := 2;
-//    factY02 := 2;
-//    charYOffset := 28;
-//    charYOffset02 := 17;
   end
   else begin
     modeHeight := 48;
     factY := 4;
-//    factY02 := 4;
-//    charYOffset := 40;
-//    charYOffset02 := 32;
   end;
-
-//  ShowFontSet;
 end;
 
 {-----------------------------------------------------------------------------
  Refresh screen data
  -----------------------------------------------------------------------------}
-procedure TfrmAntic4Tiles.RefreshData;
+procedure TfrmAntic4Tiles.RefreshGridData;
 begin
   FillRectEx(imgChar0000, colTab[0], 0, 0, imgChar0000.Width, imgChar0000.Height);
   FillRectEx(imgChar0100, colTab[0], 0, 0, imgChar0000.Width, imgChar0000.Height);
@@ -1027,36 +1145,6 @@ begin
   FillRectEx(imgChar4100, colTab[0], 0, 0, imgChar0000.Width, imgChar0000.Height);
   FillRectEx(imgChar4010, colTab[0], 0, 0, imgChar0000.Width, imgChar0000.Height);
   FillRectEx(imgChar4001, colTab[0], 0, 0, imgChar0000.Width, imgChar0000.Height);
-  //FillRectEx(imgChar5000, colTab[0], 0, 0, imgChar0000.Width, imgChar0000.Height);
-  //FillRectEx(imgChar5100, colTab[0], 0, 0, imgChar0000.Width, imgChar0000.Height);
-  //FillRectEx(imgChar5010, colTab[0], 0, 0, imgChar0000.Width, imgChar0000.Height);
-  //FillRectEx(imgChar5001, colTab[0], 0, 0, imgChar0000.Width, imgChar0000.Height);
-(*
-//  imgTile01.Canvas.Clear;
-  x := 0; y := 0;
-  for i := 0 to maxSize do begin
-    if (i > maxX) and (i mod (maxX + 1) = 0) then begin
-      x := 0;
-      Inc(y, 2);
-    end;
-    PutChar(x, y, fldAtascii[i]);
-
-    // Draw a grid
-    imgTile01.Canvas.Pen.Color := gridColor;
-    xx := x*24;
-    yy := y*modeHeight shr 1;
-//    if gridColor <> colTab[0] then begin
-    if isShowGrid then begin
-//      debug('RefreshData isShowGrid');
-      imgTile01.Canvas.Line(xx, yy, xx + 24, yy);
-      imgTile01.Canvas.Line(xx, yy + modeHeight, xx + 24, yy + modeHeight);
-      imgTile01.Canvas.Line(xx, yy, xx, yy + modeHeight);
-      imgTile01.Canvas.Line(xx + 24, yy, xx + 24, yy + modeHeight);
-    end;
-    Inc(x);
-  end;
-
-  ShowFontSet;*)
 
   MaskColor(imgChar0000, 0); MaskColor(imgChar0100, 1);
   MaskColor(imgChar0010, 2); MaskColor(imgChar0001, 3);
@@ -1099,7 +1187,8 @@ begin
         else if (mask[0] = 1) and (mask[1] = 0) then
           col := 2
         else if (mask[0] = 1) and (mask[1] = 1) then begin
-          if inverseIndex[index] then
+//          if inverseIndex[index] then
+          if antic4TileArray[antic4Tile.selected].charInverse[index] then
             col := 10
           else
             col := 3;
@@ -1110,8 +1199,8 @@ begin
                    chrFactX shl 1 - 1, chrFactY - 1);
         if isShowGrid then begin
           image.Canvas.Pen.Color := clGray;
-          image.Canvas.Rectangle((j - 1)*chrFactX, i*chrFactY, (j - 1)*chrFactX + 1 + chrFactX*2,
-                                 i*chrFactY + chrFactY + 1);
+          image.Canvas.Rectangle((j - 1)*chrFactX, i*chrFactY,
+                                 (j - 1)*chrFactX + 1 + chrFactX shl 1, i*chrFactY + chrFactY + 1);
         end;
         cnt := 0;
       end;
@@ -1123,111 +1212,46 @@ begin
   image.Invalidate;
 end;
 
-procedure TfrmAntic4Tiles.RefreshGrid;
-begin
-  RefreshData;
-//  ColorRegisters;
-end;
-
-function TfrmAntic4Tiles.CheckInverse(index : byte) : boolean;
-var
-  i, j : byte;
-begin
-  result := false;
-  for i := 0 to _CHAR_DIM do
-    for j := 0 to _CHAR_DIM do
-      if fldCharAntic45[index, j, i] = 10 then
-        result := true;
-end;
-
-procedure TfrmAntic4Tiles.ColorProc(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+procedure TfrmAntic4Tiles.ColorDown(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
   X, Y : Integer);
 begin
-  frmColors.SelColor := TImage(Sender).Tag;
+  //frmColors.SelColor := TImage(Sender).Tag;
+  //ColorRegisters;
+  //TImage(Sender).Canvas.Pen.Color := clRed;
+  //TImage(Sender).Canvas.Rectangle(0, 0, color1.width, color1.Height);
+  ColorProc(TImage(Sender));
+end;
+
+procedure TfrmAntic4Tiles.ColorProc(image : TImage);  //; selColor : byte);
+begin
+  frmColors.SelColor := image.Tag;
   ColorRegisters;
-(*  case frmColors.SelColor of
-    0: begin
-      color4.Canvas.Pen.Color := clGreen;
-//      color4.Canvas.RoundRect(0, 0, color1.width, color1.Height, 4, 4);
-      color4.Canvas.Rectangle(0, 0, color1.width, color1.Height);
-    end;
-    1: begin
-      color0.Canvas.Pen.Color := clGreen;
-      color0.Canvas.Rectangle(0, 0, color1.width, color1.Height);
-    end;
-    2: begin
-      color1.Canvas.Pen.Color := clGreen;
-      color1.Canvas.Rectangle(0, 0, color1.width, color1.Height);
-    end;
-    3: begin
-//      inverseIndex[selectTile] := false;
-      color2.Canvas.Pen.Color := clGreen;
-      color2.Canvas.Rectangle(0, 0, color1.width, color1.Height);
-    end;
-    10: begin
-//      inverseIndex[selectTile] := clGreen;
-      color3.Canvas.Pen.Color := clRed;
-      color3.Canvas.Rectangle(0, 0, color1.width, color1.Height);
-    end;
-  end;*)
-  TImage(Sender).Canvas.Pen.Color := clRed;
-  TImage(Sender).Canvas.Rectangle(0, 0, color1.width, color1.Height);
+  image.Canvas.Pen.Color := clRed;
+  image.Canvas.Rectangle(0, 0, color1.width, color1.Height);
 end;
 
 procedure TfrmAntic4Tiles.editXLeave(Sender : TObject);
-var
-  i, j : byte;
 begin
-  btn := mbMiddle;
-  if not isCreate then
-    SetXY(editX.Value, editY.Value);
+//   debug('pre editXLeave');
+  if isLoadTile then exit;
 
-//  antic4Tile.dimX := editX.Value;
-//  antic4Tile.dimY := editY.Value;
-  antic4TileArray[antic4Tile.selected].dimX := editX.Value;
-  antic4TileArray[antic4Tile.selected].dimY := editY.Value;
-  ShowTilesDim;
-
-  for i := 0 to SizeOf(cellIndex) - 1 do
-    cellIndex[i] := false;
-
-  for i := 0 to editY.Value - 1 do
-    for j := 0 to editX.Value - 1 do
-      cellIndex[j + i shl 2] := true;
-
-  SetCells;
-end;
-
-procedure TfrmAntic4Tiles.editXUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-  X, Y : Integer);
-var
-  i, j : byte;
-begin
-  //if editX.Value = 1 then
-  //  SetCell(imgChar0000, true)
-  //SetCell(imgChar0000, true);
-  //if editY.Value <= 2 then begin
-  //  SetCell(imgChar1000, true);
-  //end;
+  if isCreate or isSelectTile then begin
+    isSelectTile := false;
+    exit;
+  end;
 
   btn := mbMiddle;
-  if not isCreate then
-    SetXY(editX.Value, editY.Value);
+  SetXY(editX.Value, editY.Value);
+  antic4TileArray[antic4Tile.selected].dimX := antic4Tile.dimX;
+  antic4TileArray[antic4Tile.selected].dimY := antic4Tile.dimY;
 
-//  antic4Tile.dimX := editX.Value;
-//  antic4Tile.dimY := editY.Value;
-  antic4TileArray[antic4Tile.selected].dimX := editX.Value;
-  antic4TileArray[antic4Tile.selected].dimY := editY.Value;
   ShowTilesDim;
-
-  for i := 0 to SizeOf(cellIndex) - 1 do
-    cellIndex[i] := false;
-
-  for i := 0 to editY.Value - 1 do
-    for j := 0 to editX.Value - 1 do
-      cellIndex[j + i shl 2] := true;
-
   SetCells;
+
+  if not (Sender is TImage) then begin
+    //and chkTileDimAuto.Checked then begin
+    ShowTileChars;
+  end;
 end;
 
 procedure TfrmAntic4Tiles.SetCells;
@@ -1235,6 +1259,13 @@ var
   y, x, index : byte;
   image : TImage;
 begin
+  for x := 0 to SizeOf(cellIndex) - 1 do
+    cellIndex[x] := false;
+
+  for x := 0 to editY.Value - 1 do
+    for y := 0 to editX.Value - 1 do
+      cellIndex[y + x shl 2] := true;
+
   for y := 0 to 3 do
     for x := 0 to 3 do begin
       index := x + y shl 2;
@@ -1286,99 +1317,97 @@ begin
     //end;
   end;
 
-  RefreshData;
-  RefreshTiles(selectTile);
+  RefreshGridData;
+  RefreshTiles;
 end;
 
 procedure TfrmAntic4Tiles.GenCodeProc(Sender : TObject);
 begin
-  ShowMessage('Not implemented yet!');
-
-  //frmAntic4Gen := TfrmAntic4Gen.Create(Self);
-  //with frmAntic4Gen do
-  //  try
-  //    ShowModal;
-  //  finally
-  //    Free;
-  //  end;
+  frmAntic4TilesGen := TfrmAntic4TilesGen.Create(Self);
+  with frmAntic4TilesGen do
+    try
+      ShowModal;
+    finally
+      Free;
+    end;
 end;
 
 {-----------------------------------------------------------------------------
  Invert tile data
  -----------------------------------------------------------------------------}
-procedure TfrmAntic4Tiles.InvertProc(Sender : TObject);
+procedure TfrmAntic4Tiles.InvertTileCharProc(Sender : TObject);
 var
   x, y : byte;
 begin
-  for y := 0 to _CHAR_DIM do
+  for y := 0 to _CHAR_DIM do begin
     for x := 0 to _CHAR_DIM do
-      fldChar[selectTile, x, y] := 1 - fldChar[selectTile, x, y];
-
-  UpdateColors;
-  RefreshGrid;
-  RefreshTiles(selectTile);
+      fldChar[selectTileChar, x, y] := 1 - fldChar[selectTileChar, x, y];
+  end;
+  UpdateCharColors;
+  RefreshGridData;
+  RefreshTiles;
 end;
 
 {-----------------------------------------------------------------------------
  Rotate character
  -----------------------------------------------------------------------------}
-procedure TfrmAntic4Tiles.RotateProc(Sender : TObject);
+procedure TfrmAntic4Tiles.RotateTileCharProc(Sender : TObject);
 var
   x, y, n : byte;
   arr : charType;
 begin
   for y := 0 to _CHAR_DIM do
     for x := 0 to _CHAR_DIM do
-      arr[y, x] := fldChar[selectTile, x, y];
+      arr[y, x] := fldChar[selectTileChar, x, y];
 
   for x := 0 to _CHAR_DIM do
     for n := 0 to _CHAR_DIM do
-      fldChar[selectTile, 7 - n, x] := arr[n, x];
+      fldChar[selectTileChar, 7 - n, x] := arr[n, x];
 
-  UpdateColors;
-  RefreshGrid;
-  RefreshTiles(selectTile);
+  UpdateCharColors;
+  RefreshGridData;
+  RefreshTiles;
 end;
 
 {-----------------------------------------------------------------------------
  Mirror character horizontally
  -----------------------------------------------------------------------------}
-procedure TfrmAntic4Tiles.FlipXProc(Sender : TObject);
+procedure TfrmAntic4Tiles.FlipTileCharXProc(Sender : TObject);
 var
   x, y, n : byte;
 begin
   for y := 0 to _CHAR_DIM do
     for x := _CHAR_DIM downto 4 do begin
-      n := fldChar[selectTile, x, y];
-      fldChar[selectTile, x, y] := fldChar[selectTile, 7 - x, y];
-      fldChar[selectTile, 7 - x, y] := n;
+      n := fldChar[selectTileChar, x, y];
+      fldChar[selectTileChar, x, y] := fldChar[selectTileChar, 7 - x, y];
+      fldChar[selectTileChar, 7 - x, y] := n;
     end;
 
-  UpdateColors;
-  RefreshGrid;
-  RefreshTiles(selectTile);
+  UpdateCharColors;
+  RefreshGridData;
+  RefreshTiles;
 end;
 
 {-----------------------------------------------------------------------------
  Mirror character vertically
  -----------------------------------------------------------------------------}
-procedure TfrmAntic4Tiles.FlipYProc(Sender : TObject);
+procedure TfrmAntic4Tiles.FlipTileCharYProc(Sender : TObject);
 var
   x, y, n : byte;
 begin
   for x := 0 to _CHAR_DIM do
     for y := _CHAR_DIM downto 4 do begin
-      n := fldChar[selectTile, x, y];
-      fldChar[selectTile, x, y] := fldChar[selectTile, x, 7 - y];
-      fldChar[selectTile, x, 7 - y] := n;
+      n := fldChar[selectTileChar, x, y];
+      fldChar[selectTileChar, x, y] := fldChar[selectTileChar, x, 7 - y];
+      fldChar[selectTileChar, x, 7 - y] := n;
     end;
 
-  UpdateColors;
-  RefreshGrid;
-  RefreshTiles(selectTile);
+  UpdateCharColors;
+  RefreshGridData;
+  RefreshTiles;
 end;
 
-procedure TfrmAntic4Tiles.ClearTilesProc(Sender : TObject);
+procedure TfrmAntic4Tiles.ClearTileProc(Sender : TObject);
 begin
   case antic4Tile.selected of
     1: FillRectEx(imgTile01, coltab[0], 0, 0, imgTile01.Width, imgTile01.Height);
@@ -1391,18 +1420,15 @@ begin
     8: FillRectEx(imgTile08, coltab[0], 0, 0, imgTile08.Width, imgTile08.Height);
   end;
 
-//  FillByte(fldAtascii, SizeOf(fldAtascii), 0);
   FillByte(fldCharAntic45, SizeOf(fldCharAntic45), 0);
   FillByte(fldChar, SizeOf(fldChar), 0);
-  FillByte(inverseIndex, SizeOf(inverseIndex), 0);
   SetCells;
-//  RefreshData;
 
-  UpdateColors;
+  UpdateCharColors;
 end;
 
 {-----------------------------------------------------------------------------
- Shift tile left
+ Shift tile character left
  -----------------------------------------------------------------------------}
 procedure TfrmAntic4Tiles.ShiftLeftProc(Sender: TObject);
 var
@@ -1416,89 +1442,171 @@ begin
   //
   //  fldChar[selectTile, 7, y] := n;
   //end;
+
   for y := 0 to _CHAR_DIM do begin
-    n1 := fldChar[selectTile, 0, y];
-    n2 := fldChar[selectTile, 1, y];
+    n1 := fldChar[selectTileChar, 0, y];
+    n2 := fldChar[selectTileChar, 1, y];
     for x := 1 to _CHAR_DIM do
       if (x = 1) or (x = 3) or (x = 5) then begin
-        fldChar[selectTile, x - 1, y] := fldChar[selectTile, x + 1, y];
-        fldChar[selectTile, x, y] := fldChar[selectTile, x + 2, y];
+        fldChar[selectTileChar, x - 1, y] := fldChar[selectTileChar, x + 1, y];
+        fldChar[selectTileChar, x, y] := fldChar[selectTileChar, x + 2, y];
       end;
 
-    fldChar[selectTile, 6, y] := n1;
-    fldChar[selectTile, 7, y] := n2;
+    fldChar[selectTileChar, 6, y] := n1;
+    fldChar[selectTileChar, 7, y] := n2;
   end;
 end;
 
 {-----------------------------------------------------------------------------
- Shift tile right
+ Shift tile left
+ -----------------------------------------------------------------------------}
+procedure TfrmAntic4Tiles.ShiftTileLeftProc(Sender: TObject);
+var
+  x, y, i : byte;
+  n1, n2 : byte;
+begin
+  for i := 0 to _MAX_TILE_CHARS - 1 do
+    for y := 0 to _CHAR_DIM do begin
+      n1 := fldChar[i, 0, y];
+      n2 := fldChar[i, 1, y];
+      for x := 1 to _CHAR_DIM do
+        if (x = 1) or (x = 3) or (x = 5) then begin
+          fldChar[i, x - 1, y] := fldChar[i, x + 1, y];
+          fldChar[i, x, y] := fldChar[i, x + 2, y];
+        end;
+
+      fldChar[i, 6, y] := n1;
+      fldChar[i, 7, y] := n2;
+    end;
+end;
+
+{-----------------------------------------------------------------------------
+ Shift tile character right
  -----------------------------------------------------------------------------}
 procedure TfrmAntic4Tiles.ShiftRightProc(Sender: TObject);
 var
   x, y : byte;
   n1, n2 : byte;
 begin
-  //for y := 0 to _CHAR_DIM do begin
-  //  n := fldChar[selectTile, 7, y];
-  //  for x := _CHAR_DIM - 1 downto 0 do
-  //    fldChar[selectTile, x + 1, y] := fldChar[selectTile, x, y];
-  //
-  //  fldChar[selectTile, 0, y] := n;
-  //end;
   for y := 0 to _CHAR_DIM do begin
-    n1 := fldChar[selectTile, 7, y];
-    n2 := fldChar[selectTile, 6, y];
+    n1 := fldChar[selectTileChar, 7, y];
+    n2 := fldChar[selectTileChar, 6, y];
     for x := _CHAR_DIM downto 1 do
       if (x = 7) or (x = 5) or (x = 3) then begin
-        fldChar[selectTile, x, y] := fldChar[selectTile, x - 2, y];
-        fldChar[selectTile, x - 1, y] := fldChar[selectTile, x - 3, y];
+        fldChar[selectTileChar, x, y] := fldChar[selectTileChar, x - 2, y];
+        fldChar[selectTileChar, x - 1, y] := fldChar[selectTileChar, x - 3, y];
       end;
 
-    fldChar[selectTile, 1, y] := n1;
-    fldChar[selectTile, 0, y] := n2;
+    fldChar[selectTileChar, 1, y] := n1;
+    fldChar[selectTileChar, 0, y] := n2;
   end;
 end;
 
 {-----------------------------------------------------------------------------
- Shift tile up
+ Shift tile right
+ -----------------------------------------------------------------------------}
+procedure TfrmAntic4Tiles.ShiftTileRightProc(Sender: TObject);
+var
+  x, y, i : byte;
+  n1, n2 : byte;
+begin
+  for i := 0 to _MAX_TILE_CHARS - 1 do
+    for y := 0 to _CHAR_DIM do begin
+      n1 := fldChar[i, 7, y];
+      n2 := fldChar[i, 6, y];
+      for x := _CHAR_DIM downto 1 do
+        if (x = 7) or (x = 5) or (x = 3) then begin
+          fldChar[i, x, y] := fldChar[i, x - 2, y];
+          fldChar[i, x - 1, y] := fldChar[i, x - 3, y];
+        end;
+
+      fldChar[i, 1, y] := n1;
+      fldChar[i, 0, y] := n2;
+    end;
+end;
+
+{-----------------------------------------------------------------------------
+ Shift tile character up
  -----------------------------------------------------------------------------}
 procedure TfrmAntic4Tiles.ShiftUpProc(Sender: TObject);
 var
   x, y : byte;
 begin
   for x := 0 to _CHAR_DIM do
-    fld02[x] := fldChar[selectTile, x, 0];
+    fld02[x] := fldChar[selectTileChar, x, 0];
 
   for x := 0 to _CHAR_DIM do
     for y := 1 to _CHAR_DIM do begin
-      fldChar[selectTile, x, y - 1] := fldChar[selectTile, x, y];
-      fldChar[selectTile, x, y] := 0;
+      fldChar[selectTileChar, x, y - 1] := fldChar[selectTileChar, x, y];
+      fldChar[selectTileChar, x, y] := 0;
     end;
 
   for x := 0 to _CHAR_DIM do
-    fldChar[selectTile, x, _CHAR_DIM] := fld02[x];
-
-//  RefreshGrid;
+    fldChar[selectTileChar, x, _CHAR_DIM] := fld02[x];
 end;
 
 {-----------------------------------------------------------------------------
- Shift tile down
+ Shift tile up
+ -----------------------------------------------------------------------------}
+procedure TfrmAntic4Tiles.ShiftTileUpProc(Sender: TObject);
+var
+  x, y, i : byte;
+begin
+  for i := 0 to _MAX_TILE_CHARS - 1 do begin
+    for x := 0 to _CHAR_DIM do
+      fld02[x] := fldChar[i, x, 0];
+
+    for x := 0 to _CHAR_DIM do
+      for y := 1 to _CHAR_DIM do begin
+        fldChar[i, x, y - 1] := fldChar[i, x, y];
+        fldChar[i, x, y] := 0;
+      end;
+
+    for x := 0 to _CHAR_DIM do
+      fldChar[i, x, _CHAR_DIM] := fld02[x];
+  end;
+end;
+
+{-----------------------------------------------------------------------------
+ Shift tile character down
  -----------------------------------------------------------------------------}
 procedure TfrmAntic4Tiles.ShiftDownProc(Sender: TObject);
 var
   x, y : byte;
 begin
   for x := 0 to _CHAR_DIM do
-    fld02[x] := fldChar[selectTile, x, _CHAR_DIM];
+    fld02[x] := fldChar[selectTileChar, x, _CHAR_DIM];
 
   for x := 0 to _CHAR_DIM do
     for y := _CHAR_DIM - 1 downto 0 do begin
-      fldChar[selectTile, x, y + 1] := fldChar[selectTile, x, y];
-      fldChar[selectTile, x, y] := 0;
+      fldChar[selectTileChar, x, y + 1] := fldChar[selectTileChar, x, y];
+      fldChar[selectTileChar, x, y] := 0;
     end;
 
   for x := 0 to _CHAR_DIM do
-    fldChar[selectTile, x, 0] := fld02[x];
+    fldChar[selectTileChar, x, 0] := fld02[x];
+end;
+
+{-----------------------------------------------------------------------------
+ Shift tile down
+ -----------------------------------------------------------------------------}
+procedure TfrmAntic4Tiles.ShiftTileDownProc(Sender: TObject);
+var
+  x, y, i : byte;
+begin
+  for i := 0 to _MAX_TILE_CHARS - 1 do begin
+    for x := 0 to _CHAR_DIM do
+      fld02[x] := fldChar[i, x, _CHAR_DIM];
+
+    for x := 0 to _CHAR_DIM do
+      for y := _CHAR_DIM - 1 downto 0 do begin
+        fldChar[i, x, y + 1] := fldChar[i, x, y];
+        fldChar[i, x, y] := 0;
+      end;
+
+    for x := 0 to _CHAR_DIM do
+      fldChar[i, x, 0] := fld02[x];
+  end;
 end;
 
 {-----------------------------------------------------------------------------
@@ -1517,44 +1625,29 @@ begin
   for y := 0 to _CHAR_DIM do begin
     for x := 1 to _CHAR_DIM do
       if (x = 1) or (x = 3) or (x = 5) then begin
-        fldChar[selectTile, x - 1, y] := fldChar[selectTile, x + 1, y];
-        fldChar[selectTile, x, y] := fldChar[selectTile, x + 2, y];
-        fldChar[selectTile, x + 1, y] := 0;
-        fldChar[selectTile, x + 2, y] := 0;
+        fldChar[selectTileChar, x - 1, y] := fldChar[selectTileChar, x + 1, y];
+        fldChar[selectTileChar, x, y] := fldChar[selectTileChar, x + 2, y];
+        fldChar[selectTileChar, x + 1, y] := 0;
+        fldChar[selectTileChar, x + 2, y] := 0;
       end;
   end;
 end;
 
-//{-----------------------------------------------------------------------------
-// Move character right
-// -----------------------------------------------------------------------------}
+{-----------------------------------------------------------------------------
+ Move character right
+ -----------------------------------------------------------------------------}
 procedure TfrmAntic4Tiles.MoveRightProc(Sender: TObject);
 var
   x, y : byte;
 begin
-  //for y := 0 to _CHAR_DIM do
-  //  for x := _CHAR_DIM - 1 downto 0 do begin
-  //    fldChar[selectTile, x + 1, y] := fldChar[selectTile, x, y];
-  //    fldChar[selectTile, x, y] := 0;
-  //  end;
-
-//begin
-//  MoveRight(chrX, chrY, fldChar);
-
-  for y := 0 to _CHAR_DIM do begin
-//    n1 := fldChar[selectTile, 7, y];
-//    n2 := fldChar[selectTile, 6, y];
+  for y := 0 to _CHAR_DIM do
     for x := _CHAR_DIM downto 1 do
       if (x = 7) or (x = 5) or (x = 3) then begin
-        fldChar[selectTile, x, y] := fldChar[selectTile, x - 2, y];
-        fldChar[selectTile, x - 1, y] := fldChar[selectTile, x - 3, y];
-        fldChar[selectTile, x - 2, y] := 0;
-        fldChar[selectTile, x - 3, y] := 0;
+        fldChar[selectTileChar, x, y] := fldChar[selectTileChar, x - 2, y];
+        fldChar[selectTileChar, x - 1, y] := fldChar[selectTileChar, x - 3, y];
+        fldChar[selectTileChar, x - 2, y] := 0;
+        fldChar[selectTileChar, x - 3, y] := 0;
       end;
-
-//    fldChar[selectTile, 1, y] := n1;
-//    fldChar[selectTile, 0, y] := n2;
-  end;
 end;
 
 {-----------------------------------------------------------------------------
@@ -1566,8 +1659,8 @@ var
 begin
   for x := 0 to _CHAR_DIM do
     for y := 1 to _CHAR_DIM do begin
-      fldChar[selectTile, x, y - 1] := fldChar[selectTile, x, y];
-      fldChar[selectTile, x, y] := 0;
+      fldChar[selectTileChar, x, y - 1] := fldChar[selectTileChar, x, y];
+      fldChar[selectTileChar, x, y] := 0;
     end;
 end;
 
@@ -1580,8 +1673,8 @@ var
 begin
   for x := 0 to _CHAR_DIM do
     for y := _CHAR_DIM - 1 downto 0 do begin
-      fldChar[selectTile, x, y + 1] := fldChar[selectTile, x, y];
-      fldChar[selectTile, x, y] := 0;
+      fldChar[selectTileChar, x, y + 1] := fldChar[selectTileChar, x, y];
+      fldChar[selectTileChar, x, y] := 0;
     end;
 end;
 
@@ -1591,7 +1684,7 @@ var
 begin
   for y := 0 to _CHAR_DIM do
     for x := 0 to _CHAR_DIM do
-      undoValuesEx[selectTile, x, y] := fldChar[selectTile, x, y];
+      undoValuesEx[selectTileChar, x, y] := fldChar[selectTileChar, x, y];
 
   if radShiftChar.Checked then begin
     case (Sender as TSpeedButton).Tag of
@@ -1601,34 +1694,42 @@ begin
       3: ShiftDownProc(Sender);
     end;
   end
-  else begin
+  else if radMoveChar.Checked then begin
     case (Sender as TSpeedButton).Tag of
       0: MoveLeftProc(Sender);
       1: MoveRightProc(Sender);
       2: MoveUpProc(Sender);
       3: MoveDownProc(Sender);
     end;
+  end
+  else if radShiftTile.Checked then begin
+    case (Sender as TSpeedButton).Tag of
+      0: ShiftTileLeftProc(Sender);
+      1: ShiftTileRightProc(Sender);
+      2: ShiftTileUpProc(Sender);
+      3: ShiftTileDownProc(Sender);
+    end;
   end;
-  UpdateColors;
-  RefreshGrid;
-  RefreshTiles(selectTile);
+
+  UpdateCharColors;
+  RefreshGridData;
+  RefreshTiles;
 end;
 
-procedure TfrmAntic4Tiles.ClearTileProc(Sender : TObject);
+procedure TfrmAntic4Tiles.ClearTileCharProc(Sender : TObject);
 var
   x, y : byte;
 begin
   for y := 0 to _CHAR_DIM do
     for x := 0 to _CHAR_DIM do
-      fldChar[selectTile, x, y] := 0;
+      fldChar[selectTileChar, x, y] := 0;
 
-  UpdateColors;
-  RefreshGrid;
-  RefreshTiles(selectTile);
-//  editXLeave(Sender);
+  UpdateCharColors;
+  RefreshGridData;
+  RefreshTiles;
 end;
 
-procedure TfrmAntic4Tiles.FillTileProc(Sender : TObject);
+procedure TfrmAntic4Tiles.FillTileCharProc(Sender : TObject);
 var
   x, y : byte;
 begin
@@ -1641,33 +1742,32 @@ begin
       if (x = 1) or (x = 3) or (x = 5) or (x = 7) then begin
         case frmColors.SelColor of
           0: begin
-            fldChar[selectTile, x - 1, y] := 0;
-            fldChar[selectTile, x, y] := 0;
+            fldChar[selectTileChar, x - 1, y] := 0;
+            fldChar[selectTileChar, x, y] := 0;
           end;
           1: begin
-            fldChar[selectTile, x - 1, y] := 0;
-            fldChar[selectTile, x, y] := 1;
+            fldChar[selectTileChar, x - 1, y] := 0;
+            fldChar[selectTileChar, x, y] := 1;
           end;
           2: begin
-            fldChar[selectTile, x - 1, y] := 1;
-            fldChar[selectTile, x, y] := 0;
+            fldChar[selectTileChar, x - 1, y] := 1;
+            fldChar[selectTileChar, x, y] := 0;
           end;
           3, 10: begin
-            fldChar[selectTile, x - 1, y] := 1;
-            fldChar[selectTile, x, y] := 1;
+            fldChar[selectTileChar, x - 1, y] := 1;
+            fldChar[selectTileChar, x, y] := 1;
           end;
         end;
       end;
 
-  UpdateColors;
-  inverseIndex[selectTile] := frmColors.SelColor = 10;
-  RefreshGrid;
-//  RefreshChar(imgChar0000, selectTile, frmColors.SelColor);
-  RefreshTiles(selectTile);
+  antic4TileArray[antic4Tile.selected].charInverse[selectTileChar] := frmColors.SelColor = 10;
+  UpdateCharColors;
+  RefreshGridData;
+  RefreshTiles;
 end;
 
 // Update data colors on tile grid
-procedure TfrmAntic4Tiles.UpdateColors;
+procedure TfrmAntic4Tiles.UpdateCharColors;
 var
   x, y, i : byte;
 begin
@@ -1675,7 +1775,7 @@ begin
   //  for x := 0 to _CHAR_DIM do
   //    redoValuesEx[selectTile, x, y] := undoValuesEx[selectTile, x, y];
 
-  for i := 0 to 19 do
+  for i := 0 to _MAX_TILE_CHARS - 1 do
     for y := 0 to _CHAR_DIM do
       for x := 0 to _CHAR_DIM do
         if (x = 1) or (x = 3) or (x = 5) or (x = 7) then begin
@@ -1698,10 +1798,18 @@ begin
             fldCharAntic45Ex[antic4Tile.selected, i, x, y] := 2;
           end
           else if (fldChar[i, x - 1, y] = 1) and (fldChar[i, x, y] = 1) then begin
-            fldCharAntic45[i, x - 1, y] := 3;
-            fldCharAntic45[i, x, y] := 3;
-            fldCharAntic45Ex[antic4Tile.selected, i, x - 1, y] := 3;
-            fldCharAntic45Ex[antic4Tile.selected, i, x, y] := 3;
+            if antic4TileArray[antic4Tile.selected].charInverse[i] then begin
+              fldCharAntic45[i, x - 1, y] := 3;
+              fldCharAntic45[i, x, y] := 3;
+              fldCharAntic45Ex[antic4Tile.selected, i, x - 1, y] := 3;
+              fldCharAntic45Ex[antic4Tile.selected, i, x, y] := 3;
+            end
+            else begin
+              fldCharAntic45[i, x - 1, y] := 10;
+              fldCharAntic45[i, x, y] := 10;
+              fldCharAntic45Ex[antic4Tile.selected, i, x - 1, y] := 10;
+              fldCharAntic45Ex[antic4Tile.selected, i, x, y] := 10;
+            end;
           end;
         end;
 end;
@@ -1711,16 +1819,63 @@ begin
   frmColors.Show;
 end;
 
-procedure TfrmAntic4Tiles.CharSetProc(Sender : TObject);
+procedure TfrmAntic4Tiles.paintBoxMove(Sender : TObject; Shift : TShiftState; X, Y : Integer);
 begin
-//  ShowMessage('Not implemented yet!');
-  frmCharSet := TfrmCharSet.Create(Self);
-  with frmCharSet do
-    try
-      ShowModal;
-    finally
-      Free;
-    end;
+  isPaintBoxMove := true;
+  paintBoxDown(Sender, btn, Shift, x, y);
+end;
+
+procedure TfrmAntic4Tiles.paintBoxUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+  X, Y : Integer);
+begin
+  btn := mbMiddle;
+end;
+
+procedure TfrmAntic4Tiles.ClearTilesProc(Sender : TObject);
+var
+  i : byte;
+begin
+  FillByte(fldChar, SizeOf(fldChar), 0);
+  FillByte(fldCharAntic45, SizeOf(fldCharAntic45), 0);
+  FillByte(fldCharAntic45Ex, SizeOf(fldCharAntic45Ex), 0);
+
+  antic4Tile.dimX := 4;
+  antic4Tile.dimY := 5;
+  editX.Value := antic4Tile.dimX;
+  editY.Value := antic4Tile.dimY;
+
+  for i := 1 to 8 do begin
+    antic4Tile.selected := i;
+    RefreshTiles;
+  end;
+
+  antic4Tile.selected := 1;
+  SetCells;
+
+  with shape do begin
+    Visible := true;
+    Top := (imageObject as TImage).Top - 4;
+    Left := (imageObject as TImage).Left - 4;
+    Width := (imageObject as TImage).Width + 8;
+    Height := (imageObject as TImage).Height + 8;
+  end;
+end;
+
+procedure TfrmAntic4Tiles.popFunc(Sender : TObject);
+begin
+  //showmessage('popFunc * ' + inttostr(TMenuItem(Sender).Tag));
+  case TMenuItem(Sender).Tag of
+    0, 12: btnDraw.Down := true;
+    1: btnFlipX.Down := true;
+    2: btnFlipY.Down := true;
+    3: btnRotateTileChar.Down := true;
+    4: btnInvertTileChar.Down := true;
+    5: btnFillTileChar.Down := true;
+    6: btnClearTileChar.Down := true;
+    7: btnClearTile.Down := true;
+  end;
+
+  MiscOper(Sender);
 end;
 
 procedure TfrmAntic4Tiles.SelectTileProc(Sender : TObject);
@@ -1729,8 +1884,11 @@ var
   xf, yf : byte;
   col : byte;
 begin
-//  ShowTilesDim;
+//  debug('SelectTileProc');
+
+//  isSelectTile := true;
   imageObject := Sender;
+  isSizeEdit := false;
 
   with shape do begin
     Visible := true;
@@ -1743,28 +1901,18 @@ begin
   antic4Tile.selected := TImage(Sender).Tag;
   antic4Tile.dimX := antic4TileArray[antic4Tile.selected].dimX;
   antic4Tile.dimY := antic4TileArray[antic4Tile.selected].dimY;
+//  debug('antic4Tile 1a', antic4Tile.selected, antic4Tile.dimX, antic4Tile.dimY);
+
+  isSelectTile := true;
   editX.Value := antic4Tile.dimX;
+  isSelectTile := true;
   editY.Value := antic4Tile.dimY;
+  editX.Invalidate;
+  editY.Invalidate;
 
-//  fldCharAntic45Ex[selectTiles, selectTile, xf, yf] := frmColors.SelColor;
-(*
-  for i := 0 to _CHAR_DIM do
-    for j := 0 to _CHAR_DIM do begin
-      //fldChar[0, j, i] := fldCharAntic45Ex[selectTiles, 0, j, i];
-      //fldChar[1, j, i] := fldCharAntic45Ex[selectTiles, 1, j, i];
-
-      fldCharAntic45[0, j, i] := fldCharAntic45Ex[selectTiles, 0, j, i];
-      fldCharAntic45[1, j, i] := fldCharAntic45Ex[selectTiles, 1, j, i];*)
-(*
-      FillRectEx(imgChar0000, colTab[fldCharAntic45Ex[selectTiles, 0, j, i]],
-                   (j - 1)*chrFactX + 1, i*chrFactY + 1, chrFactX shl 1 - 1, chrFactY - 1);
-      FillRectEx(imgChar0100, colTab[fldCharAntic45Ex[selectTiles, 1, j, i]],
-                   (j - 1)*chrFactX + 1, i*chrFactY + 1, chrFactX shl 1 - 1, chrFactY - 1);
-//      for k := 0 to 15 do
-//        fldCharAntic45[k, j, i] := fldCharAntic45Ex[selectTiles, k, j, i];
-    end;
-*)
-  for i := 0 to 19 do
+  caption := programName + ' ' + programVersion +
+             ' - Antic mode 4 tile editor (' + antic4TileArray[antic4Tile.selected].filename + ')';
+  for i := 0 to _MAX_TILE_CHARS - 1 do
     for yf := 0 to _CHAR_DIM do
       for xf := 0 to _CHAR_DIM do
         case xf of
@@ -1793,16 +1941,21 @@ begin
           end;
         end;
 
-//  RefreshData;
+  //for i := 0 to SizeOf(cellIndex) - 1 do
+  //  cellIndex[i] := false;
+  //
+  //for i := 0 to editY.Value - 1 do
+  //  for j := 0 to editX.Value - 1 do
+  //    cellIndex[j + i shl 2] := true;
 
-  editXLeave(Sender);
+  SetCells;
 end;
 
 procedure TfrmAntic4Tiles.UndoProc(Sender : TObject);
 var
   x, y : byte;
 begin
-  //for i := 0 to 19 do
+  //for i := 0 to _MAX_TILE_CHARS - 1 do
   //  for y := 0 to _CHAR_DIM do
   //    for x := 0 to _CHAR_DIM do
   //      fldChar[i, x, y] := fldCharMem[0, i, x, y];
@@ -1816,7 +1969,7 @@ begin
   //fldCharMemEx[0, selectTile, 4] := xf;
   //fldCharMemEx[0, selectTile, 5] := yf;
 
-//  for i := 0 to 19 do
+//  for i := 0 to _MAX_TILE_CHARS - 1 do
 //    fldChar[i, x, y] := fldCharMemEx[0, i, y];
 
   //undoValues[0].tileSelected := selectTile;
@@ -1830,7 +1983,7 @@ begin
 
   for y := 0 to _CHAR_DIM do
     for x := 0 to _CHAR_DIM do
-      redoValuesEx[selectTile, x, y] := fldChar[selectTile, x, y];
+      redoValuesEx[selectTileChar, x, y] := fldChar[selectTileChar, x, y];
 
   if btnDraw.Down then begin
     fldChar[undoValues[0].tileSelected, undoValues[0].x, undoValues[0].y] := undoValues[0].value;
@@ -1839,12 +1992,12 @@ begin
   else begin
     for y := 0 to _CHAR_DIM do
       for x := 0 to _CHAR_DIM do
-        fldChar[selectTile, x, y] := undoValuesEx[selectTile, x, y];
+        fldChar[selectTileChar, x, y] := undoValuesEx[selectTileChar, x, y];
   end;
 
-  UpdateColors;
-  RefreshGrid;
-  RefreshTiles(selectTile);
+  UpdateCharColors;
+  RefreshGridData;
+  RefreshTiles;
 end;
 
 procedure TfrmAntic4Tiles.RedoProc(Sender : TObject);
@@ -1857,39 +2010,40 @@ begin
 
   for y := 0 to _CHAR_DIM do
     for x := 0 to _CHAR_DIM do
-      fldChar[selectTile, x, y] := redoValuesEx[selectTile, x, y];
+      fldChar[selectTileChar, x, y] := redoValuesEx[selectTileChar, x, y];
 
-  UpdateColors;
-  RefreshGrid;
-  RefreshTiles(selectTile);
+  UpdateCharColors;
+  RefreshGridData;
+  RefreshTiles;
 end;
 
 procedure TfrmAntic4Tiles.LoadDefaultColorsProc(Sender : TObject);
 begin
   frmMain.LoadDefaultPalette;
-  RefreshGrid;
+  RefreshGridData;
 end;
 
 procedure TfrmAntic4Tiles.ShowGridProc(Sender : TObject);
 begin
-  case TMenuItem(Sender).Tag of
-    0: isShowGrid := true;
-    1: isShowGrid := false;
-  end;
-  RefreshData;
+  isShowGrid := TMenuItem(Sender).Tag = 0;
+  RefreshGridData;
 end;
 
 procedure TfrmAntic4Tiles.paintBoxDown(Sender : TObject; Button : TMouseButton;
   Shift : TShiftState; X, Y : Integer);
 var
-  i, j : word;
+  i, j : byte;
   xx, yy : byte;
+  x02, y02 : byte;
+  coordX02, coordY02 : integer;
 begin
   btn := Button;
   coordX := X div factX;
   coordY := Y div factY;
+  coordX02 := coordX;
+  coordY02 := coordY;
 
-//  statusBar.Panels[1].Text := 'xy : ' + inttostr(coordX) + ', ' + inttostr(coordY);
+//  statusBar.Panels[2].Text := 'xy : ' + inttostr(coordX) + ', ' + inttostr(coordY);
 
   //// Data is changed
   //if not isEdit then begin
@@ -1898,67 +2052,101 @@ begin
   //    caption := caption + ' *';
   //end;
 
-  // Calculate Atari matrix coordinates for Antic mode 4
+  // Calculate Atari tile matrix coordinates for Antic mode 4
   for j := 0 to 23 do begin
     for i := 0 to 39 do
       if (coordX >= (i shl 3)*editX.Value) and (coordX < ((i + 1) shl 3)*editX.Value) then begin
         if j = 0 then begin
-          if i > 0 then
-            coordX := (i shl 4)*editX.Value
-          else
+          if i > 0 then begin
+            coordX := (i shl 4)*editX.Value;
+//            x01 := ((i shl 3)*editX.Value) shr 2;
+            x02 := ((i shl 3)*editX.Value) shr 3;
+          end
+          else begin
             coordX := 0;
+            x02 := 0;
+          end;
         end;
-        xx := i;
         break;
       end;
 
     if (coordY >= (j shl 3)*editY.Value) and (coordY < ((j + 1) shl 3)*editY.Value) then begin
       coordY := (j shl 4)*editY.Value;
-      yy := j;
+//      yy := j;
+//      y01 := j shl 4;
+      y02 := ((j shl 3)*editY.Value) shr 3;
       break;
     end;
   end;
 
+  // Calculate screen coordinates for Antic mode 4
+  for j := 0 to 23 do begin
+    for i := 0 to 39 do
+      if (coordX02 >= (i shl 3)) and (coordX02 < ((i + 1) shl 3)) then begin
+        if j = 0 then begin
+          if i > 0 then begin
+//            coordX := (i shl 4);
+//            x01 := ((i shl 3)*editX.Value) shr 2;
+            xx := ((i shl 3)) shr 3;
+          end
+          else begin
+//            coordX := 0;
+            xx := 0;
+          end;
+        end;
+        break;
+      end;
+
+    if (coordY02 >= (j shl 3)) and (coordY02 < ((j + 1) shl 3)) then begin
+//      coordY02 := (j shl 4);
+//      yy := j;
+//      y01 := j shl 4;
+      yy := ((j shl 3)) shr 3;
+      break;
+    end;
+  end;
+
+  if x02 + y02*(39 + 1) > _ANTIC_MODE_4_SIZE - 1 then Exit;
+
 //  if xx + yy*(maxX + 1) > maxSize then Exit;
   statusBar.Panels[1].Text := 'Cursor coordinates (x: ' +
                               inttostr(xx) + ', y: ' + inttostr(yy) + ')';
-
+  statusBar.Panels[2].Text := 'Tile coordinates (x: ' +
+                              inttostr(x02) + ', y: ' + inttostr(y02) + ')';
   //offset2 := offs2;
   //offset := offset2 shl 3;
   //if not isFontSetNormal then
   //  Inc(offset2, 128);
 
-//  fldAtascii[xx + yy*(maxX + 1)] := offset2;
+  coordX02 := x02 + y02*(39 + 1);
+  if not isPaintBoxMove then begin
+    tiles[coordX02].tileIndex := antic4Tile.selected;
+    tiles[coordX02].coordX := coordX;
+    tiles[coordX02].coordY := coordY;
+    tiles[coordX02].x := x02;
+    tiles[coordX02].y := y02;
 
-  paintBoxPaint(imageObject as TImage);
+    case btn of
+      mbLeft : begin end;
+      mbRight: begin end;
+    else
+      exit;
+    end;
+
+    paintBoxPaint(imageObject as TImage);
+  end;
 
   //imgTile01.Picture := nil; //<-- add this.
   //imgTile01.SetBounds(imgTile01.Left, imgTile01.Top, 14, 14);
   //imgTile01.Invalidate;
 //  paintBoxPaint(imgTile01);
-end;
 
-//constructor Icon.Create(X, Y: Integer);
-//var Bitmap:TBitmap;
-//begin
-//  Bitmap:=TBitmap.Create;
-//  try
-//    Bitmap.Height := IconSize;
-//    Bitmap.Width := IconSize;
-//    Bitmap.Canvas.Pen.Color := clBlack;
-//    Bitmap.Canvas.Rectangle(Round(X-(IconSize/2)), Round(Y-(IconSize/2)),
-//      Round(X+(IconSize/2)), Round(Y+(IconSize/2)));
-//    PaintBox.Canvas.Draw(0, 0, Bitmap);
-//  finally
-//    Bitmap.Free;
-//  end;
-//end;
+  isPaintBoxMove := false;
+end;
 
 procedure TfrmAntic4Tiles.paintBoxPaint(Sender : TObject);
 begin
   if not (sender is TImage) then exit;
-
-//  selectTile := TImage(Sender).Tag;
 
 //  case selectTiles of
 //    1: begin
@@ -1968,23 +2156,6 @@ begin
 //    end;
 //  end;
 
-  //antic4Tile.selected := TImage(Sender).Tag;
-  //antic4Tile.dimX := antic4TileArray[antic4Tile.selected].dimX;
-  //antic4Tile.dimY := antic4TileArray[antic4Tile.selected].dimY;
-
-//  Bitmap:=TBitmap.Create;
-//  try
-//    Bitmap.Assign(TImage(Sender).Picture.Bitmap);
-//    Bitmap.Height := 30;
-//    Bitmap.Width := 30;
-////    Bitmap.Canvas.Pen.Color := clBlack;
-////    Bitmap.Canvas.Rectangle(Round(X-(IconSize/2)), Round(Y-(IconSize/2)),
-////      Round(X+(IconSize/2)), Round(Y+(IconSize/2)));
-//    paintBox.Canvas.Draw(coordX, coordY, Bitmap);
-//  finally
-//    Bitmap.Free;
-//  end;
-
 //paintBox.Canvas.CopyRect(
   //  Rect(coordX,coordY,TImage(Sender).Picture.Width,TImage(Sender).Picture.Height),
   //  TImage(Sender).Canvas,
@@ -1992,41 +2163,57 @@ begin
   //    0, 0, TImage(Sender).Picture.Width-40, TImage(Sender).Picture.Height-40));
 
   paintBox.Canvas.Draw(coordX, coordY, TImage(Sender).Picture.Bitmap);
+//  paintBox.Canvas.Draw(coordX, coordY, (imageObject as TImage).Picture.Bitmap);
 end;
 
-procedure TfrmAntic4Tiles.btnFlipXClick(Sender : TObject);
+procedure TfrmAntic4Tiles.MiscOper(Sender : TObject);
 begin
   shapeTileGrid.Visible := false;
+
+  if btnSelectTileChar.Down then
+    lblFunc.Caption := 'Function: ' + _TILE_FUNCTION[0]
+  else if btnDraw.Down then
+    lblFunc.Caption := 'Function: ' + _TILE_FUNCTION[1]
+  else if btnRotateTileChar.Down then
+    lblFunc.Caption := 'Function: ' + _TILE_FUNCTION[5]
+  else if btnFlipX.Down then
+    lblFunc.Caption := 'Function: ' + _TILE_FUNCTION[2]
+  else if btnFlipY.Down then
+    lblFunc.Caption := 'Function: ' + _TILE_FUNCTION[3]
+  else if btnInvertTileChar.Down then
+    lblFunc.Caption := 'Function: ' + _TILE_FUNCTION[4]
+  else if btnFillTileChar.Down then
+    lblFunc.Caption := 'Function: ' + _TILE_FUNCTION[6]
+  else if btnClearTileChar.Down then
+    lblFunc.Caption := 'Function: ' + _TILE_FUNCTION[7];
 end;
 
 procedure TfrmAntic4Tiles.ViewerProc(Sender : TObject);
 begin
-  ShowMessage('Not implemented yet!');
+  frmViewer.isModal := true;
+  frmViewer.ShowModal;
+  if frmViewer.filename <> '' then
+    OpenFile(frmViewer.filename);
 end;
 
 procedure TfrmAntic4Tiles.ShowTilesDim;
 var
   i : byte;
-
-function CalcBytes(dim : byte) : string;
-begin
-  result := IntToStr(dim shl 3);
-end;
-
 begin
   for i := 1 to _MAX_TILES do
-    (FindComponent('lblTiles0' + IntToStr(i) + 'Dim') as TLabel).Caption :=
-      IntToStr(antic4TileArray[i].dimX) + ' x' + IntToStr(antic4TileArray[i].dimY) + #13#10 +
-      '(' + CalcBytes(antic4TileArray[i].dimX) + ' x' + CalcBytes(antic4TileArray[i].dimY) + ')';
+    (FindComponent('lblTile0' + IntToStr(i) + 'Dim') as TLabel).Caption :=
+      IntToStr(antic4TileArray[i].dimX) + ' x ' + IntToStr(antic4TileArray[i].dimY);
+//      #13#10'(' + IntToStr(antic4TileArray[i].dimX shl 3) + ' x' + IntToStr(antic4TileArray[i].dimY shl 3) + ')';
 end;
 
 procedure TfrmAntic4Tiles.RefreshCharX(imgChar : TImage; offset : integer);
 var
   col : byte;
   xf, yf : integer;
+  isInverse : boolean;
 begin
+  isInverse := offset > 127;
   FillRectEx(imgChar, coltabFont[0], 0, 0, imgChar.Width, imgChar.Height);
-//  FillRectEx(imgCharAntic45, colTab[0], 0, 0, imgChar.Width, imgChar.Height);
   offset := offset shl 3;
   for yf := 0 to _CHAR_DIM do
     for xf := 0 to _CHAR_DIM do begin
@@ -2035,126 +2222,323 @@ begin
 //      if not isFontSetNormal then
 //        col := 1 - col;
 
+      if isInverse then
+        col := 1 - col;
+
       FillRectEx(imgChar, coltabFont[col], xf shl 1, yf shl 1, 2, 2);
-
-      // Show pixel of edited character
-//      col := fldFontSet[xf, yf + offset];
-//      fldChar[xf, yf] := col;
-//      FillRectEx(imgChar, coltabFont[col], xf*chrFactX, yf*chrFactY, chrFactX, chrFactX);
-(*
-      if isShowGrid then begin
-//        debug('gridColor <> colTab[0]');
-        imgChar.Canvas.Pen.Color := gridColor;
-        imgChar.Canvas.Rectangle(xf*chrFactX, yf*chrFactY,
-                                 xf*chrFactX + (xf + 1)*chrFactX + 1,
-                                 yf*chrFactY + (yf + 1)*chrFactY + 1);
-      end;
-
-      if (xf = 1) or (xf = 3) or (xf = 5) or (xf = 7) then begin
-        if (fldChar[xf - 1, yf] = 0) and (fldChar[xf, yf] = 0) then
-          col := 0
-        else if (fldChar[xf - 1, yf] = 1) and (fldChar[xf, yf] = 0) then
-          col := 2
-        else if (fldChar[xf - 1, yf] = 0) and (fldChar[xf, yf] = 1) then
-          col := 1
-        else if (fldChar[xf - 1, yf] = 1) and (fldChar[xf, yf] = 1) then begin
-          if isFontSetNormal then
-            col := 3
-          else
-            col := 10;
-        end;
-        fldCharAntic45[xf - 1, yf] := colTab[col];
-        fldCharAntic45[xf, yf] := colTab[col];
-        FillRectEx(imgCharAntic45, colTab[col], (xf - 1)*chrFactX, yf*chrFactY,
-                   (xf - 1)*chrFactX*2, chrFactY);
-        if isShowGrid then begin
-//          debug('isShowGrid');
-          imgCharAntic45.Canvas.Pen.Color := gridColor
-        end
-        else begin
-//          debug('not isShowGrid');
-          imgCharAntic45.Canvas.Pen.Color := colTab[col];
-        end;
-
-        if xf = 1 then
-          imgCharAntic45.Canvas.Rectangle(0, yf*chrFactY,
-                                          chrFactX*2 + 1,
-                                          yf*chrFactY + (yf + 1)*chrFactY + 1)
-        else
-          imgCharAntic45.Canvas.Rectangle((xf - 1)*chrFactX, yf*chrFactY,
-                                          (xf - 1)*chrFactX + (xf - 1)*chrFactX + 1,
-                                          yf*chrFactY + (yf + 1)*chrFactY + 1);
-      end;*)
     end;
 
   imgChar.Refresh;
-//  imgCharOrig.Refresh;
 end;
 
 procedure TfrmAntic4Tiles.ShowTileChars;
+var
+  i : byte;
+  cntTiles : byte = 1;
+  cntValues : byte = 0;
+  charValuePos : byte = 1;
+  tileMaxSize : byte;
+  xPos : byte = 0;
+  yPos : byte = 96;
 begin
-  RefreshCharX(imgTile01Char0000, 64);
-  RefreshCharX(imgTile01Char0100, 65);
-  RefreshCharX(imgTile01Char0010, 66);
-  RefreshCharX(imgTile01Char0001, 67);
-  RefreshCharX(imgTile01Char1000, 68);
-  RefreshCharX(imgTile01Char1100, 69);
-  RefreshCharX(imgTile01Char1010, 70);
-  RefreshCharX(imgTile01Char1001, 71);
-  RefreshCharX(imgTile01Char2000, 72);
-  RefreshCharX(imgTile01Char2100, 73);
-  RefreshCharX(imgTile01Char2010, 74);
-  RefreshCharX(imgTile01Char2001, 75);
-  RefreshCharX(imgTile01Char3000, 76);
-  RefreshCharX(imgTile01Char3100, 77);
-  RefreshCharX(imgTile01Char3010, 78);
-  RefreshCharX(imgTile01Char3001, 79);
-  RefreshCharX(imgTile01Char4000, 80);
-  RefreshCharX(imgTile01Char4100, 81);
-  RefreshCharX(imgTile01Char4010, 82);
-  RefreshCharX(imgTile01Char4001, 83);
+//  isFontSetNormal := true;
+  tileMaxSize := antic4TileArray[cntTiles].dimX*antic4TileArray[cntTiles].dimY - 1;
 
-  RefreshCharX(imgTile02Char0000, 84);
-  RefreshCharX(imgTile02Char0100, 85);
-  RefreshCharX(imgTile02Char0010, 86);
-  RefreshCharX(imgTile02Char0001, 87);
-  RefreshCharX(imgTile02Char1000, 88);
-  RefreshCharX(imgTile02Char1100, 89);
-  RefreshCharX(imgTile02Char1010, 90);
-  RefreshCharX(imgTile02Char1001, 91);
-  RefreshCharX(imgTile02Char2000, 92);
-  RefreshCharX(imgTile02Char2100, 93);
-  RefreshCharX(imgTile02Char2010, 94);
-  RefreshCharX(imgTile02Char2001, 95);
-  RefreshCharX(imgTile02Char3000, 96);
-  RefreshCharX(imgTile02Char3100, 97);
-  RefreshCharX(imgTile02Char3010, 98);
-  RefreshCharX(imgTile02Char3001, 99);
-  RefreshCharX(imgTile02Char4000, 100);
-  RefreshCharX(imgTile02Char4100, 101);
-  RefreshCharX(imgTile02Char4010, 102);
-  RefreshCharX(imgTile02Char4001, 103);
+//  debug('imgCharList', imgCharList.count);
+  for i := 0 to imgCharList.Count - 1 do begin
+    TImage(imgCharList[i]).Enabled := false;
+    TImage(imgCharList[i]).Visible := false;
 
-  RefreshCharX(imgTile03Char0000, 104);
-  RefreshCharX(imgTile03Char0100, 105);
-  RefreshCharX(imgTile03Char0010, 106);
-  RefreshCharX(imgTile03Char0001, 107);
-  RefreshCharX(imgTile03Char1000, 108);
-  RefreshCharX(imgTile03Char1100, 109);
-  RefreshCharX(imgTile03Char1010, 110);
-  RefreshCharX(imgTile03Char1001, 111);
-  RefreshCharX(imgTile03Char2000, 112);
-  RefreshCharX(imgTile03Char2100, 113);
-  RefreshCharX(imgTile03Char2010, 114);
-  RefreshCharX(imgTile03Char2001, 115);
-  RefreshCharX(imgTile03Char3000, 116);
-  RefreshCharX(imgTile03Char3100, 117);
-  RefreshCharX(imgTile03Char3010, 118);
-  RefreshCharX(imgTile03Char3001, 119);
-  RefreshCharX(imgTile03Char4000, 120);
-  RefreshCharX(imgTile03Char4100, 121);
-  RefreshCharX(imgTile03Char4010, 122);
-  RefreshCharX(imgTile03Char4001, 123);
+    // Check the maximum possible number of characters for the tile
+    if (i > _MAX_TILE_CHARS - 1) and (i mod _MAX_TILE_CHARS = 0) then begin
+      // Next tile
+      Inc(cntTiles);
+      // Start with first tile character
+      cntValues := 0;
+      // Y coordinate of tile character
+      yPos := 96;
+      // Calculate new maximum count of tile characters
+      tileMaxSize := antic4TileArray[cntTiles].dimX*antic4TileArray[cntTiles].dimY - 1;
+//      debug('ShowTileChars', tileMaxSize, i, charValuePos);
+    end;
+
+    // Draw tile character until maximum dimension boundaries are reached
+    if cntValues <= tileMaxSize then begin
+      // Check if maximum count of x positioned tiles exceed set values
+      if cntValues mod antic4TileArray[cntTiles].dimX = 0 then begin
+        xPos := 0;      // Reset tile character position horizontally
+        inc(yPos, 18);  // Position tile character vertically
+      end;
+
+      // Enable and show character for the tile at specific position
+      TImage(imgCharList[i]).Enabled := true;
+      TImage(imgCharList[i]).Visible := true;
+      TImage(imgCharList[i]).Left := (cntTiles - 1)*80 + xPos*(TImage(imgCharList[i]).Width - 1) +
+                                     xPos + 10;
+      TImage(imgCharList[i]).Top := yPos;
+
+//      if charValuePos = 0 then debug('0', i);
+
+      // Set character value of the tile and show it on the screen
+      antic4TileArray[cntTiles].charValues[cntValues] := charValuePos;
+      RefreshCharX(TImage(imgCharList[i]), charValuePos);
+      TImage(imgCharList[i]).Hint := 'Dec: ' + IntToStr(charValuePos) +
+                                     ' Hex: ' + IntToHex(charValuePos, 2);
+      Inc(xPos);          // Position for next tile character
+      Inc(cntValues);     // Next tile character
+
+      if charValuePos = 127 then
+        charValuePos := 0;
+
+      Inc(charValuePos);  // Next character value
+    end;
+  end;
+end;
+(*
+procedure TfrmAntic4Tiles.ShowTileCharsBackup;
+var
+  i : byte;
+  j : byte = 0;
+  cnt : byte = 1;
+begin
+  isFontSetNormal := true;
+
+//  debug('imgCharList', imgCharList.count);
+  for i := 0 to imgCharList.Count - 1 do begin
+    if (i > 19) and (i mod 20 = 0) then begin
+      Inc(cnt);
+      j := 0;
+//      debug('i, cnt', i, cnt);
+    end;
+    antic4TileArray[cnt].charValues[j] := i;
+    RefreshCharX(TImage(imgCharList[i]), i);
+    TImage(imgCharList[i]).Hint := 'Dec: ' + IntToStr(i) + ' Hex: ' + IntToHex(i, 2);
+//    debug('status', i, j);
+    Inc(j);
+  end;
+end;
+*)
+procedure TfrmAntic4Tiles.CreateObjects(index : byte);
+var
+  image : TImage;
+  i : byte;
+  j, y : word;
+begin
+  j := 0;
+  y := 96;
+  for i := 0 to _MAX_TILE_CHARS - 1 do begin
+    image := TImage.Create(self);
+    image.Parent := scrollBox;
+    image.Name := 'imgTile0' + IntToStr(index) + 'Char' + inttostr(i);
+    image.Enabled := false;
+    image.Visible := false;
+    image.Width := 18;
+    image.Height := 18;
+    inc(j);
+    if i mod 4 = 0 then begin
+      j := 0;
+      inc(y, 18);
+    end;
+
+//    image.Left := (index - 1)*80 + j*(image.Width - 1) + j + 10;
+//    image.Top := y;
+//    image.OnClick := @CharSetProc;
+    image.OnMouseDown := @OnMouseDown;
+    image.Tag := i;
+    image.ParentShowHint := false;
+    image.ShowHint := true;
+
+    // Alternative to Tag property for detecting selected tile
+    image.Constraints.MinWidth := index;
+
+//    RefreshCharX(TImage(image.Name), 64 + i);
+//    RefreshCharX(FindComponent(image.Name) as TImage, 64 + i);
+//    RefreshCharX(TImage(imgCharList[i]), 64 + i);
+    imgCharList.Add(image);
+  end;
+end;
+
+procedure TfrmAntic4Tiles.CopyTileToAllProc(Sender : TObject);
+var
+  x, y, i, j : byte;
+begin
+  if MessageDlg('Question',
+                'Selected tile will be copied to all other tiles! Are you sure to proceed?',
+                mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    for i := 1 to 8 do
+      for j := 0 to _MAX_TILE_CHARS - 1 do
+        for y := 0 to _CHAR_DIM do
+          for x := 0 to _CHAR_DIM do
+            if i <> antic4Tile.selected then
+              fldCharAntic45Ex[i, j, x, y] := fldCharAntic45Ex[antic4Tile.selected, j, x, y];
+
+    j := antic4Tile.selected;
+    for i := 1 to 8 do
+      if i <> j then begin
+        antic4Tile.selected := i;
+        RefreshTiles;
+      end;
+
+    antic4Tile.selected := j;
+    RefreshTiles;
+  end;
+end;
+
+procedure TfrmAntic4Tiles.OnMouseDown(Sender : TObject; Button : TMouseButton;
+  Shift : TShiftState; X, Y : Integer);
+begin
+  case TImage(Sender).Constraints.MinWidth of
+    1: imageObject := imgTile01;
+    2: imageObject := imgTile02;
+    3: imageObject := imgTile03;
+    4: imageObject := imgTile04;
+    5: imageObject := imgTile05;
+    6: imageObject := imgTile06;
+    7: imageObject := imgTile07;
+    8: imageObject := imgTile08;
+  end;
+
+  SelectTileProc(imageObject);
+
+  isCharConfirm := false;
+  charOffset := antic4TileArray[antic4Tile.selected].charValues[TImage(Sender).Tag];
+//  debug('char', antic4Tile.selected, charOffset, TImage(Sender).Tag);
+//  charOffset := 33;
+
+  if Button = mbRight then begin
+    frmCharSet := TfrmCharSet.Create(Self);
+    with frmCharSet do
+      try
+        ShowModal;
+      finally
+        Free;
+      end;
+
+    if isCharConfirm then begin
+      antic4TileArray[antic4Tile.selected].charValues[TImage(Sender).Tag] := charOffset;
+      RefreshCharX(TImage(Sender), charOffset);
+    end;
+  end;
+end;
+
+procedure TfrmAntic4Tiles.itemTileDrawProc(Sender : TObject);
+begin
+  btnDraw.down := true;
+  MiscOper(Sender);
+end;
+
+procedure TfrmAntic4Tiles.MenuItem5Click(Sender : TObject);
+begin
+  ColorProc(color4);
+  btnDraw.Down := true;
+  MiscOper(Sender);
+end;
+
+procedure TfrmAntic4Tiles.RefreshScreen;
+var
+  i : word;
+begin
+  for i := 0 to _ANTIC_MODE_4_SIZE - 1 do begin
+    if tiles[i].tileIndex = antic4Tile.selected then begin
+//      coordX := ((tiles[i].coordX shl 3)*antic4TileArray[tiles[i].tileIndex].dimX) shr 3;
+//      coordY := ((tiles[i].coordY shl 3)*antic4TileArray[tiles[i].tileIndex].dimY) shr 3;
+      coordX := tiles[i].coordX;
+      coordY := tiles[i].coordY;
+      case tiles[i].tileIndex of
+        1: imageObject := imgTile01;
+        2: imageObject := imgTile02;
+        3: imageObject := imgTile03;
+        4: imageObject := imgTile04;
+        5: imageObject := imgTile05;
+        6: imageObject := imgTile06;
+        7: imageObject := imgTile07;
+        8: imageObject := imgTile08;
+      end;
+      paintBoxPaint(imageObject as TImage);
+    end;
+  end;
+end;
+
+procedure TfrmAntic4Tiles.MenuOper(Sender : TObject);
+begin
+  case TMenuItem(Sender).Tag of
+    0: btnDraw.Down := true;
+    1: btnFlipX.Down := true;
+    2: btnFlipY.Down := true;
+    3: btnRotateTileChar.Down := true;
+    4: btnInvertTileChar.Down := true;
+    5: btnFillTileChar.Down := true;
+    6: btnClearTileChar.Down := true;
+    7: btnClearTile.Down := true;
+  end;
+
+  MiscOper(Sender);
+end;
+
+procedure TfrmAntic4Tiles.RefreshColors;
+begin
+  ColorRegisters;
+  UpdateCharColors;
+  RefreshGridData;
+  RefreshTiles;
+end;
+
+procedure TfrmAntic4Tiles.ResizeTilesProc(Sender : TObject);
+var
+  i : byte;
+begin
+  frmTilesResize := TfrmTilesResize.Create(Self);
+  with frmTilesResize do
+    try
+      ShowModal;
+    finally
+      Free;
+    end;
+
+  if not frmAntic4Tiles.isTilesResizeProc then exit;
+
+  selectTileChar := 0;
+  antic4Tile.selected := 1;
+
+  for i := 1 to _MAX_TILES do begin
+    antic4TileArray[i].dimX := antic4Tile.dimX;
+    antic4TileArray[i].dimY := antic4Tile.dimY;
+  end;
+
+  ShowTilesDim;
+  SelectTileProc(imgTile02);
+  SelectTileProc(imgTile03);
+  SelectTileProc(imgTile04);
+  SelectTileProc(imgTile05);
+  SelectTileProc(imgTile06);
+  SelectTileProc(imgTile07);
+  SelectTileProc(imgTile08);
+  SelectTileProc(imgTile01);
+  ShowTileChars;
+
+  RefreshScreen
+end;
+
+procedure TfrmAntic4Tiles.ClearScreenProc(Sender : TObject);
+var
+  i : word;
+begin
+  // Clear tile pointers
+  for i := 0 to _ANTIC_MODE_4_SIZE - 1 do begin
+    tiles[i].tileIndex := 0;
+    tiles[i].coordX := 0;
+    tiles[i].coordY := 0;
+    tiles[i].x := 0;
+    tiles[i].y := 0;
+  end;
+
+  // Clear screen
+  with shapeEditor.Canvas do begin
+    Brush.Color := coltab[0];
+    Brush.Style := bsSolid;
+    FillRect(bounds(0, 0, shapeEditor.Width, shapeEditor.Height));
+  end;
 end;
 
 procedure TfrmAntic4Tiles.CloseWinProc(Sender : TObject);
@@ -2163,21 +2547,3 @@ begin
 end;
 
 end.
-(*
-if inttostr(fldChar[index, 0, i]) +
-            inttostr(fldChar[index, 1, i]) +
-            inttostr(fldChar[index, 2, i]) +
-            inttostr(fldChar[index, 3, i]) +
-            inttostr(fldChar[index, 4, i]) +
-            inttostr(fldChar[index, 5, i]) +
-            inttostr(fldChar[index, 6, i]) +
-            inttostr(fldChar[index, 7, i]) <> '00000000' then
-showmessage(inttostr(fldChar[index, 0, i]) +
-            inttostr(fldChar[index, 1, i]) +
-            inttostr(fldChar[index, 2, i]) +
-            inttostr(fldChar[index, 3, i]) +
-            inttostr(fldChar[index, 4, i]) +
-            inttostr(fldChar[index, 5, i]) +
-            inttostr(fldChar[index, 6, i]) +
-            inttostr(fldChar[index, 7, i]));
-            *)

@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Text mode 1 and 2 editor
 }
 unit antic6;
@@ -76,12 +76,12 @@ type
     procedure cmbTextModeChange(Sender : TObject);
     procedure WriteTextProc(Sender: TObject);
     procedure ClearTextProc(Sender: TObject);
-    procedure imgEditorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgEditorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure imgEditorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure imgEditorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure imgEditorUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure imgFontSetMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgFontSetDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure CloseWinProc(Sender: TObject);
     procedure ClearScreenProc(Sender: TObject);
@@ -335,7 +335,7 @@ begin
   editText.Text := '';
 end;
 
-procedure TfrmAntic6.imgEditorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmAntic6.imgEditorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   xf, yf : integer;
@@ -346,7 +346,7 @@ begin
   Plot(xf, yf);
 end;
 
-procedure TfrmAntic6.imgEditorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TfrmAntic6.imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
   xf, yf : integer;
 begin
@@ -358,13 +358,13 @@ begin
     Plot(xf, yf);
 end;
 
-procedure TfrmAntic6.imgEditorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmAntic6.imgEditorUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
   btn := mbMiddle;
 end;
 
-procedure TfrmAntic6.imgFontSetMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmAntic6.imgFontSetDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   n, m : byte;

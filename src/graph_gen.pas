@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Graphics editor - source code generator
 }
 unit graph_gen;
@@ -57,10 +57,8 @@ type
     procedure ListExamplesProc(Sender: TObject);
     procedure CloseWinProc(Sender: TObject);
     procedure radLangProc(Sender: TObject);
-    procedure btnCloseMouseEnter(Sender : TObject);
-    procedure btnCloseMouseLeave(Sender : TObject);
-    procedure btnCopyToEditorMouseEnter(Sender : TObject);
-    procedure btnCopyToEditorMouseLeave(Sender : TObject);
+    procedure ButtonHoverEnter(Sender : TObject);
+    procedure ButtonHoverLeave(Sender : TObject);
   private
     { private declarations }
     listings : TListings;
@@ -82,7 +80,7 @@ implementation
 {$R *.lfm}
 
 uses
-  src_editor, graph, code_lib, lib;
+  src_editor, code_lib, lib;
 
 { TfrmGraphGen }
 
@@ -643,28 +641,14 @@ begin
   CreateCode;
 end;
 
-procedure TfrmGraphGen.btnCopyToEditorMouseEnter(Sender : TObject);
+procedure TfrmGraphGen.ButtonHoverEnter(Sender : TObject);
 begin
-  btnCopyToEditor.NormalColor := $00CECECE;
-  btnCopyToEditor.NormalColorEffect := clWhite;
+  SetButton(Sender as TBCMaterialDesignButton, true);
 end;
 
-procedure TfrmGraphGen.btnCloseMouseEnter(Sender : TObject);
+procedure TfrmGraphGen.ButtonHoverLeave(Sender : TObject);
 begin
-  btnClose.NormalColor := $00CECECE;
-  btnClose.NormalColorEffect := clWhite;
-end;
-
-procedure TfrmGraphGen.btnCopyToEditorMouseLeave(Sender : TObject);
-begin
-  btnCopyToEditor.NormalColor := clWhite;
-  btnCopyToEditor.NormalColorEffect := clSilver;
-end;
-
-procedure TfrmGraphGen.btnCloseMouseLeave(Sender : TObject);
-begin
-  btnClose.NormalColor := clWhite;
-  btnClose.NormalColorEffect := clSilver;
+  SetButton(Sender as TBCMaterialDesignButton, false);
 end;
 
 end.

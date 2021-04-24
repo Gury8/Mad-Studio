@@ -100,10 +100,8 @@ type
     procedure pmColorDecChange(Sender: TObject);
     procedure radLangProc(Sender: TObject);
     procedure radPmProc(Sender: TObject);
-    procedure btnCloseMouseEnter(Sender : TObject);
-    procedure btnCloseMouseLeave(Sender : TObject);
-    procedure btnCopyToEditorMouseEnter(Sender : TObject);
-    procedure btnCopyToEditorMouseLeave(Sender : TObject);
+    procedure ButtonHoverEnter(Sender : TObject);
+    procedure ButtonHoverLeave(Sender : TObject);
   private
     { private declarations }
     listings : TListings;
@@ -1628,9 +1626,9 @@ begin
                   'POKE 53277, 3'#13#10 +
                   WaitKeyCode(_FAST_BASIC);
   end
-  else begin
+  else
     code.line := '';
-  end;
+
   result := code.line;
 end;
 
@@ -1673,28 +1671,14 @@ begin
   CreateCode;
 end;
 
-procedure TfrmPmgGen.btnCopyToEditorMouseEnter(Sender : TObject);
+procedure TfrmPmgGen.ButtonHoverEnter(Sender : TObject);
 begin
-  btnCopyToEditor.NormalColor := $00CECECE;
-  btnCopyToEditor.NormalColorEffect := clWhite;
+  SetButton(Sender as TBCMaterialDesignButton, true);
 end;
 
-procedure TfrmPmgGen.btnCopyToEditorMouseLeave(Sender : TObject);
+procedure TfrmPmgGen.ButtonHoverLeave(Sender : TObject);
 begin
-  btnCopyToEditor.NormalColor := clWhite;
-  btnCopyToEditor.NormalColorEffect := clSilver;
-end;
-
-procedure TfrmPmgGen.btnCloseMouseEnter(Sender : TObject);
-begin
-  btnClose.NormalColor := $00CECECE;
-  btnClose.NormalColorEffect := clWhite;
-end;
-
-procedure TfrmPmgGen.btnCloseMouseLeave(Sender : TObject);
-begin
-  btnClose.NormalColor := clWhite;
-  btnClose.NormalColorEffect := clSilver;
+  SetButton(Sender as TBCMaterialDesignButton, false);
 end;
 
 procedure TfrmPmgGen.CloseWin(Sender: TObject);

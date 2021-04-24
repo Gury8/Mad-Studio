@@ -19,16 +19,16 @@ object frmAntic2: TfrmAntic2
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object imgEditor: TImage
     Tag = 2
     Left = 224
     Height = 576
     Top = 40
     Width = 960
-    OnMouseDown = imgEditorMouseDown
-    OnMouseMove = imgEditorMouseMove
-    OnMouseUp = imgEditorMouseUp
+    OnMouseDown = imgEditorDown
+    OnMouseMove = imgEditorMove
+    OnMouseUp = imgEditorUp
   end
   object statusBar: TStatusBar
     Left = 0
@@ -151,7 +151,7 @@ object frmAntic2: TfrmAntic2
     Height = 192
     Top = 640
     Width = 384
-    OnMouseDown = imgFontSetMouseDown
+    OnMouseDown = imgFontSetDown
   end
   object Label1: TLabel
     Left = 624
@@ -167,7 +167,7 @@ object frmAntic2: TfrmAntic2
     Height = 192
     Top = 640
     Width = 384
-    OnMouseDown = imgFontSetMouseDown
+    OnMouseDown = imgFontSetDown
   end
   object boxTextPos: TGroupBox
     Left = 9
@@ -515,8 +515,8 @@ object frmAntic2: TfrmAntic2
       TabOrder = 0
       TabStop = True
       UseDockManager = False
-      OnMouseLeave = editTextXMouseLeave
-      OnMouseUp = editTextXMouseUp
+      OnMouseLeave = editTextXLeave
+      OnMouseUp = editTextXUp
     end
     object editY: TBCTrackbarUpdown
       Left = 108
@@ -597,8 +597,8 @@ object frmAntic2: TfrmAntic2
       TabOrder = 1
       TabStop = True
       UseDockManager = False
-      OnMouseLeave = editTextXMouseLeave
-      OnMouseUp = editTextXMouseUp
+      OnMouseLeave = editTextXLeave
+      OnMouseUp = editTextXUp
     end
     object chkMaxSize: TCheckBox
       Left = 9
@@ -612,8 +612,8 @@ object frmAntic2: TfrmAntic2
     end
   end
   object menuAntic2: TMainMenu
-    left = 78
-    top = 708
+    Left = 48
+    Top = 750
     object MenuItem1: TMenuItem
       Caption = '&File'
       object miNewScreen: TMenuItem
@@ -668,11 +668,6 @@ object frmAntic2: TfrmAntic2
         Caption = 'Use default character set'
         OnClick = DefaultFontProc
       end
-      object MenuItem12: TMenuItem
-        Caption = 'Ascii character map'
-        Enabled = False
-        Visible = False
-      end
     end
     object menuView: TMenuItem
       Caption = 'View'
@@ -680,10 +675,6 @@ object frmAntic2: TfrmAntic2
         Caption = 'Antic mode 2 viewer'
         OnClick = ViewerProc
       end
-    end
-    object MenuItem4: TMenuItem
-      Caption = '&Help'
-      Visible = False
     end
   end
 end

@@ -14,12 +14,12 @@ object frmGraph: TfrmGraph
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
-  OnMouseDown = FormMouseDown
-  OnMouseMove = FormMouseMove
-  OnMouseUp = FormMouseUp
-  OnMouseWheel = FormMouseWheel
-  OnMouseWheelDown = FormMouseWheelDown
-  OnMouseWheelUp = FormMouseWheelUp
+  OnMouseDown = FormDown
+  OnMouseMove = FormMove
+  OnMouseUp = FormUp
+  OnMouseWheel = FormWheel
+  OnMouseWheelDown = FormWheelDown
+  OnMouseWheelUp = FormWheelUp
   OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '2.0.10.0'
@@ -28,12 +28,12 @@ object frmGraph: TfrmGraph
     Height = 576
     Top = 60
     Width = 959
-    OnMouseDown = imgEditorMouseDown
-    OnMouseMove = imgEditorMouseMove
-    OnMouseUp = imgEditorMouseUp
-    OnMouseWheel = FormMouseWheel
-    OnMouseWheelDown = FormMouseWheelDown
-    OnMouseWheelUp = FormMouseWheelUp
+    OnMouseDown = imgEditorDown
+    OnMouseMove = imgEditorMove
+    OnMouseUp = imgEditorUp
+    OnMouseWheel = FormWheel
+    OnMouseWheelDown = FormWheelDown
+    OnMouseWheelUp = FormWheelUp
   end
   object sbGr: TStatusBar
     Left = 0
@@ -345,7 +345,7 @@ object frmGraph: TfrmGraph
       Caption = 'btnShiftLeft'
       ImageIndex = 9
       OnClick = ShiftScreenProc
-      OnMouseEnter = btnShiftLeftMouseEnter
+      OnMouseEnter = btnShiftLeftEnter
       ParentShowHint = False
       ShowHint = True
     end
@@ -357,7 +357,7 @@ object frmGraph: TfrmGraph
       Caption = 'btnShiftRight'
       ImageIndex = 10
       OnClick = ShiftScreenProc
-      OnMouseEnter = btnShiftLeftMouseEnter
+      OnMouseEnter = btnShiftLeftEnter
       ParentShowHint = False
       ShowHint = True
     end
@@ -369,7 +369,7 @@ object frmGraph: TfrmGraph
       Caption = 'btnShiftUp'
       ImageIndex = 11
       OnClick = ShiftScreenProc
-      OnMouseEnter = btnShiftLeftMouseEnter
+      OnMouseEnter = btnShiftLeftEnter
       ParentShowHint = False
       ShowHint = True
     end
@@ -381,7 +381,7 @@ object frmGraph: TfrmGraph
       Caption = 'btnShiftDown'
       ImageIndex = 12
       OnClick = ShiftScreenProc
-      OnMouseEnter = btnShiftLeftMouseEnter
+      OnMouseEnter = btnShiftLeftEnter
       ParentShowHint = False
       ShowHint = True
     end
@@ -392,7 +392,7 @@ object frmGraph: TfrmGraph
       Caption = 'btnMoveLeft'
       ImageIndex = 18
       OnClick = MoveScreenProc
-      OnMouseEnter = btnShiftLeftMouseEnter
+      OnMouseEnter = btnShiftLeftEnter
       ParentShowHint = False
       ShowHint = True
     end
@@ -404,7 +404,7 @@ object frmGraph: TfrmGraph
       Caption = 'btnMoveRight'
       ImageIndex = 19
       OnClick = MoveScreenProc
-      OnMouseEnter = btnShiftLeftMouseEnter
+      OnMouseEnter = btnShiftLeftEnter
       ParentShowHint = False
       ShowHint = True
     end
@@ -416,7 +416,7 @@ object frmGraph: TfrmGraph
       Caption = 'btnMoveUp'
       ImageIndex = 20
       OnClick = MoveScreenProc
-      OnMouseEnter = btnShiftLeftMouseEnter
+      OnMouseEnter = btnShiftLeftEnter
       ParentShowHint = False
       ShowHint = True
     end
@@ -428,7 +428,7 @@ object frmGraph: TfrmGraph
       Caption = 'btnMoveDown'
       ImageIndex = 21
       OnClick = MoveScreenProc
-      OnMouseEnter = btnShiftLeftMouseEnter
+      OnMouseEnter = btnShiftLeftEnter
       ParentShowHint = False
       ShowHint = True
     end

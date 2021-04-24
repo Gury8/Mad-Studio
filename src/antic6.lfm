@@ -16,23 +16,23 @@ object frmAntic6: TfrmAntic6
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object imgEditor: TImage
     Tag = 2
     Left = 210
     Height = 576
     Top = 32
     Width = 960
-    OnMouseDown = imgEditorMouseDown
-    OnMouseMove = imgEditorMouseMove
-    OnMouseUp = imgEditorMouseUp
+    OnMouseDown = imgEditorDown
+    OnMouseMove = imgEditorMove
+    OnMouseUp = imgEditorUp
   end
   object imgFontSet: TImage
     Left = 210
     Height = 216
     Top = 612
     Width = 960
-    OnMouseDown = imgFontSetMouseDown
+    OnMouseDown = imgFontSetDown
   end
   object ToolBar2: TToolBar
     Left = 0
@@ -385,8 +385,8 @@ object frmAntic6: TfrmAntic6
     end
   end
   object menuAntic6: TMainMenu
-    left = 60
-    top = 756
+    Left = 60
+    Top = 768
     object MenuItem1: TMenuItem
       Caption = '&File'
       object miNew: TMenuItem

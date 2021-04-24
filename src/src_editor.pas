@@ -88,7 +88,7 @@ type
     procedure dlgFindFind(Sender: TObject);
     procedure dlgReplaceReplace(Sender: TObject);
     procedure editorChange(Sender: TObject);
-    procedure editorClick(Sender: TObject);
+    procedure editorProc(Sender: TObject);
     procedure CloseFileProc(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
     procedure CloseProc(Sender: TObject);
@@ -131,8 +131,8 @@ implementation
 {$R *.lfm}
 
 uses
-  common, main, src_settings, pmg_gen, graph_gen, font_gen, antic2_gen, antic6_gen, antic4_gen,
-  dl_gen, anim_gen, antic3_gen;
+  common, main, src_settings, pmg_gen, graph_gen, font_gen,
+  antic2_gen, antic6_gen, antic4_gen, dl_gen, anim_gen, antic3_gen;
 
 { TfrmSrcEdit }
 
@@ -145,7 +145,7 @@ begin
 
   // Set SynEdit feature for automatic markup of all occurrences of selected word
   SynMarkup := TSynEditMarkupHighlightAllCaret(
-      editor.MarkupByClass[TSynEditMarkupHighlightAllCaret]);
+                 editor.MarkupByClass[TSynEditMarkupHighlightAllCaret]);
   SynMarkup.MarkupInfo.FrameColor := clGray;
   SynMarkup.MarkupInfo.Background := clSilver;
   SynMarkup.WaitTime := 100;
@@ -234,7 +234,7 @@ begin
     caption := caption + ' *';
 end;
 
-procedure TfrmSrcEdit.editorClick(Sender: TObject);
+procedure TfrmSrcEdit.editorProc(Sender: TObject);
 var
   p1 : TPoint;
 begin
@@ -868,16 +868,23 @@ begin
        //if isMadsAddLib_i then
        //  AProcess.Parameters.Add('-i:' + getDir + 'bin' + DirectorySeparator + 'mp' + DirectorySeparator + strMadsAddLib_i);
 
-       if isMadPascalUserLocation then
-         AProcess.Executable := strMadPascalUserLocation + DirectorySeparator + 'mp'
-       else
+       if isMadPascalUserLocation then begin
+         AProcess.Executable := strMadPascalUserLocation + DirectorySeparator + 'mp';
+//         debug('isMadPascalUserLocation');
+       end
+       else begin
+//         debug('not isMadPascalUserLocation');
          AProcess.Executable := getDir + 'bin' + DirectorySeparator + 'mp' +
                                 DirectorySeparator + 'mp';
+       end;
 
        //  AProcess.Parameters.Add(AnsiQuotedStr(GetCurrentDir + '\bin\roto.pas', '"'));
        AProcess.Parameters.Add(AnsiQuotedStr(filename, '"'));
        SetParams(AProcess, propMadPascal, propFlagMadPascal);
        AProcess.Options := AProcess.Options + [poWaitOnExit, poUsePipes];
+
+//       showmessage(AProcess.Executable);
+
        AProcess.Execute;
        memoMP.Lines.LoadFromStream(AProcess.Output);
        AProcess.Free;
@@ -887,12 +894,17 @@ begin
        if isMadPascalUserLocation then
          AProcess.Executable := strMadsUserLocation + DirectorySeparator + 'mads'
        else
-         AProcess.Executable := getDir + 'bin' + DirectorySeparator + 'mp' + DirectorySeparator + 'mads';
+         AProcess.Executable := getDir + 'bin' +
+                             DirectorySeparator + 'mp' +
+                             DirectorySeparator + 'mads';
+
+//       showmessage(AProcess.Executable);
 
        AProcess.Parameters.Add(AnsiQuotedStr(ExtractFileNameWithoutExt(filename) + '.a65', '"'));
        SetParams(AProcess, propMadsMP, propFlagMadsMP);
 
        AProcess.Options := AProcess.Options + [poWaitOnExit, poUsePipes];
+//       showmessage(AProcess.Options);
        AProcess.Execute;
 
        memoMads.Lines.LoadFromStream(AProcess.Output);
@@ -1186,7 +1198,7 @@ end;
 
 procedure TfrmSrcEdit.editorKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  editorClick(Sender);
+  editorProc(Sender);
 end;
 
 //procedure TfrmSrcEdit.editorKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);

@@ -54,10 +54,8 @@ type
     procedure ShellListViewProc(Sender : TObject);
     procedure shellListViewKeyUp(Sender : TObject; var Key : Word; Shift : TShiftState);
     procedure cmbFormatsChange(Sender : TObject);
-    procedure btnCloseMouseEnter(Sender : TObject);
-    procedure btnCloseMouseLeave(Sender : TObject);
-    procedure btnOpenMouseEnter(Sender : TObject);
-    procedure btnOpenMouseLeave(Sender : TObject);
+    procedure ButtonHoverEnter(Sender : TObject);
+    procedure ButtonHoverLeave(Sender : TObject);
   private
     fld : array[0..319, 0..191] of byte;
     is01bit : boolean;
@@ -69,9 +67,12 @@ type
     maxSize : integer;
     Antic4maxX, Antic4maxY : byte;
     Antic4maxSize : integer;
+    maxTileSize : byte;
     fileExt : string;
     comboType : byte;
     fldPlayer : fldType;
+    fldChar : array[0.._MAX_TILE_CHARS - 1, 0..7, 0..7] of byte;
+    antic4TileArray : TAntic4TileType;
     procedure GrModeSettings;
     procedure DrawImage;
     procedure ShowFontSet;
@@ -82,6 +83,8 @@ type
     procedure ClearData(Sender : TObject);
     procedure RefreshPM;
     procedure RefreshPlayer(pm : TImage; factX, factY : byte);
+    procedure DrawTile;
+    procedure DrawTileChar(scrPos, y, offset : byte);
   public
     filename : string;
     isModal : boolean;
@@ -98,6 +101,7 @@ const
   _COMBO_ANTIC_7 = 108;
   _COMBO_CHR_SET = 100;
   _COMBO_PLAYER  = 111;
+  _COMBO_ANTIC_4_TILE = 112;
 
 implementation
 
@@ -165,6 +169,9 @@ begin
     end;
     formPmg: begin
       cmbFormats.ItemIndex := 11;
+    end;
+    formAntic4TileEditor: begin
+      cmbFormats.ItemIndex := 12;
     end
     else
       cmbFormats.ItemIndex := 0;
@@ -208,7 +215,7 @@ begin
   case cmbFormats.ItemIndex of
     0: begin
       shellListView.Mask := '*.gr0;*.an2;*.asc;*.gr1;*.gr2;*.an6;*.an7;*.gr3;*.gr7;*.mic;*.gr8;' +
-                            '*.fnt;*.fon;*.set;*.an4;*.an5;*.spr';
+                            '*.fnt;*.fon;*.set;*.an4;*.an5;*.spr;*.tl4';
     end;
     1: begin
       comboType := grMode160x96x4;
@@ -254,6 +261,10 @@ begin
     11: begin
       comboType := _COMBO_PLAYER;
       shellListView.Mask := '*.spr';
+    end;
+    12: begin
+      comboType := _COMBO_ANTIC_4_TILE;
+      shellListView.Mask := '*.tl4';
     end;
   end;
 end;
@@ -367,6 +378,8 @@ begin
         comboType := _COMBO_ANTIC_5
       else if fileExt = '.spr' then
         comboType := _COMBO_PLAYER
+      else if fileExt = '.tl4' then
+        comboType := _COMBO_ANTIC_4_TILE
     end;
 
     if comboType = 255 then Exit;
@@ -466,9 +479,7 @@ begin
       end;
 
       FillRectEx(imgView, coltab[0], 0, 0, imgView.Width, imgView.Height);
-//      imgView.Invalidate;
 
-//      debug('maxsize', maxsize);
       r4 := 0; m4 := 0;
       for j := 0 to maxSize do begin
         if (j > (maxX - 1)) and (j mod maxX = 0) then begin
@@ -478,7 +489,6 @@ begin
         PutAntic6Char(r4, m4, fldAtascii[j]);
         Inc(r4);
       end;
-//      debug('end');
     end
     { Antic 4 and Antic 5 screen view
      -------------------------------------------------------------------------}
@@ -559,6 +569,37 @@ begin
       end;
 
       RefreshPM;
+    end
+    { Antic 4 tile view
+     -------------------------------------------------------------------------}
+    else if comboType = _COMBO_ANTIC_4_TILE then begin
+      FillRectEx(imgView, colTab[0], 0, 0, imgView.Width, imgView.Height);
+      FillByte(fldChar, SizeOf(fldChar), 0);
+      factX := 4; factY := 4;
+      Antic4maxX := fs.ReadByte;
+      Antic4maxY := fs.ReadByte;
+//      debug('Antic4maxX', Antic4maxX, Antic4maxY);
+      maxTileSize := (Antic4maxX + 1)*(Antic4maxY + 1) - 1;
+      for y := 0 to Antic4maxY - 1 do begin
+        for x := 0 to Antic4maxX - 1 do begin
+          h := x + y shl 2;
+          for i := 0 to _CHAR_DIM do
+            if fs.Position < fs.Size then begin
+              r := fs.ReadByte;
+              bin := IntToBin(r, 8);
+              for j := 0 to _CHAR_DIM do
+                fldChar[h, j, i] := StrToInt(bin[j + 1]);
+            end;
+
+          col := fs.ReadByte;
+          if col = 0 then
+            antic4TileArray.charInverse[h] := false
+          else
+            antic4TileArray.charInverse[h] := true;
+        end;
+      end;
+
+      DrawTile;
     end
     { Graphics view
      -------------------------------------------------------------------------}
@@ -890,6 +931,64 @@ begin
 end;
 
 {-----------------------------------------------------------------------------
+ Draw tile
+ -----------------------------------------------------------------------------}
+procedure TfrmViewer.DrawTile;
+var
+  i, j : integer;
+  m, r : byte;
+begin
+  r := 0; m := 0;
+  for j := 0 to maxTileSize do begin
+    for i := 1 to 4 do
+      if j = 4*i then begin
+        r := 0;
+        Inc(m, 2);
+        break;
+      end;
+
+    DrawTileChar(r, m, j);
+    Inc(r);
+  end;
+end;
+
+{-----------------------------------------------------------------------------
+ Draw tile character
+ -----------------------------------------------------------------------------}
+procedure TfrmViewer.DrawTileChar(scrPos, y, offset : byte);
+var
+  xf, yf : integer;
+  cnt : byte = 0;
+  i, j, col : byte;
+  mask : array[0..1] of byte;
+begin
+  xf := scrPos shl 3;
+  yf := y shl 2;
+
+  for i := 0 to _CHAR_DIM do
+    for j := 0 to _CHAR_DIM do begin
+      Inc(cnt);
+      col := fldChar[offset, j, i];
+      mask[cnt - 1] := col;
+      if cnt = 2 then begin
+        if (mask[0] = 0) and (mask[1] = 1) then
+          col := 1
+        else if (mask[0] = 1) and (mask[1] = 0) then
+          col := 2
+        else if (mask[0] = 1) and (mask[1] = 1) then begin
+          if antic4TileArray.charInverse[offset] then
+            col := 10
+          else
+            col := 3;
+        end;
+
+        FillRectEx(imgView, colTab[col], (xf + j - 1)*factX, (yf + i)*factY, factX shl 1, factY);
+        cnt := 0;
+      end;
+    end;
+end;
+
+{-----------------------------------------------------------------------------
  Set filename of selected object to be opened in program module
  -----------------------------------------------------------------------------}
 procedure TfrmViewer.OpenProc(Sender : TObject);
@@ -898,28 +997,14 @@ begin
   Close;
 end;
 
-procedure TfrmViewer.btnOpenMouseEnter(Sender : TObject);
+procedure TfrmViewer.ButtonHoverEnter(Sender : TObject);
 begin
-  btnOpen.NormalColor := $00CECECE;
-  btnOpen.NormalColorEffect := clWhite;
+  SetButton(Sender as TBCMaterialDesignButton, true);
 end;
 
-procedure TfrmViewer.btnOpenMouseLeave(Sender : TObject);
+procedure TfrmViewer.ButtonHoverLeave(Sender : TObject);
 begin
-  btnOpen.NormalColor := clWhite;
-  btnOpen.NormalColorEffect := clSilver;
-end;
-
-procedure TfrmViewer.btnCloseMouseEnter(Sender : TObject);
-begin
-  btnClose.NormalColor := $00CECECE;
-  btnClose.NormalColorEffect := clWhite;
-end;
-
-procedure TfrmViewer.btnCloseMouseLeave(Sender : TObject);
-begin
-  btnClose.NormalColor := clWhite;
-  btnClose.NormalColorEffect := clSilver;
+  SetButton(Sender as TBCMaterialDesignButton, false);
 end;
 
 procedure TfrmViewer.CloseProc(Sender : TObject);

@@ -30,7 +30,7 @@ object frmSrcEdit: TfrmSrcEdit
     ParentColor = False
     ParentFont = False
     TabOrder = 0
-    OnClick = editorClick
+    OnClick = editorProc
     OnKeyUp = editorKeyUp
     Gutter.Width = 57
     Gutter.MouseActions = <>
@@ -901,7 +901,7 @@ object frmSrcEdit: TfrmSrcEdit
   end
   object SynJScriptSyn: TSynJScriptSyn
     Enabled = False
-    Left = 231
-    Top = 135
+    Left = 324
+    Top = 66
   end
 end

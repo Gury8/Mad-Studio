@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Antic mode 2 editor - source code generator
 }
 unit antic2_gen;
@@ -57,8 +57,8 @@ type
     procedure radLangProc(Sender: TObject);
     procedure btnCloseMouseEnter(Sender : TObject);
     procedure btnCloseMouseLeave(Sender : TObject);
-    procedure btnCopyToEditorMouseEnter(Sender : TObject);
-    procedure btnCopyToEditorMouseLeave(Sender : TObject);
+    procedure ButtonHoverEnter(Sender : TObject);
+    procedure ButtonHoverLeave(Sender : TObject);
     procedure CloseWinProc(Sender: TObject);
   private
     { private declarations }
@@ -650,13 +650,13 @@ begin
   CreateCode;
 end;
 
-procedure TfrmAntic2Gen.btnCopyToEditorMouseEnter(Sender : TObject);
+procedure TfrmAntic2Gen.ButtonHoverEnter(Sender : TObject);
 begin
   btnCopyToEditor.NormalColor := $00CECECE;
   btnCopyToEditor.NormalColorEffect := clWhite;
 end;
 
-procedure TfrmAntic2Gen.btnCopyToEditorMouseLeave(Sender : TObject);
+procedure TfrmAntic2Gen.ButtonHoverLeave(Sender : TObject);
 begin
   btnCopyToEditor.NormalColor := clWhite;
   btnCopyToEditor.NormalColorEffect := clSilver;

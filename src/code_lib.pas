@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Custom library
 }
 unit code_lib;
@@ -41,6 +41,8 @@ function SetDataValues(fldChar : charType; fld : fldFontSetType; charOffset, dat
   separator : string) : string;
 
 function CodeLine(line : string) : string;
+
+function GenSetColors(langIndex : byte) : string;
 
 implementation
 
@@ -952,7 +954,7 @@ begin
       if charOffset = 255 then
         line += IntToStr(fldChar[x, y])
       else
-        line += IntToStr(fld[x, y + charOffset shl 3]);  // *8
+        line += IntToStr(fld[x, y + charOffset shl 3]);
     end;
     case dataType of
       0: line := IntToStr(Bin2Dec(line));
@@ -973,6 +975,40 @@ function CodeLine(line : string) : string;
 begin
   result := IntToStr(code.number) + ' ' + line + #13#10;
   Inc(code.number, code.step);
+end;
+
+function GenSetColors(langIndex : byte) : string;
+begin
+  if langIndex < 2 then begin
+    Inc(code.number, code.step);
+    result := CodeLine('REM SET COLORS') +
+              CodeLine('POKE 708,' + IntToStr(colorValues[1]) +
+              ':POKE 709,' + IntToStr(colorValues[2])) +
+              CodeLine('POKE 710,' + IntToStr(colorValues[3]) +
+              ':POKE 711,' + IntToStr(colorValues[10])) +
+              CodeLine('POKE 712,' + IntToStr(colorValues[0]));
+  end
+  else if langIndex = _MAD_PASCAL then
+    result := #13#10'  // Set colors'#13#10 +
+              '  POKE(712, ' + IntToStr(colorValues[0]) + ');'#13#10 +
+              '  POKE(708, ' + IntToStr(colorValues[1]) + ');'#13#10 +
+              '  POKE(709, ' + IntToStr(colorValues[2]) + ');'#13#10 +
+              '  POKE(710, ' + IntToStr(colorValues[3]) + ');'#13#10 +
+              '  POKE(711, ' + IntToStr(colorValues[10]) + ');'#13#10
+  else if langIndex = _ACTION then
+    result := #13#10'; Set colors'#13#10 +
+              'POKE(708,' + IntToStr(colorValues[1]) + ') POKE(709,' +
+              IntToStr(colorValues[2]) + ')'#13#10 +
+              'POKE(710,' + IntToStr(colorValues[3]) + ') POKE(711,' +
+              IntToStr(colorValues[10]) + ')'#13#10 +
+              'POKE(712,' + IntToStr(colorValues[0]) + ')'#13#10
+  else if langIndex = _FAST_BASIC then
+    result := #13#10'''Set colors'#13#10 +
+              'POKE 708, ' + IntToStr(colorValues[1]) +
+              ' : POKE 709, ' + IntToStr(colorValues[2]) + #13#10 +
+              'POKE 710, ' + IntToStr(colorValues[3]) +
+              ' : POKE 711, ' + IntToStr(colorValues[10]) + #13#10 +
+              'POKE 712, ' + IntToStr(colorValues[0]) + #13#10;
 end;
 
 end.

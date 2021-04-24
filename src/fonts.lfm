@@ -17,10 +17,10 @@ object frmFonts: TfrmFonts
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
-  OnMouseDown = FormMouseDown
+  OnMouseDown = FormDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object imgChar: TImage
     Left = 28
     Height = 192
@@ -799,8 +799,8 @@ object frmFonts: TfrmFonts
     end
   end
   object menuFonts: TMainMenu
-    left = 30
-    top = 612
+    Left = 30
+    Top = 612
     object menuFile: TMenuItem
       Caption = '&File'
       object menuOpen: TMenuItem
@@ -888,8 +888,8 @@ object frmFonts: TfrmFonts
     end
   end
   object popMenu: TPopupMenu
-    left = 102
-    top = 612
+    Left = 102
+    Top = 612
     object MenuItem2: TMenuItem
       Caption = 'Flip character horizontally'
       OnClick = FlipXProc

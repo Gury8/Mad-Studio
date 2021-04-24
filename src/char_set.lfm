@@ -1,8 +1,104 @@
 object frmCharSet: TfrmCharSet
-  Left = 400
-  Height = 240
-  Top = 250
-  Width = 380
+  Left = 241
+  Height = 415
+  Top = 229
+  Width = 803
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
   Caption = 'Character set'
+  ClientHeight = 415
+  ClientWidth = 803
+  KeyPreview = True
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  Position = poScreenCenter
   LCLVersion = '2.0.10.0'
+  object Label2: TLabel
+    Left = 12
+    Height = 15
+    Top = 150
+    Width = 104
+    Caption = 'Standard characters'
+    ParentColor = False
+  end
+  object Label1: TLabel
+    Left = 408
+    Height = 15
+    Top = 150
+    Width = 94
+    Caption = 'Inverse characters'
+    ParentColor = False
+  end
+  object imgFontSet: TImage
+    Left = 12
+    Height = 192
+    Top = 168
+    Width = 384
+    OnDblClick = CharConfirmProc
+    OnMouseDown = imgFontSetDown
+  end
+  object imgFontSetInv: TImage
+    Tag = 1
+    Left = 408
+    Height = 192
+    Top = 168
+    Width = 384
+    OnDblClick = CharConfirmProc
+    OnMouseDown = imgFontSetDown
+  end
+  object btnClose: TBCMaterialDesignButton
+    Left = 690
+    Height = 30
+    Top = 378
+    Width = 105
+    TextSize = 12
+    TextShadow = False
+    TextFont = 'default'
+    TextQuality = fqSystemClearType
+    Caption = 'Close'
+    OnClick = CloseProc
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
+  end
+  object boxSelChar: TGroupBox
+    Left = 12
+    Height = 126
+    Top = 12
+    Width = 207
+    Caption = 'Selected character'
+    ClientHeight = 106
+    ClientWidth = 203
+    TabOrder = 0
+    object imgChar: TImage
+      Left = 9
+      Height = 24
+      Top = 6
+      Width = 24
+    end
+    object memoInfo: TMemo
+      Left = 11
+      Height = 57
+      Top = 42
+      Width = 183
+      BorderStyle = bsNone
+      Color = clForm
+      ReadOnly = True
+      TabOrder = 0
+    end
+  end
+  object btnConfirm: TBCMaterialDesignButton
+    Left = 582
+    Height = 30
+    Top = 378
+    Width = 105
+    TextSize = 12
+    TextShadow = False
+    TextFont = 'default'
+    TextQuality = fqSystemClearType
+    Caption = 'Confirm'
+    OnClick = CharConfirmProc
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
+  end
 end

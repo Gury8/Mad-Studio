@@ -1,8 +1,9 @@
 object frmAntic4Gen: TfrmAntic4Gen
-  Left = 273
+  Left = 217
   Height = 667
-  Top = 110
+  Top = 96
   Width = 959
+  BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Antic mode 4 and 5 editor source code generator'
   ClientHeight = 667
@@ -14,7 +15,7 @@ object frmAntic4Gen: TfrmAntic4Gen
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object memo: TMemo
     Tag = 3
     Left = 150
@@ -56,7 +57,7 @@ object frmAntic4Gen: TfrmAntic4Gen
   object chkTextWindow: TCheckBox
     Left = 618
     Height = 19
-    Top = 288
+    Top = 408
     Width = 91
     Caption = 'Text window'
     OnChange = editStartLineChange
@@ -65,7 +66,7 @@ object frmAntic4Gen: TfrmAntic4Gen
   object boxFilenames: TGroupBox
     Left = 612
     Height = 108
-    Top = 324
+    Top = 438
     Width = 287
     ClientHeight = 90
     ClientWidth = 283
@@ -681,8 +682,8 @@ object frmAntic4Gen: TfrmAntic4Gen
     TextQuality = fqSystemClearType
     Caption = 'Copy to editor'
     OnClick = CopyToEditorProc
-    OnMouseEnter = btnCopyToEditorMouseEnter
-    OnMouseLeave = btnCopyToEditorMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object btnClose: TBCMaterialDesignButton
     Left = 846
@@ -695,8 +696,8 @@ object frmAntic4Gen: TfrmAntic4Gen
     TextQuality = fqSystemClearType
     Caption = 'Close'
     OnClick = CloseWinProc
-    OnMouseEnter = btnCloseMouseEnter
-    OnMouseLeave = btnCloseMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object StaticText1: TStaticText
     Left = 9
@@ -735,83 +736,81 @@ object frmAntic4Gen: TfrmAntic4Gen
     TabOrder = 10
   end
   object boxColors: TGroupBox
-    Left = 618
-    Height = 204
-    Top = 444
-    Width = 204
+    Left = 612
+    Height = 120
+    Top = 276
+    Width = 336
     Caption = 'Color registers'
-    ClientHeight = 186
-    ClientWidth = 200
+    ClientHeight = 102
+    ClientWidth = 332
     TabOrder = 11
     object chkUseColors: TCheckBox
-      Left = 8
+      Left = 12
       Height = 19
-      Top = 162
+      Top = 78
       Width = 183
       Caption = 'Use colors in program listing'
-      Checked = True
-      OnChange = chkUseColorsChange
-      State = cbChecked
+      OnClick = ExamplesProc
       TabOrder = 0
     end
     object Label2: TLabel
-      Left = 40
+      Left = 138
       Height = 13
-      Top = 41
+      Top = 12
       Width = 48
       Caption = 'COLOR0'
       ParentColor = False
     end
     object color0: TShape
-      Left = 8
+      Left = 12
       Height = 23
       Top = 6
       Width = 24
     end
     object Label3: TLabel
-      Left = 40
+      Left = 44
       Height = 13
-      Top = 71
+      Top = 43
       Width = 48
       Caption = 'COLOR1'
       ParentColor = False
     end
     object color1: TShape
-      Left = 8
+      Left = 106
       Height = 23
-      Top = 35
+      Top = 6
       Width = 24
     end
     object Label4: TLabel
-      Left = 40
+      Left = 138
       Height = 13
-      Top = 101
+      Top = 43
       Width = 48
       Caption = 'COLOR2'
       ParentColor = False
     end
     object color2: TShape
-      Left = 8
+      Left = 12
       Height = 23
-      Top = 64
+      Top = 36
       Width = 24
     end
     object Label7: TLabel
-      Left = 40
+      Left = 234
       Height = 13
-      Top = 131
+      Top = 43
       Width = 48
       Caption = 'COLOR3'
       ParentColor = False
     end
     object color3: TShape
-      Left = 8
+      Left = 106
       Height = 23
-      Top = 94
+      Top = 36
       Width = 24
     end
     object Label8: TLabel
-      Left = 40
+      Left = 44
       Height = 13
       Top = 11
       Width = 48
@@ -819,9 +818,9 @@ object frmAntic4Gen: TfrmAntic4Gen
       ParentColor = False
     end
     object color4: TShape
-      Left = 8
+      Left = 202
       Height = 23
-      Top = 124
+      Top = 36
       Width = 24
     end
   end

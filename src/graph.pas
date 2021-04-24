@@ -105,27 +105,27 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure CloseProc(Sender: TObject);
     procedure cmbGraphModeChange(Sender: TObject);
-    procedure btnShiftLeftMouseEnter(Sender : TObject);
+    procedure btnShiftLeftEnter(Sender : TObject);
     procedure LoadPaletteProc(Sender : TObject);
     procedure LoadDefaultPaletteProc(Sender : TObject);
     procedure TextProc(Sender : TObject);
     procedure SetColorProc(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure FormMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure FormDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure FormMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure FormMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure FormMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure FormUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure FormMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer;
+    procedure FormWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer;
       MousePos: TPoint; var Handled: Boolean);
-    procedure FormMouseWheelDown(Sender: TObject; Shift: TShiftState; MousePos: TPoint;
+    procedure FormWheelDown(Sender: TObject; Shift: TShiftState; MousePos: TPoint;
       var Handled: Boolean);
-    procedure FormMouseWheelUp(Sender: TObject; Shift: TShiftState; MousePos: TPoint;
+    procedure FormWheelUp(Sender: TObject; Shift: TShiftState; MousePos: TPoint;
       var Handled: Boolean);
-    procedure imgEditorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgEditorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure imgEditorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure imgEditorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure imgEditorUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure btnTextDisableProc(Sender : TObject);
     procedure ExportData(Sender: TObject);
@@ -728,7 +728,7 @@ begin
   undoList.Add('0;0;0;0;21');
 end;
 
-procedure TfrmGraph.FormMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmGraph.FormDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   xf, yf : integer;
@@ -739,31 +739,31 @@ begin
   Plot(xf, yf);
 end;
 
-procedure TfrmGraph.FormMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TfrmGraph.FormMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 begin
   Plot(x div factX, y div factY);
 end;
 
-procedure TfrmGraph.FormMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmGraph.FormUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
   btn := mbMiddle;
 end;
 
-procedure TfrmGraph.FormMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer;
+procedure TfrmGraph.FormWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer;
   MousePos: TPoint; var Handled: Boolean);
 begin
   frmGraph.SetFocus;
 end;
 
-procedure TfrmGraph.FormMouseWheelDown(Sender: TObject; Shift: TShiftState; MousePos: TPoint;
+procedure TfrmGraph.FormWheelDown(Sender: TObject; Shift: TShiftState; MousePos: TPoint;
   var Handled: Boolean);
 begin
   if not is01bit and (frmColors.SelColor < 3) then
     inc(frmColors.SelColor);
 end;
 
-procedure TfrmGraph.FormMouseWheelUp(Sender: TObject; Shift: TShiftState; MousePos: TPoint;
+procedure TfrmGraph.FormWheelUp(Sender: TObject; Shift: TShiftState; MousePos: TPoint;
   var Handled: Boolean);
 begin
   if not is01bit and (frmColors.SelColor > 1) then
@@ -1087,7 +1087,7 @@ begin
   refreshp;
 end;
 
-procedure TfrmGraph.imgEditorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmGraph.imgEditorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   xf, yf : integer;
@@ -1124,7 +1124,7 @@ begin
   end;
 end;
 
-procedure TfrmGraph.imgEditorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TfrmGraph.imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
   xf, yf : integer;
   col : byte;
@@ -1226,7 +1226,7 @@ begin
   sbGr.Panels[0].Text := 'Cursor coordinates: ' + 'x: ' + inttostr(xf) + ', y: ' + inttostr(yf);
 end;
 
-procedure TfrmGraph.imgEditorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmGraph.imgEditorUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   xf, yf : integer;
@@ -1804,7 +1804,7 @@ begin
   editText.Visible := true;
 end;
 
-procedure TfrmGraph.btnShiftLeftMouseEnter(Sender : TObject);
+procedure TfrmGraph.btnShiftLeftEnter(Sender : TObject);
 begin
   editShiftMove.Enabled := true;
   editShiftMove.Visible := true;

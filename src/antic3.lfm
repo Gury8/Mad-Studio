@@ -14,16 +14,16 @@ object frmAntic3: TfrmAntic3
   OnDeactivate = FormDeactivate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object imgEditor: TImage
     Tag = 2
     Left = 312
     Height = 432
     Top = 42
     Width = 664
-    OnMouseDown = imgEditorMouseDown
-    OnMouseMove = imgEditorMouseMove
-    OnMouseUp = imgEditorMouseUp
+    OnMouseDown = imgEditorDown
+    OnMouseMove = imgEditorMove
+    OnMouseUp = imgEditorUp
   end
   object ToolBar2: TToolBar
     Left = 0
@@ -132,7 +132,7 @@ object frmAntic3: TfrmAntic3
     Height = 164
     Top = 506
     Width = 258
-    OnMouseDown = imgFontSetMouseDown
+    OnMouseDown = imgFontSetDown
   end
   object Label1: TLabel
     Left = 584
@@ -148,7 +148,7 @@ object frmAntic3: TfrmAntic3
     Height = 164
     Top = 506
     Width = 258
-    OnMouseDown = imgFontSetMouseDown
+    OnMouseDown = imgFontSetDown
   end
   object boxSelChar: TGroupBox
     Left = 9
@@ -198,9 +198,9 @@ object frmAntic3: TfrmAntic3
     Height = 240
     Top = 245
     Width = 192
-    OnMouseDown = imgCharEditMouseDown
-    OnMouseMove = imgCharEditMouseMove
-    OnMouseUp = imgCharEditMouseUp
+    OnMouseDown = imgCharEditDown
+    OnMouseMove = imgCharEditMove
+    OnMouseUp = imgCharEditUp
   end
   object lblNum1: TLabel
     Tag = 1
@@ -517,8 +517,8 @@ object frmAntic3: TfrmAntic3
     end
   end
   object menuAntic3: TMainMenu
-    left = 252
-    top = 48
+    Left = 252
+    Top = 42
     object MenuItem1: TMenuItem
       Caption = '&File'
       object itemNewScreen: TMenuItem

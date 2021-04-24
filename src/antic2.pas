@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Text mode 0 (Antic mode 2) editor
 }
 unit antic2;
@@ -11,8 +11,8 @@ unit antic2;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  ComCtrls, Menus, StdCtrls, BCTrackbarUpdown, strutils, lcltype,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
+  ExtCtrls, ComCtrls, Menus, StdCtrls, BCTrackbarUpdown, strutils, lcltype,
   common;
 
 type
@@ -48,7 +48,6 @@ type
     itemDefaultFont : TMenuItem;
     itemLoadCharSet : TMenuItem;
     miClose: TMenuItem;
-    MenuItem12: TMenuItem;
     miNewScreen: TMenuItem;
     miFillScreen: TMenuItem;
     MenuItem15: TMenuItem;
@@ -57,7 +56,6 @@ type
     miGenCode: TMenuItem;
     miClearScreen: TMenuItem;
     MenuItem3: TMenuItem;
-    MenuItem4: TMenuItem;
     miLoadScreen: TMenuItem;
     miSaveScreen: TMenuItem;
     miSaveScreenAs: TMenuItem;
@@ -79,19 +77,19 @@ type
     procedure ApplyText(Sender: TObject);
     procedure ClearText(Sender: TObject);
     procedure editTextXChange(Sender : TObject);
-    procedure editTextXMouseLeave(Sender : TObject);
-    procedure editTextXMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+    procedure editTextXLeave(Sender : TObject);
+    procedure editTextXUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
       X, Y : Integer);
     procedure FormKeyDown(Sender : TObject; var Key : Word; Shift : TShiftState);
     procedure LoadFontProc(Sender : TObject);
     procedure DefaultFontProc(Sender : TObject);
     procedure ViewerProc(Sender : TObject);
-    procedure imgEditorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgEditorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure imgEditorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure imgEditorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure imgEditorUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure imgFontSetMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgFontSetDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure CloseWinProc(Sender: TObject);
     procedure GenCodeProc(Sender: TObject);
@@ -108,7 +106,8 @@ type
   private
     { private declarations }
     btn : TMousebutton;
-    offs, offsX, offsY : byte;
+    offs : byte;
+    // offsX, offsY : byte;
     isSaveAs : boolean;
     isFontSetNormal : boolean;
     fldChar : charType;
@@ -255,7 +254,7 @@ begin
   end;
 end;
 
-procedure TfrmAntic2.editTextXMouseLeave(Sender : TObject);
+procedure TfrmAntic2.editTextXLeave(Sender : TObject);
 begin
   btn := mbMiddle;
   if not isCreate then
@@ -272,7 +271,7 @@ begin
   caption := programName + ' ' + programVersion + ' - Text mode 0 editor (' + filename + ')';
 end;
 
-procedure TfrmAntic2.editTextXMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+procedure TfrmAntic2.editTextXUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
   X, Y : Integer);
 begin
   //btn := mbMiddle;
@@ -286,7 +285,7 @@ begin
   //
   //caption := programName + ' ' + programVersion + ' - Text mode 0 editor (' + filename + ')';
 
-  editTextXMouseLeave(Sender);
+  editTextXLeave(Sender);
 end;
 
 procedure TfrmAntic2.DefaultFontProc(Sender : TObject);
@@ -313,7 +312,6 @@ begin
   //imgEditor.Height := maxY*24;
   //statusBar.Panels[0].Text := 'Max X coord.: ' + IntToStr(_maxX) +
   //                            ', max Y coord.: ' + IntToStr(_maxY);
-
   maxX := _maxX;
   maxY := _maxY;
   maxSize := (maxX + 1)*(maxY + 1) - 1;
@@ -367,7 +365,7 @@ begin
   editText.Text := '';
 end;
 
-procedure TfrmAntic2.imgEditorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmAntic2.imgEditorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   xf, yf : integer;
@@ -378,7 +376,7 @@ begin
   Plot(xf, yf);
 end;
 
-procedure TfrmAntic2.imgEditorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TfrmAntic2.imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
   xf, yf : integer;
 begin
@@ -392,13 +390,13 @@ begin
 //  statusBar.Panels[1].Text := 'Editor cursor coordinates (x: ' + inttostr(xf) + ', y: ' + inttostr(yf) + ')';
 end;
 
-procedure TfrmAntic2.imgEditorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmAntic2.imgEditorUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
   btn := mbMiddle;
 end;
 
-procedure TfrmAntic2.imgFontSetMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmAntic2.imgFontSetDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   n, m : byte;
@@ -411,13 +409,13 @@ begin
   for m := 0 to 7 do begin
     for n := 0 to 15 do begin
       if (x > 24) and (x <= 42) and (y > 24*m) and (y < 28 + 24*m) then begin
-        offsY := m; offsX := 1;
+//        offsY := m; offsX := 1;
         offs := m shl 4 + 1;
         RefreshCharX(offs);
         break;
       end;
       if (x > 24*n) and (x <= 42 + 24*n) and (y > 24*m) and (y < 28 + 24*m) then begin
-        offsY := m; offsX := n;
+//        offsY := m; offsX := n;
         offs := n + m shl 4 + 1;
         if n = 0 then Dec(offs);
         RefreshCharX(offs);
@@ -429,14 +427,15 @@ begin
   with memoInfo do begin
     Clear;
 
-    // Calculate code number
-    n := offs;
-    if (offs >= 0) and (offs <= 63) then
-      n += 32
-    else if (offs >= 64) and (offs <= 95) then
-      n -= 64;
-
-    m := offs;
+    //// Calculate code number
+    //n := offs;
+    //if (offs >= 0) and (offs <= 63) then
+    //  n += 32
+    //else if (offs >= 64) and (offs <= 95) then
+    //  n -= 64;
+    //
+    //m := offs;
+    n := StrToInt(AtasciiCode(offs));
 
     //if isFontSetNormal then
     //  m := offs
@@ -445,7 +444,7 @@ begin
     //  n += 128;
     //end;
 
-    Lines.Add('Internal code Dec: ' + IntToStr(m) + ' Hex: ' + Dec2hex(m));
+    Lines.Add('Internal code Dec: ' + IntToStr(offs) + ' Hex: ' + Dec2hex(offs));
     if isFontSetNormal then
       Lines.Add('Atascii code Dec: ' + IntToStr(n) + ' Hex: ' + Dec2hex(n))
     else
@@ -888,7 +887,7 @@ begin
   if chkMaxSize.Checked then begin
     editX.Value := 39;
     editY.Value := 23;
-    editTextXMouseLeave(Sender);
+    editTextXLeave(Sender);
   end;
 end;
 

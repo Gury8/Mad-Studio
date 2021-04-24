@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Display list editor - source code generator
 }
 unit dl_gen;
@@ -59,10 +59,8 @@ type
       X, Y : Integer);
     procedure editStartLineMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
       X, Y : Integer);
-    procedure btnCloseMouseEnter(Sender : TObject);
-    procedure btnCloseMouseLeave(Sender : TObject);
-    procedure btnCopyToEditorMouseEnter(Sender : TObject);
-    procedure btnCopyToEditorMouseLeave(Sender : TObject);
+    procedure ButtonHoverEnter(Sender : TObject);
+    procedure ButtonHoverLeave(Sender : TObject);
   private
     { private declarations }
     listings : TListings;
@@ -423,28 +421,14 @@ begin
   CreateCode;
 end;
 
-procedure TfrmDisplayListGen.btnCopyToEditorMouseEnter(Sender : TObject);
+procedure TfrmDisplayListGen.ButtonHoverEnter(Sender : TObject);
 begin
-  btnCopyToEditor.NormalColor := $00CECECE;
-  btnCopyToEditor.NormalColorEffect := clWhite;
+  SetButton(Sender as TBCMaterialDesignButton, true);
 end;
 
-procedure TfrmDisplayListGen.btnCopyToEditorMouseLeave(Sender : TObject);
+procedure TfrmDisplayListGen.ButtonHoverLeave(Sender : TObject);
 begin
-  btnCopyToEditor.NormalColor := clWhite;
-  btnCopyToEditor.NormalColorEffect := clSilver;
-end;
-
-procedure TfrmDisplayListGen.btnCloseMouseEnter(Sender : TObject);
-begin
-  btnClose.NormalColor := $00CECECE;
-  btnClose.NormalColorEffect := clWhite;
-end;
-
-procedure TfrmDisplayListGen.btnCloseMouseLeave(Sender : TObject);
-begin
-  btnClose.NormalColor := clWhite;
-  btnClose.NormalColorEffect := clSilver;
+  SetButton(Sender as TBCMaterialDesignButton, false);
 end;
 
 end.

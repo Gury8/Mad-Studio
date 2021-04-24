@@ -1361,6 +1361,7 @@ var
 begin
   FillRectEx(imgChar, coltabFont[0], 0, 0, imgChar.Width, imgChar.Height);
 
+  // Refresh character set with changes for selected character
   for yf := 0 to chrY do
     for xf := 0 to chrX do begin
       fldFontSet[xf, yf + offs shl 3] := fldChar[xf, yf];
@@ -1371,6 +1372,7 @@ begin
   imgChar.Refresh;
   PlotChar(255, 255);
 
+  // Refresh screen with changes for selected character
   r := 0; m := 0;
   for j := 0 to maxSize do begin
     if (j > maxX) and (j mod (maxX + 1) = 0) then begin
@@ -2056,11 +2058,13 @@ begin
     lblCharInfo03.Caption := '';
   end
   else begin
-    n := offset;
-    if (offset >= 0) and (offset <= 63) then
-      n += 32
-    else if (offset >= 64) and (offset <= 95) then
-      n -= 64;
+    //n := offset;
+    //if (offset >= 0) and (offset <= 63) then
+    //  n += 32
+    //else if (offset >= 64) and (offset <= 95) then
+    //  n -= 64;
+
+    n := StrToInt(AtasciiCode(offset));
 
     lblCharInfo01.Caption := 'Internal code Dec: ' + IntToStr(offset) + ' Hex: ' + Dec2hex(offset);
     lblCharInfo02.Caption := 'Atascii code Dec: ' + IntToStr(n) + ' Hex: ' + Dec2hex(n);

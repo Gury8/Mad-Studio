@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Character set (font) editor
 }
 unit fonts;
@@ -144,7 +144,7 @@ type
     btnRotate: TToolButton;
     ToolButton3: TToolButton;
     procedure FormCreate(Sender: TObject);
-    procedure FormMouseDown(Sender : TObject; Button : TMouseButton;
+    procedure FormDown(Sender : TObject; Button : TMouseButton;
       Shift : TShiftState; X, Y : Integer);
     procedure FormShow(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -331,7 +331,7 @@ begin
   end;
 end;
 
-procedure TfrmFonts.FormMouseDown(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+procedure TfrmFonts.FormDown(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
   X, Y : Integer);
 begin
   btn := Button;
@@ -631,7 +631,7 @@ begin
       break;
     end;
     for n := 0 to 14 do begin
-      if (x > 32*n) and (x <= 64 + 32*n) and
+      if (x > n shl 5) and (x <= 64 + n shl 5) and
          (y > (16 + factor shl 4)*m) and
          (y < (16 + factor shl 4)*(m + 1)) then
       begin
@@ -1149,12 +1149,13 @@ begin
   end
   else begin
     // Calculate code number
-    n := offs;
-    if (offs >= 0) and (offs <= 63) then
-      n += 32
-    else if (offs >= 64) and (offs <= 95) then
-      n -= 64;
+    //n := offs;
+    //if (offs >= 0) and (offs <= 63) then
+    //  n += 32
+    //else if (offs >= 64) and (offs <= 95) then
+    //  n -= 64;
 
+    n := StrToInt(AtasciiCode(offs));
     lblCharInfo01.Caption := 'Internal code Dec: ' + IntToStr(offs) + ' Hex: ' + Dec2hex(offs);
     lblCharInfo02.Caption := 'Atascii code Dec: ' + IntToStr(n) + ' Hex: ' + Dec2hex(n);
     lblCharInfo03.Caption := 'Atascii inverse Dec: ' + IntToStr(n + 128) +

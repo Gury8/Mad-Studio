@@ -14,7 +14,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, runtimetypeinfocontrols, anchordockpkg, common, main, graph,
   src_editor, pmg, colors, fonts, antic2, antic6, antic3, antic4, dl_editor,
-  animator, byte_editor, viewer, antic4_tiles;  //, char_set;
+  animator, antic4_tiles, byte_editor, viewer;
 
 {$R *.res}
 
@@ -34,10 +34,9 @@ begin
   Application.CreateForm(TfrmAntic4, frmAntic4);
   Application.CreateForm(TfrmDisplayList, frmDisplayList);
   Application.CreateForm(TfrmAnimator, frmAnimator);
+  Application.CreateForm(TfrmAntic4Tiles, frmAntic4Tiles);
   Application.CreateForm(TfrmByteEditor, frmByteEditor);
   Application.CreateForm(TfrmViewer, frmViewer);
-  Application.CreateForm(TfrmAntic4Tiles, frmAntic4Tiles);
-//  Application.CreateForm(TfrmCharSet, frmCharSet);
   Application.Run;
 end.
 

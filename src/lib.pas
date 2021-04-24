@@ -12,7 +12,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, strutils, StdCtrls, ComCtrls, ExtCtrls,
-  Forms, Dialogs, LCLType, Controls, Graphics, BCTrackbarUpdown,
+  Forms, Dialogs, LCLType, Controls, Graphics, BCTrackbarUpdown, BCMDButton, BCMaterialDesignButton,
   common;
 
 procedure MoveLeft(mx, my : byte; var fld : charType);
@@ -47,6 +47,8 @@ procedure SetTrackBarUpDown(trackBarUpDown : TBCTrackBarUpDown; startColor, endC
 
 procedure SaveColors;
 procedure RetrieveColors;
+
+procedure SetButton(btn : TBCMaterialDesignButton; isEnter : boolean);
 
 var
   isDebug : boolean;
@@ -236,7 +238,7 @@ begin
   result := true;
   if frmSrcEdit.editor.Lines.Count > 0 then begin
     if MessageDlg('Question',
-                  'All previous work will be erased! Are you sure to copy new text?',
+                  'All your previous work will be erased! Are you sure to copy new listing?',
                   mtConfirmation, [mbYes, mbNo], 0) = mrNo then
     begin
       result := false;
@@ -246,16 +248,13 @@ end;
 
 // Calculate code number
 function AtasciiCode(offset : byte) : string;
-var
-  n : byte;
 begin
-  n := offset;
   if (offset >= 0) and (offset <= 63) then
-    n += 32
+    offset += 32
   else if (offset >= 64) and (offset <= 95) then
-    n -= 64;
+    offset -= 64;
 
-  result := IntToStr(n);
+  result := IntToStr(offset);
 end;
 
 procedure FillRectEx(image : TImage; color : TColor; x, y, factX, factY : word);
@@ -335,6 +334,18 @@ begin
   for i := 0 to 10 do begin
     colTab[i] := colTabCopy[i];
     colorValues[i] := colorValuesCopy[i];
+  end;
+end;
+
+procedure SetButton(btn : TBCMaterialDesignButton; isEnter : boolean);
+begin
+  if isEnter then begin
+    btn.NormalColor := $00CECECE;
+    btn.NormalColorEffect := clWhite;
+  end
+  else begin
+    btn.NormalColor := clWhite;
+    btn.NormalColorEffect := clSilver;
   end;
 end;
 

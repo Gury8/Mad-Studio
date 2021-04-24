@@ -209,6 +209,7 @@ object frmViewer: TfrmViewer
       'Antic mode 4 screens (*.an4) - 40x24x5'
       'Antic mode 5 screens (*.an5) - 40x12x5'
       'Player/sprite graphics (*.spr)'
+      'Antic mode 4 tiles (*.tl4)'
     )
     OnChange = cmbFormatsChange
     Style = csDropDownList
@@ -258,8 +259,8 @@ object frmViewer: TfrmViewer
     TextQuality = fqSystemClearType
     Caption = 'Close'
     OnClick = CloseProc
-    OnMouseEnter = btnCloseMouseEnter
-    OnMouseLeave = btnCloseMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object btnOpen: TBCMaterialDesignButton
     Left = 804
@@ -272,7 +273,7 @@ object frmViewer: TfrmViewer
     TextQuality = fqSystemClearType
     Caption = 'Open'
     OnClick = OpenProc
-    OnMouseEnter = btnOpenMouseEnter
-    OnMouseLeave = btnOpenMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
 end

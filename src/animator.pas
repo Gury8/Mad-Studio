@@ -174,9 +174,11 @@ type
     procedure FormActivate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-    procedure pcolr0Down(Sender : TObject; Button : TMouseButton; Shift : TShiftState; X, Y : Integer);
+    procedure pcolr0Down(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+      X, Y : Integer);
     procedure editPlayerHeightLeave(Sender : TObject);
-    procedure editPlayerHeightUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState; X, Y : Integer);
+    procedure editPlayerHeightUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+      X, Y : Integer);
     procedure FlipXAllProc(Sender : TObject);
     procedure FlipYAllProc(Sender : TObject);
     procedure FlipXSelectedProc(Sender : TObject);

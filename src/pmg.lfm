@@ -2899,6 +2899,8 @@ object frmPmg: TfrmPmg
       end
       object miMultiValues: TMenuItem
         Caption = 'Multi-color player editor values'
+        Enabled = False
+        Visible = False
         object miShowDec: TMenuItem
           Caption = 'Show decimal values'
           ShortCut = 16452

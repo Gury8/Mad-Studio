@@ -1,7 +1,7 @@
 object frmAnimGen: TfrmAnimGen
-  Left = 129
+  Left = 176
   Height = 713
-  Top = 141
+  Top = 170
   Width = 992
   BorderStyle = bsDialog
   Caption = 'Player Animator source code generator'
@@ -14,7 +14,7 @@ object frmAnimGen: TfrmAnimGen
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object panelLang: TBCPaperPanel
     Left = 9
     Height = 214
@@ -222,7 +222,7 @@ object frmAnimGen: TfrmAnimGen
   object radDataType: TRadioGroup
     Left = 9
     Height = 98
-    Top = 384
+    Top = 258
     Width = 132
     AutoFill = True
     Caption = 'Data values'
@@ -248,7 +248,7 @@ object frmAnimGen: TfrmAnimGen
   object boxStartLine: TGroupBox
     Left = 9
     Height = 114
-    Top = 252
+    Top = 372
     Width = 132
     ClientHeight = 96
     ClientWidth = 128
@@ -349,7 +349,7 @@ object frmAnimGen: TfrmAnimGen
       TabStop = True
       UseDockManager = False
       OnMouseLeave = CreateCodeProc
-      OnMouseUp = editStartLineMouseUp
+      OnMouseUp = editStartLineUp
     end
     object editLineStep: TBCTrackbarUpdown
       Left = 6
@@ -431,7 +431,7 @@ object frmAnimGen: TfrmAnimGen
       TabStop = True
       UseDockManager = False
       OnMouseLeave = CreateCodeProc
-      OnMouseUp = editStartLineMouseUp
+      OnMouseUp = editStartLineUp
     end
   end
   object memo: TMemo
@@ -490,9 +490,8 @@ object frmAnimGen: TfrmAnimGen
     TextQuality = fqSystemClearType
     Caption = 'Copy to editor'
     OnClick = CopyToEditor
-    OnMouseUp = btnCopyToEditorUp
-    OnMouseEnter = btnCopyToEditorEnter
-    OnMouseLeave = btnCopyToEditorLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object btnClose: TBCMaterialDesignButton
     Left = 881
@@ -505,8 +504,8 @@ object frmAnimGen: TfrmAnimGen
     TextQuality = fqSystemClearType
     Caption = 'Close'
     OnClick = CloseWin
-    OnMouseEnter = btnCloseEnter
-    OnMouseLeave = btnCloseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object StaticText1: TStaticText
     Left = 9

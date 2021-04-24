@@ -13,7 +13,7 @@ object frmDisplayListGen: TfrmDisplayListGen
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object box: TGroupBox
     Left = 612
     Height = 122
@@ -719,8 +719,8 @@ object frmDisplayListGen: TfrmDisplayListGen
     TextQuality = fqSystemClearType
     Caption = 'Copy to editor'
     OnClick = CopyToEditor
-    OnMouseEnter = btnCopyToEditorMouseEnter
-    OnMouseLeave = btnCopyToEditorMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object btnClose: TBCMaterialDesignButton
     Left = 718
@@ -733,8 +733,8 @@ object frmDisplayListGen: TfrmDisplayListGen
     TextQuality = fqSystemClearType
     Caption = 'Close'
     OnClick = CloseWin
-    OnMouseEnter = btnCloseMouseEnter
-    OnMouseLeave = btnCloseMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object memo: TMemo
     Tag = 3
