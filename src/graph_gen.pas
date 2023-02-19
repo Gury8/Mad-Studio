@@ -11,13 +11,14 @@ unit graph_gen;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, lcltype,
-  ComCtrls, BCTrackbarUpdown, BCListBox, BCMDButton, BCMaterialDesignButton, Windows,
+  Classes, SysUtils, FileUtil, SpinEx, Forms, Controls, Graphics, Dialogs,
+  StdCtrls, ExtCtrls, lcltype, BCListBox, BCMDButton, BCMaterialDesignButton,
   common;
 
 type
   { TfrmGraphGen }
   TfrmGraphGen = class(TForm)
+    boxColors : TGroupBox;
     btnCopyToEditor : TBCMaterialDesignButton;
     btnClose : TBCMaterialDesignButton;
     boxStartLine : TGroupBox;
@@ -25,20 +26,29 @@ type
     btnEffectus : TBCMDButton;
     btnFastBasic : TBCMDButton;
     btnKickC : TBCMDButton;
-    btnKickC1 : TBCMDButton;
-    btnKickC2 : TBCMDButton;
-    btnKickC3 : TBCMDButton;
+    btnMads : TBCMDButton;
+    btnMac65 : TBCMDButton;
+    btnCC65 : TBCMDButton;
     btnMadPascal : TBCMDButton;
     btnTurboBasicXL : TBCMDButton;
-    chkAddColors: TCheckBox;
-    chkTextWindow: TCheckBox;
     chkMAC65Lines: TCheckBox;
+    chkTextWindow : TCheckBox;
+    chkUseColors : TCheckBox;
+    color0 : TShape;
+    color1 : TShape;
+    color2 : TShape;
+    color3 : TShape;
+    color4 : TShape;
     editFilename: TEdit;
-    editLineStep : TBCTrackbarUpdown;
-    editStartLine : TBCTrackbarUpdown;
-    grpColors: TGroupBox;
-    grpMAC65Lines: TGroupBox;
-    grpFilename: TGroupBox;
+    editLineStep : TSpinEditEx;
+    editStartLine : TSpinEditEx;
+    boxMAC65Lines: TGroupBox;
+    boxFilename: TGroupBox;
+    Label2 : TLabel;
+    Label3 : TLabel;
+    Label4 : TLabel;
+    Label7 : TLabel;
+    Label8 : TLabel;
     lblLineStep1 : TLabel;
     lblStartLine1 : TLabel;
     listExamples : TBCPaperListBox;
@@ -48,12 +58,11 @@ type
     StaticText1 : TStaticText;
     StaticText2 : TStaticText;
     StaticText3 : TStaticText;
+    procedure editFilenameChange(Sender : TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure CopyToEditorProc(Sender: TObject);
-    procedure editStartLineMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
     procedure ListExamplesProc(Sender: TObject);
     procedure CloseWinProc(Sender: TObject);
     procedure radLangProc(Sender: TObject);
@@ -63,13 +72,12 @@ type
     { private declarations }
     listings : TListings;
     grBytes : integer;
+    isCreate : boolean;
     is01bit : boolean;
     procedure CreateCode;
     function Example01 : string;
     function Example02 : string;
     function Example03 : string;
-  public
-    { public declarations }
   end;
 
 var
@@ -80,12 +88,13 @@ implementation
 {$R *.lfm}
 
 uses
-  src_editor, code_lib, lib;
+  src_editor, graph, code_lib, lib;
 
 { TfrmGraphGen }
 
 procedure TfrmGraphGen.FormCreate(Sender: TObject);
 begin
+  isCreate := true;
   is01bit := false;
 
   case grMode of
@@ -116,51 +125,40 @@ begin
     grMode320x192x2: begin
       is01bit := true;
       grBytes := 7680;
-      chkAddColors.Checked := false;
+      chkUseColors.Checked := false;
     end;
   end;
 
-  // Example 1
-  listings[0, 0] := true;
-  listings[0, 1] := true;
-  listings[0, 2] := true;
-  listings[0, 3] := true;
-  listings[0, 4] := true;
+  SetListings(listings);
 
   // Example 2
-  listings[1, 0] := true;
-  listings[1, 1] := true;
-  listings[1, 2] := true;
-  listings[1, 3] := true;
-  listings[1, 4] := true;
-  listings[1, 5] := true;
-  listings[1, 6] := true;
-  listings[1, 7] := true;
+  listings[1, 5] := false;
+  listings[1, 6] := false;
+  listings[1, 7] := false;
+  listings[1, 8] := false;
 
   // Example 3
-  listings[2, 0] := true;
-  listings[2, 1] := true;
-  listings[2, 2] := true;
-  listings[2, 3] := true;
-  listings[2, 4] := true;
-
-  // Example 4
-  //listings[3, 0] := true;
-  //listings[3, 1] := true;
-  //listings[3, 2] := true;
-  //listings[3, 3] := true;
-  //listings[3, 4] := true;
-
-  SetTrackBarUpDown(editStartLine, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editLineStep, $00DDDDDD, clWhite);
+  listings[2, 5] := false;
+  listings[2, 6] := false;
+  listings[2, 7] := false;
+  listings[2, 8] := false;
 end;
 
 procedure TfrmGraphGen.FormShow(Sender: TObject);
 begin
   FormStyle := fsSystemStayOnTop;
 
+  if frmGraph.filename <> '' then
+    editFilename.Text := 'H1:' + ExtractFileName(frmGraph.filename);
+
+  color0.Brush.Color := colTab[0];   // POKE 712,C
+  color1.Brush.Color := colTab[1];   // POKE 708,C
+  color2.Brush.Color := colTab[2];   // POKE 709,C
+  color3.Brush.Color := colTab[3];   // POKE 710,C
+  color4.Brush.Color := colTab[10];  // POKE 711,C
+
+  isCreate := false;
   langIndex := 0;
-//  editFilename.Text := 'H1:' + ExtractFileName(frmGraph.filename);
   listExamples.ListBox.ItemIndex := 0;
   ListExamplesProc(Sender);
 end;
@@ -191,11 +189,30 @@ end;
 
 procedure TfrmGraphGen.ListExamplesProc(Sender: TObject);
 begin
-//  for i := 0 to radLang.Items.Count - 1 do begin
-//    radLang.Controls[i].Enabled := listings[listExamples.ItemIndex, i];
-////    radLang.Controls[i].Visible := listings[listExamples.ItemIndex, i];
-//  end;
-//  radLang.ItemIndex := langIndex;
+  if listExamples.ListBox.ItemIndex < 0 then exit;
+
+  btnAtariBASIC.Enabled := listings[listExamples.ListBox.ItemIndex, 0];
+  btnTurboBasicXL.Enabled := listings[listExamples.ListBox.ItemIndex, 1];
+  btnMadPascal.Enabled := listings[listExamples.ListBox.ItemIndex, 2];
+  btnEffectus.Enabled := listings[listExamples.ListBox.ItemIndex, 3];
+  btnFastBasic.Enabled := listings[listExamples.ListBox.ItemIndex, 4];
+  btnKickC.Enabled := listings[listExamples.ListBox.ItemIndex, 8];
+  btnMads.Enabled := listings[listExamples.ListBox.ItemIndex, 5];
+  btnCC65.Enabled := listings[listExamples.ListBox.ItemIndex, 7];
+  btnMac65.Enabled := listings[listExamples.ListBox.ItemIndex, 6];
+
+  boxColors.Enabled := listExamples.ListBox.ItemIndex > 0;
+  boxColors.Visible := boxColors.Enabled;
+
+  boxMAC65Lines.Enabled := listExamples.ListBox.ItemIndex = 0;
+  boxMAC65Lines.Visible := boxMAC65Lines.Enabled;
+
+  boxFilename.Enabled := listExamples.ListBox.ItemIndex = 2;
+  boxFilename.Visible := boxFilename.Enabled;
+
+  chkTextWindow.Enabled := listExamples.ListBox.ItemIndex > 0;
+  chkTextWindow.Visible := chkTextWindow.Enabled;
+
   CreateCode;
 end;
 
@@ -203,219 +220,21 @@ procedure TfrmGraphGen.CreateCode;
 var
   code : string;
 begin
-  boxStartLine.Enabled := langIndex < 2;
-  boxStartLine.Visible := boxStartLine.Enabled;
-
-  if langIndex = 0 then begin
-    radDataType.ItemIndex := 0;
-    TRadioButton(radDataType.Controls[1]).Enabled := false;
-//    TRadioButton(radDataType.Controls[2]).Enabled := false;
-  end
-  else begin
-    TRadioButton(radDataType.Controls[1]).Enabled := true;
-//    TRadioButton(radDataType.Controls[2]).Enabled := true;
-  end;
-
-  memo.Lines.Clear;
+  Set01(boxStartLine, langIndex, radDataType, false);
 
   case listExamples.ListBox.ItemIndex of
-    0: begin
-      code := Example01;
-      grpFilename.Enabled := true;
-      grpColors.Enabled := true;
-    end;
-    1: begin
-      code := Example02;
-      grpFilename.Enabled := false;
-      grpColors.Enabled := false;
-    end;
-    2: begin
-      code := Example03;
-      grpFilename.Enabled := false;
-      grpColors.Enabled := true;
-    end;
+    0: code := Example01;
+    1: code := Example02;
+    2: code := Example03;
   end;
 
-  memo.Lines.Add(code);
-
-  // Set cursor position at the top of memo object
-  memo.SelStart := 0;
-  memo.SelLength := 0;
-  SendMessage(memo.Handle, EM_SCROLLCARET, 0, 0);
+  Set02(memo, code);
 end;
 
-// Picture loader
+{-----------------------------------------------------------------------------
+ Screen data values
+ -----------------------------------------------------------------------------}
 function TfrmGraphGen.Example01 : string;
-var
-  strTextWindow : string = '';
-begin
-  if not chkTextWindow.Checked then
-    strTextWindow := '+16';
-
-  { Atari BASIC
-   ---------------------------------------------------------------------------}
-  if langIndex = _ATARI_BASIC then begin
-    code.number := editStartLine.Value;
-    code.step := editLineStep.Value;
-    code.line := CodeLine('GRAPHICS ' + IntToStr(grMode) + strTextWindow) +
-                 CodeLine('CLOSE #1') +
-                 CodeLine('OPEN #1,4,0,"' + editFilename.Text + '"') +
-                 CodeLine('SCR=PEEK(88)+PEEK(89)*256') +
-                 CodeLine('FOR I=0 TO ' + IntToStr(grBytes - 1)) +
-                 CodeLine('GET #1,BYTE') +
-                 CodeLine('POKE SCR+I,BYTE') +
-                 CodeLine('NEXT I');
-    if chkAddColors.Checked then begin
-      code.line += CodeLine('GET #1,BYTE:POKE 712,BYTE');
-      code.line += CodeLine('GET #1,BYTE:POKE 708,BYTE');
-
-      if not is01bit then begin
-        code.line += CodeLine('GET #1,BYTE:POKE 709,BYTE');
-        code.line += CodeLine('GET #1,BYTE:POKE 710,BYTE');
-      end;
-    end;
-//    lineNum := 120;
-    code.line += CodeLine('CLOSE #1');
-    code.line += WaitKeyCode(langIndex);
-//            '120 IF PEEK(764)<>255 THEN POKE 764,255:END'#13#10 +
-//            '130 GOTO 120';
-  end
-  { Turbo BASIC XL
-   ---------------------------------------------------------------------------}
-  else if langIndex = _TURBO_BASIC_XL then begin
-    code.number := editStartLine.Value;
-    code.step := editLineStep.Value;
-    code.line := CodeLine('GRAPHICS ' + IntToStr(grMode) + strTextWindow) +
-                 CodeLine('CLOSE #%1') +
-                 CodeLine('OPEN #%1,4,%0,"' + editFilename.Text + '"') +
-                 CodeLine('BGET #%1,DPEEK(88),' + IntToStr(grBytes - 1));
-
-    //      Lines.Add('20 DIM FN$(30)');
-    //      Lines.Add('30 FN$(%1)="' + editFilename.Text + '"');
-    if chkAddColors.Checked then begin
-      code.line += CodeLine('BGET #%1,PEEK(712),%1');
-      code.line += CodeLine('BGET #%1,PEEK(708),%1');
-
-      if not is01bit then begin
-        code.line += CodeLine('BGET #%1,PEEK(709),%1');
-        code.line += CodeLine('BGET #%1,PEEK(710),%1');
-      end;
-    end;
-    code.line += CodeLine('CLOSE #%1');
-    code.line += WaitKeyCode(langIndex);
-  end
-  { Action!
-   ---------------------------------------------------------------------------}
-  else if langIndex = _ACTION then begin
-    if not chkTextWindow.Checked then
-      strTextWindow := ' + 16';
-
-    code.line := 'PROC MAIN()'#13#10#13#10 +
-                 'CARD I       ; COUNTER'#13#10 +
-                 'BYTE DATA    ; BYTE OF DATA'#13#10 +
-                 'BYTE CH=764  ; KEY SCAN REGISTER'#13#10 +
-                 'CARD SCR=88  ; SCREEN DISPLAY'#13#10#13#10 +
-                 'GRAPHICS(' + IntToStr(grMode) + strTextWindow + ')'#13#10 +
-                 'SCR=PEEKC(88)'#13#10#13#10 +
-                 'CLOSE(1)'#13#10 +
-                 'OPEN(1,"' + editFilename.Text + '",4,0)'#13#10 +
-                 'FOR I=0 TO ' + IntToStr(grBytes - 1) + ' DO'#13#10 +
-                 '  DATA=GETD(1)'#13#10 +
-                 '  POKEC(SCR+I,DATA)'#13#10 +
-                 'OD'#13#10;
-    if chkAddColors.Checked then begin
-      code.line += #13#10'DATA=GETD(1) POKE(712,DATA)'#13#10 +
-                   'DATA=GETD(1) POKE(708,DATA)'#13#10;
-
-      if not is01bit then
-        code.line += 'DATA=GETD(1) POKE(709,DATA)'#13#10 +
-                     'DATA=GETD(1) POKE(710,DATA)'#13#10;
-    end;
-    code.line += #13#10'CLOSE(1)'#13#10 +
-                 //'CH=255'#13#10 +
-                 //'DO UNTIL CH#255 OD'#13#10 +
-                 //'CH=255'#13#10 +
-                 WaitKeyCode(langIndex) +
-                 #13#10'RETURN';
-  end
-  { Mad Pascal
-   ---------------------------------------------------------------------------}
-  else if langIndex = _MAD_PASCAL then begin
-    if not chkTextWindow.Checked then
-      strTextWindow := ' + 16';
-
-    code.line := 'uses'#13#10 +
-                 '  SysUtils, FastGraph, Crt;'#13#10 +
-                 #13#10 +
-                 'const'#13#10 +
-                 '  picSize = ' + IntToStr(grBytes - 1) + ';'#13#10 +
-                 #13#10 +
-                 'var'#13#10 +
-                 '  f : file;'#13#10 +
-                 '  filename : TString;'#13#10 +
-                 '  buf : pointer;'#13#10 +
-                 'begin'#13#10 +
-                 '  InitGraph(' + IntToStr(grMode) + strTextWindow + ');'#13#10 +
-                 '  buf := pointer(DPeek(88));'#13#10 +
-                 #13#10 +
-                 '  // Open file'#13#10 +
-                 '  filename := ''' + editFilename.Text + ''';'#13#10 +
-                 '  Assign(f, filename);'#13#10 +
-                 #13#10 +
-                 '  // Read data'#13#10 +
-                 '  Reset(f, 1);'#13#10 +
-                 '  BlockRead(f, buf, picSize);'#13#10;
-    if chkAddColors.Checked then begin
-      code.line += #13#10'  // Read colors'#13#10 +
-                   '  buf := pointer(712); '#13#10 +
-                   '  BlockRead(f, buf, 1);'#13#10 +
-                   '  buf := pointer(708);'#13#10;
-      if is01bit then
-        code.line += '  BlockRead(f, buf, 1);'#13#10
-      else
-        code.line += '  BlockRead(f, buf, 3);'#13#10;
-    end;
-    code.line += #13#10'  // Close file'#13#10 +
-                 '  Close(f);'#13#10 +
-                 //#13#10 +
-                 //'  repeat until KeyPressed;'#13#10 +
-                 //'  ReadKey;'#13#10 +
-                 WaitKeyCode(langIndex) +
-                 'end.';
-  end
-  { FastBasic
-   ---------------------------------------------------------------------------}
-  else if langIndex = _FAST_BASIC then begin
-    if not chkTextWindow.Checked then
-      strTextWindow := ' + 16';
-
-    code.line := 'GRAPHICS ' + IntToStr(grMode) + strTextWindow + #13#10 +
-                 #13#10 +
-                 'CLOSE #1'#13#10 +
-                 'OPEN #1, 4, 0, "' + editFilename.Text + '"'#13#10 +
-                 'BGET #1, DPEEK(88), ' + IntToStr(grBytes - 1) + #13#10;
-    if chkAddColors.Checked then begin
-      code.line += 'BGET #1, PEEK(712), 1'#13#10 +
-                   'BGET #1, PEEK(708), 1'#13#10;
-      if not is01bit then
-        code.line += 'BGET #1, PEEK(709), 1'#13#10 +
-                     'BGET #1, PEEK(710), 1'#13#10;
-    end;
-    code.line += 'CLOSE #1'#13#10 +
-                 //#13#10 +
-                 //'REPEAT'#13#10 +
-                 //'UNTIL Key()';
-                 WaitKeyCode(langIndex);
-  end
-  else begin
-    code.line := '';
-  end;
-
-  result := code.line;
-end;
-
-// Data values
-function TfrmGraphGen.Example02 : string;
 begin
   code.number := editStartLine.Value;
   code.step := editLineStep.Value;
@@ -460,8 +279,10 @@ begin
   result := code.line;
 end;
 
-// Data values with picture loader
-function TfrmGraphGen.Example03 : string;
+{-----------------------------------------------------------------------------
+ Display picture screen
+ -----------------------------------------------------------------------------}
+function TfrmGraphGen.Example02 : string;
 var
   strTextWindow : string;
 begin
@@ -479,7 +300,7 @@ begin
     code.line += CodeLine('READ BYTE');
     code.line += CodeLine('POKE SCR+I,BYTE');
     code.line += CodeLine('NEXT I');
-    if chkAddColors.Checked then begin
+    if chkUseColors.Checked then begin
       code.line += CodeLine('READ BYTE:POKE 712,BYTE');
       code.line += CodeLine('READ BYTE:POKE 708,BYTE');
       if not is01bit then begin
@@ -512,7 +333,7 @@ begin
                  CodeLine('READ BYTE') +
                  CodeLine('POKE SCR+I,BYTE') +
                  CodeLine('NEXT I');
-    if chkAddColors.Checked then begin
+    if chkUseColors.Checked then begin
       code.line += CodeLine('READ BYTE:POKE 712,BYTE');
       code.line += CodeLine('READ BYTE:POKE 708,BYTE');
       if not is01bit then begin
@@ -546,19 +367,13 @@ begin
                  'PROC Main()'#13#10#13#10 +
                  'Graphics(' + IntToStr(grMode) + strTextWindow + ')'#13#10#13#10 +
                  'MoveBlock(SCREEN, picData, ' + IntToStr(grBytes) + ')'#13#10;
-    if chkAddColors.Checked then begin
+    if chkUseColors.Checked then begin
       code.line += 'Poke(712, colors(0))'#13#10 +
                    'Poke(708, colors(1))'#13#10;
       if not is01bit then
         code.line += 'Poke(709, colors(2))'#13#10 +
                      'Poke(710, colors(3))'#13#10;
     end;
-
-    //code += #13#10 +
-    //        'DO UNTIL CH#255 OD'#13#10 +
-    //        'CH=255'#13#10 +
-    //        #13#10 +
-    //        'RETURN';
 
     code.line += WaitKeyCode(langIndex) +
                  #13#10'RETURN';
@@ -578,7 +393,7 @@ begin
                  'begin'#13#10 +
                  '  InitGraph(' + IntToStr(grMode) + strTextWindow + ');'#13#10#13#10 +
                  '  Move(picData, pointer(screen), ' + IntToStr(grBytes) + ');'#13#10;
-    if chkAddColors.Checked then begin
+    if chkUseColors.Checked then begin
       code.line += '  Poke(712, colors[0]);'#13#10 +
                    '  Poke(708, colors[1]);'#13#10;
       if not is01bit then
@@ -587,7 +402,6 @@ begin
     end;
     code.line += WaitKeyCode(langIndex) +
                  'end.';
-                 //'  repeat until KeyPressed;'#13#10 +
   end
   { FastBasic
    ---------------------------------------------------------------------------}
@@ -600,7 +414,7 @@ begin
                  'GRAPHICS ' + IntToStr(grMode) + strTextWindow + #13#10 +
                  'scr = DPEEK(88)'#13#10 +
                  'MOVE ADR(picData), scr, ' + IntToStr(grBytes) + #13#10;
-    if chkAddColors.Checked then begin
+    if chkUseColors.Checked then begin
       code.line += 'POKE 712, colors(0)'#13#10 +
                    'POKE 708, colors(1)'#13#10;
       if not is01bit then
@@ -616,18 +430,206 @@ begin
   result := code.line;
 end;
 
-// Data values for compressed gr. mode 15
-//function TfrmGraphGen.Example04 : string;
-//var
-//  code : string;
-//begin
-//  if radLang.ItemIndex = _MAD_PASCAL then begin
-////    code := Gr15Opt(grBytes, radDataType.ItemIndex);
-//    code := Gr15Asm(editScanlines.Value - 1);
-//  end;
-//
-//  result := code;
-//end;
+{-----------------------------------------------------------------------------
+ Load picture from disk
+ -----------------------------------------------------------------------------}
+function TfrmGraphGen.Example03 : string;
+var
+  strTextWindow : string = '';
+begin
+  if not chkTextWindow.Checked then
+    strTextWindow := '+16';
+
+  { Atari BASIC
+   ---------------------------------------------------------------------------}
+  if langIndex = _ATARI_BASIC then begin
+    code.number := editStartLine.Value;
+    code.step := editLineStep.Value;
+    code.line := CodeLine('GRAPHICS ' + IntToStr(grMode) + strTextWindow) +
+                 CodeLine('CLOSE #1') +
+                 CodeLine('OPEN #1,4,0,"' + editFilename.Text + '"') +
+                 CodeLine('SCR=PEEK(88)+PEEK(89)*256');
+//                 CodeLine('FOR I=0 TO ' + IntToStr(grBytes - 1)) +
+//                 CodeLine('GET #1,BYTE') +
+//                 CodeLine('POKE SCR+I,BYTE') +
+//                 CodeLine('NEXT I');
+
+//    code.line += SetCIOFastLoad(_BASIC_SCR_MEM_VAR, true, true);
+    //DisplayScreen(langIndex, antic_mode_max_x, antic_mode_max_y, true);
+    code.line += CodeLine('REM SET CIO FOR FASTER FILE LOAD');
+    code.line += CodeLine('X=16:DIM ML$(7)') +
+                 CodeLine('ML$="hhh*LV*":ML$(4,4)=CHR$(170):ML$(7,7)=CHR$(228)') +
+                 CodeLine('ICCOM=834:ICBADR=836:ICBLEN=840');
+    code.line += CodeLine('REM High and low address for IOCB #1') +
+                 CodeLine('POKE ICBADR+X+1,INT(SCR/256):POKE ICBADR+X,SCR-INT(SCR/256)*256') +
+                 CodeLine('POKE ICBLEN+X+1,15:POKE ICBLEN+X,0') +
+                 CodeLine('REM CALL CIO (7 = "get" command, 16 = IOCB #1)') +
+                 CodeLine('POKE ICCOM+X,7:A=USR(ADR(ML$),X)');
+
+    if chkUseColors.Checked then begin
+      code.line += CodeLine('GET #1,BYTE:POKE 712,BYTE');
+      code.line += CodeLine('GET #1,BYTE:POKE 708,BYTE');
+      if not is01bit then begin
+        code.line += CodeLine('GET #1,BYTE:POKE 709,BYTE');
+        code.line += CodeLine('GET #1,BYTE:POKE 710,BYTE');
+      end;
+    end;
+    code.line += CodeLine('CLOSE #1');
+    code.line += WaitKeyCode(langIndex);
+  end
+  { Turbo BASIC XL
+   ---------------------------------------------------------------------------}
+  else if langIndex = _TURBO_BASIC_XL then begin
+    code.number := editStartLine.Value;
+    code.step := editLineStep.Value;
+    code.line := CodeLine('GRAPHICS ' + IntToStr(grMode) + strTextWindow) +
+                 CodeLine('CLOSE #%1') +
+                 CodeLine('OPEN #%1,4,%0,"' + editFilename.Text + '"') +
+                 CodeLine('BGET #%1,DPEEK(88),' + IntToStr(grBytes - 1));
+    if chkUseColors.Checked then begin
+      code.line += CodeLine('BGET #%1,PEEK(712),%1');
+      code.line += CodeLine('BGET #%1,PEEK(708),%1');
+
+      if not is01bit then begin
+        code.line += CodeLine('BGET #%1,PEEK(709),%1');
+        code.line += CodeLine('BGET #%1,PEEK(710),%1');
+      end;
+    end;
+    code.line += CodeLine('CLOSE #%1');
+    code.line += WaitKeyCode(langIndex);
+  end
+  { Action!
+   ---------------------------------------------------------------------------}
+  else if langIndex = _ACTION then begin
+    if not chkTextWindow.Checked then
+      strTextWindow := ' + 16';
+
+    code.line := 'PROC MAIN()'#13#10#13#10 +
+                 'CARD I       ; COUNTER'#13#10 +
+                 'BYTE DATA    ; BYTE OF DATA'#13#10 +
+                 'BYTE CH=764  ; KEY SCAN REGISTER'#13#10 +
+                 'CARD SCR=88  ; SCREEN DISPLAY'#13#10#13#10 +
+                 'GRAPHICS(' + IntToStr(grMode) + strTextWindow + ')'#13#10 +
+                 'SCR=PEEKC(88)'#13#10#13#10 +
+                 'CLOSE(1)'#13#10 +
+                 'OPEN(1,"' + editFilename.Text + '",4,0)'#13#10 +
+                 'FOR I=0 TO ' + IntToStr(grBytes - 1) + ' DO'#13#10 +
+                 '  DATA=GETD(1)'#13#10 +
+                 '  POKEC(SCR+I,DATA)'#13#10 +
+                 'OD'#13#10;
+    if chkUseColors.Checked then begin
+      code.line += #13#10'DATA=GETD(1) POKE(712,DATA)'#13#10 +
+                   'DATA=GETD(1) POKE(708,DATA)'#13#10;
+      if not is01bit then
+        code.line += 'DATA=GETD(1) POKE(709,DATA)'#13#10 +
+                     'DATA=GETD(1) POKE(710,DATA)'#13#10;
+    end;
+    code.line += #13#10'CLOSE(1)'#13#10 +
+                 WaitKeyCode(langIndex) +
+                 #13#10'RETURN';
+  end
+  { Mad Pascal
+   ---------------------------------------------------------------------------}
+  else if langIndex = _MAD_PASCAL then begin
+    if not chkTextWindow.Checked then
+      strTextWindow := ' + 16';
+
+    //             'const'#13#10 +
+    //             '  picSize = ' + IntToStr(grBytes - 1) + ';'#13#10 +
+    //             'var'#13#10 +
+    //             '  f : file;'#13#10 +
+    //             '  filename : TString;'#13#10 +
+    //             '  buf : pointer;'#13#10 +
+    //             'begin'#13#10 +
+    //             '  InitGraph(' + IntToStr(grMode) + strTextWindow + ');'#13#10 +
+    //             '  buf := pointer(DPeek(88));'#13#10 +
+    //             '  // Open file'#13#10 +
+    //             '  filename := ''' + editFilename.Text + ''';'#13#10 +
+    //             '  Assign(f, filename);'#13#10 +
+    //             '  // Read data'#13#10 +
+    //             '  Reset(f, 1);'#13#10 +
+    //             '  BlockRead(f, buf, picSize);'#13#10;
+    //if chkUseColors.Checked then begin
+    //  code.line += #13#10'  // Read colors'#13#10 +
+    //               '  buf := pointer(712); '#13#10 +
+    //               '  BlockRead(f, buf, 1);'#13#10 +
+    //               '  buf := pointer(708);'#13#10;
+    //  if is01bit then
+    //    code.line += '  BlockRead(f, buf, 1);'#13#10
+    //  else
+    //    code.line += '  BlockRead(f, buf, 3);'#13#10;
+    //end;
+    //code.line += #13#10'  // Close file'#13#10 +
+    //             '  Close(f);'#13#10 +
+    //             WaitKeyCode(langIndex) +
+    //             'end.';
+
+    code.line := '// Load picture'#13#10#13#10 +
+                 'uses'#13#10 +
+                 '  SysUtils, FastGraph, Crt, Cio;'#13#10#13#10 +
+                 'const'#13#10 +
+                 '  picSize = ' + IntToStr(grBytes - 1) + ';'#13#10 +
+                 'var'#13#10 +
+                 '  scr : word;'#13#10 +
+                 '  cnt : byte = 0;'#13#10 +
+                 '  maxX, maxY : byte;'#13#10 +
+                 '  colReg : array[0..4] of byte absolute 708;'#13#10;
+    code.line += '  i, data : byte;'#13#10#13#10 +
+                 'begin'#13#10 +
+                 '  InitGraph(' + IntToStr(grMode) + strTextWindow + ');'#13#10 +
+                 '  scr := DPeek(88);'#13#10 +
+                 '  // Open file'#13#10 +
+                 '  Cls(1);'#13#10;
+
+    code.line += '  Opn(1, 4, 0, ' + QuotedStr(editFilename.Text) + ');'#13#10#13#10;
+    //code.line += DisplayScreen(langIndex, editMaxX.Value, editMaxY.Value, true);
+    code.line += '  BGet(1, pointer(scr), picSize);'#13#10#13#10;
+
+    if chkUseColors.Checked then begin
+      code.line += '  // Read color values'#13#10 +
+                   '  colReg[4] := Get(1);'#13#10 +
+                   '  colReg[0] := Get(1);'#13#10 +
+                   '  colReg[1] := Get(1);'#13#10 +
+                   '  colReg[2] := Get(1);'#13#10 +
+                   '  colReg[3] := Get(1);'#13#10 +
+                   '  Poke(712, colReg[4]);'#13#10 +
+                   '  Poke(708, colReg[0]);'#13#10 +
+                   '  Poke(709, colReg[1]);'#13#10 +
+                   '  Poke(710, colReg[2]);'#13#10 +
+                   '  Poke(711, colReg[3]);'#13#10#13#10;
+    end;
+
+    code.line += '  // Close file'#13#10 +
+                 '  Cls(1);'#13#10 +
+                 WaitKeyCode(langIndex) +
+                 'end.';
+  end
+  { FastBasic
+   ---------------------------------------------------------------------------}
+  else if langIndex = _FAST_BASIC then begin
+    if not chkTextWindow.Checked then
+      strTextWindow := ' + 16';
+
+    code.line := 'GRAPHICS ' + IntToStr(grMode) + strTextWindow + #13#10#13#10 +
+                 'CLOSE #1'#13#10 +
+                 'OPEN #1, 4, 0, "' + editFilename.Text + '"'#13#10 +
+                 'BGET #1, DPEEK(88), ' + IntToStr(grBytes - 1) + #13#10;
+    if chkUseColors.Checked then begin
+      code.line += 'BGET #1, PEEK(712), 1'#13#10 +
+                   'BGET #1, PEEK(708), 1'#13#10;
+      if not is01bit then
+        code.line += 'BGET #1, PEEK(709), 1'#13#10 +
+                     'BGET #1, PEEK(710), 1'#13#10;
+    end;
+    code.line += 'CLOSE #1'#13#10 +
+                 WaitKeyCode(langIndex);
+  end
+  else begin
+    code.line := '';
+  end;
+
+  result := code.line;
+end;
 
 procedure TfrmGraphGen.radLangProc(Sender: TObject);
 begin
@@ -635,10 +637,10 @@ begin
   CreateCode;
 end;
 
-procedure TfrmGraphGen.editStartLineMouseUp(Sender : TObject; Button : TMouseButton;
-  Shift : TShiftState; X, Y : Integer);
+procedure TfrmGraphGen.editFilenameChange(Sender : TObject);
 begin
-  CreateCode;
+  if not isCreate then
+    CreateCode;
 end;
 
 procedure TfrmGraphGen.ButtonHoverEnter(Sender : TObject);

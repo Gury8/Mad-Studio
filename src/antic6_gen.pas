@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Text mode 1 and 2 editor - source code generator
 }
 unit antic6_gen;
@@ -11,13 +11,15 @@ unit antic6_gen;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls, ExtCtrls,
-  lcltype, BCTrackbarUpdown, BCListBox, BCMDButton, BCMaterialDesignButton, Windows,
+  Classes, SysUtils, FileUtil, SpinEx, Forms, Controls, Graphics, Dialogs,
+  StdCtrls, ExtCtrls, lcltype, BCListBox, BCMDButton, BCMaterialDesignButton,
   common;
 
 type
   { TfrmAntic6Gen }
   TfrmAntic6Gen = class(TForm)
+    boxCharSet : TGroupBox;
+    boxColors : TGroupBox;
     btnCopyToEditor : TBCMaterialDesignButton;
     btnClose : TBCMaterialDesignButton;
     boxStartLine : TGroupBox;
@@ -27,22 +29,23 @@ type
     btnKickC : TBCMDButton;
     btnMadPascal : TBCMDButton;
     btnTurboBasicXL : TBCMDButton;
-    chkUseColors: TCheckBox;
+    chkCharSet : TCheckBox;
     chkTextWindow: TCheckBox;
+    chkUseColors : TCheckBox;
+    color0 : TShape;
+    color1 : TShape;
+    color2 : TShape;
+    color3 : TShape;
+    color4 : TShape;
     editFilename: TLabeledEdit;
-    boxColors: TGroupBox;
-    editLineStep : TBCTrackbarUpdown;
-    editStartLine : TBCTrackbarUpdown;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    color0: TShape;
-    color1: TShape;
-    color2: TShape;
-    color3: TShape;
-    color4: TShape;
+    editFontName : TLabeledEdit;
+    editLineStep : TSpinEditEx;
+    editStartLine : TSpinEditEx;
+    Label2 : TLabel;
+    Label3 : TLabel;
+    Label4 : TLabel;
+    Label7 : TLabel;
+    Label8 : TLabel;
     lblLineStep : TLabel;
     lblStartLine : TLabel;
     ListExamples : TBCPaperListBox;
@@ -52,17 +55,15 @@ type
     StaticText1 : TStaticText;
     StaticText2 : TStaticText;
     StaticText3 : TStaticText;
-//    procedure chkUseColorsChange(Sender : TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure CloseWinProc(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure CopyToEditorProc(Sender: TObject);
     procedure CreateCodeProc(Sender : TObject);
-    procedure editStartLineMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
     procedure listExamplesProc(Sender: TObject);
     procedure radLangProc(Sender: TObject);
+    procedure chkCharSetChange(Sender : TObject);
     procedure ButtonHoverEnter(Sender : TObject);
     procedure ButtonHoverLeave(Sender : TObject);
   private
@@ -77,8 +78,6 @@ type
     function GenChrDataMadPascal(grMode : string) : string;
     function GenChrDataFastBASIC(grMode : string) : string;
     procedure CreateCode;
-  public
-    { public declarations }
   end;
 
 var
@@ -95,36 +94,30 @@ uses
 
 procedure TfrmAntic6Gen.FormCreate(Sender: TObject);
 begin
-  // Example 1
-  listings[0, 0] := true;
-  listings[0, 1] := true;
-  listings[0, 2] := true;
-  listings[0, 3] := true;
-  listings[0, 4] := true;
+  if frmAntic6.textMode = 1 then begin
+    antic_mode_max_x := _ANTIC_MODE_6_MAX_X;
+    antic_mode_max_y := _ANTIC_MODE_6_MAX_Y;
+  end
+  else begin
+    antic_mode_max_x := _ANTIC_MODE_7_MAX_X;
+    antic_mode_max_y := _ANTIC_MODE_7_MAX_Y;
+  end;
+
+  SetListings(listings);
 
   // Example 2
-  listings[1, 0] := true;
-  listings[1, 1] := true;
-  listings[1, 2] := true;
-  listings[1, 3] := true;
-  listings[1, 4] := true;
+  listings[1, 8] := false;
 
   // Example 3
-  listings[2, 0] := true;
-  listings[2, 1] := true;
-  listings[2, 2] := true;
-  listings[2, 3] := true;
-  listings[2, 4] := true;
+  listings[2, 8] := false;
 
   // Example 4
-  listings[3, 0] := true;
-  listings[3, 1] := true;
-  listings[3, 2] := true;
-  listings[3, 3] := true;
-  listings[3, 4] := true;
+  listings[3, 8] := false;
+end;
 
-  SetTrackBarUpDown(editStartLine, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editLineStep, $00DDDDDD, clWhite);
+procedure TfrmAntic6Gen.chkCharSetChange(Sender : TObject);
+begin
+  editFontName.Enabled := chkCharSet.Checked;
 end;
 
 procedure TfrmAntic6Gen.FormShow(Sender: TObject);
@@ -137,8 +130,12 @@ begin
   color3.Brush.Color := colTab[3];   // POKE 710,C
   color4.Brush.Color := colTab[10];  // POKE 711,C
 
-  langIndex := 0;
   editFilename.Text:= 'H1:' + ExtractFileName(frmAntic6.filename);
+  editFontname.Text := 'H1:' + ExtractFileName(frmAntic6.fontName);
+
+  chkCharSet.Checked := frmAntic6.fontName <> '';
+
+  langIndex := 0;
   ListExamples.ListBox.ItemIndex := 0;
   listExamplesProc(Sender);
 end;
@@ -153,6 +150,22 @@ end;
 procedure TfrmAntic6Gen.CloseWinProc(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TfrmAntic6Gen.CreateCode;
+var
+  code : string;
+begin
+  Set01(boxStartLine, langIndex, radDataType, false);
+
+  case ListExamples.ListBox.ItemIndex of
+    0: code := Example01;
+    1: code := Example02;
+    2: code := Example03;
+    3: code := Example04;
+  end;
+
+  Set02(memo, code);
 end;
 
 procedure TfrmAntic6Gen.CopyToEditorProc(Sender: TObject);
@@ -176,10 +189,8 @@ procedure Rep(isLast : boolean);
 var
   stry : string;
 begin
-//  Inc(lineNum, 5);
-  stry := CodeLine('? #6;' + str);
   if isNormal then
-    stry += '";';
+    stry := CodeLine('? #6;' + str + '";');
 
   if isLast then
     SetLength(stry, Length(stry) - 1);
@@ -191,13 +202,15 @@ begin
 end;
 
 begin
-  code.number := editStartLine.Value;
-  code.step := editLineStep.Value;
-  code.line := CodeLine('REM Print character codes to the screen');
-  code.line += CodeLine('GRAPHICS ' + grMode);
-
   isNormal := false;
   isFirst := true;
+  code.number := editStartLine.Value;
+  code.step := editLineStep.Value;
+  code.line := CodeLine(_REM) +
+               CodeLine('REM' + _REM_MAD_STUDIO) +
+               CodeLine('REM Print character codes to the screen') +
+               CodeLine(_REM) +
+               CodeLine('GRAPHICS ' + grMode);
   for j := 0 to frmAntic6.modeSize do begin
     //if j = frmAntic6.modeSize then break;
     if (j > 19) and (j mod 20 = 0) then begin
@@ -212,6 +225,7 @@ begin
         str += '"';
         isFirst := false;
       end;
+
       if Length(str) < 112 then
         str += chr(frmAntic6.fldAtascii[j] + 32)
       else
@@ -223,6 +237,7 @@ begin
         str += '"';
         isFirst := false;
       end;
+
       if Length(str) < 112 then
         str += Chr(frmAntic6.fldAtascii[j])
       else
@@ -231,9 +246,9 @@ begin
     else if (frmAntic6.fldAtascii[j] >= 128) and (frmAntic6.fldAtascii[j] <= 128 + 63) then begin
       if Length(str) < 112 then begin
         if isNormal then
-          str += '";CHR$(' + inttostr(frmAntic6.fldAtascii[j] + 32) + ');'
-        else
-          str += 'CHR$(' + inttostr(frmAntic6.fldAtascii[j] + 32) + ');';
+          str += '";';
+
+        str += 'CHR$(' + inttostr(frmAntic6.fldAtascii[j] + 32) + ');';
       end
       else
         Rep(false);
@@ -241,12 +256,13 @@ begin
       isNormal := false;
       isFirst := true;
     end
-    else if (frmAntic6.fldAtascii[j] >= 128 + 97) and (frmAntic6.fldAtascii[j] <= 128 + 97 + 26) then begin
+    else if (frmAntic6.fldAtascii[j] >= 128 + 97) and
+            (frmAntic6.fldAtascii[j] <= 128 + 97 + 26) then begin
       if Length(str) < 112 then begin
         if isNormal then
-          str += '";CHR$(' + inttostr(frmAntic6.fldAtascii[j]) + ');'
-        else
-          str += 'CHR$(' + inttostr(frmAntic6.fldAtascii[j]) + ');';
+          str += '";';
+
+        str += 'CHR$(' + inttostr(frmAntic6.fldAtascii[j]) + ');';
       end
       else
         Rep(false);
@@ -256,7 +272,6 @@ begin
     end;
   end;
 
-//  code += IntToStr(lineNum) + ' GOTO ' + IntToStr(lineNum);
   code.line += WaitKeyCode(langIndex);
 
   result := code.line;
@@ -272,9 +287,9 @@ var
 //PUTD(6,65) PUTD(6,65)
 //PRINTD(6,"TEST AbA")
 // P 65)
-
 begin
-  code.line := '; Print character codes to the screen'#13#10#13#10 +
+  code.line := ';' + _REM_MAD_STUDIO + #13#10 +
+               '; Print character codes to the screen'#13#10#13#10 +
                'DEFINE PUT="PUTD(6,"'#13#10#13#10 +
                'BYTE CH=764'#13#10#13#10 +
                'GRAPHICS(' + grMode + ')'#13#10#13#10;
@@ -283,6 +298,7 @@ begin
       code.line += str + #13#10;
       str := '';
     end;
+
     if (frmAntic6.fldAtascii[j] >= 0) and (frmAntic6.fldAtascii[j] <= 63) then
       str += 'PUT ' + IntToStr(frmAntic6.fldAtascii[j] + 32) + ') '
     else if (frmAntic6.fldAtascii[j] >= 97) and (frmAntic6.fldAtascii[j] <= 122) then
@@ -303,21 +319,22 @@ var
   j : short;
   str : string = '';
 begin
-  code.line := '// Print character codes to the screen'#13#10 +
-               'uses crt, graph;'#13#10#13#10 +
+  code.line := '//' + _REM_MAD_STUDIO + #13#10 +
+               '// Print character codes to the screen'#13#10#13#10 +
+               'uses crt, fastgraph, cio;'#13#10#13#10 +
                'var'#13#10 +
-               '  f : file;'#13#10 +
                '  textBuf : string;'#13#10 +
                #13#10'begin'#13#10 +
-               '  Assign(f, ''S:''); Rewrite(f, 1);'#13#10 +
                '  InitGraph(' + grMode + ');'#13#10#13#10;
   str := '  textBuf := ';
   for j := 0 to frmAntic6.modeSize do begin
     if (j > 19) and (j mod 20 = 0) then begin
-      str += ';'#13#10'  BlockWrite(f, textBuf[1], Length(textBuf));';
+      //str += ';'#13#10'  BlockWrite(f, textBuf[1], Length(textBuf));';
+      str += ';'#13#10'  BPut(6, @textBuf[1], Length(textBuf));';
       code.line += str + #13#10;
       str := '  textBuf := ';
     end;
+
     if (frmAntic6.fldAtascii[j] >= 0) and (frmAntic6.fldAtascii[j] <= 63) then
       str += '#' + IntToStr(frmAntic6.fldAtascii[j] + 32)
     else if (frmAntic6.fldAtascii[j] >= 97) and (frmAntic6.fldAtascii[j] <= 122) then
@@ -359,7 +376,8 @@ end;
 begin
   isNormal := false;
   isFirst := true;
-  code.line := ''' Print character codes to the screen'#13#10#13#10 +
+  code.line := '''' + _REM_MAD_STUDIO + #13#10 +
+               ''' Print character codes to the screen'#13#10#13#10 +
                'GRAPHICS ' + grMode +
                #13#10'POS. 0, 0'#13#10;
   for j := 0 to frmAntic6.modeSize do begin
@@ -368,7 +386,6 @@ begin
       Inc(cnt);
       if cnt <= 23 then
         code.line += 'POS. 0, ' + IntToStr(cnt) + #13#10;
-//      memoFastBASIC.Lines.Add('POS. 0, ' + IntToStr(cnt));
     end;
     if (frmAntic6.fldAtascii[j] >= 0) and (frmAntic6.fldAtascii[j] <= 63) then begin
       isNormal := true;
@@ -395,9 +412,9 @@ begin
     else if (frmAntic6.fldAtascii[j] >= 128) and (frmAntic6.fldAtascii[j] <= 128 + 63) then begin
       if Length(str) < 112 then begin
         if isNormal then
-          str += '";CHR$(' + inttostr(frmAntic6.fldAtascii[j] + 32) + ');'
-        else
-          str += 'CHR$(' + inttostr(frmAntic6.fldAtascii[j] + 32) + ');';
+          str += '";';
+
+        str += 'CHR$(' + inttostr(frmAntic6.fldAtascii[j] + 32) + ');';
       end
       else
         Rep(false);
@@ -405,12 +422,13 @@ begin
       isNormal := false;
       isFirst := true;
     end
-    else if (frmAntic6.fldAtascii[j] >= 128 + 97) and (frmAntic6.fldAtascii[j] <= 128 + 97 + 26) then begin
+    else if (frmAntic6.fldAtascii[j] >= 128 + 97) and
+            (frmAntic6.fldAtascii[j] <= 128 + 97 + 26) then begin
       if Length(str) < 112 then begin
         if isNormal then
-          str += '";CHR$(' + inttostr(frmAntic6.fldAtascii[j]) + ');'
-        else
-          str += 'CHR$(' + inttostr(frmAntic6.fldAtascii[j]) + ');';
+          str += '";';
+
+        str += 'CHR$(' + inttostr(frmAntic6.fldAtascii[j]) + ');';
       end
       else
         Rep(false);
@@ -423,265 +441,10 @@ begin
   result := code.line + WaitKeyCode(_FAST_BASIC);
 end;
 
-procedure TfrmAntic6Gen.CreateCode;
-var
-  code : string;
-begin
-  boxStartLine.Enabled := langIndex < 2;
-  boxStartLine.Visible := boxStartLine.Enabled;
-
-  if langIndex = 0 then begin
-    radDataType.ItemIndex := 0;
-    TRadioButton(radDataType.Controls[1]).Enabled := false;
-//    TRadioButton(radDataType.Controls[2]).Enabled := false;
-  end
-  else begin
-    TRadioButton(radDataType.Controls[1]).Enabled := true;
-//    TRadioButton(radDataType.Controls[2]).Enabled := true;
-  end;
-
-  memo.Lines.Clear;
-
-  case ListExamples.ListBox.ItemIndex of
-    0: code := Example01;
-    1: code := Example02;
-    2: code := Example03;
-    3: code := Example04;
-  end;
-
-  memo.Lines.Add(code);
-
-  // Set cursor position at the top of memo object
-  memo.SelStart := 0;
-  memo.SelLength := 0;
-  SendMessage(memo.Handle, EM_SCROLLCARET, 0, 0);
-end;
-
+{-----------------------------------------------------------------------------
+ Data values
+ -----------------------------------------------------------------------------}
 function TfrmAntic6Gen.Example01 : string;
-var
-  strTextWindow, grMode : string;
-begin
-  grMode := IntToStr(frmAntic6.textMode);
-
-  if not chkTextWindow.Checked then
-    strTextWindow := '+16';
-
-  { Atari BASIC
-   ---------------------------------------------------------------------------}
-  if langIndex = _ATARI_BASIC then
-    code.line := GenChrDataBASIC(grMode + strTextWindow)
-  { Turbo BASIC XL
-   ---------------------------------------------------------------------------}
-  else if langIndex = _TURBO_BASIC_XL then
-    code.line := GenChrDataBASIC(grMode + strTextWindow)
-  { Mad Pascal
-   ---------------------------------------------------------------------------}
-  else if langIndex = _MAD_PASCAL then
-    code.line := GenChrDataMadPascal(grMode + strTextWindow)
-  { Action!
-   ---------------------------------------------------------------------------}
-  else if langIndex = _ACTION then
-    code.line := GenChrDataAction(grMode + strTextWindow)
-  { FastBasic
-   ---------------------------------------------------------------------------}
-  else if langIndex = _FAST_BASIC then
-    code.line := GenChrDataFastBASIC(grMode + strTextWindow)
-  { KickC
-   ---------------------------------------------------------------------------}
-  else if langIndex = _KICKC then begin
-//    code.line := GenChrDataKickC(grMode + strTextWindow);
-    code.line := '';
-  end;
-
-  result := code.line;
-end;
-
-function TfrmAntic6Gen.Example02 : string;
-var
-  strTextWindow, grMode : string;
-begin
-  grMode := IntToStr(frmAntic6.textMode);
-
-  if not chkTextWindow.Checked then
-    strTextWindow := '+16';
-
-  { Atari BASIC
-   ---------------------------------------------------------------------------}
-  if langIndex = _ATARI_BASIC then begin
-    code.number := editStartLine.Value;
-    code.step := editLineStep.Value;
-    code.line := CodeLine('REM ******************************') +
-                 CodeLine('REM LOAD TEXT MODE ' + grMode + ' SCREEN') +
-                 CodeLine('REM ******************************') +
-                 CodeLine('SIZE=' + IntToStr(frmAntic6.modeSize)) +
-                 CodeLine('GRAPHICS ' + grMode + strTextWindow) +
-                 CodeLine('CLOSE #1') +
-                 CodeLine('OPEN #1,4,0,"' + editFilename.Text + '"') +
-                 CodeLine('SCR=PEEK(88)+PEEK(89)*256') +
-                 CodeLine('FOR I=0 TO SIZE-1') +
-                 CodeLine('GET #1,BYTE') +
-                 CodeLine('POKE SCR+I,BYTE') +
-                 CodeLine('NEXT I') +
-                 CodeLine('CLOSE #1');
-    if chkUseColors.Checked then
-      code.line += GenSetColors(_ATARI_BASIC);
-      //code.line += CodeLine('POKE 708,' + IntToStr(colorValues[1]) + ':POKE 709,' + IntToStr(colorValues[2])) +
-      //             CodeLine('POKE 710,' + IntToStr(colorValues[3]) + ':POKE 711,' + IntToStr(colorValues[10])) +
-      //             CodeLine('POKE 712,' + IntToStr(colorValues[0]));
-
-    code.line += WaitKeyCode(_ATARI_BASIC);
-  end
-  { Turbo BASIC XL
-   ---------------------------------------------------------------------------}
-  else if langIndex = _TURBO_BASIC_XL then begin
-    code.number := editStartLine.Value;
-    code.step := editLineStep.Value;
-    code.line := CodeLine('--') +
-                 CodeLine('REM LOAD TEXT MODE ' + grMode + ' SCREEN') +
-                 CodeLine('--') +
-                 CodeLine('SIZE=' + IntToStr(frmAntic6.modeSize)) +
-                 CodeLine('GRAPHICS %' + grMode + strTextWindow) +
-                 CodeLine('CLOSE #%1') +
-                 CodeLine('SCR=DPEEK(88)') +
-                 CodeLine('OPEN #%1,4,%0,"' + editFilename.Text + '"') +
-                 CodeLine('BGET #%1,DPEEK(SCR),SIZE') +
-                 //'20 OPEN #%1,4,%0,"' + editFilename.Text + '"'#13#10 +
-                 //'40 FOR I=%0 TO SIZE-%1'#13#10 +
-                 //'50 GET #%1,BYTE'#13#10 +
-                 //'60 POKE SCR+I,BYTE'#13#10 +
-                 //'70 NEXT I'#13#10 +
-                 CodeLine('60 CLOSE #%1');
-    if chkUseColors.Checked then begin
-      code.line += GenSetColors(_TURBO_BASIC_XL);
-      //code.line += CodeLine('POKE 708,' + IntToStr(colorValues[1]) + ':POKE 709,' + IntToStr(colorValues[2])) +
-      //             CodeLine('POKE 710,' + IntToStr(colorValues[3]) + ':POKE 711,' + IntToStr(colorValues[10])) +
-      //             CodeLine('POKE 712,' + IntToStr(colorValues[0]));
-    end;
-//    lineNum := 90;
-    code.line += WaitKeyCode(_TURBO_BASIC_XL);
-  end
-  { Mad Pascal
-   ---------------------------------------------------------------------------}
-  else if langIndex = _MAD_PASCAL then begin
-    code.line := '// Load text mode ' + grMode + ' screen'#13#10#13#10 +
-                 'uses'#13#10 +
-                 '  SysUtils, FastGraph, Crt;'#13#10#13#10 +
-                 'const'#13#10 +
-                 '  fileSize = ' + IntToStr(frmAntic6.modeSize) + ';'#13#10#13#10 +
-                 'var'#13#10 +
-                 '  f : file;'#13#10#13#10 +
-                 '  filename : TString;'#13#10 +
-                 '  buf : pointer;'#13#10#13#10 +
-                 'begin'#13#10 +
-                 '  InitGraph(' + grMode + strTextWindow + ');'#13#10 +
-                 '  buf := pointer(DPeek(88));'#13#10#13#10 +
-                 '  // Open file'#13#10 +
-                 '  filename := ' + QuotedStr(editFilename.Text) + ';'#13#10 +
-                 '  Assign(f, filename);'#13#10#13#10 +
-                 '  // Read data'#13#10 +
-                 '  Reset(f, 1);'#13#10 +
-                 '  BlockRead(f, buf, fileSize);'#13#10#13#10 +
-                 '  // Close file'#13#10 +
-                 '  Close(f);'#13#10;
-    if chkUseColors.Checked then begin
-      code.line += GenSetColors(_MAD_PASCAL);
-      //code.line += #13#10 +
-      //             'Poke(708,' + IntToStr(colorValues[1]) + '); Poke(709,' + IntToStr(colorValues[2]) + ');'#13#10 +
-      //             'Poke(710,' + IntToStr(colorValues[3]) + '); Poke(711,' + IntToStr(colorValues[10]) + ');'#13#10 +
-      //             'Poke(712,' + IntToStr(colorValues[0]) + ');'#13#10;
-    end;
-    code.line += WaitKeyCode(_MAD_PASCAL) +
-                 'end.';
-  end
-  { Action!
-   ---------------------------------------------------------------------------}
-  else if langIndex = _ACTION then begin
-    code.line := '; Load text mode ' + grMode + ' screen'#13#10#13#10 +
-                 'BYTE ch=$2FC'#13#10 +
-                 'BYTE data'#13#10 +
-                 'CARD size=[' + IntToStr(frmAntic6.modeSize) + ']'#13#10 +
-                 'CARD scr'#13#10 +
-                 'CARD n'#13#10#13#10 +
-                 'PROC Main()'#13#10#13#10 +
-                 'Graphics(' + grMode + strTextWindow + ')'#13#10 +
-                 'scr=PeekC(88)'#13#10#13#10 +
-                 '; Set up channel 2 for screen'#13#10 +
-                 'Close(2)'#13#10 +
-                 'Open(2,"' + editFilename.Text + '",4,0)'#13#10#13#10 +
-                 '; Read font data'#13#10 +
-                 'FOR n=0 TO size-1'#13#10 +
-                 'DO'#13#10 +
-                 '  data=GetD(2)'#13#10 +
-                 '  PokeC(scr+n,data)'#13#10 +
-                 'OD'#13#10#13#10 +
-                 '; Close channel 2'#13#10 +
-                 'Close(2)';
-     if chkUseColors.Checked then
-       code.line += GenSetColors(_ACTION);
-       //code.line += #13#10 +
-       //             'POKE(708,' + IntToStr(colorValues[1]) + ') POKE(709,' +
-       //             IntToStr(colorValues[2]) + ')'#13#10 +
-       //             'POKE(710,' + IntToStr(colorValues[3]) + ') POKE(711,' +
-       //             IntToStr(colorValues[10]) + ')'#13#10 +
-       //             'POKE(712,' + IntToStr(colorValues[0]) + ')'#13#10;
-     //code += #13#10 +
-     //       '; Press any key to exit'#13#10 +
-     //       'ch=255'#13#10 +
-     //       'DO UNTIL ch<255 OD'#13#10 +
-     //       'ch=255'#13#10 +
-     //       #13#10 +
-     //       'RETURN';
-
-     code.line += #13#10 +
-                  WaitKeyCode(_ACTION) +
-                  #13#10 +
-                  'RETURN';
-  end
-  { FastBasic
-   ---------------------------------------------------------------------------}
-  else if langIndex = _FAST_BASIC then begin
-    code.line := ''' Load text mode ' + grMode + ' screen'#13#10#13#10 +
-                 'size = ' + IntToStr(frmAntic6.modeSize) + #13#10#13#10 +
-      //          #13#10 +
-                 'Graphics ' + grMode + strTextWindow + #13#10#13#10 +
-                 'CLOSE #1'#13#10 +
-                 'OPEN #1, 4, 0, "' + editFilename.Text + '"'#13#10#13#10 +
-      //          '''BGET #1, DPEEK(88), 3839'#13#10 +
-                 'scr = DPeek(88)'#13#10#13#10 +
-                 'FOR i = 0 TO size - 1'#13#10 +
-                 '  GET #1, BYTE'#13#10;
-
-                 //if (frmMode12.maxX < 40) or (frmMode12.maxY < 24) then begin
-                 //  code += 'IF cnt = ' + IntToStr(frmMode12.maxX) + #13#10 +
-                 //          '  scr = scr + 40 - cnt : cnt = 0'#13#10 +
-                 //          'ENDIF'#13#10;
-                 //end;
-
-     code.line += '  POKE scr + i, BYTE'#13#10 +
-                  'NEXT'#13#10 +
-                  #13#10 +
-                  'CLOSE #1'#13#10;
-     if chkUseColors.Checked then
-       code.line += GenSetColors(_FAST_BASIC);
-       //code.line += #13#10 +
-       //             'POKE 708, ' + IntToStr(colorValues[1]) +
-       //             ' : POKE 709, ' + IntToStr(colorValues[2]) + #13#10 +
-       //             'POKE 710, ' + IntToStr(colorValues[3]) +
-       //             ' : POKE 711, ' + IntToStr(colorValues[10]) + #13#10 +
-       //             'POKE 712, ' + IntToStr(colorValues[0]) + #13#10;
-
-     code.line += WaitKeyCode(_FAST_BASIC);
-  end
-  { KickC
-   ---------------------------------------------------------------------------}
-  else if langIndex = _KICKC then
-    code.line := '';
-
-  result := code.line;
-end;
-
-// Data values
-function TfrmAntic6Gen.Example03 : string;
 begin
   { Atari BASIC, Turbo BASIC XL
    ---------------------------------------------------------------------------}
@@ -738,12 +501,16 @@ begin
   result := code.line;
 end;
 
-// Data values with screen loader
-function TfrmAntic6Gen.Example04 : string;
+{-----------------------------------------------------------------------------
+ Display text mode 1/2 screen
+ -----------------------------------------------------------------------------}
+function TfrmAntic6Gen.Example02 : string;
 var
+  maxSize : word;
   strTextWindow, grMode : string;
 begin
   grMode := IntToStr(frmAntic6.textMode);
+  maxSize := frmAntic6.modeSize - 1;
 
   if not chkTextWindow.Checked then
     strTextWindow := '+16';
@@ -753,12 +520,26 @@ begin
   if langIndex = _ATARI_BASIC then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-    code.line := CodeLine('GRAPHICS ' + grMode + strTextWindow) +
-                 CodeLine('SCR=PEEK(88)+PEEK(89)*256') +
-                 CodeLine('FOR I=0 TO ' + IntToStr(frmAntic6.modeSize - 1)) +
-                 CodeLine('READ BYTE') +
-                 CodeLine('POKE SCR+I,BYTE') +
-                 CodeLine('NEXT I');
+
+    code.line := CodeLine(_REM) +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Display text mode ' + grMode + ' screen') +
+                 CodeLine(_REM);
+
+    if chkCharSet.Checked then begin
+      code.line += CodeLine('TOPMEM=PEEK(106)-8');
+      code.line += CodeLine('POKE 106,TOPMEM');
+    end;
+
+    code.line += CodeLine('GRAPHICS ' + grMode + strTextWindow) +
+                 CodeLine('SCR=PEEK(88)+PEEK(89)*256');
+
+    if chkCharSet.Checked then
+      code.line += SetCharSet(langIndex, editFontname.Text, true);
+
+    code.line += CodeLine('SIZE=' + IntToStr(maxSize));
+    code.line += DisplayScreen(langIndex, antic_mode_max_x, antic_mode_max_y, false);
+
     if chkUseColors.Checked then
       code.line += GenSetColors(_ATARI_BASIC);
       //code.line += CodeLine('POKE 712,' + IntToStr(colorValues[0]) + ':' +
@@ -778,19 +559,29 @@ begin
   else if langIndex = _TURBO_BASIC_XL then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-    code.line := CodeLine('GRAPHICS ' + grMode + strTextWindow) +
-                 CodeLine('SCR=DPEEK(88)') +
-                 CodeLine('FOR I=%0 TO ' + IntToStr(frmAntic6.modeSize - 1)) +
-                 CodeLine('READ BYTE') +
-                 CodeLine('POKE SCR+I,BYTE') +
-                 CodeLine('NEXT I');
+
+    code.line := CodeLine('--') +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Display text mode ' + grMode + ' screen') +
+                 CodeLine('--');
+
+    if chkCharSet.Checked then begin
+      code.line += CodeLine('TOPMEM=PEEK(106)-8');
+      code.line += CodeLine('POKE 106,TOPMEM');
+      code.line += CodeLine('CHRAM=TOPMEM*256');
+    end;
+
+    code.line += CodeLine('GRAPHICS ' + grMode + strTextWindow) +
+                 CodeLine('SCR=DPEEK(88)');
+
+    if chkCharSet.Checked then
+      code.line += SetCharSet(langIndex, editFontname.Text, true);
+
+    code.line += CodeLine('SIZE=' + IntToStr(maxSize));
+    code.line += DisplayScreen(langIndex, antic_mode_max_x, antic_mode_max_y, false);
+
     if chkUseColors.Checked then
       code.line += GenSetColors(_TURBO_BASIC_XL);
-      //code.line += CodeLine('POKE 712,' + IntToStr(colorValues[0]) + ':' +
-      //                      'POKE 708,' + IntToStr(colorValues[1]) + ':' +
-      //                      'POKE 709,' + IntToStr(colorValues[2]) + ':' +
-      //                      'POKE 710,' + IntToStr(colorValues[3]) + ':' +
-      //                      'POKE 711,' + IntToStr(colorValues[10]));
 
     code.line += WaitKeyCode(langIndex);
 
@@ -801,23 +592,42 @@ begin
   { Action!
    ---------------------------------------------------------------------------}
   else if langIndex = _ACTION then begin
-    code.line := DataValues(_ACTION, frmAntic6.fldAtascii,
+    code.line := ';' + _REM_MAD_STUDIO + #13#10 +
+                 '; Display text mode ' + grMode + ' screen'#13#10#13#10;
+    code.line += DataValues(_ACTION, frmAntic6.fldAtascii,
                             frmAntic6.modeHeight, 20, radDataType.ItemIndex);
-    code.line += #13#10 +
-                 '; Screen memory address'#13#10 +
+    code.line += #13#10'; Screen memory address'#13#10 +
                  'CARD SCREEN = 88'#13#10#13#10 +
                  '; Keyboard code of last key pressed'#13#10 +
-                 'BYTE CH = $2FC'#13#10#13#10 +
-                 'PROC Main()'#13#10#13#10 +
-                 'Graphics(' + grMode + strTextWindow + ')'#13#10#13#10 +
-                 'MoveBlock(SCREEN, screenData, ' + IntToStr(frmAntic6.modeSize) + ')'#13#10;
+                 'BYTE CH = $2FC'#13#10 +
+                 '; The size of the screen'#13#10 +
+                 'CARD size=[' + IntToStr(maxSize) + ']'#13#10#13#10;
+
+    if chkCharSet.Checked then
+      code.line += 'BYTE RAMTOP=$6A'#13#10 +
+                   'BYTE CHBAS=$2F4'#13#10 +
+                   'CARD TOPMEM, CHRAM'#13#10 +
+                   'BYTE ARRAY FONT(1023)'#13#10 +
+                   'BYTE DATA'#13#10 +
+                   'CARD i'#13#10#13#10;
+
+    code.line += 'PROC Main()'#13#10#13#10;
+
+    if chkCharSet.Checked then
+      code.line += '; RESERVE MEMORY FOR NEW CHARACTER SET'#13#10 +
+                   'TOPMEM=RAMTOP-12'#13#10 +
+                   'CHRAM=TOPMEM LSH 8'#13#10#13#10;
+
+    code.line += 'Graphics(' + grMode + strTextWindow + ')'#13#10#13#10;
+//                 'MoveBlock(SCREEN, screenData, ' + IntToStr(frmAntic6.modeSize) + ')'#13#10;
+
+    if chkCharSet.Checked then
+      code.line += SetCharSet(langIndex, editFontname.Text, true);
+
+    code.line += DisplayScreen(langIndex, antic_mode_max_x, antic_mode_max_y, false);
+
     if chkUseColors.Checked then
       code.line += GenSetColors(_ACTION);
-      //code.line += 'POKE(712, ' + IntToStr(colorValues[0]) + ')'#13#10 +
-      //             'POKE(708, ' + IntToStr(colorValues[1]) + ')'#13#10 +
-      //             'POKE(709, ' + IntToStr(colorValues[2]) + ')'#13#10 +
-      //             'POKE(710, ' + IntToStr(colorValues[3]) + ')'#13#10 +
-      //             'POKE(711, ' + IntToStr(colorValues[10]) + ')'#13#10;
 
     code.line += WaitKeyCode(langIndex) +
                  #13#10'RETURN';
@@ -825,24 +635,44 @@ begin
   { Mad Pascal
    ---------------------------------------------------------------------------}
   else if langIndex = _MAD_PASCAL then begin
-//    frmAntic6.modeSize
-    code.line := 'uses'#13#10 +
-                 '  FastGraph, Crt;'#13#10#13#10 +
-                 'var'#13#10 +
-                 ' screen : word absolute 88;'#13#10#13#10 +
-                 DataValues(_MAD_PASCAL, frmAntic6.fldAtascii,
-                            frmAntic6.modeHeight, 20, radDataType.ItemIndex) +
-                 #13#10 +
-                 'begin'#13#10 +
-                 '  InitGraph(' + grMode + strTextWindow +');'#13#10#13#10 +
-                 '  Move(screenData, pointer(screen), ' + IntToStr(frmAntic6.modeSize) + ');'#13#10;
+    code.line := '//' + _REM_MAD_STUDIO + #13#10 +
+                 '// Display text mode ' + grMode + ' screen'#13#10#13#10;
+    code.line += 'uses'#13#10 +
+                 '  FastGraph, Crt';
+    if chkCharSet.Checked then
+      code.line += ', Cio';
+
+    code.line += ';'#13#10#13#10;
+
+    code.line += 'var'#13#10 +
+                 '  screen : word absolute 88;'#13#10 +
+                 '  // The size of the screen'#13#10 +
+                 '  size : word = ' + IntToStr(maxSize) + ';'#13#10#13#10;
+
+    if chkCharSet.Checked then
+      code.line += '  topMem, chRAM : word;'#13#10 +
+                   '  CHBAS  : byte absolute $2F4;'#13#10 +
+                   '  RAMTOP : byte absolute $6A;'#13#10;
+
+    code.line += DataValues(_MAD_PASCAL, frmAntic6.fldAtascii,
+                            frmAntic6.modeHeight, 20, radDataType.ItemIndex) + #13#10 +
+                 'begin'#13#10;
+
+    if chkCharSet.Checked then
+      code.line += '  // Set new character set'#13#10 +
+                   '  topMem := RAMTOP - 12;'#13#10 +
+                   '  chRAM := topMem shl 8;'#13#10;
+
+    code.line += '  InitGraph(' + grMode + strTextWindow +');'#13#10;
+//                 '  Move(screenData, pointer(screen), ' + IntToStr(frmAntic6.modeSize) + ');'#13#10;
+
+    if chkCharSet.Checked then
+      code.line += SetCharSet(langIndex, editFontname.Text, true);
+
+    code.line += DisplayScreen(langIndex, antic_mode_max_x, antic_mode_max_y, false);
+
     if chkUseColors.Checked then
       code.line += GenSetColors(_MAD_PASCAL);
-      //code.line += 'POKE(712, ' + IntToStr(colorValues[0]) + ');'#13#10 +
-      //             'POKE(708, ' + IntToStr(colorValues[1]) + ');'#13#10 +
-      //             'POKE(709, ' + IntToStr(colorValues[2]) + ');'#13#10 +
-      //             'POKE(710, ' + IntToStr(colorValues[3]) + ');'#13#10 +
-      //             'POKE(711, ' + IntToStr(colorValues[10]) + ');'#13#10;
 
     code.line += WaitKeyCode(langIndex) +
                  'end.';
@@ -850,52 +680,312 @@ begin
   { FastBasic
    ---------------------------------------------------------------------------}
   else if langIndex = _FAST_BASIC then begin
-    code.line := DataValues(_FAST_BASIC, frmAntic6.fldAtascii,
-                       frmAntic6.modeHeight, 20, radDataType.ItemIndex);
-    code.line += #13#10'GRAPHICS ' + grMode + strTextWindow + #13#10 +
-                 'scr = DPEEK(88)'#13#10 +
-                 'MOVE ADR(screenData), scr, ' + IntToStr(frmAntic6.modeSize) + #13#10;
+    code.line := '''' + _REM_MAD_STUDIO + #13#10 +
+                 ''' Display text mode ' + grMode + ' screen'#13#10#13#10;
+
+    code.line += DataValues(_FAST_BASIC, frmAntic6.fldAtascii,
+                            frmAntic6.modeHeight, 20, radDataType.ItemIndex);
+
+    code.line += #13#10#13#10;
+
+    if chkCharSet.Checked then
+      code.line += 'TOPMEM = PEEK(106) - 4'#13#10 +
+                   'POKE 106, TOPMEM'#13#10 +
+                   'CHRAM = TOPMEM*256'#13#10;
+
+    code.line += 'GRAPHICS ' + grMode + strTextWindow + #13#10 +
+                 'screen = DPEEK(88)'#13#10;
+//                 'MOVE ADR(screenData), scr, ' + IntToStr(frmAntic6.modeSize) + #13#10;
+
+    if chkCharSet.Checked then
+      code.line += SetCharSet(langIndex, editFontname.Text, true);
+
+    code.line += ''' The size of the screen'#13#10 +
+                 'size = ' + IntToStr(maxSize) + #13#10#13#10 +
+                 DisplayScreen(langIndex, antic_mode_max_x, antic_mode_max_y, false);
+
     if chkUseColors.Checked then
       code.line += GenSetColors(_FAST_BASIC);
-      //code.line += 'POKE 712, ' + IntToStr(colorValues[0]) + ');'#13#10 +
-      //             'POKE 708, ' + IntToStr(colorValues[1]) + ');'#13#10 +
-      //             'POKE 709, ' + IntToStr(colorValues[2]) + ');'#13#10 +
-      //             'POKE 710, ' + IntToStr(colorValues[3]) + ');'#13#10 +
-      //             'POKE 711, ' + IntToStr(colorValues[10]) + ');'#13#10;
 
     code.line += WaitKeyCode(langIndex);
   end
   { KickC
    ---------------------------------------------------------------------------}
-  else if langIndex = _KICKC then
+  else  // if langIndex = _KICKC then
     code.line := '';
 
   result := code.line;
 end;
 
-procedure TfrmAntic6Gen.listExamplesProc(Sender: TObject);
-//var
-//  i : byte;
+{-----------------------------------------------------------------------------
+ Load text mode 1/2 screen
+ -----------------------------------------------------------------------------}
+function TfrmAntic6Gen.Example03 : string;
+var
+  strTextWindow, grMode : string;
 begin
-  //for i := 0 to radLang.Items.Count - 1 do
-  //  radLang.Controls[i].Enabled := listings[ListExamples.ItemIndex, i];
-//    radLang.Controls[i].Visible := listings[ListExamples.ItemIndex, i];
+  grMode := IntToStr(frmAntic6.textMode);
 
-//  radLang.ItemIndex := langIndex;
-  editFilename.Visible := ListExamples.ListBox.ItemIndex = 1;
-  editFilename.Enabled := ListExamples.ListBox.ItemIndex = 1;
+  if not chkTextWindow.Checked then
+    strTextWindow := '+16';
+
+  { Atari BASIC
+   ---------------------------------------------------------------------------}
+  if langIndex = _ATARI_BASIC then begin
+    code.number := editStartLine.Value;
+    code.step := editLineStep.Value;
+    code.line := CodeLine(_REM) +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Load text mode ' + grMode + ' screen') +
+                 CodeLine(_REM);
+
+    if chkCharSet.Checked then begin
+      code.line += CodeLine('TOPMEM=PEEK(106)-8');
+      code.line += CodeLine('POKE 106,TOPMEM');
+    end;
+
+    code.line += CodeLine('GRAPHICS ' + grMode + strTextWindow);
+
+    code.line += CodeLine('CLOSE #1');
+    if chkCharSet.Checked then
+      code.line += SetCharSet(langIndex, editFontname.Text, true);
+
+    code.line += CodeLine('OPEN #1,4,0,"' + editFilename.Text + '"') +
+                 CodeLine('SCR=PEEK(88)+PEEK(89)*256') +
+                 CodeLine('SIZE=' + IntToStr(frmAntic6.modeSize - 1));
+    code.line += DisplayScreen(langIndex, antic_mode_max_x, antic_mode_max_y, true,
+                               not chkCharSet.Checked);
+    code.line += CodeLine('CLOSE #1');
+
+    if chkUseColors.Checked then
+      code.line += GenSetColors(langIndex);
+
+    code.line += WaitKeyCode(langIndex);
+  end
+  { Turbo BASIC XL
+   ---------------------------------------------------------------------------}
+  else if langIndex = _TURBO_BASIC_XL then begin
+    code.number := editStartLine.Value;
+    code.step := editLineStep.Value;
+    code.line := CodeLine('--') +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Load text mode ' + grMode + ' screen') +
+                 CodeLine('--');
+
+    if chkCharSet.Checked then begin
+      code.line += CodeLine('TOPMEM=PEEK(106)-8');
+      code.line += CodeLine('POKE 106,TOPMEM');
+      code.line += CodeLine('CHRAM=TOPMEM*256');
+    end;
+
+    code.line += CodeLine('GRAPHICS ' + grMode + strTextWindow);
+    code.line += CodeLine('CLOSE #%1');
+
+    if chkCharSet.Checked then
+      code.line += SetCharSet(langIndex, editFontname.Text, true);
+
+    code.line += CodeLine('OPEN #%1,4,%0,"' + editFilename.Text + '"') +
+                 CodeLine('SCR=DPEEK(88)') +
+                 CodeLine('SIZE=' + IntToStr(frmAntic6.modeSize - 1));
+    code.line += DisplayScreen(langIndex, antic_mode_max_x, antic_mode_max_y, true);
+    code.line += CodeLine('CLOSE #%1');
+
+    if chkUseColors.Checked then
+      code.line += GenSetColors(langIndex);
+
+    code.line += WaitKeyCode(langIndex);
+  end
+  { Mad Pascal
+   ---------------------------------------------------------------------------}
+  else if langIndex = _MAD_PASCAL then begin
+    code.line := '//' + _REM_MAD_STUDIO + #13#10 +
+                 '// Load text mode ' + grMode + ' screen'#13#10#13#10 +
+                 'uses'#13#10 +
+                 '  SysUtils, FastGraph, Crt, Cio;'#13#10#13#10 +
+                 'var'#13#10 +
+                 '  screen : word;'#13#10 +
+//                 '  cnt : byte = 0;'#13#10 +
+//                 '  maxX, maxY : byte;'#13#10 +
+                 '  size : word = ' + IntToStr(frmAntic6.modeSize) + ';'#13#10 +
+                 '  colReg : array[0..4] of byte absolute 708;'#13#10;
+    if chkCharSet.Checked then
+      code.line += '  topMem, chRAM : word;'#13#10 +
+                   '  CHBAS  : byte absolute $2F4;'#13#10 +
+                   '  RAMTOP : byte absolute $6A;'#13#10;
+
+//    code.line += '  i, data : byte;'#13#10#13#10 +
+    code.line += #13#10'begin'#13#10;
+
+    if chkCharSet.Checked then
+      code.line += '  // Set new character set'#13#10 +
+                   '  topMem := RAMTOP - 12;'#13#10 +
+                   '  chRAM := topMem shl 8;'#13#10;
+
+    code.line += '  InitGraph(' + grMode + strTextWindow + ');'#13#10 +
+                 '  screen := DPeek(88);'#13#10 +
+//                 '  size := ' + IntToStr(frmAntic6.modeSize) + ';'#13#10#13#10 +
+                 '  // Open file'#13#10 +
+                 '  Cls(1);'#13#10;
+
+    if chkCharSet.Checked then
+      code.line += SetCharSet(langIndex, editFontname.Text, true);
+
+    code.line += '  Opn(1, 4, 0, ' + QuotedStr(editFilename.Text) + ');'#13#10#13#10;
+    code.line += DisplayScreen(langIndex, antic_mode_max_x, antic_mode_max_y, true);
+    code.line += '  // Close file'#13#10 +
+                 '  Cls(1);'#13#10;
+
+    if chkUseColors.Checked then
+      code.line += GenSetColors(langIndex);
+
+    code.line += WaitKeyCode(langIndex) +
+                 'end.';
+  end
+  { Action!
+   ---------------------------------------------------------------------------}
+  else if langIndex = _ACTION then begin
+    code.line := ';' + _REM_MAD_STUDIO + #13#10 +
+                 '; Load text mode ' + grMode + ' screen'#13#10 +
+                 #13#10'BYTE ch=$2FC'#13#10 +
+                 'BYTE data, cnt=[0]'#13#10 +
+                 'CARD size=[' + IntToStr(frmAntic6.modeSize - 1) + ']'#13#10 +
+                 'CARD screen'#13#10 +
+                 'BYTE maxX, maxY'#13#10 +
+                 'BYTE ARRAY colReg(708)'#13#10 +
+                 'CARD i'#13#10#13#10;
+    if chkCharSet.Checked then
+      code.line += 'BYTE RAMTOP=$6A'#13#10 +
+                   'BYTE CHBAS=$2F4'#13#10 +
+                   'CARD TOPMEM, CHRAM'#13#10 +
+                   'BYTE ARRAY FONT(1023)'#13#10#13#10;
+
+    code.line += 'PROC Main()'#13#10#13#10;
+
+    if chkCharSet.Checked then
+      code.line += '; RESERVE MEMORY FOR NEW CHARACTER SET'#13#10 +
+                   'TOPMEM=RAMTOP-12'#13#10 +
+                   'CHRAM=TOPMEM LSH 8'#13#10#13#10;
+
+    code.line += 'Graphics(' + grMode + strTextWindow + ')'#13#10 +
+                 'screen=PeekC(88)'#13#10#13#10 +
+                 '; Set up channel 2 for screen'#13#10 +
+                 'Close(2)'#13#10;
+
+    if chkCharSet.Checked then
+      code.line += SetCharSet(langIndex, editFontname.Text, true);
+
+    code.line += 'Open(2,"' + editFilename.Text + '",4,0)'#13#10#13#10 +
+//                 'size=' + IntToStr(frmAntic6.modeSize - 1) + #13#10#13#10 +
+                 '; Screen data'#13#10;
+    code.line += DisplayScreen(langIndex, antic_mode_max_x, antic_mode_max_y, true);
+    code.line += '; Close channel 2'#13#10 +
+                 'Close(2)'#13#10;
+
+    if chkUseColors.Checked then
+      code.line += GenSetColors(langIndex);
+
+    code.line += WaitKeyCode(langIndex) + #13#10 +
+                 'RETURN';
+  end
+  { FastBasic
+   ---------------------------------------------------------------------------}
+   else if langIndex = _FAST_BASIC then begin
+     code.line := '''' + _REM_MAD_STUDIO + #13#10 +
+                  ''' Load text mode ' + grMode + ' screen'#13#10#13#10;
+
+     if chkCharSet.Checked then
+       code.line += 'TOPMEM = PEEK(106) - 4'#13#10 +
+                    'POKE 106, TOPMEM'#13#10 +
+                    'CHRAM = TOPMEM*256'#13#10#13#10;
+
+     code.line += 'GRAPHICS ' + grMode + strTextWindow + #13#10#13#10 +
+                  'CLOSE #1'#13#10;
+
+     if chkCharSet.Checked then
+       code.line += SetCharSet(langIndex, editFontname.Text, true);
+
+     code.line += 'OPEN #1, 4, 0, "' + editFilename.Text + '"'#13#10 +
+                  'screen = DPEEK(88)'#13#10 +
+                  'size = ' + IntToStr(frmAntic6.modeSize) + #13#10#13#10;
+     code.line += DisplayScreen(langIndex, antic_mode_max_x, antic_mode_max_y, true);
+     code.line += 'CLOSE #1'#13#10;
+
+     if chkUseColors.Checked then
+       code.line += GenSetColors(langIndex);
+
+     code.line += WaitKeyCode(langIndex);
+  end
+  else
+    code.line := '';
+
+  result := code.line;
+end;
+
+function TfrmAntic6Gen.Example04 : string;
+var
+  strTextWindow, grMode : string;
+begin
+  grMode := IntToStr(frmAntic6.textMode);
+
+  if not chkTextWindow.Checked then
+    strTextWindow := '+16';
+
+  { Atari BASIC
+   ---------------------------------------------------------------------------}
+  if langIndex = _ATARI_BASIC then
+    code.line := GenChrDataBASIC(grMode + strTextWindow)
+  { Turbo BASIC XL
+   ---------------------------------------------------------------------------}
+  else if langIndex = _TURBO_BASIC_XL then
+    code.line := GenChrDataBASIC(grMode + strTextWindow)
+  { Mad Pascal
+   ---------------------------------------------------------------------------}
+  else if langIndex = _MAD_PASCAL then
+    code.line := GenChrDataMadPascal(grMode + strTextWindow)
+  { Action!
+   ---------------------------------------------------------------------------}
+  else if langIndex = _ACTION then
+    code.line := GenChrDataAction(grMode + strTextWindow)
+  { FastBasic
+   ---------------------------------------------------------------------------}
+  else if langIndex = _FAST_BASIC then
+    code.line := GenChrDataFastBASIC(grMode + strTextWindow)
+  { KickC
+   ---------------------------------------------------------------------------}
+  else if langIndex = _KICKC then begin
+//    code.line := GenChrDataKickC(grMode + strTextWindow);
+    code.line := '';
+  end;
+
+  result := code.line;
+end;
+
+procedure TfrmAntic6Gen.listExamplesProc(Sender: TObject);
+begin
+  if listExamples.ListBox.ItemIndex < 0 then exit;
+
+  btnAtariBASIC.Enabled := listings[listExamples.ListBox.ItemIndex, 0];
+  btnTurboBasicXL.Enabled := listings[listExamples.ListBox.ItemIndex, 1];
+  btnMadPascal.Enabled := listings[listExamples.ListBox.ItemIndex, 2];
+  btnEffectus.Enabled := listings[listExamples.ListBox.ItemIndex, 3];
+  btnFastBasic.Enabled := listings[listExamples.ListBox.ItemIndex, 4];
+  btnKickC.Enabled := listings[listExamples.ListBox.ItemIndex, 8];
+
+  boxColors.Enabled := listExamples.ListBox.ItemIndex > 0;
+  boxColors.Visible := boxColors.Enabled;
+
+  editFilename.Visible := ListExamples.ListBox.ItemIndex = 2;
+  editFilename.Enabled := editFilename.Visible;
+
+  boxCharSet.Enabled := boxColors.Enabled;
+  boxCharSet.Visible := boxColors.Enabled;
+
   CreateCode;
 end;
 
 procedure TfrmAntic6Gen.radLangProc(Sender: TObject);
 begin
   langIndex := (Sender as TBCMDButton).Tag;
-  CreateCode;
-end;
-
-procedure TfrmAntic6Gen.editStartLineMouseUp(Sender : TObject; Button : TMouseButton;
-  Shift : TShiftState; X, Y : Integer);
-begin
   CreateCode;
 end;
 
@@ -913,11 +1003,6 @@ procedure TfrmAntic6Gen.ButtonHoverLeave(Sender : TObject);
 begin
   SetButton(Sender as TBCMaterialDesignButton, false);
 end;
-
-//procedure TfrmAntic6Gen.chkUseColorsChange(Sender : TObject);
-//begin
-//  CreateCode;
-//end;
 
 end.
 

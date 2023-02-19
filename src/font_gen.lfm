@@ -1,12 +1,12 @@
 object frmFontSetGen: TfrmFontSetGen
-  Left = -1378
+  Left = 231
   Height = 715
-  Top = 87
-  Width = 871
+  Top = 162
+  Width = 1029
   BorderStyle = bsDialog
   Caption = 'Character set source code generator'
   ClientHeight = 715
-  ClientWidth = 871
+  ClientWidth = 1029
   Font.Height = -11
   Font.Name = 'Verdana'
   KeyPreview = True
@@ -15,10 +15,10 @@ object frmFontSetGen: TfrmFontSetGen
   OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '2.0.10.0'
-  object editFilename: TLabeledEdit
-    Left = 612
+  object editFontname: TLabeledEdit
+    Left = 618
     Height = 21
-    Top = 168
+    Top = 180
     Width = 143
     CharCase = ecUppercase
     EditLabel.Height = 13
@@ -28,31 +28,6 @@ object frmFontSetGen: TfrmFontSetGen
     TabOrder = 0
     Text = 'H1:FONTSET.FNT'
     OnChange = CreateCodeProc
-  end
-  object ListExamples: TTreeView
-    Left = 612
-    Height = 105
-    Top = 30
-    Width = 252
-    ReadOnly = True
-    RowSelect = True
-    ScrollBars = ssNone
-    TabOrder = 1
-    OnClick = ExamplesClick
-    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRowSelect, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
-    Items.Data = {
-      F9FFFFFF020003000000FFFFFFFF00000000FFFFFFFFFFFFFFFF030000000000
-      0000011E000000446174612076616C7565732061732064617461207374617465
-      6D656E7473FFFFFFFF0000000000000000FFFFFFFF0000000000000000001200
-      000053656C656374656420636861726163746572FFFFFFFFFFFFFFFF01000000
-      FFFFFFFF000000000000000000130000004D6F64696669656420636861726163
-      74657273FFFFFFFFFFFFFFFF02000000FFFFFFFF000000000000000000120000
-      0046756C6C2063686172616374657220736574FFFFFFFF01000000FFFFFFFFFF
-      FFFFFF0000000000000000001F0000004D6F6469666965642063686172616374
-      6572732077697468206C6F61646572FFFFFFFF02000000FFFFFFFFFFFFFFFF00
-      00000000000000001C0000004C6F616420636861726163746572207365742066
-      726F6D2066696C65
-    }
   end
   object panelLang: TBCPaperPanel
     Left = 9
@@ -65,7 +40,7 @@ object frmFontSetGen: TfrmFontSetGen
     ClientWidth = 132
     Color = clWhite
     ParentColor = False
-    TabOrder = 2
+    TabOrder = 1
     object btnAtariBASIC: TBCMDButton
       Left = 12
       Height = 20
@@ -209,7 +184,7 @@ object frmFontSetGen: TfrmFontSetGen
       OnClick = LangProc
       ParentFont = False
     end
-    object btnMadPascal1: TBCMDButton
+    object btnMads: TBCMDButton
       Tag = 5
       Left = 12
       Height = 20
@@ -233,7 +208,7 @@ object frmFontSetGen: TfrmFontSetGen
       OnClick = LangProc
       ParentFont = False
     end
-    object btnMadPascal2: TBCMDButton
+    object btnMac65: TBCMDButton
       Tag = 6
       Left = 12
       Height = 20
@@ -257,7 +232,7 @@ object frmFontSetGen: TfrmFontSetGen
       OnClick = LangProc
       ParentFont = False
     end
-    object btnMadPascal3: TBCMDButton
+    object btnCC65: TBCMDButton
       Tag = 7
       Left = 12
       Height = 20
@@ -305,7 +280,7 @@ object frmFontSetGen: TfrmFontSetGen
       'Binary'
     )
     OnClick = CreateCodeProc
-    TabOrder = 3
+    TabOrder = 2
   end
   object boxStartLine: TGroupBox
     Left = 9
@@ -314,8 +289,8 @@ object frmFontSetGen: TfrmFontSetGen
     Width = 132
     ClientHeight = 96
     ClientWidth = 128
-    TabOrder = 4
-    object lblStartLine1: TLabel
+    TabOrder = 3
+    object lblStartLine: TLabel
       Left = 6
       Height = 13
       Top = -6
@@ -323,7 +298,7 @@ object frmFontSetGen: TfrmFontSetGen
       Caption = 'Starting line number'
       ParentColor = False
     end
-    object lblLineStep1: TLabel
+    object lblLineStep: TLabel
       Left = 6
       Height = 13
       Top = 48
@@ -331,169 +306,36 @@ object frmFontSetGen: TfrmFontSetGen
       Caption = 'Line number step'
       ParentColor = False
     end
-    object editStartLine: TBCTrackbarUpdown
+    object editStartLine: TSpinEditEx
       Left = 6
-      Height = 22
+      Height = 21
       Top = 12
-      Width = 70
-      AllowNegativeValues = False
-      BarExponent = 1
-      Increment = 1
-      LongTimeInterval = 400
-      MinValue = 0
+      Width = 69
+      BiDiMode = bdRightToLeft
+      BorderStyle = bsSingle
+      MaxLength = 0
+      NumbersOnly = True
+      ParentBiDiMode = False
+      TabOrder = 0
+      OnChange = CreateCodeProc
       MaxValue = 65535
       Value = 10
-      ShortTimeInterval = 100
-      Background.Color = clWindow
-      Background.Gradient1.StartColor = clWhite
-      Background.Gradient1.EndColor = clBlack
-      Background.Gradient1.GradientType = gtLinear
-      Background.Gradient1.Point1XPercent = 0
-      Background.Gradient1.Point1YPercent = 0
-      Background.Gradient1.Point2XPercent = 0
-      Background.Gradient1.Point2YPercent = 100
-      Background.Gradient2.StartColor = clWhite
-      Background.Gradient2.EndColor = clOlive
-      Background.Gradient2.GradientType = gtLinear
-      Background.Gradient2.Point1XPercent = 0
-      Background.Gradient2.Point1YPercent = 0
-      Background.Gradient2.Point2XPercent = 0
-      Background.Gradient2.Point2YPercent = 100
-      Background.Gradient2.Sinus = True
-      Background.Gradient1EndPercent = 35
-      Background.Style = bbsColor
-      ButtonBackground.Gradient1.StartColor = clBtnShadow
-      ButtonBackground.Gradient1.EndColor = clBtnFace
-      ButtonBackground.Gradient1.GradientType = gtLinear
-      ButtonBackground.Gradient1.Point1XPercent = 0
-      ButtonBackground.Gradient1.Point1YPercent = -50
-      ButtonBackground.Gradient1.Point2XPercent = 0
-      ButtonBackground.Gradient1.Point2YPercent = 50
-      ButtonBackground.Gradient1.Sinus = True
-      ButtonBackground.Gradient2.StartColor = clBtnFace
-      ButtonBackground.Gradient2.EndColor = clBtnShadow
-      ButtonBackground.Gradient2.GradientType = gtLinear
-      ButtonBackground.Gradient2.Point1XPercent = 0
-      ButtonBackground.Gradient2.Point1YPercent = 50
-      ButtonBackground.Gradient2.Point2XPercent = 0
-      ButtonBackground.Gradient2.Point2YPercent = 150
-      ButtonBackground.Gradient2.Sinus = True
-      ButtonBackground.Gradient1EndPercent = 50
-      ButtonBackground.Style = bbsGradient
-      ButtonDownBackground.Color = clBtnShadow
-      ButtonDownBackground.Gradient1.StartColor = clWhite
-      ButtonDownBackground.Gradient1.EndColor = clBlack
-      ButtonDownBackground.Gradient1.GradientType = gtLinear
-      ButtonDownBackground.Gradient1.Point1XPercent = 0
-      ButtonDownBackground.Gradient1.Point1YPercent = 0
-      ButtonDownBackground.Gradient1.Point2XPercent = 0
-      ButtonDownBackground.Gradient1.Point2YPercent = 100
-      ButtonDownBackground.Gradient2.StartColor = clWhite
-      ButtonDownBackground.Gradient2.EndColor = clBlack
-      ButtonDownBackground.Gradient2.GradientType = gtLinear
-      ButtonDownBackground.Gradient2.Point1XPercent = 0
-      ButtonDownBackground.Gradient2.Point1YPercent = 0
-      ButtonDownBackground.Gradient2.Point2XPercent = 0
-      ButtonDownBackground.Gradient2.Point2YPercent = 100
-      ButtonDownBackground.Gradient1EndPercent = 35
-      ButtonDownBackground.Style = bbsColor
-      Border.Color = clWindowText
-      Border.ColorOpacity = 100
-      Border.Style = bboSolid
-      Rounding.RoundX = 4
-      Rounding.RoundY = 4
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Verdana'
-      HasTrackBar = True
-      ArrowColor = clBlack
-      TabOrder = 0
-      TabStop = True
-      UseDockManager = False
-      OnMouseLeave = CreateCodeProc
-      OnMouseUp = editStartLineMouseUp
     end
-    object editLineStep: TBCTrackbarUpdown
+    object editLineStep: TSpinEditEx
       Left = 6
-      Height = 22
+      Height = 21
       Top = 66
-      Width = 70
-      AllowNegativeValues = False
-      BarExponent = 1
-      Increment = 1
-      LongTimeInterval = 400
-      MinValue = 1
-      MaxValue = 1000
-      Value = 10
-      ShortTimeInterval = 100
-      Background.Color = clWindow
-      Background.Gradient1.StartColor = clWhite
-      Background.Gradient1.EndColor = clBlack
-      Background.Gradient1.GradientType = gtLinear
-      Background.Gradient1.Point1XPercent = 0
-      Background.Gradient1.Point1YPercent = 0
-      Background.Gradient1.Point2XPercent = 0
-      Background.Gradient1.Point2YPercent = 100
-      Background.Gradient2.StartColor = clWhite
-      Background.Gradient2.EndColor = clOlive
-      Background.Gradient2.GradientType = gtLinear
-      Background.Gradient2.Point1XPercent = 0
-      Background.Gradient2.Point1YPercent = 0
-      Background.Gradient2.Point2XPercent = 0
-      Background.Gradient2.Point2YPercent = 100
-      Background.Gradient2.Sinus = True
-      Background.Gradient1EndPercent = 35
-      Background.Style = bbsColor
-      ButtonBackground.Gradient1.StartColor = clBtnShadow
-      ButtonBackground.Gradient1.EndColor = clBtnFace
-      ButtonBackground.Gradient1.GradientType = gtLinear
-      ButtonBackground.Gradient1.Point1XPercent = 0
-      ButtonBackground.Gradient1.Point1YPercent = -50
-      ButtonBackground.Gradient1.Point2XPercent = 0
-      ButtonBackground.Gradient1.Point2YPercent = 50
-      ButtonBackground.Gradient1.Sinus = True
-      ButtonBackground.Gradient2.StartColor = clBtnFace
-      ButtonBackground.Gradient2.EndColor = clBtnShadow
-      ButtonBackground.Gradient2.GradientType = gtLinear
-      ButtonBackground.Gradient2.Point1XPercent = 0
-      ButtonBackground.Gradient2.Point1YPercent = 50
-      ButtonBackground.Gradient2.Point2XPercent = 0
-      ButtonBackground.Gradient2.Point2YPercent = 150
-      ButtonBackground.Gradient2.Sinus = True
-      ButtonBackground.Gradient1EndPercent = 50
-      ButtonBackground.Style = bbsGradient
-      ButtonDownBackground.Color = clBtnShadow
-      ButtonDownBackground.Gradient1.StartColor = clWhite
-      ButtonDownBackground.Gradient1.EndColor = clBlack
-      ButtonDownBackground.Gradient1.GradientType = gtLinear
-      ButtonDownBackground.Gradient1.Point1XPercent = 0
-      ButtonDownBackground.Gradient1.Point1YPercent = 0
-      ButtonDownBackground.Gradient1.Point2XPercent = 0
-      ButtonDownBackground.Gradient1.Point2YPercent = 100
-      ButtonDownBackground.Gradient2.StartColor = clWhite
-      ButtonDownBackground.Gradient2.EndColor = clBlack
-      ButtonDownBackground.Gradient2.GradientType = gtLinear
-      ButtonDownBackground.Gradient2.Point1XPercent = 0
-      ButtonDownBackground.Gradient2.Point1YPercent = 0
-      ButtonDownBackground.Gradient2.Point2XPercent = 0
-      ButtonDownBackground.Gradient2.Point2YPercent = 100
-      ButtonDownBackground.Gradient1EndPercent = 35
-      ButtonDownBackground.Style = bbsColor
-      Border.Color = clWindowText
-      Border.ColorOpacity = 100
-      Border.Style = bboSolid
-      Rounding.RoundX = 4
-      Rounding.RoundY = 4
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Verdana'
-      HasTrackBar = True
-      ArrowColor = clWindowText
+      Width = 69
+      BiDiMode = bdRightToLeft
+      BorderStyle = bsSingle
+      MaxLength = 0
+      NumbersOnly = True
+      ParentBiDiMode = False
       TabOrder = 1
-      TabStop = True
-      UseDockManager = False
-      OnMouseLeave = CreateCodeProc
-      OnMouseUp = editStartLineMouseUp
+      OnChange = CreateCodeProc
+      MaxValue = 1000
+      MinValue = 1
+      Value = 10
     end
   end
   object memo: TMemo
@@ -506,7 +348,7 @@ object frmFontSetGen: TfrmFontSetGen
     Font.Name = 'Courier New'
     ParentFont = False
     ScrollBars = ssAutoBoth
-    TabOrder = 5
+    TabOrder = 4
     WordWrap = False
   end
   object btnCopyToEditor: TBCMaterialDesignButton
@@ -524,7 +366,7 @@ object frmFontSetGen: TfrmFontSetGen
     OnMouseLeave = ButtonHoverLeave
   end
   object btnClose: TBCMaterialDesignButton
-    Left = 759
+    Left = 918
     Height = 30
     Top = 678
     Width = 105
@@ -534,8 +376,8 @@ object frmFontSetGen: TfrmFontSetGen
     TextQuality = fqSystemClearType
     Caption = 'Close'
     OnClick = CloseWinProc
-    OnMouseEnter = btnCloseMouseEnter
-    OnMouseLeave = btnCloseMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object StaticText1: TStaticText
     Left = 6
@@ -547,7 +389,7 @@ object frmFontSetGen: TfrmFontSetGen
     Font.Height = -9
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 6
+    TabOrder = 5
   end
   object StaticText2: TStaticText
     Left = 150
@@ -559,7 +401,7 @@ object frmFontSetGen: TfrmFontSetGen
     Font.Height = -9
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 7
+    TabOrder = 6
   end
   object StaticText3: TStaticText
     Left = 612
@@ -571,6 +413,40 @@ object frmFontSetGen: TfrmFontSetGen
     Font.Height = -9
     Font.Name = 'Verdana'
     ParentFont = False
+    TabOrder = 7
+  end
+  object listExamples: TBCPaperListBox
+    Left = 612
+    Height = 120
+    Top = 30
+    Width = 411
+    Alignment = taLeftJustify
+    ChildSizing.LeftRightSpacing = 4
+    ChildSizing.TopBottomSpacing = 5
+    ChildSizing.ControlsPerLine = 1
+    Caption = 'listExamples'
+    ClientHeight = 120
+    ClientWidth = 411
+    Color = clWhite
+    ParentColor = False
     TabOrder = 8
+    OnClick = ExamplesProc
+    ListBox.Left = 4
+    ListBox.Height = 110
+    ListBox.Top = 5
+    ListBox.Width = 403
+    ListBox.Align = alClient
+    ListBox.BorderStyle = bsNone
+    ListBox.Items.Strings = (
+      'Data values for selected character'
+      'Data values for modified characters'
+      'Data values for full character set'
+      'Display text mode 0 screen with modified characters'
+      'Load character set from file'
+    )
+    ListBox.ItemHeight = 20
+    ListBox.OnClick = ExamplesProc
+    ListBox.Style = lbOwnerDrawFixed
+    ListBox.TabOrder = 0
   end
 end

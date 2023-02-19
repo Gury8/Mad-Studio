@@ -1,0 +1,105 @@
+object frmSetValues: TfrmSetValues
+  Left = 290
+  Height = 165
+  Top = 214
+  Width = 227
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Tiles resize dialog'
+  ClientHeight = 165
+  ClientWidth = 227
+  KeyPreview = True
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.10.0'
+  object btnConfirm: TBCMaterialDesignButton
+    Left = 6
+    Height = 30
+    Top = 126
+    Width = 105
+    TextSize = 12
+    TextShadow = False
+    TextFont = 'default'
+    TextQuality = fqSystemClearType
+    Caption = 'Confirm'
+    OnClick = ConfirmProc
+  end
+  object btnClose: TBCMaterialDesignButton
+    Left = 114
+    Height = 30
+    Top = 126
+    Width = 105
+    TextSize = 12
+    TextShadow = False
+    TextFont = 'default'
+    TextQuality = fqSystemClearType
+    Caption = 'Close'
+    OnClick = CloseProc
+  end
+  object editX: TSpinEditEx
+    Left = 12
+    Height = 23
+    Top = 24
+    Width = 54
+    BiDiMode = bdRightToLeft
+    BorderStyle = bsSingle
+    MaxLength = 0
+    NumbersOnly = True
+    ParentBiDiMode = False
+    TabOrder = 0
+    MaxValue = 4
+    MinValue = 1
+    Value = 4
+  end
+  object editY: TSpinEditEx
+    Left = 84
+    Height = 23
+    Top = 24
+    Width = 54
+    BiDiMode = bdRightToLeft
+    BorderStyle = bsSingle
+    MaxLength = 0
+    NumbersOnly = True
+    ParentBiDiMode = False
+    TabOrder = 1
+    MaxValue = 5
+    MinValue = 1
+    Value = 5
+  end
+  object lblEditX: TLabel
+    Left = 12
+    Height = 15
+    Top = 6
+    Width = 29
+    Caption = 'X size'
+    ParentColor = False
+  end
+  object lblEditY: TLabel
+    Left = 84
+    Height = 15
+    Top = 6
+    Width = 29
+    Caption = 'Y size'
+    ParentColor = False
+  end
+  object editText: TLabeledEdit
+    Left = 12
+    Height = 23
+    Top = 78
+    Width = 176
+    EditLabel.Height = 15
+    EditLabel.Width = 176
+    EditLabel.Caption = 'Input text'
+    EditLabel.ParentColor = False
+    MaxLength = 40
+    TabOrder = 2
+  end
+  object Bevel1: TBevel
+    Left = 12
+    Height = 5
+    Top = 114
+    Width = 204
+    Shape = bsTopLine
+  end
+end

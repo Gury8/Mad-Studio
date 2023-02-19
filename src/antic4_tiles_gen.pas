@@ -11,8 +11,8 @@ unit antic4_tiles_gen;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, lcltype, Windows,
-  ComCtrls, Buttons, SpinEx, BCListBox, BCMDButton, BCMaterialDesignButton, StrUtils,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, lcltype,
+  Buttons, SpinEx, BCListBox, BCMDButton, BCMaterialDesignButton, StrUtils,
   common;
 
 type
@@ -80,8 +80,6 @@ type
     function Example06 : string;
     function SetTileDataValues(isOnlyTile : boolean) : string;
     function SetTileCharDataValues(isOnlyTile : boolean) : string;
-  public
-
   end;
 
 var
@@ -97,43 +95,19 @@ uses
 { TfrmAntic4TilesGen }
 
 procedure TfrmAntic4TilesGen.FormCreate(Sender : TObject);
-var
-  i : byte;
 begin
   isCreate := true;
 
-  // Example 1
-  for i := 0 to 7 do
-    listings[0, i] := true;
-
-  // Example 2
-  for i := 0 to 7 do
-    listings[1, i] := true;
-
-  // Example 3
-  for i := 0 to 7 do
-    listings[2, i] := true;
-
-  // Example 4
-  for i := 0 to 7 do
-    listings[3, i] := true;
+  SetListings(listings);
 
   // Example 5
-  listings[4, 0] := true;
-  listings[4, 1] := true;
-  listings[4, 2] := true;
   listings[4, 3] := false;
-  listings[4, 4] := true;
   listings[4, 5] := false;
   listings[4, 6] := false;
   listings[4, 7] := false;
 
   // Example 6
-  listings[5, 0] := true;
-  listings[5, 1] := true;
-  listings[5, 2] := true;
   listings[5, 3] := false;
-  listings[5, 4] := true;
   listings[5, 5] := false;
   listings[5, 6] := false;
   listings[5, 7] := false;
@@ -161,20 +135,20 @@ procedure TfrmAntic4TilesGen.CreateCode;
 var
   code : string;
 begin
-  boxStartLine.Enabled := langIndex < 2;
-  boxStartLine.Visible := boxStartLine.Enabled;
+  //boxStartLine.Enabled := langIndex < 2;
+  //boxStartLine.Visible := boxStartLine.Enabled;
+  //
+  //if langIndex = 0 then begin
+  //  radDataType.ItemIndex := 0;
+  //  TRadioButton(radDataType.Controls[1]).Enabled := false;
+  //  TRadioButton(radDataType.Controls[2]).Enabled := false;
+  //end
+  //else begin
+  //  TRadioButton(radDataType.Controls[1]).Enabled := true;
+  //  TRadioButton(radDataType.Controls[2]).Enabled := true;
+  //end;
 
-  if langIndex = 0 then begin
-    radDataType.ItemIndex := 0;
-    TRadioButton(radDataType.Controls[1]).Enabled := false;
-    TRadioButton(radDataType.Controls[2]).Enabled := false;
-  end
-  else begin
-    TRadioButton(radDataType.Controls[1]).Enabled := true;
-    TRadioButton(radDataType.Controls[2]).Enabled := true;
-  end;
-
-  memo.Lines.Clear;
+  Set01(boxStartLine, langIndex, radDataType, true);
 
   case ListExamples.ListBox.ItemIndex of
     0: code := Example01;
@@ -185,12 +159,15 @@ begin
     5: code := Example06;
   end;
 
-  memo.Lines.Add(code);
+  //memo.Lines.Clear;
+  //memo.Lines.Add(code);
+  //
+  //// Set cursor position at the top of memo object
+  //memo.SelStart := 0;
+  //memo.SelLength := 0;
+  //SendMessage(memo.Handle, EM_SCROLLCARET, 0, 0);
 
-  // Set cursor position at the top of memo object
-  memo.SelStart := 0;
-  memo.SelLength := 0;
-  SendMessage(memo.Handle, EM_SCROLLCARET, 0, 0);
+  Set02(memo, code);
 end;
 
 function TfrmAntic4TilesGen.SetTileDataValues(isOnlyTile : boolean) : string;
@@ -224,7 +201,7 @@ begin
     sum := 0;
 
     // Map Antic 4 mode character data to Antic 2 mode character data
-    for i := 0 to _MAX_TILE_CHARS - 1 do
+    for i := 0 to _MAX_TILE_CHARS - 1 do begin
       for y := 0 to _CHAR_DIM do
         for x := 0 to _CHAR_DIM do
           case x of
@@ -251,6 +228,7 @@ begin
               end;
             end;
           end;
+    end;
 
     if not isOnlyTile and (sum = 0) then continue;
 
@@ -408,7 +386,7 @@ begin
     sum := 0;
 
     // Map Antic 4 mode character data to Antic 2 mode character data
-    for i := 0 to _MAX_TILE_CHARS - 1 do
+    for i := 0 to _MAX_TILE_CHARS - 1 do begin
       for y := 0 to _CHAR_DIM do
         for x := 0 to _CHAR_DIM do
           case x of
@@ -419,6 +397,7 @@ begin
               Inc(sum, col);
             end;
           end;
+    end;
 
     if not isOnlyTile and (sum = 0) then continue;
 
@@ -634,14 +613,15 @@ begin
   if langIndex < 2 then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-    code.line += CodeLine('REM ******************************');
-    code.line += CodeLine('REM MODIFIED CHARACTERS');
-    code.line += CodeLine('REM ******************************');
-    code.line += CodeLine('DIM TILE1CHARMAP(' + IntToStr(maxTileChars) + ')');
-    code.line += CodeLine('NMEMTOP=PEEK(106)-4');
-    code.line += CodeLine('POKE 106,NMEMTOP');
-    code.line += CodeLine('GRAPHICS 12' + strTextWindow);
-    code.line += CodeLine('POKE 82,0');
+    code.line += CodeLine(_REM) +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM MODIFIED CHARACTERS') +
+                 CodeLine(_REM) +
+                 CodeLine('DIM TILE1CHARMAP(' + IntToStr(maxTileChars) + ')') +
+                 CodeLine('NMEMTOP=PEEK(106)-4') +
+                 CodeLine('POKE 106,NMEMTOP') +
+                 CodeLine('GRAPHICS 12' + strTextWindow) +
+                 CodeLine('POKE 82,0');
 
     if chkTextWindow.Checked then
       code.line += CodeLine('? "COPY ATARI CHARACTER SET TO RAM AREA"');
@@ -718,7 +698,8 @@ begin
   else if langIndex = _ACTION then begin
     code.line := '';
 (*
-    code.line := '; Modified characters'#13#10#13#10 +
+    code.line := ';' + _REM_MAD_STUDIO + #13#10 +
+                 '; Modified characters'#13#10#13#10 +
                  'BYTE CH=$2FC'#13#10 +
                  'BYTE RAMTOP=$6A'#13#10 +
                  'BYTE CHBAS=$2F4'#13#10#13#10 +
@@ -749,14 +730,14 @@ begin
                  '; CUSTOM CHARACTER SET DATA'#13#10;
 //    for i := 0 to 127 do
 //      if frmFonts.charEditIndex[i] = 1 then
-//        code.line += 'MOVEBLOCK(TOPMEM+' + IntToStr(i) + '*8,char' + IntToStr(i) + ',8)' + #13#10;
+//        code.line += 'MOVEBLOCK(TOPMEM+' + IntToStr(i) + '*8,char' + IntToStr(i) + ',8)'#13#10;
 
 for i := 0 to maxTileChars do
   //code.line += '  MOVEBLOCK(tile' + IntToStr(tileSelected) + ' + _CHAR_OFFSET*' + IntToStr(i) + ', ' +
   //             'TOPMEM + tile' + IntToStr(tileSelected) +
   //             'CharMap(' + IntToStr(i) + ')*8), 8)'#13#10;
   code.line += 'MOVEBLOCK(TOPMEM+tile' + IntToStr(tileSelected) + 'CharMap(' + IntToStr(i) +
-               ')*8,tile' + IntToStr(tileSelected) + ' + _CHAR_OFFSET*' + IntToStr(i) + ',8)' + #13#10;
+               ')*8,tile' + IntToStr(tileSelected) + ' + _CHAR_OFFSET*' + IntToStr(i) + ',8)'#13#10;
 
 //    code.line += 's := ''ABCD''';
 //    code.line += 'GotoXY(2, 2); BPut(6, @s[1], 2);';
@@ -794,7 +775,9 @@ end;
   { Mad Pascal
    ---------------------------------------------------------------------------}
   else if langIndex = _MAD_PASCAL then begin
-    code.line := 'uses graph, crt, cio;'#13#10#13#10;
+    code.line := '//' + _REM_MAD_STUDIO + #13#10 +
+                 '// Modified characters'#13#10#13#10;
+    code.line += 'uses graph, crt, cio;'#13#10#13#10;
     code.line += SetTileCharDataValues(true);
     code.line += SetTileDataValues(true);
     code.line += '  _CHAR_OFFSET = 8;'#13#10#13#10 +
@@ -865,7 +848,9 @@ end;
   { FastBasic
    ---------------------------------------------------------------------------}
   else if langIndex = _FAST_BASIC then begin
-    code.line := SetTileCharDataValues(true);
+    code.line := '''' + _REM_MAD_STUDIO + #13#10 +
+                 ''' Modified characters'#13#10#13#10;
+    code.line += SetTileCharDataValues(true);
     code.line += SetTileDataValues(true);
     code.line += #13#10'NMEMTOP = PEEK(106) - 4'#13#10 +
                  'POKE 106, NMEMTOP'#13#10 +
@@ -883,6 +868,10 @@ end;
     //MOVE ADR(tile1), CHRAM + tile1char(0)*8, 8
     //MOVE ADR(tile1) + CHR_OFFSET, CHRAM + tile1char(1)*8, 8
     //MOVE ADR(tile1) + CHR_OFFSET*2, CHRAM + tile1char(2)*8, 8
+
+// This only applies on consequent characters
+//    code.line += 'MOVE ADR(tile' + IntToStr(tileSelected) + '), CHRAM + tile' +
+//                 IntToStr(tileSelected) + 'CharMap(0)*8, 8*' + IntToStr(maxTileChars);
 
     code.line += #13#10''' Modify character set pointer'#13#10;
     code.line += 'POKE 756, NMEMTOP'#13#10;
@@ -958,10 +947,10 @@ begin
   if langIndex < 2 then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-    code.line += CodeLine('REM ******************************');
-    code.line += CodeLine('REM SCREEN WITH PREDEFINED TILES');
-    code.line += CodeLine('REM ******************************');
-
+    code.line += CodeLine(_REM) +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Screen with predefined tiles') +
+                 CodeLine(_REM);
     for j := 1 to _MAX_TILES do begin
       maxTileChars := frmAntic4Tiles.antic4TileArray[j].dimX *
                       frmAntic4Tiles.antic4TileArray[j].dimY - 1;
@@ -1061,15 +1050,8 @@ begin
         end;
       end;
 
-    if chkUseColors.Checked then begin
+    if chkUseColors.Checked then
       code.line += GenSetColors(_ATARI_BASIC);
-      //Inc(code.number, code.step);
-      //code.line += CodeLine('POKE 708,' + IntToStr(colorValues[1]) +
-      //             ':POKE 709,' + IntToStr(colorValues[2])) +
-      //             CodeLine('POKE 710,' + IntToStr(colorValues[3]) +
-      //             ':POKE 711,' + IntToStr(colorValues[10])) +
-      //             CodeLine('POKE 712,' + IntToStr(colorValues[0]));
-    end;
 
     if not chkTextWindow.Checked then begin
       Inc(code.number, code.step);
@@ -1088,7 +1070,9 @@ begin
   { Mad Pascal
    ---------------------------------------------------------------------------}
   else if langIndex = _MAD_PASCAL then begin
-    code.line := 'uses graph, crt, cio;'#13#10#13#10;
+    code.line := '//' + _REM_MAD_STUDIO + #13#10 +
+                 '// Screen with predefined tiles'#13#10#13#10;
+    code.line += 'uses graph, crt, cio;'#13#10#13#10;
     code.line += SetTileCharDataValues(false);
     code.line += SetTileDataValues(false);
     code.line += '  _CHAR_OFFSET = 8;'#13#10#13#10 +
@@ -1187,7 +1171,9 @@ begin
   { FastBasic
    ---------------------------------------------------------------------------}
   else if langIndex = _FAST_BASIC then begin
-    code.line := SetTileCharDataValues(false);
+    code.line := '''' + _REM_MAD_STUDIO + #13#10 +
+                 ''' Screen with predefined tiles'#13#10#13#10;
+    code.line += SetTileCharDataValues(false);
     code.line += SetTileDataValues(false);
     code.line += #13#10'NMEMTOP = PEEK(106) - 4'#13#10 +
                  'POKE 106, NMEMTOP'#13#10 +

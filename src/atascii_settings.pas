@@ -20,12 +20,7 @@ type
     TabSheet2: TTabSheet;
     procedure ConfirmProc(Sender: TObject);
     procedure CloseWinProc(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-  private
-    { private declarations }
-  public
-    { public declarations }
   end;
 
 var
@@ -39,11 +34,6 @@ uses
   antic2;
 
 { TfrmAntic2Settings }
-
-procedure TfrmAntic2Settings.FormCreate(Sender: TObject);
-begin
-
-end;
 
 procedure TfrmAntic2Settings.ConfirmProc(Sender: TObject);
 begin

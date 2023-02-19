@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2022
   Unit: Player/missile graphics editor
 }
 unit pmg;
@@ -11,36 +11,54 @@ unit pmg;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, RTTICtrls, Forms, Controls, Graphics, Dialogs, Menus, ExtCtrls,
-  ComCtrls, StdCtrls, lcltype, Buttons, BCTrackbarUpdown, BCMDButton, Types, strutils, windows,
+  Classes, SysUtils, FileUtil, RTTICtrls, SpinEx, Forms, Controls, Graphics, Dialogs, Menus,
+  ExtCtrls, ComCtrls, StdCtrls, lcltype, Buttons, BCMDButton, Types, strutils, windows,
   common, byte_editor;
 
 type
   { TfrmPmg }
   TfrmPmg = class(TForm)
+    boxP0Res : TGroupBox;
+    boxP0Res1 : TGroupBox;
+    boxP0Res2 : TGroupBox;
+    boxP0Res3 : TGroupBox;
     btnCharDown : TSpeedButton;
     btnCharLeft : TSpeedButton;
     btnCharRight : TSpeedButton;
     btnCharUp : TSpeedButton;
-    btnFlipXAll1 : TBCMDButton;
+    btnDoubleRes : TBCMDButton;
+    btnDoubleRes1 : TBCMDButton;
+    btnPlayer2QuadRes : TBCMDButton;
+    btnPlayer3SingleRes : TBCMDButton;
+    btnPlayer3DoubleRes : TBCMDButton;
+    btnPlayer3QuadRes : TBCMDButton;
+    btnPlayer0SingleRes : TBCMDButton;
+    btnPlayer0DoubleRes : TBCMDButton;
+    btnPlayer0QuadRes : TBCMDButton;
+    btnPlayer1SingleRes : TBCMDButton;
+    btnPlayer1DoubleRes : TBCMDButton;
+    btnPlayer1QuadRes : TBCMDButton;
+    btnPlayer2SingleRes : TBCMDButton;
+    btnPlayer2DoubleRes : TBCMDButton;
+    btnFlipYAll : TBCMDButton;
     btnFlipXSelected : TBCMDButton;
     btnFlipXAll : TBCMDButton;
     btnApplyMissileHeight : TButton;
-    btnFlipXSelected1 : TBCMDButton;
+    btnFlipYSelected : TBCMDButton;
     btnInvert : TToolButton;
     btnLoadAnim : TToolButton;
     btnSep3 : TToolButton;
     btnApplyPlayerHeight : TButton;
     btnViewer : TToolButton;
     chkJoinPlayers : TCheckBox;
+    editPlayerHeight : TSpinEditEx;
+    editMissileHeight : TSpinEditEx;
     editorMulti: TImage;
-    editMissileHeight : TBCTrackbarUpdown;
-    editPosX : TBCTrackbarUpdown;
-    editMissilePosX : TBCTrackbarUpdown;
-    editPosY : TBCTrackbarUpdown;
-    editPlayerHeight : TBCTrackbarUpdown;
-    editMissilePosY : TBCTrackbarUpdown;
-    GroupBox1 : TGroupBox;
+    editPosX : TSpinEditEx;
+    editMissilePosX : TSpinEditEx;
+    editPosY : TSpinEditEx;
+    editMissilePosY : TSpinEditEx;
+    boxPmResolution : TGroupBox;
     grpFlipPlayers : TGroupBox;
     grpPlayerHeight1 : TGroupBox;
     grpShiftMovePlayer : TGroupBox;
@@ -274,20 +292,6 @@ type
     tbPlayer2: TTrackBar;
     tbPlayer3: TTrackBar;
     tbVertical : TTrackBar;
-    tglP3x1 : TToggleBox;
-    tglP3x2 : TToggleBox;
-    tglP3x4 : TToggleBox;
-    tglP1x1 : TToggleBox;
-    tglP1x2 : TToggleBox;
-    tglP1x4 : TToggleBox;
-    tglP2x1 : TToggleBox;
-    tglP2x2 : TToggleBox;
-    tglP2x4 : TToggleBox;
-    ToggleBox1 : TToggleBox;
-    ToggleBox2 : TToggleBox;
-    tglP0x1 : TToggleBox;
-    tglP0x2 : TToggleBox;
-    tglP0x4 : TToggleBox;
     toolbar: TToolBar;
     btnLoadData: TToolButton;
     btnSaveData: TToolButton;
@@ -305,19 +309,14 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure ViewerProc(Sender : TObject);
-    procedure btnFlipXAll1Click(Sender : TObject);
-    procedure btnFlipXAllClick(Sender : TObject);
-    procedure btnFlipXSelected1Click(Sender : TObject);
-    procedure btnFlipXSelectedClick(Sender : TObject);
+    procedure PmResProc(Sender : TObject);
+    procedure SingleResProc(Sender : TObject);
+    procedure DoubleResProc(Sender : TObject);
+    procedure FlipYAllProc(Sender : TObject);
+    procedure FlipXAllProc(Sender : TObject);
+    procedure FlipYSelectedProc(Sender : TObject);
+    procedure FlipXSelectedProc(Sender : TObject);
     procedure InvertProc(Sender : TObject);
-    procedure editMissilePosXMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
-    procedure editMissilePosYMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
-    procedure editPosXMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
-    procedure editPosYMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
     procedure ApplyMissileHeightProc(Sender : TObject);
     procedure ApplyPlayerHeightProc(Sender : TObject);
     procedure chkJoinPlayersChange(Sender : TObject);
@@ -334,7 +333,7 @@ type
     procedure SetDoubleResolution(Sender: TObject);
     procedure SetSingleResolution(Sender: TObject);
     procedure SaveDataAll(Sender: TObject);
-    procedure panelMissileClick(Sender: TObject);
+    procedure panelMissileProc(Sender: TObject);
     procedure SaveMissileDataAll(Sender: TObject);
     procedure tbMissileHorizontalChange(Sender: TObject);
     procedure tbMissileVerticalChange(Sender: TObject);
@@ -347,13 +346,11 @@ type
       X, Y: Integer);
     procedure editPosXChange(Sender: TObject);
     procedure editPosYChange(Sender: TObject);
-    procedure imgMissile00aMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
-      X, Y: Integer);
     procedure imgMissile00aMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure imgMissileMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgMissileDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure imgMissileMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure imgMissileMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgMissileMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure imgMissileUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure NumProc(Sender: TObject);
     procedure ExitForm(Sender: TObject);
@@ -370,10 +367,10 @@ type
     procedure SaveDataAs(Sender: TObject);
     procedure GenCode(Sender: TObject);
     procedure PaletteProc(Sender: TObject);
-    procedure editorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure editorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure editorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure editorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure editorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure editorUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure tabMultiAllShow(Sender: TObject);
     procedure tabMultiShow(Sender: TObject);
@@ -404,20 +401,6 @@ type
     procedure LoadPlayerData;
     procedure LoadMissileData;
     procedure LoadMplData(Sender : TObject);
-    procedure tglP0x1Change(Sender : TObject);
-    procedure tglP0x2Change(Sender : TObject);
-    procedure tglP1x1Change(Sender : TObject);
-    procedure tglP0x4Change(Sender : TObject);
-    procedure tglP1x2Change(Sender : TObject);
-    procedure tglP1x4Change(Sender : TObject);
-    procedure tglP2x1Change(Sender : TObject);
-    procedure tglP2x2Change(Sender : TObject);
-    procedure tglP2x4Change(Sender : TObject);
-    procedure tglP3x1Change(Sender : TObject);
-    procedure tglP3x2Change(Sender : TObject);
-    procedure tglP3x4Change(Sender : TObject);
-    procedure ToggleBox1Change(Sender : TObject);
-    procedure ToggleBox2Change(Sender : TObject);
     procedure ByteEditorProc(Sender : TObject);
   private
     { private declarations }
@@ -478,7 +461,6 @@ type
     procedure RefreshPM(isMultiColor : boolean);
     procedure RefreshAll;
     procedure RefreshMissile;
-    procedure ToggleChange(Sender : TObject; tgl01, tgl02, tgl03 : TToggleBox; plSize : byte);
   end;
 
 var
@@ -498,8 +480,6 @@ var
   i, j : word;
   labelx : TLabel;
 begin
-//  ShowCursor(frmPmg, frmPmg, crHourGlass);
-//  Cursor := crHourGlass;
   DoubleBuffered := true;
   btn := mbMiddle;
   FillByte(playerSize, SizeOf(playerSize), 0);
@@ -562,13 +542,52 @@ begin
 //  PmgSettings;
 //  isValueDec := true;
 
-  SetTrackBarUpDown(editPlayerHeight, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editMissileHeight, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editMissilePosX, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editMissilePosY, $00DDDDDD, clWhite);
-
   // Set colors for palette toolbar
   //pmColor0.Brush.Color := coltab[0];
+end;
+
+procedure TfrmPmg.PmResProc(Sender : TObject);
+begin
+  if Sender is TBCMDButton then
+    player := (Sender as TBCMDButton).Tag;
+
+  case player of
+    0: rbPlayer0.Checked := true;
+    1: rbPlayer1.Checked := true;
+    2: rbPlayer2.Checked := true;
+    3: rbPlayer3.Checked := true;
+  end;
+
+//  showmessage((Sender as TBCMDButton).Name);
+
+  if (Sender as TBCMDButton).Caption = 'x1' then begin
+    factX03 := 12;
+    playerSize[player] := _PLAYER_SIZE_NORMAL;
+  end
+  else if (Sender as TBCMDButton).Caption = 'x2' then begin
+    factX03 := 24;
+    playerSize[player] := _PLAYER_SIZE_DOUBLE;
+//    (FindComponent('tbPlayer' + IntToStr(player)) as TTrackBar).Enabled := false;
+  end
+  else begin
+    factX03 := 48;
+    playerSize[player] := _PLAYER_SIZE_QUADRUPLE;
+//    (FindComponent('tbPlayer' + IntToStr(player)) as TTrackBar).Enabled := false;
+  end;
+
+  (FindComponent('tbPlayer' + IntToStr(player)) as TTrackBar).Enabled := factX03 = 12;
+
+  ReadFld(factX02, factY02);
+end;
+
+procedure TfrmPmg.DoubleResProc(Sender : TObject);
+begin
+  SetDoubleResolution(Sender);
+end;
+
+procedure TfrmPmg.SingleResProc(Sender : TObject);
+begin
+  SetSingleResolution(Sender);
 end;
 
 procedure TfrmPmg.FormShow(Sender: TObject);
@@ -576,7 +595,6 @@ var
   i : byte;
 begin
   propFlagModules[2] := 1;
-  isChange := true;
   frmMain.Top := 0;
   formId := formPmg;
 
@@ -610,9 +628,6 @@ begin
   end;
 
   SetDoubleResolution(Sender);
-//  Cursor := crDefault;
-
-//  ShowCursor(frmPmg, frmPmg, crDefault);
 end;
 
 procedure TfrmPmg.FormActivate(Sender: TObject);
@@ -654,7 +669,8 @@ begin
     factY02 := 6;
   end;
 
-  ShowCursor(frmPmg, frmPmg, crHourGlass);
+//  ShowCursor(frmPmg, frmPmg, crHourGlass);
+  Screen.BeginWaitCursor;
 
   InitPmValues;
   refreshPM(true);
@@ -664,7 +680,8 @@ begin
   RedrawPlayer4;
   RefresPM_MultiAll(editorMulti, factX02, factY02);
 
-  ShowCursor(frmPmg, frmPmg, crDefault);
+//  ShowCursor(frmPmg, frmPmg, crDefault);
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmPmg.PlayerOper(Sender : TObject);
@@ -837,7 +854,7 @@ begin
   MissileLocation;
 end;
 
-procedure TfrmPmg.panelMissileClick(Sender: TObject);
+procedure TfrmPmg.panelMissileProc(Sender: TObject);
 begin
   player := TPanel(Sender).Tag;
   (FindComponent('rbPlayer' + IntToStr(player)) as TRadioButton).Checked := true;
@@ -923,17 +940,17 @@ begin
   end;
 end;
 
-procedure TfrmPmg.imgMissile00aMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
-  X, Y: Integer);
-begin
-  player := TImage(Sender).Tag;
-  (FindComponent('rbPlayer' + IntToStr(player)) as TRadioButton).Checked := true;
-
-  btn := Button;
-//  xf := X div factX;
-//  yf := Y div factY;
-//  PlotMissileMultiAll(xf, yf);
-end;
+//procedure TfrmPmg.imgMissile00aMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+//  X, Y: Integer);
+//begin
+//  player := TImage(Sender).Tag;
+//  (FindComponent('rbPlayer' + IntToStr(player)) as TRadioButton).Checked := true;
+//
+//  btn := Button;
+////  xf := X div factX;
+////  yf := Y div factY;
+////  PlotMissileMultiAll(xf, yf);
+//end;
 
 procedure TfrmPmg.imgMissile00aMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
@@ -966,7 +983,7 @@ begin
              tbMissileHorizontal.Position - 44, tbMissileVertical.Position, 4, 9);
 end;
 
-procedure TfrmPmg.editorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmPmg.editorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   xf, yf : integer;
@@ -1003,7 +1020,7 @@ begin
   Plot(xf, yf);
 end;
 
-procedure TfrmPmg.editorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TfrmPmg.editorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
   xf, yf : integer;
 begin
@@ -1022,7 +1039,7 @@ begin
                            inttostr(xf) + ', y: ' + inttostr(yf);
 end;
 
-procedure TfrmPmg.editorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmPmg.editorUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
   btn := mbMiddle;
@@ -1114,8 +1131,7 @@ begin
   playerIndex[player] := (Sender as TTrackBar).Position;
   (FindComponent('rbPlayer' + IntToStr(player)) as TRadioButton).Checked := true;
 
-  if oldPos = playerIndex[player] then
-    exit;
+  if oldPos = playerIndex[player] then exit;
 (*
   if btn = mbRight then begin
   end
@@ -1329,16 +1345,16 @@ begin
     // Player size
     else begin
 //      if (Sender as TComponent).Name <> 'mnuMplLoadOld' then begin
-        j := fs.ReadByte;
-        if i = 8 then
-          playerSize[0] := j
-        else if i = 9 then
-          playerSize[1] := j
-        else if i = 10 then
-          playerSize[2] := j
-        else if i = 11 then
-          playerSize[3] := j;
-//      end;
+      j := fs.ReadByte;
+      //if i = 8 then
+      //  playerSize[0] := j
+      //else if i = 9 then
+      //  playerSize[1] := j
+      //else if i = 10 then
+      //  playerSize[2] := j
+      //else if i = 11 then
+      //  playerSize[3] := j;
+      playerSize[i - 8] := j
     end;
   end;
 
@@ -1372,38 +1388,52 @@ begin
 
     case i of
       0: begin
-        if playerSize[0] = _PLAYER_SIZE_NORMAL then
-          tglP0x1Change(Sender)
-        else if playerSize[0] = _PLAYER_SIZE_DOUBLE then
-          tglP0x2Change(Sender)
-        else
-          tglP0x4Change(Sender);
+//        PmResProc(Sender);
+        //if playerSize[0] = _PLAYER_SIZE_NORMAL then
+        //  tglP0x1Change(Sender)
+        //else if playerSize[0] = _PLAYER_SIZE_DOUBLE then
+        //  tglP0x2Change(Sender)
+        //else
+        //  tglP0x4Change(Sender);
+//        factX03 := 12;
+        case playerSize[0] of
+          0: factX03 := 12;
+          1: factX03 := 24;
+          3: factX03 := 48;
+        end;
       end;
       1: begin
-        if playerSize[1] = _PLAYER_SIZE_NORMAL then
-          tglP1x1Change(Sender)
-        else if playerSize[1] = _PLAYER_SIZE_DOUBLE then
-          tglP1x2Change(Sender)
-        else
-          tglP1x4Change(Sender);
+//        PmResProc(Sender);
+        //if playerSize[1] = _PLAYER_SIZE_NORMAL then
+        //  tglP1x1Change(Sender)
+        //else if playerSize[1] = _PLAYER_SIZE_DOUBLE then
+        //  tglP1x2Change(Sender)
+        //else
+        //  tglP1x4Change(Sender);
+//        factX03 := 24;
+        case playerSize[1] of
+          0: factX03 := 12;
+          1: factX03 := 24;
+          3: factX03 := 48;
+        end;
       end;
       2: begin
-        if playerSize[2] = _PLAYER_SIZE_NORMAL then
-          tglP2x1Change(Sender)
-        else if playerSize[2] = _PLAYER_SIZE_DOUBLE then
-          tglP2x2Change(Sender)
-        else
-          tglP2x4Change(Sender);
+        case playerSize[2] of
+          0: factX03 := 12;
+          1: factX03 := 24;
+          3: factX03 := 48;
+        end;
       end;
       3: begin
-        if playerSize[3] = _PLAYER_SIZE_NORMAL then
-          tglP3x1Change(Sender)
-        else if playerSize[3] = _PLAYER_SIZE_DOUBLE then
-          tglP3x2Change(Sender)
-        else
-          tglP3x4Change(Sender);
+        case playerSize[3] of
+          0: factX03 := 12;
+          1: factX03 := 24;
+          3: factX03 := 48;
+        end;
       end;
     end;
+
+    ReadFld(factX02, factY02);
   end;
 end;
 
@@ -1426,11 +1456,6 @@ begin
 
   // Read missile data
   for y := 0 to h - 1 do begin
-    //for x := 0 to 7 do begin
-    //  dta := Char(fs.ReadByte);
-    //  fld[player, x, y] := StrToInt(dta);
-    //  playerPos[player, playerIndex[player] + x, y] := fld[player, x, y];
-    //end;
     if fs.Position < fs.Size then begin
       x := fs.ReadByte;
       bin := Dec2Bin(x);
@@ -1444,9 +1469,9 @@ begin
   //// Decimal values from binary data
   //for j := 0 to h - 1 do begin
   //  bin := '';
-  //  for i := 0 to 1 do begin
+  //  for i := 0 to 1 do
   //    bin += IntToStr(missiles[player, i, j]);
-  //  end;
+
   //  //for n := 0 to missileMaxY - 1 do begin
   //  //  if j = n then
   //  //    (FindComponent('lblNum' + IntToStr(j + labelOffset)) as TLabel).
@@ -1496,7 +1521,6 @@ end;
 procedure TfrmPmg.LoadDataProc(Sender: TObject);
 begin
   // Players
-//  if (*(tabs.ActivePage = tabPlayers) or*) (Sender = mnuPlayerLoad) then begin
   if ((tabs.ActivePage = tabPlayers) and (Sender = btnLoadData)) or
      (Sender = mnuPlayerLoad) then
   begin
@@ -1506,25 +1530,6 @@ begin
 //      frmPmg.Cursor := crHourGlass;
       filename := frmMain.dlgOpen.Filename;
       OpenPlayerFile(filename);
-(*//      playerFiles[player] := filename;
-      fs := TFileStream.Create(filename, fmOpenReadWrite);
-      try
-        LoadPlayerData;
-        tbPlayer0.Position := playerIndex[0];
-        tbPlayer1.Position := playerIndex[1];
-        tbPlayer2.Position := playerIndex[2];
-        tbPlayer3.Position := playerIndex[3];
-        SetObjects;
-        caption := programName + ' ' + programVersion +
-                   ' - Player/missile graphics editor (' + filename + ')';
-      finally
-        fs.Free;
-        RefreshPM(true);
-        frmPmg.Cursor := crDefault;
-  //      sbPmg.Panels[2].Text := 'Load: ' + inttostr(colorValues[4]) +
-  //      ', ' + inttostr(colorValues[5]);
-        frmColors.Show;
-      end;*)
     end;
   end
   // Missiles
@@ -1574,6 +1579,39 @@ begin
         caption := programName + ' ' + programVersion +
                    ' - Player/missile graphics editor (' + filename + ')';
         refreshPM(true);
+
+        if playerSize[0] = _PLAYER_SIZE_NORMAL then
+          btnPlayer0SingleRes.Checked := true
+        else if playerSize[0] = _PLAYER_SIZE_DOUBLE then
+          btnPlayer0DoubleRes.Checked := true
+        else
+          btnPlayer0QuadRes.Checked := true;
+
+        if playerSize[1] = _PLAYER_SIZE_NORMAL then
+          btnPlayer1SingleRes.Checked := true
+        else if playerSize[1] = _PLAYER_SIZE_DOUBLE then
+          btnPlayer1DoubleRes.Checked := true
+        else
+          btnPlayer1QuadRes.Checked := true;
+
+        if playerSize[2] = _PLAYER_SIZE_NORMAL then
+          btnPlayer2SingleRes.Checked := true
+        else if playerSize[2] = _PLAYER_SIZE_DOUBLE then
+          btnPlayer2DoubleRes.Checked := true
+        else
+          btnPlayer2QuadRes.Checked := true;
+
+        if playerSize[3] = _PLAYER_SIZE_NORMAL then
+          btnPlayer3SingleRes.Checked := true
+        else if playerSize[3] = _PLAYER_SIZE_DOUBLE then
+          btnPlayer3DoubleRes.Checked := true
+        else
+          btnPlayer3QuadRes.Checked := true;
+
+        tbPlayer0.Enabled := playerSize[0] = _PLAYER_SIZE_NORMAL;
+        tbPlayer1.Enabled := playerSize[1] = _PLAYER_SIZE_NORMAL;
+        tbPlayer2.Enabled := playerSize[2] = _PLAYER_SIZE_NORMAL;
+        tbPlayer3.Enabled := playerSize[3] = _PLAYER_SIZE_NORMAL;
       finally
         fs.Free;
         RefreshAll;
@@ -2174,7 +2212,8 @@ var
   x, y, n, fr : byte;
   origFrame : byte;
 begin
-  ShowCursor(frmPmg, frmPmg, crHourGlass);
+//  ShowCursor(frmPmg, frmPmg, crHourGlass);
+  Screen.BeginWaitCursor;
 
   origFrame := player;
   SetRotate(false);
@@ -2197,7 +2236,8 @@ begin
   ReadFld(factX02, factY02);
   refreshPM(true);
 
-  ShowCursor(frmPmg, frmPmg, crDefault);
+//  ShowCursor(frmPmg, frmPmg, crDefault);
+  Screen.EndWaitCursor;
 end;
 
 {-----------------------------------------------------------------------------
@@ -2213,7 +2253,8 @@ var
   x, y, n, fr : byte;
   origFrame : byte;
 begin
-  ShowCursor(frmPmg, frmPmg, crHourGlass);
+//  ShowCursor(frmPmg, frmPmg, crHourGlass);
+  Screen.BeginWaitCursor;
 
   origFrame := player;
   SetRotate(false);
@@ -2236,7 +2277,8 @@ begin
   ReadFld(factX02, factY02);
   refreshPM(true);
 
-  ShowCursor(frmPmg, frmPmg, crDefault);
+//  ShowCursor(frmPmg, frmPmg, crDefault);
+  Screen.EndWaitCursor;
 end;
 
 {-----------------------------------------------------------------------------
@@ -2378,11 +2420,21 @@ begin
   else
     exit;
   end;
-  if xf > _PM_WIDTH then xf := _PM_WIDTH;
+
+  // Check drawing boundaries
+  if xf > _PM_WIDTH then
+    xf := _PM_WIDTH
+  else if xf < 0 then
+    xf := 0;
+
+  if yf < 0 then yf := 0;
+
+  // Fill data
   fld[player, xf, yf] := col;
   playerPos[player, playerIndex[player] + xf, yf] := col;
   col := player;
   mem := col + 4;
+
   if player < 4 then begin
     FillRectEx(editor, coltab[mem], xf*factX, yf*factY, factX, factY);
 
@@ -2496,8 +2548,13 @@ begin
     exit;
   end;
 
+  // Check drawing boundaries
   if xf > _PM_WIDTH + _MAX_PLAYER_POS then
-    xf := _PM_WIDTH + _MAX_PLAYER_POS;
+    xf := _PM_WIDTH + _MAX_PLAYER_POS
+  else if xf < 0 then
+    xf := 0;
+
+  if yf < 0 then yf := 0;
 
   //if not CalcPlayerWidth(player, xf, yf) then
   //  Exit;
@@ -2648,7 +2705,15 @@ begin
   else
     exit;
   end;
-  if xf > 1 then xf := 1;
+
+  // Check drawing boundaries
+  if xf > 1 then
+    xf := 1
+  else if xf < 0 then
+    xf := 0;
+
+  if yf < 0 then yf := 0;
+
   missiles[player, xf, yf] := col;
 
   // Draw fifth player from missile data
@@ -2848,10 +2913,10 @@ begin
       end;
 
 //      if playerSize[player] = _PLAYER_SIZE_NORMAL then begin
-        col := playerPos[0, xf, yf];      // Player 0 value
-        col01 := playerPos[1, xf, yf];    // Player 1 value
-        col02 := playerPos[2, xf, yf];    // Player 2 value
-        col03 := playerPos[3, xf, yf];    // Player 3 value
+      col := playerPos[0, xf, yf];      // Player 0 value
+      col01 := playerPos[1, xf, yf];    // Player 1 value
+      col02 := playerPos[2, xf, yf];    // Player 2 value
+      col03 := playerPos[3, xf, yf];    // Player 3 value
 //      end
       //else if playerSize[player] = _PLAYER_SIZE_DOUBLE then begin
       //  if xf mod 2 = 0 then begin
@@ -3084,7 +3149,7 @@ begin
     //end;
   end;
 
-  for i := 0 to tabPlayers.ControlCount - 1 do
+  for i := 0 to tabPlayers.ControlCount - 1 do begin
     for j := 0 to 39 do
       if (tabPlayers.Controls[i].Name = 'lblPlayerLine' + inttostr(j)) then begin
         if j <= _PM_MAX_LINES - 1 then
@@ -3102,6 +3167,7 @@ begin
         end;
         break;
       end;
+  end;
 end;
 
 procedure TfrmPmg.RefreshAll;
@@ -3199,7 +3265,7 @@ begin
 //  end;
 end;
 
-procedure TfrmPmg.imgMissileMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmPmg.imgMissileDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
   xf, yf : integer;
@@ -3221,7 +3287,7 @@ begin
   PlotMissile(xf, yf);
 end;
 
-procedure TfrmPmg.imgMissileMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TfrmPmg.imgMissileMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
   xf, yf : integer;
 begin
@@ -3231,7 +3297,7 @@ begin
   sbPmg.Panels[0].Text := 'Cursor coordinates: ' + 'x: ' + inttostr(xf) + ', y: ' + inttostr(yf);
 end;
 
-procedure TfrmPmg.imgMissileMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+procedure TfrmPmg.imgMissileUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
   btn := mbMiddle;
@@ -3546,7 +3612,6 @@ begin
   isShowPmEditorGrid := true;
   RefreshPlayer(editor, factX, factY);
   RefresPM_MultiAll(editorMulti, factX02, factY02);
-  isChange := true;
 end;
 
 procedure TfrmPmg.HideGrid(Sender: TObject);
@@ -3554,14 +3619,12 @@ begin
   isShowPmEditorGrid := false;
   RefreshPlayer(editor, factX, factY);
   RefresPM_MultiAll(editorMulti, factX02, factY02);
-  isChange := true;
 end;
 
 procedure TfrmPmg.MultiColorEnable(Sender: TObject);
 begin
   isPmMixedColor := true;
   sbPmg.Panels[2].Text := 'Player mixed (3rd) color enabled';
-  isChange := true;
   refreshPM(true);
 end;
 
@@ -3569,7 +3632,6 @@ procedure TfrmPmg.MultiColorDisable(Sender: TObject);
 begin
   isPmMixedColor := false;
   sbPmg.Panels[2].Text := 'Player mixed (3rd) color disabled';
-  isChange := true;
   refreshPM(true);
 end;
 
@@ -3749,32 +3811,6 @@ begin
   frmColors.Show;
 end;
 
-procedure TfrmPmg.ToggleBox1Change(Sender : TObject);
-begin
-  //ShowCursor(frmPmg, frmPmg, crHourGlass);
-  Togglebox1.State := cbGrayed;
-  Togglebox2.State := cbUnchecked;
-  Togglebox1.Refresh;
-  Togglebox2.Refresh;
-//  frmPmg.Cursor := crHourGlass;
-  SetDoubleResolution(Sender);
-//  frmPmg.Cursor := crDefault;
-//  ShowCursor(frmPmg, frmPmg, crDefault);
-end;
-
-procedure TfrmPmg.ToggleBox2Change(Sender : TObject);
-begin
-//  ShowCursor(frmPmg, frmPmg, crHourGlass);
-  Togglebox1.State := cbUnchecked;
-  Togglebox2.State := cbGrayed;
-  Togglebox1.Refresh;
-  Togglebox2.Refresh;
-//  frmPmg.Cursor := crHourGlass;
-  SetSingleResolution(Sender);
-//  frmPmg.Cursor := crDefault;
-//  ShowCursor(frmPmg, frmPmg, crDefault);
-end;
-
 procedure TfrmPmg.ByteEditorProc(Sender : TObject);
 var
   x, y, i, j : byte;
@@ -3785,14 +3821,14 @@ begin
   frmByteEditor.ShowModal;
 
   if isDataExport then begin
-    for i := 0 to 7 do
+    for i := 0 to 7 do begin
       for j := 0 to 220 do
         fld[player, i, j] := 0;
-
-    for i := 0 to _MAX_PLAYER_POS - 1 do
+    end;
+    for i := 0 to _MAX_PLAYER_POS - 1 do begin
       for j := 0 to _PM_MAX_LINES - 1 do
         playerPos[player, i, j] := 0;
-
+    end;
     // Import as player data
 //    _PM_MAX_LINES
     for y := 0 to maxLines - 1 do begin
@@ -3807,42 +3843,46 @@ begin
   end;
 end;
 
-procedure TfrmPmg.ToggleChange(Sender : TObject; tgl01, tgl02, tgl03 : TToggleBox; plSize : byte);
+procedure TfrmPmg.FlipXSelectedProc(Sender : TObject);
 begin
-  if Sender is TToggleBox then
-    player := (Sender as TToggleBox).Tag;
-
-  case player of
-    0: rbPlayer0.Checked := true;
-    1: rbPlayer1.Checked := true;
-    2: rbPlayer2.Checked := true;
-    3: rbPlayer3.Checked := true;
-  end;
-
-  case plSize of
-    _PLAYER_SIZE_NORMAL : begin
-      tgl01.State := cbGrayed;
-      tgl02.State := cbUnchecked;
-      tgl03.State := cbUnchecked;
-      factX03 := 12;
-    end;
-    _PLAYER_SIZE_DOUBLE : begin
-      tgl01.State := cbUnchecked;
-      tgl02.State := cbGrayed;
-      tgl03.State := cbUnchecked;
-      factX03 := 24;
-    end;
-    _PLAYER_SIZE_QUADRUPLE : begin
-      tgl01.State := cbUnchecked;
-      tgl02.State := cbUnchecked;
-      tgl03.State := cbGrayed;
-      factX03 := 48;
-    end;
-  end;
-  playerSize[player] := plSize;
-  ReadFld(factX02, factY02);
+  FlipXProc(0);
 end;
 
+procedure TfrmPmg.InvertProc(Sender : TObject);
+var
+  x, y : byte;
+begin
+  for y := 0 to _PM_MAX_LINES - 1 do begin
+    for x := 0 to 7 do
+      fld[player, x, y] := 1 - fld[player, x, y];
+  end;
+  refreshPM(true);
+end;
+
+procedure TfrmPmg.FlipXAllProc(Sender : TObject);
+begin
+  FlipXProc(3);
+end;
+
+procedure TfrmPmg.FlipYAllProc(Sender : TObject);
+begin
+  FlipYProc(3);
+end;
+
+procedure TfrmPmg.FlipYSelectedProc(Sender : TObject);
+begin
+  FlipYProc(0);
+end;
+
+//procedure TfrmPmg.ToggleChange(Sender : TObject; tgl01, tgl02, tgl03 : TToggleBox; plSize : byte);
+//begin
+//  if Sender is TToggleBox then
+//    player := (Sender as TToggleBox).Tag;
+//  end;
+//  playerSize[player] := plSize;
+//  ReadFld(factX02, factY02);
+//end;
+(*
 procedure TfrmPmg.tglP0x1Change(Sender : TObject);
 begin
   //player := (Sender as TToggleBox).Tag;
@@ -3852,141 +3892,45 @@ begin
   //factX03 := 12;
   //playerSize[player] := _PLAYER_SIZE_NORMAL;
   //ReadFld(editorMulti, factX02, factY02);
-  ToggleChange(Sender, tglP0x1, tglP0x2, tglP0x4, _PLAYER_SIZE_NORMAL);
+//  ToggleChange(Sender, tglP0x1, tglP0x2, tglP0x4, _PLAYER_SIZE_NORMAL);
   tbPlayer0.Enabled := true;
-end;
-
-procedure TfrmPmg.tglP0x2Change(Sender : TObject);
-begin
-  //player := (Sender as TToggleBox).Tag;
-  //tglP0x1.State := cbUnchecked;
-  //tglP0x2.State := cbGrayed;
-  //tglP0x4.State := cbUnchecked;
-  //factX03 := 24;
-  //playerSize[player] := _PLAYER_SIZE_DOUBLE;
-  //ReadFld(editorMulti, factX02, factY02);
-  ToggleChange(Sender, tglP0x1, tglP0x2, tglP0x4, _PLAYER_SIZE_DOUBLE);
-  tbPlayer0.Enabled := false;
 end;
 
 procedure TfrmPmg.tglP0x4Change(Sender : TObject);
 begin
-  ToggleChange(Sender, tglP0x1, tglP0x2, tglP0x4, _PLAYER_SIZE_QUADRUPLE);
-  tbPlayer0.Enabled := false;
+//  ToggleChange(Sender, tglP0x1, tglP0x2, tglP0x4, _PLAYER_SIZE_QUADRUPLE);
+//  tbPlayer0.Enabled := false;
 end;
 
 procedure TfrmPmg.tglP1x1Change(Sender : TObject);
 begin
-  ToggleChange(Sender, tglP1x1, tglP1x2, tglP1x4, _PLAYER_SIZE_NORMAL);
-  tbPlayer1.Enabled := true;
-end;
-
-procedure TfrmPmg.tglP1x2Change(Sender : TObject);
-begin
-  ToggleChange(Sender, tglP1x1, tglP1x2, tglP1x4, _PLAYER_SIZE_DOUBLE);
-  tbPlayer1.Enabled := false;
-end;
-
-procedure TfrmPmg.tglP1x4Change(Sender : TObject);
-begin
-  ToggleChange(Sender, tglP1x1, tglP1x2, tglP1x4, _PLAYER_SIZE_QUADRUPLE);
-  tbPlayer1.Enabled := false;
+//  ToggleChange(Sender, tglP1x1, tglP1x2, tglP1x4, _PLAYER_SIZE_NORMAL);
+//  tbPlayer1.Enabled := true;
 end;
 
 procedure TfrmPmg.tglP2x1Change(Sender : TObject);
 begin
-  ToggleChange(Sender, tglP2x1, tglP2x2, tglP2x4, _PLAYER_SIZE_NORMAL);
-  tbPlayer2.Enabled := true;
+  //ToggleChange(Sender, tglP2x1, tglP2x2, tglP2x4, _PLAYER_SIZE_NORMAL);
+  //tbPlayer2.Enabled := true;
 end;
 
 procedure TfrmPmg.tglP2x2Change(Sender : TObject);
 begin
-  ToggleChange(Sender, tglP2x1, tglP2x2, tglP2x4, _PLAYER_SIZE_DOUBLE);
-  tbPlayer2.Enabled := false;
+  //ToggleChange(Sender, tglP2x1, tglP2x2, tglP2x4, _PLAYER_SIZE_DOUBLE);
+  //tbPlayer2.Enabled := false;
 end;
 
 procedure TfrmPmg.tglP2x4Change(Sender : TObject);
 begin
-  ToggleChange(Sender, tglP2x1, tglP2x2, tglP2x4, _PLAYER_SIZE_QUADRUPLE);
-  tbPlayer2.Enabled := false;
-end;
-
-procedure TfrmPmg.tglP3x1Change(Sender : TObject);
-begin
-  ToggleChange(Sender, tglP3x1, tglP3x2, tglP3x4, _PLAYER_SIZE_NORMAL);
-  tbPlayer3.Enabled := true;
-end;
-
-procedure TfrmPmg.tglP3x2Change(Sender : TObject);
-begin
-  ToggleChange(Sender, tglP3x1, tglP3x2, tglP3x4, _PLAYER_SIZE_DOUBLE);
-  tbPlayer3.Enabled := false;
+  //ToggleChange(Sender, tglP2x1, tglP2x2, tglP2x4, _PLAYER_SIZE_QUADRUPLE);
+  //tbPlayer2.Enabled := false;
 end;
 
 procedure TfrmPmg.tglP3x4Change(Sender : TObject);
 begin
-  ToggleChange(Sender, tglP3x1, tglP3x2, tglP3x4, _PLAYER_SIZE_QUADRUPLE);
-  tbPlayer3.Enabled := false;
+  //ToggleChange(Sender, tglP3x1, tglP3x2, tglP3x4, _PLAYER_SIZE_QUADRUPLE);
+  //tbPlayer3.Enabled := false;
 end;
-
-procedure TfrmPmg.editPosXMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-  X, Y : Integer);
-begin
-  tbHorizontal.Position := editPosX.Value;
-  PlayerLocation;
-end;
-
-procedure TfrmPmg.editMissilePosXMouseUp(Sender : TObject; Button : TMouseButton;
-  Shift : TShiftState; X, Y : Integer);
-begin
-  tbMissileHorizontal.Position := editMissilePosX.Value;
-  MissileLocation;
-end;
-
-procedure TfrmPmg.btnFlipXSelectedClick(Sender : TObject);
-begin
-  FlipXProc(0);
-end;
-
-procedure TfrmPmg.InvertProc(Sender : TObject);
-var
-  x, y : byte;
-begin
-  for y := 0 to _PM_MAX_LINES - 1 do
-    for x := 0 to 7 do
-      fld[player, x, y] := 1 - fld[player, x, y];
-
-  refreshPM(true);
-end;
-
-procedure TfrmPmg.btnFlipXAllClick(Sender : TObject);
-begin
-  FlipXProc(3);
-end;
-
-procedure TfrmPmg.btnFlipXAll1Click(Sender : TObject);
-begin
-  FlipYProc(3);
-end;
-
-procedure TfrmPmg.btnFlipXSelected1Click(Sender : TObject);
-begin
-  FlipYProc(0);
-end;
-
-procedure TfrmPmg.editMissilePosYMouseUp(Sender : TObject; Button : TMouseButton;
-  Shift : TShiftState; X, Y : Integer);
-begin
-  tbMissileVertical.Position := editMissilePosY.Value;
-  MissileLocation;
-end;
-
-procedure TfrmPmg.editPosYMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-  X, Y : Integer);
-begin
-  tbVertical.Position := editPosY.Value;
-  PlayerLocation;
-end;
-
+*)
 end.
 

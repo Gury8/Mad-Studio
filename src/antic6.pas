@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2023
   Unit: Text mode 1 and 2 editor
 }
 unit antic6;
@@ -11,29 +11,26 @@ unit antic6;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, strutils,
-  ExtCtrls, ComCtrls, StdCtrls, Menus, BCTrackbarUpdown, lcltype,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
+  strutils, ExtCtrls, ComCtrls, StdCtrls, Menus, lcltype,
   common;
 
 type
   { TfrmAntic6 }
   TfrmAntic6 = class(TForm)
-    btnApplyText: TButton;
-    btnClearText: TButton;
+    boxCharInfo : TGroupBox;
+    btnApplyText : TToolButton;
     btnFillScreen: TToolButton;
     btnNewScreen: TToolButton;
     btnViewer : TToolButton;
     cmbTextMode : TComboBox;
-    editTextX : TBCTrackbarUpdown;
-    editText: TLabeledEdit;
-    boxTextPos: TGroupBox;
-    editTextY : TBCTrackbarUpdown;
-    imgChar: TImage;
+    imgChar : TImage;
+    imgChar1 : TImage;
     imgEditor: TImage;
     imgFontSet: TImage;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label7: TLabel;
+    lblCharInfo01 : TLabel;
+    lblCharInfo02 : TLabel;
+    lblCharInfo03 : TLabel;
     menuAntic6: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem2 : TMenuItem;
@@ -75,7 +72,6 @@ type
     procedure DefaultsProc(Sender : TObject);
     procedure cmbTextModeChange(Sender : TObject);
     procedure WriteTextProc(Sender: TObject);
-    procedure ClearTextProc(Sender: TObject);
     procedure imgEditorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -102,19 +98,21 @@ type
     getDir : string;
     isStart : boolean;
     isExtended : boolean;
+    isEdit : boolean;
     procedure Plot(xf, yf : integer);
     procedure PutChar(scrPos, y, offset : integer);
     procedure SaveScreen;
     procedure FillScreen(character : byte);
     procedure RefreshCharX(offset : integer);
     procedure OpenFile(filename : string);
+    procedure CharInfo(offset : integer);
   public
     { public declarations }
     filename : string;
+    fontName : string;
     fldFontSet : fldFontSetType;
     fldAtascii : array[0.._TEXT_MODE_1_SIZE - 1] of byte;
     factX, factY,
-    grX02, grY02,
     factX02, factY02 : byte;
     modeSize : integer;
     modeHeight : byte;
@@ -133,7 +131,7 @@ implementation
 {$R *.lfm}
 
 uses
-  main, lib, colors, antic6_gen, viewer;
+  main, lib, colors, antic6_gen, viewer, set_values;
 
 { TfrmAntic6 }
 
@@ -143,21 +141,16 @@ begin
   btn := mbMiddle;
 
   factX := 6;
-  grX02 := 7; grY02 := 7;
   factX02 := 6; factY02 := 3;
   isStart := true;
   isExtended := false;
 
   getDir := ExtractFilePath(Application.ExeName);
-
-  SetTrackBarUpDown(editTextX, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editTextY, $00DDDDDD, clWhite);
 end;
 
 procedure TfrmAntic6.FormShow(Sender: TObject);
 begin
   propFlagModules[5] := 1;
-  isChange := true;
   frmMain.Top := 10;
   formId := formAntic6;
 
@@ -165,12 +158,14 @@ begin
   filename := getDir + 'examples\screen01.gr' + IntToStr(textMode);
   caption := programName + ' ' + programVersion +
              ' - Text mode 1 and 2 editor (' + filename + ')';
-//  statusBar.Panels[0].Text := 'Cursor coordinates: x: 0, y: 0';
-
   FillScreen(0);
-
+  isEdit := false;
   offs := 1;
   DefaultFontSet(fldFontSet);
+  RefreshCharX(offs);
+  offsAbs := offs;
+  charStatus := _CHARSET_UPPER;
+  CharInfo(offs);
   ShowFontSet;
 end;
 
@@ -203,8 +198,10 @@ end;
 
 procedure TfrmAntic6.DefaultFontProc(Sender : TObject);
 begin
+  fontName := '';
   DefaultFontSet(fldFontSet);
   RefreshData;
+  statusBar.Panels[2].Text := 'Font/Character set: default';
 end;
 
 procedure TfrmAntic6.LoadFontProc(Sender : TObject);
@@ -213,7 +210,6 @@ var
   j : integer;
   r, i : byte;
   fs : TFileStream;
-  fontname : string;
 begin
   frmMain.dlgOpen.Title := 'Open existing character set file';
   frmMain.dlgOpen.Filter := 'Character set files (*.fnt, *.fon, *.set)|*.fnt;*.fon;*.set|All files (*.*)|*.*';
@@ -234,6 +230,7 @@ begin
       // Refresh screen
       FillByte(fldChar, SizeOf(fldChar), 0);
       RefreshData;
+      statusBar.Panels[2].Text := 'Font/Character set file: ' + fontName;
     end;
   end;
 end;
@@ -293,23 +290,43 @@ var
   ch : char;
   isAtascii : boolean;
 begin
-  for i := 1 to Length(editText.Text) do begin
-    ch := editText.Text[i];
-    isAtascii := false;
-    if (ord(ch) >= 32) and (ord(ch) <= 95) then begin
-      n := ord(ch) - 32;
-      isAtascii := true;
-    end
-    else if (ord(ch) >= 97) and (ord(ch) <= 122) then begin
-      n := ord(ch);
-      isAtascii := true;
+  setValues.caption := 'Set text position dialog';
+  setValues.warningText := '';
+  setValues.editX := 3;
+  setValues.editY := 3;
+  setValues.minEditX := 0;
+  setValues.minEditY := 0;
+  setValues.maxEditX := 19;
+  setValues.maxEditY := 23;
+  setValues.editText := '';
+
+  frmSetValues := TfrmSetValues.Create(Self);
+  with frmSetValues do
+    try
+      ShowModal;
+    finally
+      Free;
     end;
-    if isAtascii then begin
-      //if editTextY.Value = 0 then
-      //  PutChar(editTextX.Value + i - 1, editTextY.Value, n)
-      //else
-      PutChar(editTextX.Value + i - 1, editTextY.Value + editTextY.Value, n);
-      fldAtascii[editTextX.Value + i - 1 + editTextY.Value*20] := n;
+
+  if setValues.valuesSet then begin
+    for i := 1 to Length(setValues.editText) do begin
+      ch := setValues.editText[i];
+      isAtascii := false;
+      if (ord(ch) >= 32) and (ord(ch) <= 95) then begin
+        n := ord(ch) - 32;
+        isAtascii := true;
+      end
+      else if (ord(ch) >= 97) and (ord(ch) <= 122) then begin
+        n := ord(ch);
+        isAtascii := true;
+      end;
+      if isAtascii then begin
+        //if editTextY.Value = 0 then
+        //  PutChar(editTextX.Value + i - 1, editTextY.Value, n)
+        //else
+        PutChar(setValues.editX + i - 1, setValues.editY + setValues.editY, n);
+        fldAtascii[setValues.editX + i - 1 + setValues.editY*20] := n;
+      end;
     end;
   end;
 end;
@@ -330,11 +347,6 @@ begin
   RefreshData;
 end;
 
-procedure TfrmAntic6.ClearTextProc(Sender: TObject);
-begin
-  editText.Text := '';
-end;
-
 procedure TfrmAntic6.imgEditorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
@@ -344,6 +356,13 @@ begin
   xf := X div factX;
   yf := Y div factY;
   Plot(xf, yf);
+
+  // Data is changed
+  if not isEdit then begin
+    isEdit := true;
+    if Pos(' *', caption) = 0 then
+      caption := caption + ' *';
+  end;
 end;
 
 procedure TfrmAntic6.imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -369,7 +388,7 @@ procedure TfrmAntic6.imgFontSetDown(Sender: TObject; Button: TMouseButton; Shift
 var
   n, m : byte;
 begin
-  for m := 0 to 8 do
+  for m := 0 to 8 do begin
     for n := 0 to 19 do begin
       if (x > 48) and (x <= 100) and (y > 24*m) and (y < 28 + 24*m) then begin
         offsY := m;
@@ -385,6 +404,7 @@ begin
         break;
       end;
     end;
+  end;
 
   // Uppercase alphabet, numbers, punctuation
   if offs <= 63 then begin
@@ -413,6 +433,8 @@ begin
     charStatus := _CHARSET_LOWER_INV;
     frmColors.SelColor := 10;
   end;
+
+  CharInfo(offs);
 
 //  statusBar.Panels[1].Text := inttostr(offs) + '/' + inttostr(offsabs);
 end;
@@ -443,6 +465,8 @@ var
   fs : TFileStream;
   dta : byte;
 begin
+  isEdit := false;
+
   fs := TFileStream.Create(Filename, fmOpenReadWrite);
   try
     // Read image data
@@ -526,6 +550,8 @@ begin
   frmMain.dlgSave.Title := 'Save text mode ' + IntToStr(textMode) + ' screen as';
   frmMain.dlgSave.Filter := filter;
 
+  isEdit := false;
+
   // Save as
   if isSaveAs then begin
     if frmMain.dlgSave.Execute then begin
@@ -565,6 +591,8 @@ begin
         fs.WriteByte(colorValues[j]);
 
       fs.WriteByte(colorValues[10]);
+
+      caption := programName + ' ' + programVersion + ' - Text mode 1 and 2 editor (' + filename + ')';
     finally
       fs.Free;
     end;
@@ -674,8 +702,8 @@ begin
       Inc(yoffset, 24);
     end;
     xoffset := offset*48;
-    for yf := 0 to grY02 do
-      for xf := 0 to grX02 do begin
+    for yf := 0 to _CHAR_DIM do
+      for xf := 0 to _CHAR_DIM do begin
         col := fldFontSet[xf, n shl 3 + yf];
 //        if col = 1 then col := 2;
 
@@ -693,15 +721,15 @@ begin
       Inc(yoffset, 24);
     end;
     xoffset := offset*48;
-    for yf := 0 to grY02 do
-      for xf := 0 to grX02 do begin
+    for yf := 0 to _CHAR_DIM do begin
+      for xf := 0 to _CHAR_DIM do begin
         col := fldFontSet[xf, n shl 3 + yf];
         if col = 1 then col := 2;
 //        col := col shl 1;
-        FillRectEx(imgFontSet, coltab[col],
-                   xf*factX02 + xoffset, yf*factY02 + yoffset, factX02, factY02);
+        FillRectEx(imgFontSet, coltab[col], xf*factX02 + xoffset, yf*factY02 + yoffset,
+                   factX02, factY02);
       end;
-
+    end;
     Inc(offset);
   end;
 
@@ -712,13 +740,14 @@ begin
       Inc(yoffset, 24);
     end;
     xoffset := offset*48;
-    for yf := 0 to grY02 do
-      for xf := 0 to grX02 do begin
+    for yf := 0 to _CHAR_DIM do begin
+      for xf := 0 to _CHAR_DIM do begin
         col := fldFontSet[xf, n shl 3 + yf];
         if col = 1 then col := 3;
-        FillRectEx(imgFontSet, coltab[col], xf*factX02 + xoffset, yf*factY02 + yoffset, factX02, factY02);
+        FillRectEx(imgFontSet, coltab[col], xf*factX02 + xoffset, yf*factY02 + yoffset,
+                   factX02, factY02);
       end;
-
+    end;
     Inc(offset);
   end;
 
@@ -729,13 +758,14 @@ begin
       Inc(yoffset, 24);
     end;
     xoffset := offset*48;
-    for yf := 0 to grY02 do
-      for xf := 0 to grX02 do begin
+    for yf := 0 to _CHAR_DIM do begin
+      for xf := 0 to _CHAR_DIM do begin
         col := fldFontSet[xf, n shl 3 + yf];
         if col = 1 then col := 10;
-        FillRectEx(imgFontSet, coltab[col], xf*factX02 + xoffset, yf*factY02 + yoffset, factX02, factY02);
+        FillRectEx(imgFontSet, coltab[col], xf*factX02 + xoffset, yf*factY02 + yoffset,
+                   factX02, factY02);
       end;
-
+    end;
     Inc(offset);
   end;
 end;
@@ -851,8 +881,8 @@ begin
   if offset <= 63 then begin
     for n := 0 to 63 do begin
       if offset = offsetx then begin
-        for yf := 0 to grY02 do
-          for xf := 0 to grX02 do begin
+        for yf := 0 to _CHAR_DIM do
+          for xf := 0 to _CHAR_DIM do begin
             col := fldFontSet[xf, n shl 3 + yf];
             FillRectEx(imgChar, coltab[col], xf*factX02, yf*factY, factX02, factY);
           end;
@@ -867,8 +897,8 @@ begin
     offsetx := 64;
     for n := 33 to 58 do begin
       if offset = offsetx then begin
-        for yf := 0 to grY02 do
-          for xf := 0 to grX02 do begin
+        for yf := 0 to _CHAR_DIM do
+          for xf := 0 to _CHAR_DIM do begin
             col := fldFontSet[xf, n shl 3 + yf];
             if col = 1 then col := 2;
 //            col := col shl 1;
@@ -885,8 +915,8 @@ begin
     offsetx := 89;
     for n := 0 to 63 do begin
       if offset = offsetx then begin
-        for yf := 0 to grY02 do
-          for xf := 0 to grX02 do begin
+        for yf := 0 to _CHAR_DIM do
+          for xf := 0 to _CHAR_DIM do begin
             col := fldFontSet[xf, n shl 3 + yf];
             if col = 1 then col := 3;
             FillRectEx(imgChar, coltab[col], xf*factX02, yf*factY, factX02, factY);
@@ -902,8 +932,8 @@ begin
     offsetx := 153;
     for n := 33 to 58 do begin
       if offset = offsetx then begin
-        for yf := 0 to grY02 do
-          for xf := 0 to grX02 do begin
+        for yf := 0 to _CHAR_DIM do
+          for xf := 0 to _CHAR_DIM do begin
             col := fldFontSet[xf, n shl 3 + yf];
             if col = 1 then col := 10;
             FillRectEx(imgChar, coltab[col], xf*factX02, yf*factY, factX02, factY);
@@ -914,25 +944,6 @@ begin
       Inc(offsetx);
     end;
   end;
-  (*
-  imgChar.Canvas.Brush.Color := coltab[0];
-  imgChar.Canvas.Brush.Style := bsSolid;
-  imgChar.Canvas.FillRect(bounds(0, 0, imgChar.Width, imgChar.Height));
-
-  offset := offset shl 3;
-
-  for yf := 0 to 7 do begin
-    for xf := 0 to 7 do begin
-      col := fldFontSet[xf, yf + offset];
-//      fldChar[xf, yf] := col;
-      imgChar.Canvas.Brush.Color := coltabFont[col];
-      imgChar.Canvas.FillRect(bounds(xf*3, yf*3, 3, 3));
-//      imgChar.Canvas.Pixels[xf*factX, yf*factY] := coltab[col];
-    end;
-  end;
-
-  imgChar.Refresh;
-  *)
 end;
 
 {-----------------------------------------------------------------------------
@@ -957,6 +968,29 @@ begin
   offs := 1;
   RefreshCharX(offs);
   frmColors.RefreshColors;
+end;
+
+{-----------------------------------------------------------------------------
+ Show character information
+ -----------------------------------------------------------------------------}
+procedure TfrmAntic6.CharInfo(offset : integer);
+var
+  n : byte;
+begin
+  if offset < 0 then begin
+    lblCharInfo01.Caption := '';
+    lblCharInfo02.Caption := '';
+    lblCharInfo03.Caption := '';
+  end
+  else begin
+    n := StrToInt(AtasciiCode(offset));
+    lblCharInfo01.Caption := 'Internal code Dec: ' + IntToStr(offset) +
+                             ' Hex: ' + Dec2hex(offset);
+    lblCharInfo02.Caption := 'Atascii code Dec: ' + IntToStr(n) +
+                             ' Hex: ' + Dec2hex(n);
+    lblCharInfo03.Caption := 'Atascii inverse Dec: ' + IntToStr(n + 128) +
+                             ' Hex: ' + Dec2hex(n + 128);
+  end;
 end;
 
 end.

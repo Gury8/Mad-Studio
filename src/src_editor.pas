@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2023
   Unit: Source code editor
 }
 unit src_editor;
@@ -145,7 +145,7 @@ begin
 
   // Set SynEdit feature for automatic markup of all occurrences of selected word
   SynMarkup := TSynEditMarkupHighlightAllCaret(
-                 editor.MarkupByClass[TSynEditMarkupHighlightAllCaret]);
+    editor.MarkupByClass[TSynEditMarkupHighlightAllCaret]);
   SynMarkup.MarkupInfo.FrameColor := clGray;
   SynMarkup.MarkupInfo.Background := clSilver;
   SynMarkup.WaitTime := 100;
@@ -157,7 +157,6 @@ end;
 procedure TfrmSrcEdit.FormShow(Sender: TObject);
 begin
   propFlagModules[0] := 1;
-  isChange := true;
 
   frmMain.Top := 0;
   formId := formSrcEdit;
@@ -169,7 +168,6 @@ begin
   //editor.Color := editorBackColor;
   //editor.LineHighlightColor := editorLineHighlightColor;
 
-//  showmessage(inttostr(editorFont.Size));
 //  editor.Font.Size := editorFont.Size;
 
 //  editorFont.Name:= 'Courier New';
@@ -256,17 +254,6 @@ begin
     cmbLanguage.ItemIndex := newLanguage;
   end;
 
-  //Atari BASIC / Turbo BASIC XL
-  //Mad Pascal
-  //Action! / Effectus
-  //FastBasic (full version)
-  //FastBasic (integer only version)
-  //Mad Assembler (MADS)
-  //CC65
-  //KickC
-  //MAC/65
-  //Other
-
   //_ATARI_BASIC    = 0;
   //_TURBO_BASIC_XL = 1;
   //_MAD_PASCAL     = 2;
@@ -312,8 +299,11 @@ begin
     3 : begin
        with cmbProp do begin
          Clear;
-         Items.Add('FastBasic (full version)');
-         Items.Add('FastBasic (integer only version)');
+         Items.Add('Floating-point support');
+         Items.Add('Integer only support');
+         Items.Add('Cartridge image (`.rom`) - floating point support');
+         Items.Add('Cartridge image (`.rom`) - integer only support');
+         Items.Add('Atari 5200 cartridge image (`.bin`) - integer only support');
          ItemIndex := 0;
        end;
        filename := getDir + 'examples\code0.bas';
@@ -359,7 +349,6 @@ begin
       for i := length(tempFilename) downto 1 do begin
 //        number := tempFilename[i];
         Inc(cnt);
-//        showmessage(tempFilename[i] + ' *** ' + inttostr(cnt));
         if not IsNumber(tempFilename[i]) then begin
           number := StrToInt(copy(tempFilename, length(tempFilename) - cnt + 2, cnt)) + 1;
           break;
@@ -817,7 +806,6 @@ begin
       end
       else begin
         AProcess.Parameters.Add(param);
-//        showmessage('2.) ' + param);
       end;
     end;
 end;
@@ -825,9 +813,15 @@ end;
 procedure TfrmSrcEdit.Compile(Sender : TObject; tagIndex : byte);
 var
   AProcess : TProcess;
-  filenameTemp, fbType : string;
+  filenameTemp : string;
+  fbType : string;
   strFastBasicUserLocation02 : string;
 begin
+  //if cmbLanguage.ItemIndex = 2 then begin
+  //  ShowMessage('Support for Effectus is currently unavailable!');
+  //  Exit;
+  //end;
+
   // Check source code file modify status
   if isEdit then begin
     SaveFileAsProc(sender);
@@ -855,6 +849,7 @@ begin
       SetParams(AProcess, propAtariBASIC, propFlagAtariBASIC);
       AProcess.Parameters.Add(AnsiQuotedStr(filename, '"'));
       AProcess.Options := AProcess.Options + [poWaitOnExit, poUsePipes];
+//      poStdErrToOutPut
       AProcess.Execute;
 
       memoMP.Lines.LoadFromStream(AProcess.Stderr);
@@ -868,22 +863,28 @@ begin
        //if isMadsAddLib_i then
        //  AProcess.Parameters.Add('-i:' + getDir + 'bin' + DirectorySeparator + 'mp' + DirectorySeparator + strMadsAddLib_i);
 
+      //{$IFDEF WIN32}
+      filenameTemp := 'mp.exe';
+      //{$ENDIF}
+      //{$IFDEF UNIX}
+      //filenameTemp := 'mp';
+      //{$ENDIF}
+
        if isMadPascalUserLocation then begin
-         AProcess.Executable := strMadPascalUserLocation + DirectorySeparator + 'mp';
+         AProcess.Executable := strMadPascalUserLocation + DirectorySeparator + filenameTemp;
 //         debug('isMadPascalUserLocation');
        end
        else begin
 //         debug('not isMadPascalUserLocation');
          AProcess.Executable := getDir + 'bin' + DirectorySeparator + 'mp' +
-                                DirectorySeparator + 'mp';
+                                DirectorySeparator + 'bin' + DirectorySeparator + filenameTemp;
        end;
 
-       //  AProcess.Parameters.Add(AnsiQuotedStr(GetCurrentDir + '\bin\roto.pas', '"'));
+//       showmessage(AProcess.Executable);
        AProcess.Parameters.Add(AnsiQuotedStr(filename, '"'));
        SetParams(AProcess, propMadPascal, propFlagMadPascal);
        AProcess.Options := AProcess.Options + [poWaitOnExit, poUsePipes];
-
-//       showmessage(AProcess.Executable);
+//     ShowMessage(AProcess.Executable + ' * ' + AProcess.Parameters.Text);
 
        AProcess.Execute;
        memoMP.Lines.LoadFromStream(AProcess.Output);
@@ -891,14 +892,13 @@ begin
 
        AProcess := TProcess.Create(nil);
 
-       if isMadPascalUserLocation then
-         AProcess.Executable := strMadsUserLocation + DirectorySeparator + 'mads'
+       if isMadsUserLocation then
+         AProcess.Executable := strMadsUserLocation + DirectorySeparator + 'mads.exe'
        else
-         AProcess.Executable := getDir + 'bin' +
-                             DirectorySeparator + 'mp' +
-                             DirectorySeparator + 'mads';
-
-//       showmessage(AProcess.Executable);
+         //AProcess.Executable := getDir + 'bin' + DirectorySeparator + 'mp' + DirectorySeparator + 'mads';
+       AProcess.Executable := getDir + 'bin' +
+                           DirectorySeparator + 'mads' +
+                           DirectorySeparator + 'mads.exe';
 
        AProcess.Parameters.Add(AnsiQuotedStr(ExtractFileNameWithoutExt(filename) + '.a65', '"'));
        SetParams(AProcess, propMadsMP, propFlagMadsMP);
@@ -913,44 +913,64 @@ begin
      ---------------------------------------------------------------------------}
     2: begin
        if isEffectusUserLocation then
-         AProcess.Executable := strEffectusUserLocation + DirectorySeparator + 'effectus'
+         AProcess.Executable := strEffectusUserLocation + DirectorySeparator + 'effectus.exe'
        else
-         AProcess.Executable := getDir + 'bin' + DirectorySeparator + 'effectus';
-
-//         ShowMessage(AProcess.Executable);
+         AProcess.Executable := getDir + 'bin' + //DirectorySeparator + 'mp' +
+           DirectorySeparator + 'effectus.exe';
 
        AProcess.Parameters.Add(AnsiQuotedStr(filename, '"'));
+       AProcess.Parameters.Add('-t');
+
 //         AProcess.Parameters.Add('-r:' + getDir + 'bin' + DirectorySeparator +
 //                                 'effectus' + DirectorySeparator + 'lib' + DirectorySeparator);
 
-       SetParams(AProcess, propEffectus, propFlagEffectus);
+//       SetParams(AProcess, propEffectus, propFlagEffectus);
 
        AProcess.Options := AProcess.Options + [poWaitOnExit, poUsePipes];
+//       ShowMessage(AProcess.Executable + ' * ' + AProcess.Parameters.Text);
        AProcess.Execute;
-       AProcess.Free;
-
+       memoMP.Lines.LoadFromStream(AProcess.Output);
+       memoMads.Lines.LoadFromStream(AProcess.Stderr);
+//       AProcess.Free;
+(*
        AProcess := TProcess.Create(nil);
 
-//         showmessage('mp');
-
+       filenameTemp := 'mp.exe';
 //         if isMadPascalUserLocation then
 //           AProcess.Executable := strMadPascalUserLocation + DirectorySeparator + 'mp'
 //         else
+//         AProcess.Executable := getDir + 'bin' + DirectorySeparator + 'mp' +
+//                                DirectorySeparator + 'mp';
+
+       if isMadPascalUserLocation then begin
+         AProcess.Executable := strMadPascalUserLocation + DirectorySeparator + filenameTemp;
+//         debug('isMadPascalUserLocation');
+       end
+       else begin
+//         debug('not isMadPascalUserLocation');
          AProcess.Executable := getDir + 'bin' + DirectorySeparator + 'mp' +
-                                DirectorySeparator + 'mp';
+                                DirectorySeparator + 'bin' + DirectorySeparator + filenameTemp;
+       end;
 
        AProcess.Parameters.Add(AnsiQuotedStr(ExtractFileNameWithoutExt(filename) + '.pas', '"'));
 
        SetParams(AProcess, propMadPascal, propFlagMadPascal);
 
+      // Parameters
+      //AProcess.Parameters.Add('-ipath:' + getDir + 'bin' + DirectorySeparator + 'mp' + DirectorySeparator + 'lib');
+
+      //if optTarget <> _TARGET_A8 then begin
+	     // AProcess.Parameters.Add('-target:' + optTarget);
+	     // //writeln('optTarget <> _TARGET_A8');
+      //end;
+
        AProcess.Options := AProcess.Options + [poWaitOnExit, poUsePipes];
-//         ShowMessage(AProcess.Executable + ' * ' + AProcess.Parameters.Text);
        AProcess.Execute;
        memoMP.Lines.LoadFromStream(AProcess.Output);
        AProcess.Free;
 
        AProcess := TProcess.Create(nil);
-
+(*
 //         if isMadPascalUserLocation then
 //           AProcess.Executable := strMadsUserLocation + DirectorySeparator + 'mads'
 //         else
@@ -964,32 +984,46 @@ begin
 
        memoMads.Lines.LoadFromStream(AProcess.Output);
 
-//         ShowMessage(AProcess.Executable + ' * ' + AProcess.Parameters.Text);
-
 //         showmessage('Param - ' + getDir + 'bin' + DirectorySeparator + 'effectus' + DirectorySeparator + 'effectus');
 //         memoMP.Lines.LoadFromStream(AProcess.Output);
 //         memoMads.Lines.LoadFromStream(AProcess.Stderr);
+*)
+       if isMadsUserLocation then
+         AProcess.Executable := strMadsUserLocation + DirectorySeparator + 'mads.exe'
+       else
+         AProcess.Executable := getDir + 'bin' +
+           DirectorySeparator + 'mads' + DirectorySeparator + 'mads.exe';
+
+       AProcess.Parameters.Add(AnsiQuotedStr(ExtractFileNameWithoutExt(filename) + '.a65', '"'));
+       SetParams(AProcess, propMadsMP, propFlagMadsMP);
+
+       AProcess.Options := AProcess.Options + [poWaitOnExit, poUsePipes];
+       AProcess.Execute;
+
+       memoMads.Lines.LoadFromStream(AProcess.Output);
+*)
      end;
     { FastBasic
      ---------------------------------------------------------------------------}
     3: begin
-       if cmbProp.ItemIndex = 0 then
-         fbType := 'fb'
-       else
-         fbType := 'fb-int';
-
-//         showmessage(inttostr(cmbProp.ItemIndex));
+      case cmbProp.ItemIndex of
+        0: fbType := '-t:atari-fp';
+        1: fbType := '-t:atari-int';
+        2: fbType := '-t:atari-cart-fp';
+        3: fbType := '-t:atari-cart-int';
+        4: fbType := '-t:atari-5200';
+      end;
 
        isFastBasicUserLocation := true;
        strFastBasicUserLocation02 := strFastBasicUserLocation +
-                                     DirectorySeparator + fbType + '.bat';
+         DirectorySeparator + 'fb.exe';
 
        AProcess.Executable := strFastBasicUserLocation02;
        AProcess.Parameters.Add(filename);
 
-//         showmessage(strFastBasicUserLocation02 + ' *** ' + filename);
-
+//       showmessage(strFastBasicUserLocation02 + ' *** ' + filename);
        SetParams(AProcess, propFastBasic, propFlagFastBasic);
+       AProcess.Parameters.Add(fbType);
 
        AProcess.Options := AProcess.Options + [poWaitOnExit, poUsePipes];
        AProcess.Execute;
@@ -1072,7 +1106,7 @@ begin
   // Clean up variables
   AProcess.Free;
 
-//  showmessage(AProcess.Parameters);
+  //  showmessage(AProcess.Parameters);
 
   // Run file in Atari emulator
   if tagIndex = 8 then begin
@@ -1097,6 +1131,7 @@ begin
       end;
     end;
   end;
+
   memoMads.Enabled := true;
 end;
 

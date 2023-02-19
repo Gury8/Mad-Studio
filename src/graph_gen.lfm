@@ -15,7 +15,7 @@ object frmGraphGen: TfrmGraphGen
   OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '2.0.10.0'
-  object grpFilename: TGroupBox
+  object boxFilename: TGroupBox
     Left = 612
     Height = 45
     Top = 120
@@ -29,55 +29,26 @@ object frmGraphGen: TfrmGraphGen
       Height = 21
       Top = 0
       Width = 191
-      OnChange = radLangProc
+      OnChange = editFilenameChange
       TabOrder = 0
       Text = 'H1:PICTURE01.MIC'
     end
   end
-  object grpColors: TGroupBox
-    Left = 612
-    Height = 81
-    Top = 180
-    Width = 212
-    Caption = 'Text window and colors'
-    ClientHeight = 63
-    ClientWidth = 208
-    TabOrder = 1
-    object chkTextWindow: TCheckBox
-      Left = 9
-      Height = 19
-      Top = 9
-      Width = 91
-      Caption = 'Text window'
-      OnClick = ListExamplesProc
-      TabOrder = 0
-    end
-    object chkAddColors: TCheckBox
-      Left = 9
-      Height = 19
-      Top = 36
-      Width = 80
-      Caption = 'Add colors'
-      Checked = True
-      State = cbChecked
-      TabOrder = 1
-    end
-  end
-  object grpMAC65Lines: TGroupBox
+  object boxMAC65Lines: TGroupBox
     Left = 612
     Height = 42
-    Top = 276
+    Top = 342
     Width = 212
     ClientHeight = 24
     ClientWidth = 208
-    TabOrder = 2
+    TabOrder = 1
     object chkMAC65Lines: TCheckBox
       Left = 9
       Height = 19
       Top = 0
       Width = 154
       Caption = 'MAC/65 line numbering'
-      OnChange = radLangProc
+      OnChange = editFilenameChange
       TabOrder = 0
     end
   end
@@ -92,7 +63,7 @@ object frmGraphGen: TfrmGraphGen
     ClientWidth = 132
     Color = clWhite
     ParentColor = False
-    TabOrder = 3
+    TabOrder = 2
     object btnAtariBASIC: TBCMDButton
       Left = 12
       Height = 20
@@ -236,7 +207,7 @@ object frmGraphGen: TfrmGraphGen
       OnClick = radLangProc
       ParentFont = False
     end
-    object btnKickC1: TBCMDButton
+    object btnMads: TBCMDButton
       Tag = 5
       Left = 12
       Height = 20
@@ -260,7 +231,7 @@ object frmGraphGen: TfrmGraphGen
       OnClick = radLangProc
       ParentFont = False
     end
-    object btnKickC2: TBCMDButton
+    object btnMac65: TBCMDButton
       Tag = 6
       Left = 12
       Height = 20
@@ -284,7 +255,7 @@ object frmGraphGen: TfrmGraphGen
       OnClick = radLangProc
       ParentFont = False
     end
-    object btnKickC3: TBCMDButton
+    object btnCC65: TBCMDButton
       Tag = 7
       Left = 12
       Height = 20
@@ -323,7 +294,7 @@ object frmGraphGen: TfrmGraphGen
     ClientWidth = 294
     Color = clWhite
     ParentColor = False
-    TabOrder = 4
+    TabOrder = 3
     ListBox.Left = 4
     ListBox.Height = 68
     ListBox.Top = 5
@@ -331,9 +302,9 @@ object frmGraphGen: TfrmGraphGen
     ListBox.Align = alClient
     ListBox.BorderStyle = bsNone
     ListBox.Items.Strings = (
-      'Picture loader (for existing file on disk)'
-      'Data values'
-      'Data values with picture loader'
+      'Screen data values'
+      'Display picture screen'
+      'Load picture from disk'
     )
     ListBox.ItemHeight = 20
     ListBox.OnClick = ListExamplesProc
@@ -362,7 +333,7 @@ object frmGraphGen: TfrmGraphGen
       'Hexadecimal'
     )
     OnClick = ListExamplesProc
-    TabOrder = 5
+    TabOrder = 4
   end
   object boxStartLine: TGroupBox
     Left = 9
@@ -371,7 +342,7 @@ object frmGraphGen: TfrmGraphGen
     Width = 132
     ClientHeight = 96
     ClientWidth = 128
-    TabOrder = 6
+    TabOrder = 5
     object lblStartLine1: TLabel
       Left = 9
       Height = 13
@@ -381,176 +352,43 @@ object frmGraphGen: TfrmGraphGen
       ParentColor = False
     end
     object lblLineStep1: TLabel
-      Left = 6
+      Left = 9
       Height = 13
       Top = 48
       Width = 99
       Caption = 'Line number step'
       ParentColor = False
     end
-    object editStartLine: TBCTrackbarUpdown
-      Left = 6
-      Height = 22
+    object editStartLine: TSpinEditEx
+      Left = 9
+      Height = 21
       Top = 12
-      Width = 70
-      AllowNegativeValues = False
-      BarExponent = 1
-      Increment = 1
-      LongTimeInterval = 400
-      MinValue = 0
+      Width = 69
+      BiDiMode = bdRightToLeft
+      BorderStyle = bsSingle
+      MaxLength = 0
+      NumbersOnly = True
+      ParentBiDiMode = False
+      TabOrder = 0
+      OnChange = ListExamplesProc
       MaxValue = 65535
       Value = 10
-      ShortTimeInterval = 100
-      Background.Color = clWindow
-      Background.Gradient1.StartColor = clWhite
-      Background.Gradient1.EndColor = clBlack
-      Background.Gradient1.GradientType = gtLinear
-      Background.Gradient1.Point1XPercent = 0
-      Background.Gradient1.Point1YPercent = 0
-      Background.Gradient1.Point2XPercent = 0
-      Background.Gradient1.Point2YPercent = 100
-      Background.Gradient2.StartColor = clWhite
-      Background.Gradient2.EndColor = clOlive
-      Background.Gradient2.GradientType = gtLinear
-      Background.Gradient2.Point1XPercent = 0
-      Background.Gradient2.Point1YPercent = 0
-      Background.Gradient2.Point2XPercent = 0
-      Background.Gradient2.Point2YPercent = 100
-      Background.Gradient2.Sinus = True
-      Background.Gradient1EndPercent = 35
-      Background.Style = bbsColor
-      ButtonBackground.Gradient1.StartColor = clBtnShadow
-      ButtonBackground.Gradient1.EndColor = clBtnFace
-      ButtonBackground.Gradient1.GradientType = gtLinear
-      ButtonBackground.Gradient1.Point1XPercent = 0
-      ButtonBackground.Gradient1.Point1YPercent = -50
-      ButtonBackground.Gradient1.Point2XPercent = 0
-      ButtonBackground.Gradient1.Point2YPercent = 50
-      ButtonBackground.Gradient1.Sinus = True
-      ButtonBackground.Gradient2.StartColor = clBtnFace
-      ButtonBackground.Gradient2.EndColor = clBtnShadow
-      ButtonBackground.Gradient2.GradientType = gtLinear
-      ButtonBackground.Gradient2.Point1XPercent = 0
-      ButtonBackground.Gradient2.Point1YPercent = 50
-      ButtonBackground.Gradient2.Point2XPercent = 0
-      ButtonBackground.Gradient2.Point2YPercent = 150
-      ButtonBackground.Gradient2.Sinus = True
-      ButtonBackground.Gradient1EndPercent = 50
-      ButtonBackground.Style = bbsGradient
-      ButtonDownBackground.Color = clBtnShadow
-      ButtonDownBackground.Gradient1.StartColor = clWhite
-      ButtonDownBackground.Gradient1.EndColor = clBlack
-      ButtonDownBackground.Gradient1.GradientType = gtLinear
-      ButtonDownBackground.Gradient1.Point1XPercent = 0
-      ButtonDownBackground.Gradient1.Point1YPercent = 0
-      ButtonDownBackground.Gradient1.Point2XPercent = 0
-      ButtonDownBackground.Gradient1.Point2YPercent = 100
-      ButtonDownBackground.Gradient2.StartColor = clWhite
-      ButtonDownBackground.Gradient2.EndColor = clBlack
-      ButtonDownBackground.Gradient2.GradientType = gtLinear
-      ButtonDownBackground.Gradient2.Point1XPercent = 0
-      ButtonDownBackground.Gradient2.Point1YPercent = 0
-      ButtonDownBackground.Gradient2.Point2XPercent = 0
-      ButtonDownBackground.Gradient2.Point2YPercent = 100
-      ButtonDownBackground.Gradient1EndPercent = 35
-      ButtonDownBackground.Style = bbsColor
-      Border.Color = clWindowText
-      Border.ColorOpacity = 100
-      Border.Style = bboSolid
-      Rounding.RoundX = 4
-      Rounding.RoundY = 4
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Verdana'
-      HasTrackBar = True
-      ArrowColor = clBlack
-      TabOrder = 0
-      TabStop = True
-      UseDockManager = False
-      OnMouseLeave = ListExamplesProc
-      OnMouseUp = editStartLineMouseUp
     end
-    object editLineStep: TBCTrackbarUpdown
-      Left = 6
-      Height = 22
+    object editLineStep: TSpinEditEx
+      Left = 9
+      Height = 21
       Top = 66
-      Width = 70
-      AllowNegativeValues = False
-      BarExponent = 1
-      Increment = 1
-      LongTimeInterval = 400
-      MinValue = 1
-      MaxValue = 1000
-      Value = 10
-      ShortTimeInterval = 100
-      Background.Color = clWindow
-      Background.Gradient1.StartColor = clWhite
-      Background.Gradient1.EndColor = clBlack
-      Background.Gradient1.GradientType = gtLinear
-      Background.Gradient1.Point1XPercent = 0
-      Background.Gradient1.Point1YPercent = 0
-      Background.Gradient1.Point2XPercent = 0
-      Background.Gradient1.Point2YPercent = 100
-      Background.Gradient2.StartColor = clWhite
-      Background.Gradient2.EndColor = clOlive
-      Background.Gradient2.GradientType = gtLinear
-      Background.Gradient2.Point1XPercent = 0
-      Background.Gradient2.Point1YPercent = 0
-      Background.Gradient2.Point2XPercent = 0
-      Background.Gradient2.Point2YPercent = 100
-      Background.Gradient2.Sinus = True
-      Background.Gradient1EndPercent = 35
-      Background.Style = bbsColor
-      ButtonBackground.Gradient1.StartColor = clBtnShadow
-      ButtonBackground.Gradient1.EndColor = clBtnFace
-      ButtonBackground.Gradient1.GradientType = gtLinear
-      ButtonBackground.Gradient1.Point1XPercent = 0
-      ButtonBackground.Gradient1.Point1YPercent = -50
-      ButtonBackground.Gradient1.Point2XPercent = 0
-      ButtonBackground.Gradient1.Point2YPercent = 50
-      ButtonBackground.Gradient1.Sinus = True
-      ButtonBackground.Gradient2.StartColor = clBtnFace
-      ButtonBackground.Gradient2.EndColor = clBtnShadow
-      ButtonBackground.Gradient2.GradientType = gtLinear
-      ButtonBackground.Gradient2.Point1XPercent = 0
-      ButtonBackground.Gradient2.Point1YPercent = 50
-      ButtonBackground.Gradient2.Point2XPercent = 0
-      ButtonBackground.Gradient2.Point2YPercent = 150
-      ButtonBackground.Gradient2.Sinus = True
-      ButtonBackground.Gradient1EndPercent = 50
-      ButtonBackground.Style = bbsGradient
-      ButtonDownBackground.Color = clBtnShadow
-      ButtonDownBackground.Gradient1.StartColor = clWhite
-      ButtonDownBackground.Gradient1.EndColor = clBlack
-      ButtonDownBackground.Gradient1.GradientType = gtLinear
-      ButtonDownBackground.Gradient1.Point1XPercent = 0
-      ButtonDownBackground.Gradient1.Point1YPercent = 0
-      ButtonDownBackground.Gradient1.Point2XPercent = 0
-      ButtonDownBackground.Gradient1.Point2YPercent = 100
-      ButtonDownBackground.Gradient2.StartColor = clWhite
-      ButtonDownBackground.Gradient2.EndColor = clBlack
-      ButtonDownBackground.Gradient2.GradientType = gtLinear
-      ButtonDownBackground.Gradient2.Point1XPercent = 0
-      ButtonDownBackground.Gradient2.Point1YPercent = 0
-      ButtonDownBackground.Gradient2.Point2XPercent = 0
-      ButtonDownBackground.Gradient2.Point2YPercent = 100
-      ButtonDownBackground.Gradient1EndPercent = 35
-      ButtonDownBackground.Style = bbsColor
-      Border.Color = clWindowText
-      Border.ColorOpacity = 100
-      Border.Style = bboSolid
-      Rounding.RoundX = 4
-      Rounding.RoundY = 4
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Verdana'
-      HasTrackBar = True
-      ArrowColor = clWindowText
+      Width = 69
+      BiDiMode = bdRightToLeft
+      BorderStyle = bsSingle
+      MaxLength = 0
+      NumbersOnly = True
+      ParentBiDiMode = False
       TabOrder = 1
-      TabStop = True
-      UseDockManager = False
-      OnMouseLeave = ListExamplesProc
-      OnMouseUp = editStartLineMouseUp
+      OnChange = ListExamplesProc
+      MaxValue = 1000
+      MinValue = 1
+      Value = 10
     end
   end
   object memo: TMemo
@@ -563,7 +401,7 @@ object frmGraphGen: TfrmGraphGen
     Font.Name = 'Courier New'
     ParentFont = False
     ScrollBars = ssAutoBoth
-    TabOrder = 7
+    TabOrder = 6
     WordWrap = False
   end
   object btnCopyToEditor: TBCMaterialDesignButton
@@ -604,7 +442,7 @@ object frmGraphGen: TfrmGraphGen
     Font.Height = -9
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 8
+    TabOrder = 7
   end
   object StaticText2: TStaticText
     Left = 150
@@ -616,7 +454,7 @@ object frmGraphGen: TfrmGraphGen
     Font.Height = -9
     Font.Name = 'Verdana'
     ParentFont = False
-    TabOrder = 9
+    TabOrder = 8
   end
   object StaticText3: TStaticText
     Left = 612
@@ -628,6 +466,106 @@ object frmGraphGen: TfrmGraphGen
     Font.Height = -9
     Font.Name = 'Verdana'
     ParentFont = False
+    TabOrder = 9
+  end
+  object boxColors: TGroupBox
+    Left = 612
+    Height = 120
+    Top = 210
+    Width = 294
+    Caption = 'Color registers'
+    ClientHeight = 102
+    ClientWidth = 290
     TabOrder = 10
+    object chkUseColors: TCheckBox
+      Left = 12
+      Height = 19
+      Top = 78
+      Width = 183
+      Caption = 'Use colors in program listing'
+      Checked = True
+      OnClick = editFilenameChange
+      State = cbChecked
+      TabOrder = 0
+    end
+    object Label2: TLabel
+      Left = 138
+      Height = 13
+      Top = 12
+      Width = 48
+      Caption = 'COLOR0'
+      ParentColor = False
+    end
+    object color0: TShape
+      Left = 12
+      Height = 23
+      Top = 6
+      Width = 24
+    end
+    object Label3: TLabel
+      Left = 44
+      Height = 13
+      Top = 43
+      Width = 48
+      Caption = 'COLOR1'
+      ParentColor = False
+    end
+    object color1: TShape
+      Left = 106
+      Height = 23
+      Top = 6
+      Width = 24
+    end
+    object Label4: TLabel
+      Left = 138
+      Height = 13
+      Top = 43
+      Width = 48
+      Caption = 'COLOR2'
+      ParentColor = False
+    end
+    object color2: TShape
+      Left = 12
+      Height = 23
+      Top = 36
+      Width = 24
+    end
+    object Label7: TLabel
+      Left = 234
+      Height = 13
+      Top = 43
+      Width = 48
+      Caption = 'COLOR3'
+      ParentColor = False
+    end
+    object color3: TShape
+      Left = 106
+      Height = 23
+      Top = 36
+      Width = 24
+    end
+    object Label8: TLabel
+      Left = 44
+      Height = 13
+      Top = 11
+      Width = 48
+      Caption = 'COLOR4'
+      ParentColor = False
+    end
+    object color4: TShape
+      Left = 202
+      Height = 23
+      Top = 36
+      Width = 24
+    end
+  end
+  object chkTextWindow: TCheckBox
+    Left = 624
+    Height = 19
+    Top = 174
+    Width = 91
+    Caption = 'Text window'
+    OnClick = editFilenameChange
+    TabOrder = 11
   end
 end

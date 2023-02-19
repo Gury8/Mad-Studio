@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2023
   Unit: Antic mode 3 editor
 }
 unit antic3;
@@ -18,6 +18,7 @@ uses
 type
   { TfrmAntic3 }
   TfrmAntic3 = class(TForm)
+    btnApplyText : TToolButton;
     btnCharDown : TSpeedButton;
     btnCharLeft : TSpeedButton;
     btnCharRight : TSpeedButton;
@@ -55,6 +56,9 @@ type
     Label7: TLabel;
     Label8: TLabel;
     Label9: TLabel;
+    lblCharInfo01 : TLabel;
+    lblCharInfo02 : TLabel;
+    lblCharInfo03 : TLabel;
     lblNum0: TLabel;
     lblNum1: TLabel;
     lblNum2: TLabel;
@@ -65,7 +69,6 @@ type
     lblNum7: TLabel;
     lblNum8: TLabel;
     lblNum9: TLabel;
-    memoInfo: TMemo;
     menuAntic3: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem15: TMenuItem;
@@ -98,11 +101,12 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormKeyDown(Sender : TObject; var Key : Word; Shift : TShiftState);
     procedure CharOper(Sender : TObject);
+    procedure ApplyTextProc(Sender : TObject);
     procedure MoveCharDown(Sender: TObject);
     procedure MoveCharLeft(Sender: TObject);
     procedure MoveCharRight(Sender: TObject);
     procedure MoveCharUp(Sender: TObject);
-    procedure lblNum0Click(Sender: TObject);
+    procedure NumCalcProc(Sender: TObject);
     procedure ShiftCharDownProc(Sender: TObject);
     procedure ShiftCharLeftProc(Sender: TObject);
     procedure ShiftCharRightProc(Sender: TObject);
@@ -124,9 +128,7 @@ type
     procedure imgFontSetDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure LoadScreenProc(Sender: TObject);
-    procedure itemLoadFontClick(Sender: TObject);
-    procedure itemSaveFontClick(Sender: TObject);
-    procedure itemSetDefaultFontClick(Sender: TObject);
+    procedure SetDefaultFontProc(Sender: TObject);
     procedure NewScreenProc(Sender: TObject);
     procedure SaveScreenAsProc(Sender: TObject);
     procedure SaveScreenProc(Sender: TObject);
@@ -140,6 +142,7 @@ type
     isSaveAs : boolean;
     isFontSetNormal : boolean;
     isCreate : boolean;
+    isEdit : boolean;
     procedure ShowFontSet;
     procedure Plot(xf, yf : integer);
     procedure PutChar(scrPos, y, offset : integer);
@@ -152,6 +155,7 @@ type
     procedure ShapeClear(image : TImage; fcolor : TColor);
     procedure ShowBinValues;
     procedure RefreshData;
+    procedure CharInfo(offset : integer);
   public
     filename : string;
     fontFilename : string;
@@ -177,7 +181,7 @@ implementation
 {$R *.lfm}
 
 uses
-  main, lib, antic3_gen;
+  main, lib, antic3_gen, set_values;
 
 { TfrmAntic3 }
 
@@ -197,7 +201,6 @@ var
   i : byte;
 begin
   propFlagModules[10] := 1;
-  isChange := true;
   frmMain.Top := 10;
   formId := formAntic3;
 
@@ -217,15 +220,19 @@ begin
   factX04 := 24; factY04 := 24;
   grX := 7; grY := 7;
   SetXY(39, 19);
-  offs := 1;
+
+  isEdit := false;
   isFontSetNormal := true;
   ShowFontSet;
 
   FillScreen(0);
   isCreate := false;
 
-  imgChar.Visible := true;
+//  imgChar.Visible := true;
   imgFontSetDown(self, mbLeft, [ssMiddle], 3, 3);
+
+  offs := 1;
+  RefreshCharX(offs);
 
   for i := 0 to 9 do
     (FindComponent('lblNum' + IntToStr(i)) as TLabel).Caption := '0';
@@ -370,6 +377,13 @@ begin
   xf := X div factX;
   yf := Y div factY;
   Plot(xf, yf);
+
+  // Data is changed
+  if not isEdit then begin
+    isEdit := true;
+    if Pos(' *', caption) = 0 then
+      caption := caption + ' *';
+  end;
 end;
 
 procedure TfrmAntic3.imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -404,7 +418,7 @@ begin
   else
     isFontSetNormal := false;
 
-  for m := 0 to 7 do
+  for m := 0 to 7 do begin
     for n := 0 to 15 do begin
       if (x > 17) and (x <= 24) and (y > 20*m) and (y < 28 + 20*m) then begin
         offsY := m; offsX := 1;
@@ -420,29 +434,77 @@ begin
         break;
       end;
     end;
-
-  with memoInfo do begin
-    Clear;
-
-    // Calculate code number
-    atascii := AtasciiCode(offs);
-    n := StrToInt(atascii);
-    m := offs;
-    Lines.Add('Internal code Dec: ' + IntToStr(m) + ' Hex: ' + Dec2hex(m));
-    Lines.Add('Atascii code Dec: ' + atascii + ' Hex: ' + Dec2hex(n));
-    if not isFontSetNormal then
-      Lines.Add('Inverse character value + 128');
   end;
+
+  //with memoInfo do begin
+  //  Clear;
+  //
+  //  // Calculate code number
+  //  atascii := AtasciiCode(offs);
+  //  n := StrToInt(atascii);
+  //  m := offs;
+  //  Lines.Add('Internal code Dec: ' + IntToStr(m) + ' Hex: ' + Dec2hex(m));
+  //  Lines.Add('Atascii code Dec: ' + atascii + ' Hex: ' + Dec2hex(n));
+  //  if not isFontSetNormal then
+  //    Lines.Add('Inverse character value + 128');
+  //end;
 
 //  PlotChar(255, 255);
 end;
 
-procedure TfrmAntic3.CloseWinProc(Sender: TObject);
+procedure TfrmAntic3.ApplyTextProc(Sender : TObject);
+var
+  i, n : byte;
+  ch : char;
+  isAtascii : boolean;
 begin
-  Close;
+  setValues.caption := 'Set text position dialog';
+  setValues.warningText := '';
+  setValues.editX := 3;
+  setValues.editY := 3;
+  setValues.minEditX := 0;
+  setValues.minEditY := 0;
+  setValues.maxEditX := 39;
+  setValues.maxEditY := 23;
+  setValues.editText := '';
+
+  frmSetValues := TfrmSetValues.Create(Self);
+  with frmSetValues do
+    try
+      ShowModal;
+    finally
+      Free;
+    end;
+
+  if setValues.valuesSet then begin
+  //  showmessage(chr(97) + ' ' + inttostr(ord('b')));  // A 65
+
+    for i := 1 to Length(setValues.editText) do begin
+      ch := setValues.editText[i];
+      isAtascii := false;
+
+      if (ord(ch) >= 32) and (ord(ch) <= 95) then begin
+        n := ord(ch) - 32;
+        isAtascii := true;
+      end
+      else if (ord(ch) >= 97) and (ord(ch) <= 122) then begin
+        n := ord(ch);
+        isAtascii := true;
+      end;
+
+      if isAtascii then begin
+        if setValues.editY = 0 then
+          PutChar(setValues.editX + i - 1, setValues.editY, n)
+        else
+          PutChar(setValues.editX + i - 1, setValues.editY + setValues.editY, n);
+
+        fldAtascii[setValues.editX + i - 1 + setValues.editY*(maxX + 1)] := n;
+      end;
+    end;
+  end;
 end;
 
-procedure TfrmAntic3.lblNum0Click(Sender: TObject);
+procedure TfrmAntic3.NumCalcProc(Sender: TObject);
 var
   dataValue, i, j : byte;
   bin : string;
@@ -627,6 +689,8 @@ var
   j : integer;
   fs : TFileStream;
 begin
+  isEdit := false;
+
   // Save as
   if isSaveAs then begin
     frmMain.dlgSave.Title := 'Save Antic mode 3 screen as';
@@ -655,6 +719,8 @@ begin
     try
       for j := 0 to maxSize do
         fs.WriteByte(fldAtascii[j]);
+
+      caption := programName + ' ' + programVersion + ' - Antic mode 3 editor (' + filename + ')';
     finally
       fs.Free;
     end;
@@ -689,6 +755,8 @@ var
   j, r, m : integer;
   fs : TFileStream;
 begin
+  isEdit := false;
+
   frmMain.dlgOpen.Title := 'Open existing Antic mode 3 screen file';
   frmMain.dlgOpen.Filter := 'Antic mode 3 screen files (*.an3)|*.an3|All files (*.*)|*.*';
   if frmMain.dlgOpen.Execute then begin
@@ -720,18 +788,18 @@ begin
   end;
 end;
 
-procedure TfrmAntic3.itemLoadFontClick(Sender: TObject);
-begin
-  LoadFontProc(Sender);
-  RefreshData;
-end;
+//procedure TfrmAntic3.itemLoadFontClick(Sender: TObject);
+//begin
+//  LoadFontProc(Sender);
+//  RefreshData;
+//end;
+//
+//procedure TfrmAntic3.itemSaveFontClick(Sender: TObject);
+//begin
+//  SaveFontProc(Sender);
+//end;
 
-procedure TfrmAntic3.itemSaveFontClick(Sender: TObject);
-begin
-  SaveFontProc(Sender);
-end;
-
-procedure TfrmAntic3.itemSetDefaultFontClick(Sender: TObject);
+procedure TfrmAntic3.SetDefaultFontProc(Sender: TObject);
 begin
   DefaultFontSet(fldFontSet);
   ShowFontSet;
@@ -835,7 +903,7 @@ begin
         break;
       end;
 
-  if offset > 128 then begin
+  if offset >= 128 then begin
     Dec(offset, 128);
     isInverse := true;
   end;
@@ -865,7 +933,7 @@ begin
   ShapeClear(imgChar, colTab[0]);
   ShapeClear(imgCharEdit, colTab[0]);
 
-  for yf := 0 to grY02 do
+  for yf := 0 to grY02 do begin
     for xf := 0 to grX02 do begin
       //col := fldFontSet[xf, yf + offset];
       col := fld[xf, offset*10 + yf];
@@ -876,9 +944,11 @@ begin
       FillRectEx(imgChar, coltabFont[col], xf*factX03, yf*factY03, factX03, factY03);
       FillRectEx(imgCharEdit, coltabFont[col], xf*factX04, yf*factY04, factX04, factY04);
     end;
+  end;
 
   imgChar.Refresh;
   imgCharEdit.Refresh;
+  CharInfo(offset);
 end;
 
 procedure TfrmAntic3.DrawFontSetChar(offset : byte);
@@ -1021,12 +1091,13 @@ begin
 //  offset := offset shl 4;
 //  showmessage(inttostr(offs));
 
-  for yf := 0 to grY + 2 do
+  for yf := 0 to grY + 2 do begin
     for xf := 0 to grX do begin
       col := fldChar[xf, yf];
 //      fld[xf, yf + offs shl 3] := col;
       FillRectEx(imgCharEdit, coltabFont[col], xf*factX04, yf*factY04, factX04, factY04);
     end;
+  end;
 
   imgCharEdit.Refresh;
   ShowBinValues;
@@ -1204,6 +1275,34 @@ begin
   end;
 //  FillByte(fldChar, SizeOf(fldChar), 0);
   RefreshCharX(0);
+end;
+
+{-----------------------------------------------------------------------------
+ Show character information
+ -----------------------------------------------------------------------------}
+procedure TfrmAntic3.CharInfo(offset : integer);
+var
+  n : byte;
+begin
+  if offset < 0 then begin
+    lblCharInfo01.Caption := '';
+    lblCharInfo02.Caption := '';
+    lblCharInfo03.Caption := '';
+  end
+  else begin
+    n := StrToInt(AtasciiCode(offset));
+    lblCharInfo01.Caption := 'Internal code Dec: ' + IntToStr(offset) +
+                             ' Hex: ' + Dec2hex(offset);
+    lblCharInfo02.Caption := 'Atascii code Dec: ' + IntToStr(n) +
+                             ' Hex: ' + Dec2hex(n);
+    lblCharInfo03.Caption := 'Atascii inverse Dec: ' + IntToStr(n + 128) +
+                             ' Hex: ' + Dec2hex(n + 128);
+  end;
+end;
+
+procedure TfrmAntic3.CloseWinProc(Sender: TObject);
+begin
+  Close;
 end;
 
 end.

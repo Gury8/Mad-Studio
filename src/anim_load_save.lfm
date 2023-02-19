@@ -1,12 +1,12 @@
 object frmAnimLoadSave: TfrmAnimLoadSave
   Left = 445
-  Height = 329
+  Height = 330
   Top = 238
   Width = 392
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Load Atari Player data file'
-  ClientHeight = 329
+  ClientHeight = 330
   ClientWidth = 392
   Font.Height = -11
   Font.Name = 'Verdana'
@@ -14,16 +14,7 @@ object frmAnimLoadSave: TfrmAnimLoadSave
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
-  object btnClose: TButton
-    Left = 306
-    Height = 25
-    Top = 294
-    Width = 75
-    Caption = 'Close'
-    OnClick = CloseProc
-    TabOrder = 0
-  end
+  LCLVersion = '2.0.10.0'
   object chkFrames: TCheckGroup
     Left = 12
     Height = 185
@@ -62,7 +53,7 @@ object frmAnimLoadSave: TfrmAnimLoadSave
       'Copy buffer'
     )
     OnItemClick = FramesItemProc
-    TabOrder = 1
+    TabOrder = 0
     Data = {
       110000000202020202020202020202020202020202
     }
@@ -75,7 +66,7 @@ object frmAnimLoadSave: TfrmAnimLoadSave
     Caption = 'Load all data'
     Checked = True
     OnChange = AllDataChange
-    TabOrder = 4
+    TabOrder = 2
     TabStop = True
   end
   object radLayer1Data: TRadioButton
@@ -84,16 +75,7 @@ object frmAnimLoadSave: TfrmAnimLoadSave
     Top = 40
     Width = 181
     Caption = 'Load layer 1 data (player 0)'
-    TabOrder = 2
-  end
-  object btnLoad: TButton
-    Left = 12
-    Height = 25
-    Top = 294
-    Width = 75
-    Caption = 'Load'
-    OnClick = LoadDataProc
-    TabOrder = 3
+    TabOrder = 1
   end
   object radLayer2Data: TRadioButton
     Left = 12
@@ -101,6 +83,34 @@ object frmAnimLoadSave: TfrmAnimLoadSave
     Top = 68
     Width = 181
     Caption = 'Load layer 2 data (player 1)'
-    TabOrder = 5
+    TabOrder = 3
+  end
+  object btnCopyToEditor: TBCMaterialDesignButton
+    Left = 6
+    Height = 30
+    Top = 294
+    Width = 105
+    TextSize = 12
+    TextShadow = False
+    TextFont = 'default'
+    TextQuality = fqSystemClearType
+    Caption = 'Load'
+    OnClick = LoadDataProc
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
+  end
+  object btnClose: TBCMaterialDesignButton
+    Left = 282
+    Height = 30
+    Top = 294
+    Width = 105
+    TextSize = 12
+    TextShadow = False
+    TextFont = 'default'
+    TextQuality = fqSystemClearType
+    Caption = 'Close'
+    OnClick = CloseProc
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
 end

@@ -11,8 +11,8 @@ unit dl_gen;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, lcltype,
-  ExtCtrls, BCTrackbarUpdown, BCListBox, BCMDButton, BCMaterialDesignButton, Windows,
+  Classes, SysUtils, FileUtil, SpinEx, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  lcltype, ExtCtrls, BCListBox, BCMDButton, BCMaterialDesignButton, Windows,
   common;
 
 type
@@ -28,12 +28,12 @@ type
     btnMadPascal : TBCMDButton;
     btnTurboBasicXL : TBCMDButton;
     editAddrHex: TLabel;
-    editAddrDec : TBCTrackbarUpdown;
-    editLineStep : TBCTrackbarUpdown;
-    editLowByte : TBCTrackbarUpdown;
+    editAddrDec : TSpinEditEx;
+    editLineStep : TSpinEditEx;
     box: TGroupBox;
-    editHighByte : TBCTrackbarUpdown;
-    editStartLine : TBCTrackbarUpdown;
+    editHighByte : TSpinEditEx;
+    editStartLine : TSpinEditEx;
+    editLowByte : TSpinEditEx;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
@@ -44,9 +44,9 @@ type
     memo : TMemo;
     panelLang : TBCPaperPanel;
     radDataType : TRadioGroup;
-    StaticText1 : TStaticText;
-    StaticText2 : TStaticText;
-    StaticText3 : TStaticText;
+    lblLang : TStaticText;
+    lblCode : TStaticText;
+    lblExamples : TStaticText;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -55,10 +55,6 @@ type
     procedure editAddrDecChange(Sender: TObject);
     procedure listExamplesProc(Sender: TObject);
     procedure radLangProc(Sender: TObject);
-    procedure editAddrDecMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
-    procedure editStartLineMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
     procedure ButtonHoverEnter(Sender : TObject);
     procedure ButtonHoverLeave(Sender : TObject);
   private
@@ -66,8 +62,6 @@ type
     listings : TListings;
     procedure CreateCode;
     function Example01 : string;
-  public
-    { public declarations }
   end;
 
 var
@@ -84,18 +78,10 @@ uses
 
 procedure TfrmDisplayListGen.FormCreate(Sender: TObject);
 begin
-  // Example 1
-  listings[0, 0] := true;
-  listings[0, 1] := true;
-  listings[0, 2] := true;
-  listings[0, 3] := true;
-  listings[0, 4] := true;
+  SetListings(listings);
 
-  SetTrackBarUpDown(editStartLine, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editLineStep, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editAddrDec, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editLowByte, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editHighByte, $00DDDDDD, clWhite);
+  // Example 1
+  listings[0, 8] := false;
 end;
 
 procedure TfrmDisplayListGen.FormShow(Sender: TObject);
@@ -140,10 +126,15 @@ end;
 
 procedure TfrmDisplayListGen.listExamplesProc(Sender: TObject);
 begin
-  //for i := 0 to radLang.Items.Count - 1 do
-  //  radLang.Controls[i].Enabled := listings[ListExamples.ItemIndex, i];
-  //
-  //radLang.ItemIndex := langIndex;
+  if listExamples.ListBox.ItemIndex < 0 then exit;
+
+  btnAtariBASIC.Enabled := listings[listExamples.ListBox.ItemIndex, 0];
+  btnTurboBasicXL.Enabled := listings[listExamples.ListBox.ItemIndex, 1];
+  btnMadPascal.Enabled := listings[listExamples.ListBox.ItemIndex, 2];
+  btnEffectus.Enabled := listings[listExamples.ListBox.ItemIndex, 3];
+  btnFastBasic.Enabled := listings[listExamples.ListBox.ItemIndex, 4];
+  btnKickC.Enabled := listings[listExamples.ListBox.ItemIndex, 8];
+
   CreateCode;
 end;
 
@@ -161,33 +152,39 @@ procedure TfrmDisplayListGen.CreateCode;
 var
   code : string;
 begin
-  boxStartLine.Enabled := langIndex < 2;
-  boxStartLine.Visible := boxStartLine.Enabled;
+//  boxStartLine.Enabled := langIndex < 2;
+//  boxStartLine.Visible := boxStartLine.Enabled;
+//
+//  if langIndex = 0 then begin
+//    radDataType.ItemIndex := 0;
+//    TRadioButton(radDataType.Controls[1]).Enabled := false;
+////    TRadioButton(radDataType.Controls[2]).Enabled := false;
+//  end
+//  else begin
+//    TRadioButton(radDataType.Controls[1]).Enabled := true;
+////    TRadioButton(radDataType.Controls[2]).Enabled := true;
+//  end;
 
-  if langIndex = 0 then begin
-    radDataType.ItemIndex := 0;
-    TRadioButton(radDataType.Controls[1]).Enabled := false;
-//    TRadioButton(radDataType.Controls[2]).Enabled := false;
-  end
-  else begin
-    TRadioButton(radDataType.Controls[1]).Enabled := true;
-//    TRadioButton(radDataType.Controls[2]).Enabled := true;
-  end;
-
-  memo.Lines.Clear;
+  Set01(boxStartLine, langIndex, radDataType, false);
 
   case ListExamples.ListBox.ItemIndex of
     0: code := Example01;
   end;
 
-  memo.Lines.Add(code);
+  //memo.Lines.Clear;
+  //memo.Lines.Add(code);
+  //
+  //// Set cursor position at the top of memo object
+  //memo.SelStart := 0;
+  //memo.SelLength := 0;
+  //SendMessage(memo.Handle, EM_SCROLLCARET, 0, 0);
 
-  // Set cursor position at the top of memo object
-  memo.SelStart := 0;
-  memo.SelLength := 0;
-  SendMessage(memo.Handle, EM_SCROLLCARET, 0, 0);
+  Set02(memo, code);
 end;
 
+{-----------------------------------------------------------------------------
+ Display list example
+ -----------------------------------------------------------------------------}
 function TfrmDisplayListGen.Example01 : string;
 var
   i : Integer = 0;
@@ -195,7 +192,6 @@ var
   strAction : string = '';
   strBASIC : string = '';
   savmsc, savmsc02 : string;
-//  nmien : string;
   dlist : string;
   ch : string;
   LMARGN : string;
@@ -227,7 +223,10 @@ begin
   if langIndex = _ATARI_BASIC then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-    code.line := CodeLine('REM DISPLAY LIST EXAMPLE') +
+    code.line := CodeLine(_REM) +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Display list example') +
+                 CodeLine(_REM) +
                  CodeLine('GRAPHICS 0') +
                  CodeLine('DL=PEEK(560)+PEEK(561)*256') +
                  CodeLine('LO=PEEK(DL+4)') +
@@ -251,7 +250,10 @@ begin
   else if langIndex = _TURBO_BASIC_XL then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-    code.line := CodeLine('REM DISPLAY LIST EXAMPLE') +
+    code.line := CodeLine('--') +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Display list example') +
+                 CodeLine('--') +
                  CodeLine('GRAPHICS %0') +
                  CodeLine('DL=DPEEK(560)') +
                  CodeLine('LO=PEEK(DL+4)') +
@@ -273,8 +275,9 @@ begin
   { Action!
    ---------------------------------------------------------------------------}
   else if langIndex = _ACTION then begin
-    code.line := '; Display list example' +
-                 #13#10'BYTE ARRAY DL=[' +  //#13#10 +
+    code.line := ';' + _REM_MAD_STUDIO + #13#10 +
+                 '; Display list example'#13#10#13#10 +
+                 'BYTE ARRAY DL=[' +  //#13#10 +
                  strAction;
     if radDataType.ItemIndex = 0 then
       code.line += ' 65]'
@@ -314,22 +317,18 @@ begin
                  '  POKE(' + LMARGN + ',0)'#13#10 +
                  '  PRINTE("Display list example")'#13#10 +
                  'OD'#13#10 +
-                 //#13#10 +
-                 //'CH=255'#13#10 +
-                 //'DO UNTIL CH#255 OD'#13#10 +
-                 //'CH=255'#13#10 +
                  WaitKeyCode(langIndex) +
                  #13#10'RETURN';
   end
   { Mad Pascal
    ---------------------------------------------------------------------------}
   else if langIndex = _MAD_PASCAL then begin
-    code.line :=
-      '// Display list example' +
-      #13#10'uses crt, graph;'#13#10#13#10 +
-      'const'#13#10 +
-      '  dl : array [0..' + IntToStr(i + 2) + '] of byte = ('#13#10 +
-      '    ' + str;
+    code.line := '//' + _REM_MAD_STUDIO + #13#10 +
+                 '// Display list example'#13#10#13#10 +
+                 'uses crt, graph;'#13#10#13#10 +
+                 'const'#13#10 +
+                 '  dl : array [0..' + IntToStr(i + 2) + '] of byte = ('#13#10 +
+                 '    ' + str;
     if radDataType.ItemIndex = 0 then
       code.line += '    65, lo(word(@dl)), hi(word(@dl)));'
     else
@@ -363,15 +362,14 @@ begin
                  '    Poke(' + LMARGN + ', 0);'#13#10 +
                  '    writeln(''Display list example'');'#13#10 +
                  '  end;'#13#10 +
-                 //#13#10 +
-                 //'  repeat until keypressed;'#13#10 +
                  WaitKeyCode(langIndex) +
                  'end.';
   end
   { FastBasic
    ---------------------------------------------------------------------------}
   else if langIndex = _FAST_BASIC then begin
-    code.line := ''' Display list example'#13#10 +
+    code.line := '''' + _REM_MAD_STUDIO + #13#10 +
+                 ''' Display list example'#13#10#13#10 +
                  'DATA dlData() BYTE = ' + strBASIC + #13#10#13#10 +
                  'GRAPHICS 0'#13#10 +
                  'dl = DPEEK(560)'#13#10 +
@@ -393,9 +391,6 @@ begin
                  '  POKE 82, 0'#13#10 +
                  '  PRINT "Display list example"'#13#10 +
                  'NEXT'#13#10 +
-                 //#13#10 +
-                 //'REPEAT'#13#10 +
-                 //'UNTIL Key()');
                  WaitKeyCode(langIndex);
   end
   else begin
@@ -403,22 +398,6 @@ begin
   end;
 
   result := code.line;
-end;
-
-procedure TfrmDisplayListGen.editStartLineMouseUp(Sender : TObject; Button : TMouseButton;
-  Shift : TShiftState; X, Y : Integer);
-begin
-  CreateCode;
-end;
-
-procedure TfrmDisplayListGen.editAddrDecMouseUp(Sender : TObject; Button : TMouseButton;
-  Shift : TShiftState; X, Y : Integer);
-begin
-  //S=57344-SF:HS = INT(S/256):LS=S-HS*256
-  editHighByte.Value := editAddrDec.Value div 256;
-  editLowByte.Value := editAddrDec.Value - editHighByte.Value*256;
-  editAddrHex.Caption := Dec2Hex(editAddrDec.Value);
-  CreateCode;
 end;
 
 procedure TfrmDisplayListGen.ButtonHoverEnter(Sender : TObject);
@@ -431,12 +410,11 @@ begin
   SetButton(Sender as TBCMaterialDesignButton, false);
 end;
 
-end.
-
 (*
 1 GRAPHICS 0
 10 DL=PEEK(560)+PEEK(561)*256
 20 FOR I=0 TO 32:? PEEK(DL+I);"*";
 30 NEXT I
 *)
+end.
 

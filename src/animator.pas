@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2023
   Unit: Player Animator editor and player
 }
 unit animator;
@@ -11,8 +11,8 @@ unit animator;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, Menus, ExtCtrls,
-  ComCtrls, StdCtrls, lcltype, Buttons, Types, LCLIntf, BCTrackbarUpdown, BCMDButton,
+  Classes, SysUtils, FileUtil, SpinEx, Forms, Controls, Graphics, Dialogs, Menus,
+  ExtCtrls, ComCtrls, StdCtrls, lcltype, Buttons, Types, LCLIntf, BCMDButton,
   common;
 
 type
@@ -20,7 +20,6 @@ type
   TfrmAnimator = class(TForm)
     boxFlip1 : TGroupBox;
     btnAnimate : TSpeedButton;
-    btnApplyPlayerHeight : TButton;
     btnByteEditor : TToolButton;
     btnCharDown : TSpeedButton;
     btnCharLeft : TSpeedButton;
@@ -38,9 +37,12 @@ type
     btnFlipY : TToolButton;
     btnInvert : TToolButton;
     boxFlip : TGroupBox;
+    editPlayerHeight : TSpinEditEx;
+    numIterations : TSpinEditEx;
+    numFrames : TSpinEditEx;
+    numAnimRate : TSpinEditEx;
     pcolr1 : TImage;
     pcolr0 : TImage;
-    editPlayerHeight : TBCTrackbarUpdown;
     lblFrameMaxHeight : TLabel;
     MenuItem10 : TMenuItem;
     itemByteEditor : TMenuItem;
@@ -50,9 +52,6 @@ type
     MenuItem6 : TMenuItem;
     miLoadAPLEx : TMenuItem;
     MenuItem9 : TMenuItem;
-    numFrames : TBCTrackbarUpdown;
-    numIterations : TBCTrackbarUpdown;
-    numAnimRate : TBCTrackbarUpdown;
     boxFrameLayer : TGroupBox;
     boxAnimation : TGroupBox;
     boxShiftMove : TGroupBox;
@@ -167,8 +166,6 @@ type
     btnDivider: TToolButton;
     btnNewAnimation: TToolButton;
     ToolButton1 : TToolButton;
-    procedure SingleResolutionProc(Sender : TObject);
-    procedure DoubleResolutionProc(Sender : TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -176,9 +173,9 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure pcolr0Down(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
       X, Y : Integer);
-    procedure editPlayerHeightLeave(Sender : TObject);
-    procedure editPlayerHeightUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
+    procedure SingleResolutionProc(Sender : TObject);
+    procedure DoubleResolutionProc(Sender : TObject);
+    procedure editPlayerHeightChange(Sender : TObject);
     procedure FlipXAllProc(Sender : TObject);
     procedure FlipYAllProc(Sender : TObject);
     procedure FlipXSelectedProc(Sender : TObject);
@@ -223,13 +220,12 @@ type
     procedure FlipY(Sender: TObject);
     procedure FlipXProc(oper : byte);
     procedure FlipYProc(oper : byte);
-//    procedure DoubleResolutionProc(Sender : TObject);
-//    procedure SingleResolutionProc(Sender : TObject);
   private
     { private declarations }
     btn : tMousebutton;
     isDataChanged : array[0..3] of boolean;
     isEnter : array[0..16] of boolean;
+    isEdit : boolean;
     procedure Settings;
     procedure Plot(xf, yf : byte);
     procedure RefreshFrames(pm : TImage; factX, factY : byte; isGridShow : boolean);
@@ -280,17 +276,11 @@ begin
   Settings;
   for i := 0 to 16 do
     isEnter[i] := false;
-
-  SetTrackBarUpDown(numFrames, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(numIterations, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editPlayerHeight, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(numAnimRate, $00DDDDDD, clWhite);
 end;
 
 procedure TfrmAnimator.FormShow(Sender: TObject);
 begin
   propFlagModules[8] := 1;
-  isChange := true;
 
   frmMain.Top := 0;
   formId := formAnimator;
@@ -299,6 +289,7 @@ begin
   caption := programName + ' ' + programVersion + ' - Player Animator (' + filename + ')';
   statusBar.Panels[0].Text := 'Cursor coordinates: x: 0, y: 0';
 
+  isEdit := false;
   player := 0;
   frame := 0;
   selected := 0;
@@ -405,7 +396,8 @@ end;
 procedure TfrmAnimator.FrameOper(Sender : TObject);
 begin
 //  ShowCursor(frmAnimator, frmAnimator, crHourGlass);
-  Screen.Cursor := crHourGlass;
+//  Screen.Cursor := crHourGlass;
+  Screen.BeginWaitCursor;
 
   if radShiftChar.Checked then begin
     case (Sender as TSpeedButton).Tag of
@@ -441,7 +433,8 @@ begin
   end;
 
 //  ShowCursor(frmAnimator, frmAnimator, crDefault);
-  Screen.Cursor := crDefault;
+//  Screen.Cursor := crDefault;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmAnimator.FlipXSelectedProc(Sender : TObject);
@@ -459,7 +452,7 @@ begin
   FlipXProc(16);
 end;
 
-procedure TfrmAnimator.editPlayerHeightLeave(Sender : TObject);
+procedure TfrmAnimator.editPlayerHeightChange(Sender : TObject);
 begin
   if editPlayerHeight.Value <= 48 then begin
     aplAnim := normal;
@@ -468,6 +461,7 @@ begin
   else begin
     aplAnim := extended;
     filename := getDir + 'examples\anim01.apm';
+//    debug('2');
   end;
   ApplyPlayerHeight(Sender);
 end;
@@ -484,11 +478,6 @@ begin
     rbPlayer1.Checked := true;
 end;
 
-procedure TfrmAnimator.editPlayerHeightUp(Sender : TObject; Button : TMouseButton;
-  Shift : TShiftState; X, Y : Integer);
-begin
-end;
-
 procedure TfrmAnimator.FlipYAllProc(Sender : TObject);
 begin
   FlipYProc(16);
@@ -501,7 +490,8 @@ procedure TfrmAnimator.Animate(Sender: TObject);
 var
   i, j : byte;
 begin
-  Screen.Cursor := crHourGlass;
+//  Screen.Cursor := crHourGlass;
+  Screen.BeginWaitCursor;
 
   for j := 1 to numIterations.Value do
     for i := 1 to numFrames.Value do begin
@@ -515,7 +505,8 @@ begin
       Sleep(100);
     end;
 
-  Screen.Cursor := crDefault;
+//  Screen.Cursor := crDefault;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmAnimator.SelectedFrame;
@@ -871,8 +862,18 @@ begin
   btn := Button;
   xf := X div factX02;
   yf := Y div factY02;
-  if (xf >= playerIndex[frame, player] - 1) or (xf >= playerIndex[frame, player]) then
+  if (xf >= playerIndex[frame, player] - 1) or
+     (xf >= playerIndex[frame, player]) then
+  begin
     Plot(xf, yf);
+  end;
+
+  // Data is changed
+  if not isEdit then begin
+    isEdit := true;
+    if Pos(' *', caption) = 0 then
+      caption := caption + ' *';
+  end;
 end;
 
 procedure TfrmAnimator.imgFrameMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -940,6 +941,8 @@ end;
 
 procedure TfrmAnimator.LoadAPLProc(Sender: TObject);
 begin
+  isEdit := false;
+
   if Sender is TMenuItem then begin
 //    debug('Sender is TMenuItem');
     case (Sender as TMenuItem).Tag of
@@ -1039,7 +1042,8 @@ var
   origFrame : byte;
 begin
 //  ShowCursor(frmAnimator, frmAnimator, crHourGlass);
-  Screen.Cursor := crHourGlass;
+//  Screen.Cursor := crHourGlass;
+  Screen.BeginWaitCursor;
 
   origFrame := selected;
   for i := 0 to 16 do begin
@@ -1061,7 +1065,8 @@ begin
   selected := origFrame;
 
 //  ShowCursor(frmAnimator, frmAnimator, crDefault);
-  Screen.Cursor := crDefault;
+//  Screen.Cursor := crDefault;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmAnimator.NewAnimation(Sender: TObject);
@@ -1114,6 +1119,8 @@ begin
 end;
 
 begin
+  isEdit := false;
+
   if Sender is TMenuItem then begin
     case (Sender as TMenuItem).Tag of
       0: aplAnim := normal;
@@ -1154,7 +1161,8 @@ begin
   frmMain.dlgSave.Title := 'Save Atari Player data file as';
   frmMain.dlgSave.Filename := filename;
   if frmMain.dlgSave.Execute then begin
-    Screen.Cursor := crHourGlass;
+//    Screen.Cursor := crHourGlass;
+    Screen.BeginWaitCursor;
     filenamexy := frmMain.dlgSave.Filename;
     fs := TFileStream.Create(filenamexy, fmCreate);
     try
@@ -1208,7 +1216,8 @@ begin
 
       //isDataChanged[player] := false;
     finally
-      Screen.Cursor := crDefault;
+//      Screen.Cursor := crDefault;
+      Screen.EndWaitCursor;
       fs.Free;
     end;
   end;
@@ -1235,8 +1244,6 @@ begin
   frame := 14; RefreshFrames(imgFrame15, factX02, factY02, true);
   frame := 15; RefreshFrames(imgFrame16, factX02, factY02, true);
   frame := 16; RefreshFrames(imgBuffer, factX02, factY02, true);
-
-  isChange := true;
 end;
 
 procedure TfrmAnimator.ShowGrid(Sender: TObject);
@@ -1253,7 +1260,6 @@ procedure TfrmAnimator.Enable3rdColor(Sender: TObject);
 begin
   isPmMixedColor := true;
   statusBar.Panels[3].Text := 'Player mixed (3rd) color enabled';
-  isChange := true;
   RefreshFrame(0);
   RefreshAnim(isAnimEditorGrid);
 end;
@@ -1262,7 +1268,6 @@ procedure TfrmAnimator.Disable3rdColor(Sender: TObject);
 begin
   isPmMixedColor := false;
   statusBar.Panels[3].Text := 'Player mixed (3rd) color disabled';
-  isChange := true;
   RefreshFrame(0);
   RefreshAnim(isAnimEditorGrid);
 end;
@@ -1271,13 +1276,14 @@ procedure TfrmAnimator.CopyFromBuffer(Sender: TObject);
 var
   i, j, k : byte;
 begin
-  for i := 0 to 1 do
+  for i := 0 to 1 do begin
     for j := 0 to 7 do
       for k := 0 to _ANIM_MAX_LINES - 1 do begin
         fld[selected][i, j, k] := fld[16][i, j, k];
         playerPos[selected, i, playerIndex[selected, i] + j, k] :=
           playerPos[16, i, playerIndex[16, i] + j, k];
       end;
+  end;
 
   HideGrid(Sender);
   RefreshFrame(0);
@@ -1287,13 +1293,14 @@ procedure TfrmAnimator.CopyToBuffer(Sender: TObject);
 var
   i, j, k : byte;
 begin
-  for i := 0 to 1 do
+  for i := 0 to 1 do begin
     for j := 0 to 7 do
       for k := 0 to _ANIM_MAX_LINES - 1 do begin
         fld[16][i, j, k] := fld[selected][i, j, k];
         playerPos[16, i, playerIndex[16, i] + j, k] :=
           playerPos[selected, i, playerIndex[selected, i] + j, k];
       end;
+  end;
 
   HideGrid(Sender);
   RefreshFrame(0);
@@ -1314,20 +1321,6 @@ begin
   //  caption := programName + ' ' + programVersion + ' - Player/missile graphics editor';
   //  caption := caption + ' (' + pmgFilenames[player] + ')';
   //end;
-end;
-
-procedure TfrmAnimator.SavePlayerAs(Sender: TObject);
-begin
-  frmMain.dlgSave.Filter := 'Player/missile files (*.spr, *.ply, *.pmg)|*.spr;*.ply;*.pmg|All files (*.*)|*.*';
-  frmMain.dlgSave.Title := 'Save player data as';
-//  frmMain.dlgSave.Options := frmMain.dlgSave.Options + [ofOverwritePrompt];
-  frmMain.dlgSave.Filename := '';
-
-  if frmMain.dlgSave.Execute then begin
-//    pmgFilenames[player] := frmMain.dlgSave.Filename;
-//    SavePlayer(pmgFilenames[player]);
-//    caption := programName + ' ' + programVersion + ' - Player/missile graphics editor (' + pmgFilenames[player] + ')';
-  end;
 end;
 
 procedure TfrmAnimator.GenCode(Sender: TObject);
@@ -1511,11 +1504,12 @@ begin
   origFrame := selected;
   for fr := 0 to oper do begin
     if oper = 16 then selected := fr;
-    for i := 0 to 1 do
+    for i := 0 to 1 do begin
       for x := 0 to 7 do
         fld02[i, x] := fld[selected][i, x, _ANIM_MAX_LINES - 1];
+    end;
 
-    for i := 0 to 1 do
+    for i := 0 to 1 do begin
       for x := 0 to 7 do
         for y := _ANIM_MAX_LINES - 2 downto 0 do begin
           fld[selected][i, x, y + 1] := fld[selected][i, x, y];
@@ -1524,12 +1518,14 @@ begin
             playerPos[selected, i, playerIndex[selected, i] + x, y];
           playerPos[selected, i, playerIndex[selected, i] + x, y] := 0;
         end;
+    end;
 
-    for i := 0 to 1 do
+    for i := 0 to 1 do begin
       for x := 0 to 7 do begin
         fld[selected][i, x, 0] := fld02[i, x];
         playerPos[selected, i, playerIndex[selected, i] + x, 0] := fld02[i, x];
       end;
+    end;
   end;
   for fr := 0 to oper do begin
     if oper = 16 then selected := fr;
@@ -1678,7 +1674,8 @@ var
   origFrame : byte;
 begin
 //  ShowCursor(frmAnimator, frmAnimator, crHourGlass);
-  Screen.Cursor := crHourGlass;
+//  Screen.Cursor := crHourGlass;
+  Screen.BeginWaitCursor;
 
   origFrame := selected;
   for fr := 0 to oper do begin
@@ -1702,7 +1699,8 @@ begin
   selected := origFrame;
 
 //  ShowCursor(frmAnimator, frmAnimator, crDefault);
-  Screen.Cursor := crDefault;
+//  Screen.Cursor := crDefault;
+  Screen.EndWaitCursor;
 end;
 
 {-----------------------------------------------------------------------------
@@ -1720,7 +1718,8 @@ var
   divFactor : byte;
 begin
 //  ShowCursor(frmAnimator, frmAnimator, crHourGlass);
-  Screen.Cursor := crHourGlass;
+//  Screen.Cursor := crHourGlass;
+  Screen.BeginWaitCursor;
 
   origFrame := selected;
   divFactor := animFrameHeight div 2;
@@ -1745,7 +1744,8 @@ begin
   selected := origFrame;
 
 //  ShowCursor(frmAnimator, frmAnimator, crDefault);
-  Screen.Cursor := crDefault;
+//  Screen.Cursor := crDefault;
+  Screen.EndWaitCursor;
 end;
 
 //procedure TfrmAnimator.DoubleResolutionProc(Sender : TObject);
@@ -1823,6 +1823,20 @@ begin
   //  else
   //    ShowMessage('There is no data to be saved!');
   //end;
+end;
+
+procedure TfrmAnimator.SavePlayerAs(Sender: TObject);
+begin
+//  frmMain.dlgSave.Filter := 'Player/missile files (*.spr, *.ply, *.pmg)|*.spr;*.ply;*.pmg|All files (*.*)|*.*';
+//  frmMain.dlgSave.Title := 'Save player data as';
+////  frmMain.dlgSave.Options := frmMain.dlgSave.Options + [ofOverwritePrompt];
+//  frmMain.dlgSave.Filename := '';
+
+//  if frmMain.dlgSave.Execute then begin
+//    pmgFilenames[player] := frmMain.dlgSave.Filename;
+//    SavePlayer(pmgFilenames[player]);
+//    caption := programName + ' ' + programVersion + ' - Player/missile graphics editor (' + pmgFilenames[player] + ')';
+//  end;
 end;
 
 end.

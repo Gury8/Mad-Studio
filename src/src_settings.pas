@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2023
   Unit: Source code editor settings
 }
 unit src_settings;
@@ -11,57 +11,62 @@ unit src_settings;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  lcltype, Buttons, ComCtrls, CheckLst, Grids, BCMDButton, BCMaterialDesignButton, types,
-  StrUtils, SynEdit, SynHighlighterPas, SynHighlighterAny, AnchorDockPanel;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, lcltype,
+  Buttons, ComCtrls, BCMDButton, BCMaterialDesignButton, StrUtils, SynEdit, SynHighlighterPas,
+  SynHighlighterAny, AnchorDockPanel;
 
 type
   { TfrmSrcSettings }
   TfrmSrcSettings = class(TForm)
     AnchorDockPanel1 : TAnchorDockPanel;
+    btnBackColors : TSpeedButton;
     btnKickC : TBCMDButton;
     btnGeneral : TBCMDButton;
     btnBasic : TBCMDButton;
+    btnLineHighlightColors : TSpeedButton;
     btnMadPascal : TBCMDButton;
     btnMads : TBCMDButton;
     btnFastBasic : TBCMDButton;
     btnCC65 : TBCMDButton;
     btnEffectus : TBCMDButton;
-    btnBackColors: TSpeedButton;
     btnConfirm : TBCMaterialDesignButton;
     btnCancel : TBCMaterialDesignButton;
     btnKickCLocation : TSpeedButton;
-    btnSelectedTextBackColors: TSpeedButton;
     btnCC65Location: TSpeedButton;
-    btnLineHighlightColors: TSpeedButton;
     btnMADSLocation: TSpeedButton;
     btnMadsMPLocation: TSpeedButton;
     btnMPLocation: TSpeedButton;
     btnAtariBASICLocation: TSpeedButton;
     btnFastBasicLocation: TSpeedButton;
-    chkCC65: TCheckListBox;
+    btnSelectedTextBackColors : TSpeedButton;
+    btnValueMadPascal: TButton;
+    btnValueFastBasic: TButton;
+    btnValueEffectus: TButton;
+    btnValueKickC: TButton;
+    btnValueAtariBasic: TButton;
+    btnValueMads: TButton;
+    btnValueMadsMP: TButton;
     chkKickCLocation : TCheckBox;
-    chkKickC : TCheckListBox;
-    chkMadPascal: TCheckListBox;
     chkCC65Location: TCheckBox;
-    chkEffectus: TCheckListBox;
-    chkMadsMP: TCheckListBox;
     chkOutputLog: TCheckBox;
-    chkAtariBASIC: TCheckListBox;
-    chkMADS: TCheckListBox;
     chkMADSLocation02: TCheckBox;
     chkMadsLocation: TCheckBox;
     chkMPLocation: TCheckBox;
     chkAtariBASICLocation: TCheckBox;
-    chkFastBasic: TCheckListBox;
     chkFastBasicLocation: TCheckBox;
     cmbFonts: TComboBox;
     cmbTextSizes: TComboBox;
     dlgColors: TColorDialog;
-    Edit7: TEdit;
+    editMadPascal: TEdit;
     editCC65Location: TEdit;
     editKickCLocation : TEdit;
     editCC65Output: TEdit;
+    editFastBasic: TEdit;
+    editEffectus: TEdit;
+    editKickC: TEdit;
+    editAtariBasic: TEdit;
+    editMads: TEdit;
+    editMadsMP: TEdit;
     editMADSLocation: TEdit;
     editMADSOutput: TEdit;
     editFastBasicLocation: TEdit;
@@ -72,21 +77,15 @@ type
     editMPLocation: TEdit;
     editAtariBASICLocation: TEdit;
     editMPOutput: TEdit;
-    gridKickC : TStringGrid;
-    gridMadPascal: TStringGrid;
-    gridMadsMp: TStringGrid;
     boxFonts: TGroupBox;
-    boxBackColor: TGroupBox;
-    boxColor01: TGroupBox;
-    boxColor02: TGroupBox;
     Label1: TLabel;
     Label10: TLabel;
     Label11: TLabel;
     Label12: TLabel;
     Label13: TLabel;
-    Label14: TLabel;
-    Label15: TLabel;
-    Label16: TLabel;
+    Label14 : TLabel;
+    Label15 : TLabel;
+    Label16 : TLabel;
     Label17 : TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -95,18 +94,19 @@ type
     Label6: TLabel;
     Label7: TLabel;
     Label8: TLabel;
-    gridAtariBASIC: TStringGrid;
-    gridMads: TStringGrid;
-    gridFastBasic: TStringGrid;
-    gridCC65: TStringGrid;
-    Label9: TLabel;
-    shapeBackColor: TShape;
-    shapeSelectedTextBackColor: TShape;
-    shapeLineHighlightColor: TShape;
+    listKickC: TListView;
+    listEffectus: TListView;
+    listMads: TListView;
+    listAtariBasic: TListView;
+    listMadPascal: TListView;
+    listMadsMP: TListView;
+    listFastBasic: TListView;
+    shapeBackColor : TShape;
+    shapeLineHighlightColor : TShape;
+    shapeSelectedTextBackColor : TShape;
     shapeTextColor: TShape;
     btnTextColors: TSpeedButton;
     editor: TSynEdit;
-    gridEffectus: TStringGrid;
     tabs: TPageControl;
     tabAtariBASIC: TTabSheet;
     tabMadPascal: TTabSheet;
@@ -116,27 +116,21 @@ type
     tabFastBasic: TTabSheet;
     tabEffectus: TTabSheet;
     tabKickC : TTabSheet;
-    procedure ButtonHoverEnter(Sender : TObject);
-    procedure ButtonHoverLeave(Sender : TObject);
+    procedure btnValueProc(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure gridKickCDrawCell(Sender : TObject; aCol, aRow : Integer; aRect : TRect;
-      aState : TGridDrawState);
-    procedure gridKickCSelectCell(Sender : TObject; aCol, aRow : Integer; var CanSelect : Boolean);
-    procedure OptionProc(Sender : TObject);
-    procedure BackColorsProc(Sender: TObject);
     procedure ConfirmProc(Sender: TObject);
     procedure CloseWinProc(Sender: TObject);
+    procedure listSettingsDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure OptionProc(Sender : TObject);
+    procedure BackColorsProc(Sender: TObject);
     procedure FastBasicLocation(Sender: TObject);
-    procedure LineHighlightColorsProc(Sender: TObject);
     procedure MADSLocation(Sender: TObject);
-    procedure SelectedTextBackColorsProc(Sender: TObject);
-    procedure chkAtariBASICCheck(Sender: TObject);
     procedure chkAtariBASICLocationChange(Sender: TObject);
     procedure chkCC65LocationChange(Sender: TObject);
     procedure chkFastBasicLocationChange(Sender: TObject);
-    procedure chkMADSCheck(Sender: TObject);
     procedure chkMADSLocation02Change(Sender: TObject);
     procedure chkMadsLocationChange(Sender: TObject);
     procedure chkMPLocationChange(Sender: TObject);
@@ -146,31 +140,25 @@ type
     procedure MadsMPLocation(Sender: TObject);
     procedure AtariBASICLocation(Sender: TObject);
     procedure CC65Location(Sender: TObject);
-    procedure gridAtariBASICDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
-      aState: TGridDrawState);
-    procedure gridAtariBASICSelectCell(Sender: TObject; aCol, aRow: Integer;
-      var CanSelect: Boolean);
-    procedure gridEffectusSelectCell(Sender: TObject; aCol, aRow: Integer;
-      var CanSelect: Boolean);
-    procedure gridMadPascalDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
-      aState: TGridDrawState);
-    procedure gridMadPascalSelectCell(Sender: TObject; aCol, aRow: Integer;
-      var CanSelect: Boolean);
-    procedure gridMadsDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
-      aState: TGridDrawState);
-    procedure gridMadsMpDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
-      aState: TGridDrawState);
-    procedure gridMadsMpSelectCell(Sender: TObject; aCol, aRow: Integer; var CanSelect: Boolean);
-    procedure gridMadsSelectCell(Sender: TObject; aCol, aRow: Integer; var CanSelect: Boolean);
-    procedure TextColorsProc(Sender: TObject);
-    procedure gridEffectusDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
-      aState: TGridDrawState);
+//    procedure gridDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
+//      aState: TGridDrawState);
+    //procedure gridAtariBASICSelectCell(Sender: TObject; aCol, aRow: Integer;
+    //  var CanSelect: Boolean);
+//    procedure gridEffectusSelectCell(Sender: TObject; aCol, aRow: Integer;
+//      var CanSelect: Boolean);
+//    procedure gridMadsMpSelectCell(Sender: TObject; aCol, aRow: Integer; var CanSelect: Boolean);
+//    procedure gridMadsSelectCell(Sender: TObject; aCol, aRow: Integer; var CanSelect: Boolean);
+    procedure BackColorDown(Sender : TObject; Button : TMouseButton;
+      Shift : TShiftState; X, Y : Integer);
+    procedure BackColorIconProc(Sender: TObject);
     procedure chkKickCLocationChange(Sender : TObject);
     procedure KickCLocationProc(Sender : TObject);
-//    procedure pageChange(Sender : TObject);
+    procedure ButtonHoverEnter(Sender : TObject);
+    procedure ButtonHoverLeave(Sender : TObject);
+    procedure SetListParams(listView : TListView; props, flags : TStringList);
   private
     { private declarations }
-    procedure SetParams(props, flags : TStringList; checkList : TCheckListBox; grid : TStringGrid);
+    //procedure SetParams(props, flags : TStringList; checkList : TCheckListBox; grid : TStringGrid);
     procedure SetEditor;
   public
     { public declarations }
@@ -248,13 +236,16 @@ begin
   chkFastBasicLocationChange(Sender);
   chkMADSLocation02Change(Sender);
 
-  SetParams(propAtariBASIC, propFlagAtariBASIC, chkAtariBASIC, gridAtariBASIC);
-  SetParams(propMadPascal, propFlagMadPascal, chkMadPascal, gridMadPascal);
-  SetParams(propMadsMP, propFlagMadsMP, chkMadsMP, gridMadsMP);
-  SetParams(propMADS, propFlagMADS, chkMADS, gridMads);
-  SetParams(propFastBasic, propFlagFastBasic, chkFastBasic, gridFastBasic);
-  SetParams(propEffectus, propFlagEffectus, chkEffectus, gridEffectus);
-  SetParams(propKickC, propFlagKickC, chkKickC, gridKickC);
+  listMadPascal.Items.Clear;
+//  SetListParams(propFastBasic, propFlagFastBasic);
+//  SetParams(propMadPascal, propFlagMadPascal, chkMadPascal, gridMadPascal);
+  SetListParams(listAtariBASIC, propAtariBASIC, propFlagAtariBASIC);
+  SetListParams(listMadPascal, propMadPascal, propFlagMadPascal);
+  SetListParams(listMadsMp, propMadsMP, propFlagMadsMP);
+  SetListParams(listMads, propMADS, propFlagMADS);
+  SetListParams(listFastBasic, propFastBasic, propFlagFastBasic);
+  SetListParams(listEffectus, propEffectus, propFlagEffectus);
+  SetListParams(listKickC, propKickC, propFlagKickC);
 
   // editor settings
   cmbFonts.Text := editorFont.Name;
@@ -283,15 +274,6 @@ begin
   //editMADSMacroDef.Enabled := chkMADS.Checked[6];
   //editMADSObjFile.Enabled := chkMADS.Checked[11];
 
-  //for i := 0 to propFastBasic.Count - 1 do begin
-  //  chkFastBasic.Items.Add(propFastBasic[i] + ' (' + propDescrFastBasic[i] + ')');
-  //
-  //  if propFlagFastBasic[i] = '0' then
-  //    chkFastBasic.Checked[i] := false
-  //  else
-  //    chkFastBasic.Checked[i] := true;
-  //end;
-
   //for i := 0 to propAtariBASIC.Count - 1 do begin
   //  listAtariBASIC.InsertRow(propAtariBASIC[i], propDescrAtariBASIC[i], True);
   //  FirstItemProp := TItemProp.Create(listAtariBASIC);
@@ -314,50 +296,48 @@ begin
   end;
 end;
 
-procedure TfrmSrcSettings.gridKickCDrawCell(Sender : TObject; aCol, aRow : Integer; aRect : TRect;
-  aState : TGridDrawState);
+//procedure TfrmSrcSettings.SetParams(props, flags : TStringList; checkList : TCheckListBox;
+//  grid : TStringGrid);
 //var
-//  s : string;
-begin
-//  s := gridKickC.Cells[ACol, ARow];
-
-  //if (aRow in [0, 1]) then begin
-  //  gridKickC.Canvas.Font.Color := clBlack;
-  //  gridKickC.Canvas.TextOut(aRect.Left + 2, aRect.Top + 2, s);
-  //end
-  //else begin
-    gridKickC.canvas.Brush.Color := RGBToColor(230, 230, 230);
-    gridKickC.canvas.FillRect(aRect);
+//  i : integer;
+//  param, descr : string;
+//begin
+//  for i := 0 to props.Count - 1 do begin
+//    param := ExtractDelimited(1, props[i], ['=']);
+//    descr := ExtractDelimited(2, props[i], ['=']);
+//
+//    checkList.Items.Add(param + ' ' + descr);
+//    checkList.Checked[i] := flags[i][1] <> '0';
+//
+//    if flags[i].Length > 1 then
+//      grid.Cells[0, i] := Copy(flags[i], 2, flags[i].Length - 1);
 //  end;
-end;
+//end;
 
-procedure TfrmSrcSettings.gridKickCSelectCell(Sender : TObject; aCol, aRow : Integer;
-  var CanSelect : Boolean);
-begin
-  //if (aRow in [0, 1]) then
-  //  gridKickC.Options := gridKickC.Options + [goEditing]
-  //else
-  gridKickC.Options := gridKickC.Options - [goEditing];
-end;
-
-procedure TfrmSrcSettings.SetParams(props, flags : TStringList; checkList : TCheckListBox;
-  grid : TStringGrid);
+procedure TfrmSrcSettings.SetListParams(listView : TListView; props, flags : TStringList);
 var
   i : integer;
   param, descr : string;
+  lvItem : TListItem;
 begin
   for i := 0 to props.Count - 1 do begin
     param := ExtractDelimited(1, props[i], ['=']);
     descr := ExtractDelimited(2, props[i], ['=']);
 
-    checkList.Items.Add(param + ' ' + descr);
-    checkList.Checked[i] := flags[i][1] <> '0';
+//    listMadPascal.Items.Add(param + ' ' + descr, 'test');
+
+    lvItem := listView.Items.Add;
+    lvItem.Caption := param;
+    lvItem.SubItems.Add(descr);
+    lvItem.Checked := flags[i][1] <> '0';
+//    listMadPascal.Checked[i] := flags[i][1] <> '0';
 
     if flags[i].Length > 1 then
-      grid.Cells[0, i] := Copy(flags[i], 2, flags[i].Length - 1);
+      lvItem.SubItems.Add(Copy(flags[i], 2, flags[i].Length - 1))
+    else
+      lvItem.SubItems.Add('');
   end;
 end;
-
 
 procedure TfrmSrcSettings.MADSLocation(Sender: TObject);
 begin
@@ -384,43 +364,12 @@ begin
   btnKickCLocation.Enabled := chkKickCLocation.Checked;
 end;
 
-procedure TfrmSrcSettings.SelectedTextBackColorsProc(Sender: TObject);
-begin
-  if dlgColors.Execute then begin
-    shapeSelectedTextBackColor.Brush.Color := dlgColors.Color;
-    SetEditor;
-  end;
-end;
-
 procedure TfrmSrcSettings.FastBasicLocation(Sender: TObject);
 begin
   frmMain.dlgFolder.Title := 'User defined FastBasic directory';
 
   if frmMain.dlgFolder.Execute then
     editFastBasicLocation.text := frmMain.dlgFolder.FileName;
-end;
-
-procedure TfrmSrcSettings.LineHighlightColorsProc(Sender: TObject);
-begin
-  if dlgColors.Execute then begin
-    shapeLineHighlightColor.Brush.Color := dlgColors.Color;
-    SetEditor;
-  end;
-end;
-
-procedure TfrmSrcSettings.chkAtariBASICCheck(Sender: TObject);
-begin
-//  editMaxLineLen.Enabled := chkAtariBASIC.Checked[0];
-//  editOutput.Enabled := chkAtariBASIC.Checked[9];
-
-//  if chkAtariBASIC.Checked[9] then
-end;
-
-procedure TfrmSrcSettings.chkMADSCheck(Sender: TObject);
-begin
-  //editMADSBinAddr.Enabled := chkMADS.Checked[0];
-  //editMADSMacroDef.Enabled := chkMADS.Checked[6];
-  //editMADSObjFile.Enabled := chkMADS.Checked[11];
 end;
 
 procedure TfrmSrcSettings.chkMADSLocation02Change(Sender: TObject);
@@ -487,10 +436,6 @@ begin
 
   if frmMain.dlgFolder.Execute then
     editMadsMPLocation.text := frmMain.dlgFolder.Filename;
-
-  //frmMain.dlgOpen.Title := 'User defined Mad Assembler directory and executable';
-  //if frmMain.dlgOpen.Execute then
-  //  editMadsMPLocation.text := frmMain.dlgOpen.Filename;
 end;
 
 procedure TfrmSrcSettings.AtariBASICLocation(Sender: TObject);
@@ -499,149 +444,100 @@ begin
 
   if frmMain.dlgFolder.Execute then
     editAtariBASICLocation.text := frmMain.dlgFolder.Filename;
-
-  //frmMain.dlgOpen.Title := 'User defined Atari BASIC parser directory and executable';
-  //if frmMain.dlgOpen.Execute then
-  //  editAtariBASICLocation.text := frmMain.dlgOpen.Filename;
 end;
 
-procedure TfrmSrcSettings.gridAtariBASICDrawCell(Sender: TObject; aCol, aRow: Integer;
-  aRect: TRect; aState: TGridDrawState);
-var
-  s : string;
+//procedure TfrmSrcSettings.gridDrawCell(Sender: TObject; aCol, aRow: Integer;
+//  aRect: TRect; aState: TGridDrawState);
+//var
+//  s : string;
+//begin
+////  s := gridAtariBASIC.Cells[ACol, ARow];
+//  s := TStringGrid(Sender).Cells[ACol, ARow];
+//
+//  //if Sender = gridAtariBASIC then begin
+//  //  //  if (aRow = 1) or (aRow = 3) then begin
+//  //  if (aRow in [0, 9]) then begin
+//  //    gridAtariBASIC.Canvas.Font.Color := clBlack;
+//  //    gridAtariBASIC.Canvas.TextOut(aRect.Left + 2, aRect.Top + 2, s);
+//  //  end
+//  //  else begin
+//  //    gridAtariBASIC.canvas.Brush.Color := RGBToColor(230, 230, 230);
+//  //    gridAtariBASIC.canvas.FillRect(aRect);
+//  //  end;
+//  //end
+//  //else if Sender = gridMadPascal then begin
+//  //  if (aRow in [1, 2, 3, 4]) then begin
+//  //    gridMadPascal.Canvas.Font.Color := clBlack;
+//  //    gridMadPascal.Canvas.TextOut(aRect.Left + 2, aRect.Top + 2, s);
+//  //  end
+//  //  else begin
+//  //    gridMadPascal.canvas.Brush.Color := RGBToColor(230, 230, 230);
+//  //    gridMadPascal.canvas.FillRect(aRect);
+//  //  end;
+//  //end
+//  //else if Sender = gridMads then begin
+//  //  if (aRow in [0, 4, 5, 6, 7, 8, 9, 10, 14]) then begin
+//  //    gridMads.Canvas.Font.Color := clBlack;
+//  //    gridMads.Canvas.TextOut(aRect.Left + 2, aRect.Top + 2, s);
+//  //  end
+//  //  else begin
+//  //    gridMads.canvas.Brush.Color := RGBToColor(230, 230, 230);
+//  //    gridMads.canvas.FillRect(aRect);
+//  //  end;
+//  //end
+//  //if Sender = gridEffectus then begin
+//  //  if (aRow in [0, 1]) then begin
+//  //    gridEffectus.Canvas.Font.Color := clBlack;
+//  //    gridEffectus.Canvas.TextOut(aRect.Left + 2, aRect.Top + 2, s);
+//  //  end
+//  //  else begin
+//  //    gridEffectus.canvas.Brush.Color := RGBToColor(230, 230, 230);
+//  //    gridEffectus.canvas.FillRect(aRect);
+//  //  end;
+//  //end
+//end;
+
+//procedure TfrmSrcSettings.gridAtariBASICSelectCell(Sender: TObject; aCol, aRow: Integer;
+//  var CanSelect: Boolean);
+//begin
+//  if (aRow in [0, 9]) then
+//    gridAtariBASIC.Options := gridAtariBASIC.Options + [goEditing]
+//  else
+//    gridAtariBASIC.Options := gridAtariBASIC.Options - [goEditing];
+//end;
+
+//procedure TfrmSrcSettings.gridMadsSelectCell(Sender: TObject; aCol, aRow: Integer;
+//  var CanSelect: Boolean);
+//begin
+//  if (aRow in [0, 4, 5, 6, 7, 8, 9, 10, 14]) then
+//    gridMads.Options := gridMads.Options + [goEditing]
+//  else
+//    gridMads.Options := gridMads.Options - [goEditing];
+//end;
+
+//procedure TfrmSrcSettings.gridMadsSelectCell(Sender: TObject; aCol,
+//  aRow: Integer; var CanSelect: Boolean);
+//begin
+//
+//end;
+
+procedure TfrmSrcSettings.BackColorDown(Sender : TObject; Button : TMouseButton;
+  Shift : TShiftState; X, Y : Integer);
 begin
-  s := gridAtariBASIC.Cells[ACol, ARow];
-
-//  if (aRow = 1) or (aRow = 3) then begin
-  if (aRow in [0, 9]) then begin
-    gridAtariBASIC.Canvas.Font.Color := clBlack;
-    gridAtariBASIC.Canvas.TextOut(aRect.Left + 2, aRect.Top + 2, s);
-  end
-  else begin
-    gridAtariBASIC.canvas.Brush.Color := RGBToColor(230, 230, 230);
-    gridAtariBASIC.canvas.FillRect(aRect);
-  end;
+  BackColorsProc(Sender);
 end;
 
-procedure TfrmSrcSettings.gridAtariBASICSelectCell(Sender: TObject; aCol, aRow: Integer;
-  var CanSelect: Boolean);
-begin
-  if (aRow in [0, 9]) then
-    gridAtariBASIC.Options := gridAtariBASIC.Options + [goEditing]
-  else
-    gridAtariBASIC.Options := gridAtariBASIC.Options - [goEditing];
-end;
-
-procedure TfrmSrcSettings.gridMadPascalDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
-  aState: TGridDrawState);
-var
-  s : string;
-begin
-  s := gridMadPascal.Cells[ACol, ARow];
-
-  if (aRow in [1, 2, 3, 4]) then begin
-    gridMadPascal.Canvas.Font.Color := clBlack;
-    gridMadPascal.Canvas.TextOut(aRect.Left + 2, aRect.Top + 2, s);
-  end
-  else begin
-    gridMadPascal.canvas.Brush.Color := RGBToColor(230, 230, 230);
-    gridMadPascal.canvas.FillRect(aRect);
-  end;
-end;
-
-procedure TfrmSrcSettings.gridMadPascalSelectCell(Sender: TObject; aCol, aRow: Integer;
-  var CanSelect: Boolean);
-begin
-  if (aRow in [1, 2, 3, 4]) then
-    gridMadPascal.Options := gridMadPascal.Options + [goEditing]
-  else
-    gridMadPascal.Options := gridMadPascal.Options - [goEditing];
-end;
-
-procedure TfrmSrcSettings.gridMadsDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
-  aState: TGridDrawState);
-var
-  s : string;
-begin
-  s := gridMads.Cells[ACol, ARow];
-
-  if (aRow in [0, 4, 5, 6, 7, 8, 9, 10, 14]) then begin
-    gridMads.Canvas.Font.Color := clBlack;
-    gridMads.Canvas.TextOut(aRect.Left + 2, aRect.Top + 2, s);
-  end
-  else begin
-    gridMads.canvas.Brush.Color := RGBToColor(230, 230, 230);
-    gridMads.canvas.FillRect(aRect);
-  end;
-end;
-
-procedure TfrmSrcSettings.gridMadsSelectCell(Sender: TObject; aCol, aRow: Integer;
-  var CanSelect: Boolean);
-begin
-  if (aRow in [0, 4, 5, 6, 7, 8, 9, 10, 14]) then
-    gridMads.Options := gridMads.Options + [goEditing]
-  else
-    gridMads.Options := gridMads.Options - [goEditing];
-end;
-
-procedure TfrmSrcSettings.TextColorsProc(Sender: TObject);
+procedure TfrmSrcSettings.BackColorIconProc(Sender: TObject);
 begin
   if dlgColors.Execute then begin
-    shapeTextColor.Brush.Color := dlgColors.Color;
+    case (Sender as TSpeedButton).Tag of
+      0: shapeTextColor.Brush.Color := dlgColors.Color;
+      1: shapeBackColor.Brush.Color := dlgColors.Color;
+      2: shapeLineHighlightColor.Brush.Color := dlgColors.Color;
+      3: shapeSelectedTextBackColor.Brush.Color := dlgColors.Color;
+    end;
     SetEditor;
   end;
-end;
-
-procedure TfrmSrcSettings.gridEffectusSelectCell(Sender: TObject; aCol, aRow: Integer;
-  var CanSelect: Boolean);
-begin
-  if (aRow in [0, 1]) then
-    gridEffectus.Options := gridEffectus.Options + [goEditing]
-  else
-    gridEffectus.Options := gridEffectus.Options - [goEditing];
-end;
-
-procedure TfrmSrcSettings.gridEffectusDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
-  aState: TGridDrawState);
-var
-  s : string;
-begin
-  s := gridEffectus.Cells[ACol, ARow];
-
-  if (aRow in [0, 1]) then begin
-    gridEffectus.Canvas.Font.Color := clBlack;
-    gridEffectus.Canvas.TextOut(aRect.Left + 2, aRect.Top + 2, s);
-  end
-  else begin
-    gridEffectus.canvas.Brush.Color := RGBToColor(230, 230, 230);
-    gridEffectus.canvas.FillRect(aRect);
-  end;
-end;
-
-procedure TfrmSrcSettings.gridMadsMpDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect;
-  aState: TGridDrawState);
-var
-  s : string;
-begin
-  s := gridMadsMp.Cells[ACol, ARow];
-
-  if (aRow in [0, 4, 5, 6, 7, 8, 9, 10, 14]) then begin
-    gridMadsMp.Canvas.Font.Color := clBlack;
-    gridMadsMp.Canvas.TextOut(aRect.Left + 2, aRect.Top + 2, s);
-  end
-  else begin
-    gridMadsMp.canvas.Brush.Color := RGBToColor(230, 230, 230);
-    gridMadsMp.canvas.FillRect(aRect);
-  end;
-end;
-
-procedure TfrmSrcSettings.gridMadsMpSelectCell(Sender: TObject; aCol, aRow: Integer;
-  var CanSelect: Boolean);
-begin
-  if (aRow in [0, 4, 5, 6, 7, 8, 9, 10, 14]) then
-    gridMadsMp.Options := gridMadsMp.Options + [goEditing]
-  else
-    gridMadsMp.Options := gridMadsMp.Options - [goEditing];
 end;
 
 procedure TfrmSrcSettings.CC65Location(Sender: TObject);
@@ -655,8 +551,6 @@ procedure TfrmSrcSettings.ConfirmProc(Sender: TObject);
 var
   i : byte;
 begin
-  isChange := true;
-
   // editor settings
   editorFont.Name:= cmbFonts.Text;
   editorFont.Size:= StrToInt(cmbTextSizes.Text);
@@ -664,17 +558,6 @@ begin
   editorBackColor := shapeBackColor.Brush.Color;
   editorLineHighlightColor.Background := shapeLineHighlightColor.Brush.Color;
   editorSelectedTextBackColor.Background := shapeSelectedTextBackColor.Brush.Color;
-
-//  isMadPascal_d := TCheckBox(chkMadPascal.Controls[0]).Checked;
-//  isMadPascal_o := TCheckBox(chkMadPascal.Controls[1]).Checked;
-
-  //isMadsExcludeUnref_x := TCheckBox(chkMadsMP.Controls[0]).Checked;
-  //isMadsAddLib_i := TCheckBox(chkMadsMP.Controls[1]).Checked;
-  //isMadsBinAddress_b := TCheckBox(chkMadsMP.Controls[2]).Checked;
-  //isMadsLabelCase_c := TCheckBox(chkMadsMP.Controls[3]).Checked;
-  //
-  //strMadsAddLib_i := editAddName_i.Text;
-  //intMadsBinAddress_b := editMadsBinAddress_b.Value;
 
   // Language settings
   isOutputLog := chkOutputLog.Checked;
@@ -749,96 +632,126 @@ begin
     Exit;
   end;
 
-  // Atari BASIC / Turbo BASIC XL
-  for i := 0 to chkAtariBASIC.Items.Count - 1 do begin
-    if chkAtariBASIC.Checked[i] then begin
+  //// Atari BASIC / Turbo BASIC XL
+  //for i := 0 to chkAtariBASIC.Items.Count - 1 do begin
+  //  if chkAtariBASIC.Checked[i] then begin
+  //    propFlagAtariBASIC[i] := '1';
+  //    if i in [0, 9] then
+  //      propFlagAtariBASIC[i] := propFlagAtariBASIC[i] + gridAtariBASIC.Cells[0, i];
+  //  end
+  //  else
+  //    propFlagAtariBASIC[i] := '0'
+  //end;
+
+  for i := 0 to listAtariBASIC.Items.Count - 1 do begin
+    if listAtariBASIC.Items[i].Checked then begin
       propFlagAtariBASIC[i] := '1';
       if i in [0, 9] then
-        propFlagAtariBASIC[i] := propFlagAtariBASIC[i] + gridAtariBASIC.Cells[0, i];
+        //propFlagMadPascal[i] := propFlagMadPascal[i] + gridMadPascal.Cells[0, i];
+        propFlagAtariBASIC[i] := propFlagAtariBASIC[i] + listAtariBASIC.Items[i].SubItems[1];
     end
     else
       propFlagAtariBASIC[i] := '0'
   end;
 
-  if chkAtariBASIC.Checked[9] and (gridAtariBASIC.Cells[0, 9] = '') then begin
-//  if editOutput.Enabled and (editOutput.Text = '') then begin
+//  if chkAtariBASIC.Checked[9] and (gridAtariBASIC.Cells[0, 9] = '') then begin
+  if listAtariBASIC.Items[i].Checked and (listAtariBASIC.Items[9].SubItems[1] = '') then begin
     ShowMessage('Atari BASIC output filename is missing!');
     Exit;
   end;
 
-//  strAtariBASIC_o := editOutput.Text;
-//  valAtariBASIC_n := editMaxLineLen.Value;
-
   // Mad Pascal
-  for i := 0 to chkMadPascal.Items.Count - 1 do begin
-    if chkMadPascal.Checked[i] then begin
+  //for i := 0 to chkMadPascal.Items.Count - 1 do begin
+  //  if chkMadPascal.Checked[i] then begin
+  //    propFlagMadPascal[i] := '1';
+  //    if i in [1, 2, 3, 4] then
+  //      propFlagMadPascal[i] := propFlagMadPascal[i] + gridMadPascal.Cells[0, i];
+  //  end
+  //  else
+  //    propFlagMadPascal[i] := '0'
+  //end;
+
+  for i := 0 to listMadPascal.Items.Count - 1 do begin
+    if listMadPascal.Items[i].Checked then begin
       propFlagMadPascal[i] := '1';
       if i in [1, 2, 3, 4] then
-        propFlagMadPascal[i] := propFlagMadPascal[i] + gridMadPascal.Cells[0, i];
+        //propFlagMadPascal[i] := propFlagMadPascal[i] + gridMadPascal.Cells[0, i];
+        propFlagMadPascal[i] := propFlagMadPascal[i] + listMadPascal.Items[i].SubItems[1];
     end
     else
       propFlagMadPascal[i] := '0'
   end;
 
   // Mad Assembler (MADS) for Mad Pascal
-  for i := 0 to chkMadsMP.Items.Count - 1 do begin
-    if chkMadsMP.Checked[i] then begin
+  for i := 0 to listMadsMP.Items.Count - 1 do begin
+    if listMadsMP.Items[i].Checked then begin
       propFlagMadsMP[i] := '1';
       if i in [0, 4, 5, 6, 7, 8, 9, 10, 14] then
-        propFlagMadsMP[i] := propFlagMadsMP[i] + gridMadsMP.Cells[0, i];
+        //propFlagMadPascal[i] := propFlagMadPascal[i] + gridMadPascal.Cells[0, i];
+        propFlagMadsMP[i] := propFlagMadsMP[i] + listMadsMP.Items[i].SubItems[1];
     end
     else
       propFlagMadsMP[i] := '0'
   end;
 
   // Mad Assembler (MADS)
-  for i := 0 to chkMADS.Items.Count - 1 do begin
-    if chkMADS.Checked[i] then begin
+  //for i := 0 to chkMADS.Items.Count - 1 do begin
+  //  if chkMADS.Checked[i] then begin
+  //    propFlagMADS[i] := '1';
+  //    if i in [0, 4, 5, 6, 7, 8, 9, 10, 14] then
+  //      propFlagMADS[i] := propFlagMADS[i] + gridMads.Cells[0, i];
+  //  end
+  //  else
+  //    propFlagMADS[i] := '0'
+  //end;
+
+  for i := 0 to listMads.Items.Count - 1 do begin
+    if listMads.Items[i].Checked then begin
       propFlagMADS[i] := '1';
       if i in [0, 4, 5, 6, 7, 8, 9, 10, 14] then
-        propFlagMADS[i] := propFlagMADS[i] + gridMads.Cells[0, i];
+        //propFlagMadPascal[i] := propFlagMadPascal[i] + gridMadPascal.Cells[0, i];
+        propFlagMADS[i] := propFlagMADS[i] + listMads.Items[i].SubItems[1];
     end
     else
       propFlagMADS[i] := '0'
   end;
 
-//  if editMADSObjFile.Enabled and (editMADSObjFile.Text = '') then begin
-  if chkMADS.Checked[11] and (gridMads.Cells[0, 11] = '') then begin
-    ShowMessage('Mad Assembler object code filename is missing!');
-    Exit;
-  end;
+////  if editMADSObjFile.Enabled and (editMADSObjFile.Text = '') then begin
+//  if chkMADS.Checked[11] and (gridMads.Cells[0, 11] = '') then begin
+//    ShowMessage('Mad Assembler object code filename is missing!');
+//    Exit;
+//  end;
 
   // FastBasic
-  for i := 0 to chkFastBasic.Items.Count - 1 do begin
-    if chkFastBasic.Checked[i] then
-      propFlagFastBasic[i] := '1'
+  for i := 0 to listFastBasic.Items.Count - 1 do begin
+    if listFastBasic.Items[i].Checked then begin
+      propFlagFastBasic[i] := '1';
+      if i in [3, 4, 7, 8, 9, 10] then
+        propFlagFastBasic[i] := propFlagFastBasic[i] + listFastBasic.Items[i].SubItems[1];
+    end
     else
       propFlagFastBasic[i] := '0'
   end;
 
   // Effectus
-  for i := 0 to chkEffectus.Items.Count - 1 do begin
-    if chkEffectus.Checked[i] then begin
+  for i := 0 to listEffectus.Items.Count - 1 do begin
+    if listEffectus.Items[i].Checked then begin
       propFlagEffectus[i] := '1';
-      if i in [0, 1] then
-        propFlagEffectus[i] := propFlagEffectus[i] + gridEffectus.Cells[0, i];
+//      if i in [0, 1] then
+        //propFlagMadPascal[i] := propFlagMadPascal[i] + gridMadPascal.Cells[0, i];
+//        propFlagEffectus[i] := propFlagEffectus[i] + listEffectus.Items[i].SubItems[1];
     end
     else
       propFlagEffectus[i] := '0'
   end;
 
   // KickC
-  for i := 0 to chkKickC.Items.Count - 1 do begin
-    if chkKickC.Checked[i] then begin
-      propFlagKickC[i] := '1';
-//      if i in [0, 1] then
-//        propFlagKickC[i] := propFlagKickC[i] + gridKickC.Cells[0, i];
-    end
+  for i := 0 to listKickC.Items.Count - 1 do begin
+    if listKickC.Items[i].Checked then
+      propFlagKickC[i] := '1'
     else
       propFlagKickC[i] := '0'
   end;
-
-//  debug(strKickCUserLocation);
 
   Close;
 end;
@@ -846,7 +759,8 @@ end;
 procedure TfrmSrcSettings.BackColorsProc(Sender: TObject);
 begin
   if dlgColors.Execute then begin
-    shapeBackColor.Brush.Color := dlgColors.Color;
+//    shapeBackColor.Brush.Color := dlgColors.Color;
+    (Sender as TShape).Brush.Color := dlgColors.Color;
     SetEditor;
   end;
 end;
@@ -859,6 +773,79 @@ end;
 procedure TfrmSrcSettings.CloseWinProc(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TfrmSrcSettings.listSettingsDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  paramValue : string;
+begin
+  if TListView(Sender).ItemIndex = -1 then exit;
+
+  if Sender = listAtariBasic then begin
+//    ShowMessage('listAtariBasic');
+    editAtariBasic.Enabled := TListView(Sender).ItemIndex in [0, 9];
+    editAtariBasic.ReadOnly := not editAtariBasic.Enabled;
+  end
+  else if Sender = listMadPascal then begin
+//    ShowMessage('listSettings');
+    editMadPascal.Enabled := TListView(Sender).ItemIndex in [1, 2, 3, 4];
+    editMadPascal.ReadOnly := not editMadPascal.Enabled;
+  end
+  else if Sender = listMadsMp then begin
+//    ShowMessage('listMadsMp');
+    editMadsMp.Enabled := TListView(Sender).ItemIndex in [0, 4, 5, 6, 7, 8, 9, 10, 14];
+    editMadsMp.ReadOnly := not editMadsMp.Enabled;
+  end
+  else if Sender = listMads then begin
+//    ShowMessage('listMads');
+    editMads.Enabled := TListView(Sender).ItemIndex in [0, 4, 5, 6, 7, 8, 9, 10, 14];
+    editMads.ReadOnly := not editMads.Enabled;
+  end
+  else if Sender = listFastBasic then begin
+    editFastBasic.Enabled := TListView(Sender).ItemIndex in [3, 4, 7, 8, 9, 10];
+    editFastBasic.ReadOnly := not editFastBasic.Enabled;
+  end;
+//  else if Sender = listEffectus then begin
+////    ShowMessage('listEffectus');
+//    editEffectus.Enabled := TListView(Sender).ItemIndex in [0, 1];
+//    editEffectus.ReadOnly := not TListView(Sender).ItemIndex in [0, 1];
+//  end;
+
+  //showmessage(listMadPascal.ItemIndex.ToString);
+
+  if TListView(Sender).Items[TListView(Sender).ItemIndex].SubItems.Count = 2 then begin
+    paramValue := TListView(Sender).Items[TListView(Sender).ItemIndex].SubItems[1];
+
+    if Sender = listAtariBasic then
+      editAtariBasic.Text := paramValue
+    else if Sender = listMadPascal then
+      editMadPascal.Text := paramValue
+    else if Sender = listMadsMp then
+      editMadsMp.Text := paramValue
+    else if Sender = listMads then
+      editMads.Text := paramValue
+    else if Sender = listFastBasic then
+      editFastBasic.Text := paramValue
+//    else if Sender = listEffectus then
+//      editEffectus.Text := paramValue;
+  end;
+end;
+
+procedure TfrmSrcSettings.btnValueProc(Sender: TObject);
+begin
+  if Sender = btnValueAtariBAsic then
+    listAtariBAsic.Items[listAtariBAsic.ItemIndex].SubItems[1] := editAtariBAsic.Text
+  else if Sender = btnValueMadPascal then
+    listMadPascal.Items[listMadPascal.ItemIndex].SubItems[1] := editMadPascal.Text
+  else if Sender = btnValueMadsMp then
+    listMadsMp.Items[listMadsMp.ItemIndex].SubItems[1] := editMadsMp.Text
+  else if Sender = btnValueMads then
+    listMads.Items[listMads.ItemIndex].SubItems[1] := editMads.Text
+  else if Sender = btnValueFastBasic then
+    listFastBasic.Items[listFastBasic.ItemIndex].SubItems[1] := editFastBasic.Text;
+//  else if Sender = btnValueEffectus then
+//    listEffectus.Items[listEffectus.ItemIndex].SubItems[1] := editEffectus.Text
 end;
 
 procedure TfrmSrcSettings.SetEditor;
@@ -881,10 +868,11 @@ begin
   SetButton(Sender as TBCMaterialDesignButton, false);
 end;
 
-//procedure TfrmSrcSettings.pageChange(Sender : TObject);
-//begin
-//
-//end;
+//  with ColorBox1 do
+//  begin
+//     items.Clear;
+//     items.AddObject('clWhite', tobject(clWhite));
+//  end;
 
 end.
 

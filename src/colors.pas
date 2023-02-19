@@ -112,7 +112,6 @@ end;
 procedure TfrmColors.FormShow(Sender: TObject);
 begin
   propFlagModules[9] := 1;
-  isChange := true;
 
   if formId = formPmg then
     keyScan := 4

@@ -14,7 +14,7 @@ object frmSrcEdit: TfrmSrcEdit
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.10.0'
+  LCLVersion = '2.2.4.0'
   inline editor: TSynEdit
     Left = 0
     Height = 506
@@ -616,10 +616,10 @@ object frmSrcEdit: TfrmSrcEdit
       ShowHint = True
     end
     object cmbProp: TComboBox
-      Left = 373
+      Left = 488
       Height = 23
       Top = 2
-      Width = 191
+      Width = 336
       ItemHeight = 15
       OnChange = cmbPropChange
       Style = csDropDownList
@@ -650,10 +650,10 @@ object frmSrcEdit: TfrmSrcEdit
       Text = 'Mad Pascal'
     end
     object cmbLineBreak: TComboBox
-      Left = 564
+      Left = 373
       Height = 23
       Top = 2
-      Width = 191
+      Width = 115
       ItemHeight = 15
       ItemIndex = 0
       Items.Strings = (

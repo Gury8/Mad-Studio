@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Byte viewer
 }
 unit byte_editor;
@@ -11,15 +11,15 @@ unit byte_editor;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  Grids, strutils, lcltype, BCTrackbarUpdown, BCMaterialDesignButton;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  ExtCtrls, Grids, strutils, lcltype, SpinEx, BCMaterialDesignButton;
 
 type
   { TfrmByteEditor }
   TfrmByteEditor = class(TForm)
     btnExportData : TBCMaterialDesignButton;
     btnClose : TBCMaterialDesignButton;
-    editMaxLines : TBCTrackbarUpdown;
+    editMaxLines : TSpinEditEx;
     lblFilesize : TLabel;
     btnLoadData : TButton;
     chkHex : TCheckBox;
@@ -37,25 +37,21 @@ type
     procedure FormClose(Sender : TObject; var CloseAction : TCloseAction);
     procedure CloseProc(Sender : TObject);
     procedure ExportDataProc(Sender : TObject);
-    procedure btnLoadDataClick(Sender : TObject);
+    procedure LoadDataProc(Sender : TObject);
     procedure chkHexChange(Sender : TObject);
     procedure chkRowSelectChange(Sender : TObject);
     procedure paintBoxPaint(Sender : TObject);
-    procedure strGridHeaderClick(Sender : TObject; IsColumn : Boolean; Index : Integer);
+    procedure GridHeaderProc(Sender : TObject; IsColumn : Boolean; Index : Integer);
     procedure strGridKeyUp(Sender : TObject; var Key : Word; Shift : TShiftState);
-    procedure strGridMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+    procedure strGridUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
       X, Y : Integer);
-    procedure btnCloseMouseEnter(Sender : TObject);
-    procedure btnCloseMouseLeave(Sender : TObject);
-    procedure btnExportDataMouseEnter(Sender : TObject);
-    procedure btnExportDataMouseLeave(Sender : TObject);
+    procedure ButtonHoverEnter(Sender : TObject);
+    procedure ButtonHoverLeave(Sender : TObject);
   private
     fs : TFileStream;
     isDataReader : boolean;
     factX02, factY02 : byte;
     procedure SetDecHex(isHex : boolean);
-  public
-
   end;
 
 var
@@ -76,8 +72,6 @@ begin
   strGrid.ColWidths[0] := 60;
   factX02 := 12; factY02 := 12;
   isDataExport := false;
-
-  SetTrackBarUpDown(editMaxLines, $00DDDDDD, clWhite);
 end;
 
 procedure TfrmByteEditor.FormShow(Sender : TObject);
@@ -129,7 +123,7 @@ begin
   Close;
 end;
 
-procedure TfrmByteEditor.btnLoadDataClick(Sender : TObject);
+procedure TfrmByteEditor.LoadDataProc(Sender : TObject);
 var
   i, n : integer;
   rowCnt : integer = 1;
@@ -159,9 +153,10 @@ begin
     fs := TFileStream.Create(filename, fmOpenRead);
     try
       // Clear string grid
-      for i := 0 to Pred(strGrid.ColCount) do
+      for i := 0 to Pred(strGrid.ColCount) do begin
         for n := 0 to Pred(strGrid.RowCount) do
           strGrid.Cells[i, n] := '';
+      end;
 
       strGrid.RowCount := 1;
 
@@ -211,6 +206,7 @@ begin
   else
     SetDecHex(false);
 end;
+
 procedure TfrmByteEditor.paintBoxPaint(Sender : TObject);
 var
   bin : string;
@@ -325,7 +321,7 @@ begin
   Screen.Cursor := crDefault;
 end;
 
-procedure TfrmByteEditor.strGridHeaderClick(Sender : TObject; IsColumn : Boolean; Index : Integer);
+procedure TfrmByteEditor.GridHeaderProc(Sender : TObject; IsColumn : Boolean; Index : Integer);
 begin
   if not IsColumn then (Sender as TStringGrid).Row := Index;
 end;
@@ -335,8 +331,8 @@ begin
   paintBox.Invalidate;
 end;
 
-procedure TfrmByteEditor.strGridMouseUp(Sender : TObject; Button : TMouseButton;
-  Shift : TShiftState; X, Y : Integer);
+procedure TfrmByteEditor.strGridUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
+  X, Y : Integer);
 begin
   paintBox.Invalidate;
 end;
@@ -366,28 +362,14 @@ begin
   end;
 end;
 
-procedure TfrmByteEditor.btnExportDataMouseEnter(Sender : TObject);
+procedure TfrmByteEditor.ButtonHoverEnter(Sender : TObject);
 begin
-  btnExportData.NormalColor := $00CECECE;
-  btnExportData.NormalColorEffect := clWhite;
+  SetButton(Sender as TBCMaterialDesignButton, true);
 end;
 
-procedure TfrmByteEditor.btnExportDataMouseLeave(Sender : TObject);
+procedure TfrmByteEditor.ButtonHoverLeave(Sender : TObject);
 begin
-  btnExportData.NormalColor := clWhite;
-  btnExportData.NormalColorEffect := clSilver;
-end;
-
-procedure TfrmByteEditor.btnCloseMouseEnter(Sender : TObject);
-begin
-  btnClose.NormalColor := $00CECECE;
-  btnClose.NormalColorEffect := clWhite;
-end;
-
-procedure TfrmByteEditor.btnCloseMouseLeave(Sender : TObject);
-begin
-  btnClose.NormalColor := clWhite;
-  btnClose.NormalColorEffect := clSilver;
+  SetButton(Sender as TBCMaterialDesignButton, false);
 end;
 
 end.

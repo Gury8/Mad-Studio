@@ -28,10 +28,6 @@ type
     procedure rad2PlayersChange(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure CloseWin(Sender: TObject);
-  private
-
-  public
-
   end;
 
 var

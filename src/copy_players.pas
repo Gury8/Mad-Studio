@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Copy Player editor data into Animator editor
 }
 unit copy_players;
@@ -28,7 +28,7 @@ type
     btnCopyToFrames0 : TButton;
     Button1 : TButton;
     Button2 : TButton;
-    GroupBox1 : TGroupBox;
+    boxOptions : TGroupBox;
     imgPlayer0dr : TImage;
     imgPlayer1dr : TImage;
     imgPlayer2dr : TImage;
@@ -51,8 +51,6 @@ type
     procedure Button1Click(Sender : TObject);
   private
     procedure ReadData(player : byte; pm : TImage; factX, factY : byte);
-  public
-
   end;
 
 var

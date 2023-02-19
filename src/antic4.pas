@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2023
   Unit: Antic mode 4 and 5 editor
 }
 unit antic4;
@@ -11,8 +11,8 @@ unit antic4;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, Menus, ComCtrls, Buttons, BCTrackbarUpdown, strutils, lcltype,
+  Classes, SysUtils, FileUtil, SpinEx, Forms, Controls, Graphics, Dialogs,
+  StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, strutils, lcltype,
   common;
 
 type
@@ -23,6 +23,7 @@ type
 
   { TfrmAntic4 }
   TfrmAntic4 = class(TForm)
+    btnApplyText : TToolButton;
     btnCharDown : TSpeedButton;
     btnCharLeft : TSpeedButton;
     btnCharRight : TSpeedButton;
@@ -41,10 +42,10 @@ type
     color2 : TImage;
     color3 : TImage;
     color4 : TImage;
-    editX : TBCTrackbarUpdown;
-    editY : TBCTrackbarUpdown;
-    GroupBox3 : TGroupBox;
-    grpCharOper : TGroupBox;
+    editX : TSpinEditEx;
+    editY : TSpinEditEx;
+    boxCharInfo : TGroupBox;
+    boxCharOper : TGroupBox;
     imgBaseFontSetInv : TImage;
     imgCharAntic45 : TImage;
     imgCharOrig : TImage;
@@ -167,12 +168,13 @@ type
     btnClearCh: TToolButton;
     btnCopyChar : TToolButton;
     btnSettings : TToolButton;
-    ToolButton17: TToolButton;
+    btnDiv02: TToolButton;
     btnLoadScreen: TToolButton;
     btnSaveScreen: TToolButton;
     btnClearScreen: TToolButton;
     btnCode: TToolButton;
-    ToolButton2 : TToolButton;
+    btnDiv01 : TToolButton;
+    btnDiv03 : TToolButton;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -181,6 +183,7 @@ type
     procedure FormKeyDown(Sender : TObject; var Key : Word; Shift : TShiftState);
     procedure GenCodeProc(Sender: TObject);
     procedure DefaultColorPaletteProc(Sender : TObject);
+    procedure ApplyTextProc(Sender : TObject);
     procedure ColorProc(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
       X, Y : Integer);
     procedure imgBaseFontSetDown(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
@@ -215,8 +218,6 @@ type
       X, Y: Integer);
     procedure imgFontSetDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure editYMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
     procedure CloseWinProc(Sender: TObject);
     procedure lblNumProc(Sender: TObject);
     procedure ClearEditorProc(Sender: TObject);
@@ -256,6 +257,7 @@ type
     isCopyChar : boolean;
     isShowGrid : boolean;
     gridColor : TColor;
+    isFileLoad : boolean;
     procedure ShowFontSet;
     procedure ShowBaseFontSet;
     procedure ShowFontSet02(offset : byte);
@@ -286,7 +288,6 @@ type
     fldCharAntic45 : charType;
     fldAtascii : array[0.._ANTIC_MODE_4_SIZE - 1] of byte;
     grX, grY : integer;
-    chrX, chrY : byte;
     factX, factY,             // Character screen editor offset
     chrFactX, chrFactY,       // Character editor pixel offsets
     factX02, factY02 : byte;  // Font set character offsets
@@ -300,6 +301,7 @@ type
     charXOffset, charYOffset, charYOffset02 : word;
     procedure RefreshData;
     procedure RefreshColors;
+    function CheckModChars : boolean;
   end;
 
 var
@@ -310,7 +312,7 @@ implementation
 {$R *.lfm}
 
 uses
-  main, lib, colors, antic4_gen, viewer;
+  main, lib, colors, antic4_gen, viewer, set_values;
 
 { TfrmAntic4 }
 
@@ -321,9 +323,8 @@ begin
   isCreate := true;
   isCopyChar := false;
   isShowGrid := false;
+  isFileLoad := false;
   FillByte(charEditIndex, SizeOf(charEditIndex), 0);
-  SetTrackBarUpDown(editX, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editY, $00DDDDDD, clWhite);
 end;
 
 procedure TfrmAntic4.FormShow(Sender: TObject);
@@ -331,7 +332,6 @@ var
   i : byte;
 begin
   propFlagModules[6] := 1;
-  isChange := true;
   frmMain.Top := 10;
   formId := formAntic4;
   filename := getDir + 'examples\screen01.an4';
@@ -339,7 +339,6 @@ begin
              ' - Antic mode 4 and 5 editor (' + filename + ')';
 
   isEdit := false;
-
   modeHeight := 24;
   SetXY(39, 23);
   editX.Value := maxX;
@@ -350,7 +349,6 @@ begin
 //  editorX := 24;
 
   // Character editor parameters
-  chrX := 7; chrY := 7;
   chrFactX := 18; chrFactY := 18;
 
   isFontSetNormal := true;
@@ -375,7 +373,7 @@ begin
   PlotChar(255, 255);
   ColorRegisters;
 
-  statusBar.Panels[2].Text := 'Font/Character set: default';
+  statusBar.Panels[2].Text := 'Character set: default';
 end;
 
 procedure TfrmAntic4.FormActivate(Sender: TObject);
@@ -438,10 +436,12 @@ end;
 
 procedure TfrmAntic4.ViewerProc(Sender : TObject);
 begin
-  frmViewer.isModal := true;
-  frmViewer.ShowModal;
-  if frmViewer.filename <> '' then
-    OpenFile(frmViewer.filename);
+  with frmViewer do begin
+    isModal := true;
+    ShowModal;
+    if filename <> '' then
+      OpenFile(filename);
+  end;
 end;
 
 procedure TfrmAntic4.ColorProc(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
@@ -472,7 +472,7 @@ begin
     exit;
   end;
 
-  for m := 0 to _CHAR_DIM do
+  for m := 0 to _CHAR_DIM do begin
     for n := 0 to 15 do begin
       if (x > 18) and (x <= charXOffset) and
          (y > 17*m) and (y < charYOffset + 17*m) then
@@ -483,8 +483,8 @@ begin
           RefreshCharX(offs)
         else begin
           offset := offs shl 3;
-          for yf := 0 to chrY do
-            for xf := 0 to chrX do
+          for yf := 0 to _CHAR_DIM do
+            for xf := 0 to _CHAR_DIM do
               fldFontSet[xf, yf + offset] := fldChar[xf, yf];
         end;
         break;
@@ -499,14 +499,14 @@ begin
           RefreshCharX(offs)
         else begin
           offset := offs shl 3;
-          for yf := 0 to chrY do
-            for xf := 0 to chrX do
+          for yf := 0 to _CHAR_DIM do
+            for xf := 0 to _CHAR_DIM do
               fldFontSet[xf, yf + offset] := fldChar[xf, yf];
         end;
         break;
       end;
     end;
-
+  end;
   CharInfo(offs);
   PlotChar(255, 255);
   ColorRegisters;
@@ -576,7 +576,7 @@ end;
 procedure TfrmAntic4.EditDimProc(Sender : TObject);
 begin
   btn := mbMiddle;
-  if not isCreate then
+  if not isCreate and not isFileLoad then
     SetXY(editX.Value, editY.Value);
 end;
 
@@ -695,15 +695,15 @@ begin
   xf := X div factX;
   yf := Y div factY;
 
+  // Plot character
+  Plot(xf, yf);
+
   // Data is changed
   if not isEdit then begin
     isEdit := true;
     if Pos(' *', caption) = 0 then
       caption := caption + ' *';
   end;
-
-  // Plot character
-  Plot(xf, yf);
 end;
 
 procedure TfrmAntic4.imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -746,8 +746,8 @@ begin
           RefreshCharX(offs)
         else begin
           offset := offs shl 3;
-          for yf := 0 to chrY do
-            for xf := 0 to chrX do
+          for yf := 0 to _CHAR_DIM do
+            for xf := 0 to _CHAR_DIM do
               fldFontSet[xf, yf + offset] := fldChar[xf, yf];
         end;
         break;
@@ -762,8 +762,8 @@ begin
           RefreshCharX(offs)
         else begin
           offset := offs shl 3;
-          for yf := 0 to chrY do
-            for xf := 0 to chrX do
+          for yf := 0 to _CHAR_DIM do
+            for xf := 0 to _CHAR_DIM do
               fldFontSet[xf, yf + offset] := fldChar[xf, yf];
         end;
         break;
@@ -815,6 +815,7 @@ end;
 
 procedure TfrmAntic4.DefaultSetProc(Sender: TObject);
 begin
+  FillByte(charEditIndex, SizeOf(charEditIndex), 0);
   DefaultFontSet(fldFontSet);
   fontName := '';
   statusBar.Panels[2].Text := 'Font/Character set: default';
@@ -831,7 +832,9 @@ var
   fs : TFileStream;
   dta : byte;
 begin
-  ShowCursor(frmAntic4, frmAntic4, crHourGlass);
+//  ShowCursor(frmAntic4, frmAntic4, crHourGlass);
+  Screen.BeginWaitCursor;
+  isEdit := false;
 
   filename := LowerCase(filename);
   if isAntic2 then begin
@@ -872,6 +875,7 @@ begin
       maxX := fs.ReadByte;
       maxY := fs.ReadByte;
 
+//      debug('maxy', maxy);
       SetXY(maxx, maxy);
       editX.Value := maxX;
       editY.Value := maxY;
@@ -897,7 +901,9 @@ begin
     RefreshColors;
     caption := programName + ' ' + programVersion +
                ' - Antic mode 4 and 5 editor (' + filename + ')';
-    ShowCursor(frmAntic4, frmAntic4, crDefault);
+//    ShowCursor(frmAntic4, frmAntic4, crDefault);
+    Screen.EndWaitCursor;
+    isFileLoad := false;
   end;
 end;
 
@@ -913,6 +919,7 @@ begin
     frmMain.dlgOpen.Filename := filename;
 
   if frmMain.dlgOpen.Execute then begin
+    isFileLoad := true;
     filename := frmMain.dlgOpen.Filename;
     isAntic2 := false;
     OpenFile(filename);
@@ -1154,21 +1161,14 @@ begin
   end;
 
   SetGrid(gridColor);
-
-  //imgEditor.Invalidate;
-  //imgEditor.Update;
-  //imgEditor.Refresh;
 end;
 
 procedure TfrmAntic4.SetGrid(gColor : TColor);
 begin
   isShowGrid := gColor <> colTab[0];
-//  if isshowgrid then debug('is') else debug('not is');
   gridColor := gColor;
-//  RefreshChar;
   RefreshData;
   RefreshChar;
-//  debug('after SetGrid');
 end;
 
 procedure TfrmAntic4.ShowFontSet;
@@ -1189,10 +1189,11 @@ begin
     end;
     cnt := 0;
     xoffset := offset*18;
-    for yf := 0 to chrY do
-      for xf := 0 to chrX do begin
+    for yf := 0 to _CHAR_DIM do begin
+      for xf := 0 to _CHAR_DIM do begin
         Inc(cnt);
         col := fldFontSet[xf, n shl 3 + yf];
+//        col := Antic45Mask(fldFontSet[xf, n shl 3 + yf], cnt);
         mask[cnt - 1] := col;
         if cnt = 2 then begin
           // Antic mode 4 and 5 display
@@ -1203,6 +1204,7 @@ begin
           else if (mask[0] = 1) and (mask[1] = 1) then
             col := 3;
 
+//        if cnt = 2 then begin
           FillRectEx(imgFontSet, coltab[col],
                      (xf - 1)*factX02 + xoffset, yf*factY02 + yoffset, factX02 shl 1, factY02);
 
@@ -1215,7 +1217,7 @@ begin
           cnt := 0;
         end;
       end;
-
+    end;
     Inc(offset);
   end;
 end;
@@ -1337,12 +1339,13 @@ begin
   xf := scrPos shl 3;
   yf := y shl 2;
 
-  for dy := 0 to maxY do
+  for dy := 0 to maxY do begin
     for dx := 0 to maxX do
       if (xf >= dx shl 3) and (xf < (dx + 1) shl 3) then begin
         xf := dx shl 3;
         break;
       end;
+  end;
 
   if offset > 127 then begin
     isInverse := true;
@@ -1362,8 +1365,8 @@ begin
   FillRectEx(imgChar, coltabFont[0], 0, 0, imgChar.Width, imgChar.Height);
 
   // Refresh character set with changes for selected character
-  for yf := 0 to chrY do
-    for xf := 0 to chrX do begin
+  for yf := 0 to _CHAR_DIM do
+    for xf := 0 to _CHAR_DIM do begin
       fldFontSet[xf, yf + offs shl 3] := fldChar[xf, yf];
       FillRectEx(imgChar, colTabFont[fldChar[xf, yf]],
                  xf*chrFactX, yf*chrFactY, chrFactX, chrFactY);
@@ -1397,8 +1400,8 @@ begin
   FillRectEx(imgChar, coltabFont[0], 0, 0, imgChar.Width, imgChar.Height);
   FillRectEx(imgCharAntic45, colTab[0], 0, 0, imgChar.Width, imgChar.Height);
   offset := offset shl 3;
-  for yf := 0 to chrY do
-    for xf := 0 to chrX do begin
+  for yf := 0 to _CHAR_DIM do begin
+    for xf := 0 to _CHAR_DIM do begin
       // Show pixel of selected character
       col := fldFontSetOrig[xf, yf + offset];
       if not isFontSetNormal then
@@ -1435,7 +1438,7 @@ begin
         fldCharAntic45[xf - 1, yf] := colTab[col];
         fldCharAntic45[xf, yf] := colTab[col];
         FillRectEx(imgCharAntic45, colTab[col], (xf - 1)*chrFactX, yf*chrFactY,
-                   (xf - 1)*chrFactX*2, chrFactY);
+                   (xf - 1)*chrFactX shl 1, chrFactY);
         if isShowGrid then begin
 //          debug('isShowGrid');
           imgCharAntic45.Canvas.Pen.Color := gridColor
@@ -1447,7 +1450,7 @@ begin
 
         if xf = 1 then
           imgCharAntic45.Canvas.Rectangle(0, yf*chrFactY,
-                                          chrFactX*2 + 1,
+                                          chrFactX shl 1 + 1,
                                           yf*chrFactY + (yf + 1)*chrFactY + 1)
         else
           imgCharAntic45.Canvas.Rectangle((xf - 1)*chrFactX, yf*chrFactY,
@@ -1455,7 +1458,7 @@ begin
                                           yf*chrFactY + (yf + 1)*chrFactY + 1);
       end;
     end;
-
+  end;
   imgChar.Refresh;
   imgCharOrig.Refresh;
 end;
@@ -1478,7 +1481,7 @@ begin
       exit;
     end;
 
-    if xf > chrX then xf := chrX;
+    if xf > _CHAR_DIM then xf := _CHAR_DIM;
     fldChar[xf, yf] := col;
     fldFontset[xf, yf + offs shl 3] := col;
     FillRectEx(imgChar, colTabFont[col], xf*chrFactX, yf*chrFactY, chrFactX, chrFactY);
@@ -1587,7 +1590,7 @@ begin
     exit;
   end;
 
-  if xf > chrX then xf := chrX;
+  if xf > _CHAR_DIM then xf := _CHAR_DIM;
   fldCharAntic45[xf, yf] := frmColors.SelColor;
 
   case xf of
@@ -1663,17 +1666,19 @@ begin
   if offset < 16 then
     xoffset := offset*18;
 
-  for cnt := 1 to _CHAR_DIM do
+  for cnt := 1 to _CHAR_DIM do begin
     if (offset >= cnt shl 4) and (offset < charXOffset + (cnt - 1) shl 4) then begin
       xoffset := (offset - cnt shl 4)*18;
       break;
     end;
+  end;
 
   cnt := 0;
-  for yf := 0 to chrY do
-    for xf := 0 to chrX do begin
+  for yf := 0 to _CHAR_DIM do
+    for xf := 0 to _CHAR_DIM do begin
       Inc(cnt);
       col := fldFontSet[xf, offset shl 3 + yf];
+//      col := Antic45Mask(fldFontSet[xf, offset shl 3 + yf], cnt);
       mask[cnt - 1] := col;
       if cnt = 2 then begin
         // Antic mode 4 and 5 display
@@ -1684,6 +1689,7 @@ begin
         else if (mask[0] = 1) and (mask[1] = 1) then
           col := 3;
 
+//      if cnt = 2 then begin
         FillRectEx(imgFontSet, coltab[col],
                    (xf - 1)*factX02 + xoffset, yf*factY02 + yoffset, factX02 shl 1, factY02);
 
@@ -1713,8 +1719,8 @@ begin
       Inc(yoffset, 17);
     end;
     xoffset := offset*18;
-    for yf := 0 to chrY do
-      for xf := 0 to chrX do begin
+    for yf := 0 to _CHAR_DIM do begin
+      for xf := 0 to _CHAR_DIM do begin
         // Standard characters
         col := fldFontSet[xf, n shl 3 + yf];
         FillRectEx(imgBaseFontSet, coltabFont[col],
@@ -1724,7 +1730,7 @@ begin
         FillRectEx(imgBaseFontSetInv, coltabFont[col],
                    xf*factX02 + xoffset, yf*factY02 + yoffset, factX02, factY02);
       end;
-
+    end;
     Inc(offset);
   end;
 end;
@@ -1736,12 +1742,13 @@ procedure TfrmAntic4.FlipXProc(Sender: TObject);
 var
   x, y, n : byte;
 begin
-  for y := 0 to chrY do
-    for x := chrX downto 4 do begin
+  for y := 0 to _CHAR_DIM do begin
+    for x := _CHAR_DIM downto 4 do begin
       n := fldChar[x, y];
       fldChar[x, y] := fldChar[7 - x, y];
       fldChar[7 - x, y] := n;
     end;
+  end;
 
   RefreshChar;
 //  RefreshCharX(offs);
@@ -1754,12 +1761,13 @@ procedure TfrmAntic4.FlipYProc(Sender: TObject);
 var
   x, y, n : byte;
 begin
-  for x := 0 to chrX do
-    for y := chrY downto 4 do begin
+  for x := 0 to _CHAR_DIM do begin
+    for y := _CHAR_DIM downto 4 do begin
       n := fldChar[x, y];
       fldChar[x, y] := fldChar[x, 7 - y];
       fldChar[x, 7 - y] := n;
     end;
+  end;
 
   RefreshChar;
 //  RefreshCharX(offs);
@@ -1773,13 +1781,14 @@ var
   x, y, n : byte;
   arr : charType;
 begin
-  for y := 0 to chrY do
-    for x := 0 to chrX do
+  for y := 0 to _CHAR_DIM do begin
+    for x := 0 to _CHAR_DIM do
       arr[y, x] := fldChar[x, y];
-
-  for x := 0 to chrX do
-    for n := 0 to chrY do
+  end;
+  for x := 0 to _CHAR_DIM do begin
+    for n := 0 to _CHAR_DIM do
       fldChar[7 - n, x] := arr[n, x];
+  end;
 
   RefreshChar;
 //  RefreshCharX(offs);
@@ -1792,9 +1801,9 @@ procedure TfrmAntic4.ShiftLeft(Sender: TObject);
 var
   x, y, n : byte;
 begin
-  for y := 0 to chrY do begin
+  for y := 0 to _CHAR_DIM do begin
     n := fldChar[0, y];
-    for x := 1 to chrX do
+    for x := 1 to _CHAR_DIM do
       fldChar[x - 1, y] := fldChar[x, y];
 
     fldChar[7, y] := n;
@@ -1810,9 +1819,9 @@ procedure TfrmAntic4.ShiftRightProc(Sender: TObject);
 var
   x, y, n : byte;
 begin
-  for y := 0 to chrY do begin
+  for y := 0 to _CHAR_DIM do begin
     n := fldChar[7, y];
-    for x := chrX - 1 downto 0 do
+    for x := _CHAR_DIM - 1 downto 0 do
       fldChar[x + 1, y] := fldChar[x, y];
 
     fldChar[0, y] := n;
@@ -1829,17 +1838,18 @@ var
   x, y : byte;
   fld02 : array[0..7] of byte;
 begin
-  for x := 0 to chrY do
+  for x := 0 to _CHAR_DIM do
     fld02[x] := fldChar[x, 0];
 
-  for x := 0 to chrX do
-    for y := 1 to chrY do begin
+  for x := 0 to _CHAR_DIM do begin
+    for y := 1 to _CHAR_DIM do begin
       fldChar[x, y - 1] := fldChar[x, y];
       fldChar[x, y] := 0;
     end;
+  end;
 
   for x := 0 to _CHAR_DIM do
-    fldChar[x, chrY] := fld02[x];
+    fldChar[x, _CHAR_DIM] := fld02[x];
 
   RefreshChar;
 end;
@@ -1853,15 +1863,16 @@ var
   fld02 : array[0..7] of byte;
 begin
   for x := 0 to _CHAR_DIM do
-    fld02[x] := fldChar[x, chrY];
+    fld02[x] := fldChar[x, _CHAR_DIM];
 
-  for x := 0 to chrX do
-    for y := chrY - 1 downto 0 do begin
+  for x := 0 to _CHAR_DIM do begin
+    for y := _CHAR_DIM - 1 downto 0 do begin
       fldChar[x, y + 1] := fldChar[x, y];
       fldChar[x, y] := 0;
     end;
+  end;
 
-  for x := 0 to chrX do
+  for x := 0 to _CHAR_DIM do
     fldChar[x, 0] := fld02[x];
 
   RefreshChar;
@@ -1872,7 +1883,7 @@ end;
  -----------------------------------------------------------------------------}
 procedure TfrmAntic4.MoveLeftProc(Sender: TObject);
 begin
-  MoveLeft(chrX, chrY, fldChar);
+  MoveLeft(_CHAR_DIM, _CHAR_DIM, fldChar);
   RefreshChar;
 end;
 
@@ -1881,7 +1892,7 @@ end;
  -----------------------------------------------------------------------------}
 procedure TfrmAntic4.MoveRightProc(Sender: TObject);
 begin
-  MoveRight(chrX, chrY, fldChar);
+  MoveRight(_CHAR_DIM, _CHAR_DIM, fldChar);
   RefreshChar;
 end;
 
@@ -1890,7 +1901,7 @@ end;
  -----------------------------------------------------------------------------}
 procedure TfrmAntic4.MoveUpProc(Sender: TObject);
 begin
-  MoveUp(chrX, chrY, fldChar);
+  MoveUp(_CHAR_DIM, _CHAR_DIM, fldChar);
   RefreshChar;
 end;
 
@@ -1899,7 +1910,7 @@ end;
  -----------------------------------------------------------------------------}
 procedure TfrmAntic4.MoveDownProc(Sender: TObject);
 begin
-  MoveDown(chrX, chrY, fldChar);
+  MoveDown(_CHAR_DIM, _CHAR_DIM, fldChar);
   RefreshChar;
 end;
 
@@ -1910,8 +1921,8 @@ procedure TfrmAntic4.InvertProc(Sender : TObject);
 var
   x, y : byte;
 begin
-  for y := 0 to chrY do
-    for x := 0 to chrX do
+  for y := 0 to _CHAR_DIM do
+    for x := 0 to _CHAR_DIM do
       fldChar[x, y] := 1 - fldChar[x, y];
 
   RefreshChar;
@@ -1961,9 +1972,6 @@ begin
     Inc(x);
   end;
 
-  //imgEditor.Invalidate;
-  //imgEditor.Update;
-  //imgEditor.Refresh;
   ShowFontSet;
   //if isShowGrid then begin
   //    debug('RefreshData isShowGrid');
@@ -1991,14 +1999,6 @@ begin
     FillRectEx(color2, coltab[10], 0, 0, color0.width, color0.Height);
 end;
 
-procedure TfrmAntic4.editYMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-  X, Y : Integer);
-begin
-  btn := mbMiddle;
-  if not isCreate then
-    SetXY(editX.Value, editY.Value);
-end;
-
 procedure TfrmAntic4.MaxSizeProc(Sender : TObject);
 begin
   if chkMaxSize.Checked then begin
@@ -2017,11 +2017,13 @@ begin
   if iscopy then begin
     statusBar.Panels[3].Text := 'Copy drawing character to selected character set cell.' +
                                 ' Press ''Esc'' key to end the operation!';
-    ShowCursor(frmAntic4, frmAntic4, crDrag);
+//    ShowCursor(frmAntic4, frmAntic4, crDrag);
+    Screen.BeginTempCursor(crDrag);
   end
   else begin
     statusBar.Panels[3].Text := '';
-    ShowCursor(frmAntic4, frmAntic4, crDefault);
+//    ShowCursor(frmAntic4, frmAntic4, crDefault);
+    Screen.EndTempCursor(crDrag);
   end;
 end;
 
@@ -2033,13 +2035,13 @@ var
   xf, yf, col : byte;
 begin
   FillRectEx(imgChar, colTab[0], 0, 0, imgChar.Width, imgChar.Height);
-  for yf := 0 to chrY do
-    for xf := 0 to chrX do begin
+  for yf := 0 to _CHAR_DIM do begin
+    for xf := 0 to _CHAR_DIM do begin
       col := fldFontSetOrig[xf, yf + offs shl 3];
       fldFontSet[xf, yf + offs shl 3] := col;
       FillRectEx(imgChar, coltabFont[col], xf*chrFactX, yf*chrFactY, chrFactX, chrFactX);
     end;
-
+  end;
   PlotChar(255, 255);
   RefreshCharX(offs);
   RefreshChar;
@@ -2058,18 +2060,81 @@ begin
     lblCharInfo03.Caption := '';
   end
   else begin
-    //n := offset;
-    //if (offset >= 0) and (offset <= 63) then
-    //  n += 32
-    //else if (offset >= 64) and (offset <= 95) then
-    //  n -= 64;
-
     n := StrToInt(AtasciiCode(offset));
-
-    lblCharInfo01.Caption := 'Internal code Dec: ' + IntToStr(offset) + ' Hex: ' + Dec2hex(offset);
-    lblCharInfo02.Caption := 'Atascii code Dec: ' + IntToStr(n) + ' Hex: ' + Dec2hex(n);
+    lblCharInfo01.Caption := 'Internal code Dec: ' + IntToStr(offset) +
+                             ' Hex: ' + Dec2hex(offset);
+    lblCharInfo02.Caption := 'Atascii code Dec: ' + IntToStr(n) +
+                             ' Hex: ' + Dec2hex(n);
     lblCharInfo03.Caption := 'Atascii inverse Dec: ' + IntToStr(n + 128) +
                              ' Hex: ' + Dec2hex(n + 128);
+  end;
+end;
+
+procedure TfrmAntic4.ApplyTextProc(Sender : TObject);
+var
+  i, n : byte;
+  ch : char;
+  isAtascii : boolean;
+begin
+  setValues.caption := 'Set text position dialog';
+  setValues.warningText := '';
+  setValues.editX := 3;
+  setValues.editY := 3;
+  setValues.minEditX := 0;
+  setValues.minEditY := 0;
+  setValues.maxEditX := 39;
+  setValues.maxEditY := 23;
+  setValues.editText := '';
+
+  frmSetValues := TfrmSetValues.Create(Self);
+  with frmSetValues do
+    try
+      ShowModal;
+    finally
+      Free;
+    end;
+
+  if setValues.valuesSet then begin
+  //  showmessage(chr(97) + ' ' + inttostr(ord('b')));  // A 65
+
+    for i := 1 to Length(setValues.editText) do begin
+      ch := setValues.editText[i];
+      isAtascii := false;
+
+      if (ord(ch) >= 32) and (ord(ch) <= 95) then begin
+        n := ord(ch) - 32;
+        isAtascii := true;
+      end
+      else if (ord(ch) >= 97) and (ord(ch) <= 122) then begin
+        n := ord(ch);
+        isAtascii := true;
+      end;
+
+      if isAtascii then begin
+        if setValues.editY = 0 then
+          PutChar(setValues.editX + i - 1, setValues.editY, n)
+        else
+          PutChar(setValues.editX + i - 1, setValues.editY + setValues.editY, n);
+
+        fldAtascii[setValues.editX + i - 1 + setValues.editY*(maxX + 1)] := n;
+      end;
+    end;
+  end;
+end;
+
+// Check for modified characters
+function TfrmAntic4.CheckModChars : boolean;
+var
+  i : byte;
+  sum : byte = 0;
+begin
+  result := false;
+  for i := 0 to 127 do begin
+    Inc(sum, charEditIndex[i]);
+    if sum > 0 then begin
+      result := true;
+      break;
+    end;
   end;
 end;
 
@@ -2077,6 +2142,10 @@ procedure TfrmAntic4.CloseWinProc(Sender: TObject);
 begin
   Close;
 end;
+
+//imgEditor.Invalidate;
+//imgEditor.Update;
+//imgEditor.Refresh;
 
 end.
 

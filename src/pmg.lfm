@@ -1,13 +1,13 @@
 object frmPmg: TfrmPmg
-  Left = 102
+  Left = 64
   Height = 768
-  Top = 148
-  Width = 1138
+  Top = 67
+  Width = 1172
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Mad Studio - Player/missile graphics editor'
   ClientHeight = 748
-  ClientWidth = 1138
+  ClientWidth = 1172
   KeyPreview = True
   Menu = menuPmg
   OnActivate = FormActivate
@@ -20,7 +20,7 @@ object frmPmg: TfrmPmg
   object toolbar: TToolBar
     Left = 0
     Top = 0
-    Width = 1138
+    Width = 1172
     ButtonHeight = 30
     ButtonWidth = 30
     Caption = 'toolbar'
@@ -60,7 +60,7 @@ object frmPmg: TfrmPmg
       Top = 2
       Caption = 'btnGenCode'
       ImageIndex = 4
-      OnClick = Gencode
+      OnClick = GenCode
       ParentShowHint = False
       ShowHint = True
     end
@@ -164,7 +164,7 @@ object frmPmg: TfrmPmg
     Left = 0
     Height = 23
     Top = 725
-    Width = 1138
+    Width = 1172
     Panels = <    
       item
         Width = 250
@@ -244,7 +244,7 @@ object frmPmg: TfrmPmg
       TabOrder = 2
     end
     object imgP0_normal02: TImage
-      Left = 6
+      Left = 7
       Height = 160
       Top = 22
       Width = 32
@@ -276,36 +276,36 @@ object frmPmg: TfrmPmg
       Height = 136
       Top = 45
       Width = 8
-      OnMouseDown = imgMissileMouseDown
-      OnMouseMove = imgMissileMouseMove
-      OnMouseUp = imgMissileMouseUp
+      OnMouseDown = imgMissileDown
+      OnMouseMove = imgMissileMove
+      OnMouseUp = imgMissileUp
     end
     object imgMissile1: TImage
       Left = 90
       Height = 136
       Top = 214
       Width = 8
-      OnMouseDown = imgMissileMouseDown
-      OnMouseMove = imgMissileMouseMove
-      OnMouseUp = imgMissileMouseUp
+      OnMouseDown = imgMissileDown
+      OnMouseMove = imgMissileMove
+      OnMouseUp = imgMissileUp
     end
     object imgMissile2: TImage
       Left = 90
       Height = 136
       Top = 382
       Width = 8
-      OnMouseDown = imgMissileMouseDown
-      OnMouseMove = imgMissileMouseMove
-      OnMouseUp = imgMissileMouseUp
+      OnMouseDown = imgMissileDown
+      OnMouseMove = imgMissileMove
+      OnMouseUp = imgMissileUp
     end
     object imgMissile3: TImage
       Left = 90
       Height = 136
       Top = 550
       Width = 8
-      OnMouseDown = imgMissileMouseDown
-      OnMouseMove = imgMissileMouseMove
-      OnMouseUp = imgMissileMouseUp
+      OnMouseDown = imgMissileDown
+      OnMouseMove = imgMissileMove
+      OnMouseUp = imgMissileUp
     end
     object imgP0_single: TImage
       Left = 48
@@ -340,36 +340,36 @@ object frmPmg: TfrmPmg
       Height = 68
       Top = 45
       Width = 8
-      OnMouseDown = imgMissileMouseDown
-      OnMouseMove = imgMissileMouseMove
-      OnMouseUp = imgMissileMouseUp
+      OnMouseDown = imgMissileDown
+      OnMouseMove = imgMissileMove
+      OnMouseUp = imgMissileUp
     end
     object imgMissileSingle1: TImage
       Left = 104
       Height = 68
       Top = 214
       Width = 8
-      OnMouseDown = imgMissileMouseDown
-      OnMouseMove = imgMissileMouseMove
-      OnMouseUp = imgMissileMouseUp
+      OnMouseDown = imgMissileDown
+      OnMouseMove = imgMissileMove
+      OnMouseUp = imgMissileUp
     end
     object imgMissileSingle2: TImage
       Left = 104
       Height = 68
       Top = 382
       Width = 8
-      OnMouseDown = imgMissileMouseDown
-      OnMouseMove = imgMissileMouseMove
-      OnMouseUp = imgMissileMouseUp
+      OnMouseDown = imgMissileDown
+      OnMouseMove = imgMissileMove
+      OnMouseUp = imgMissileUp
     end
     object imgMissileSingle3: TImage
       Left = 104
       Height = 68
       Top = 550
       Width = 8
-      OnMouseDown = imgMissileMouseDown
-      OnMouseMove = imgMissileMouseMove
-      OnMouseUp = imgMissileMouseUp
+      OnMouseDown = imgMissileDown
+      OnMouseMove = imgMissileMove
+      OnMouseUp = imgMissileUp
     end
     object lblPlayer: TLabel
       Left = 66
@@ -399,7 +399,7 @@ object frmPmg: TfrmPmg
     Left = 168
     Height = 693
     Top = 32
-    Width = 779
+    Width = 786
     ActivePage = tabPlayers
     Align = alClient
     Font.Height = -11
@@ -411,7 +411,7 @@ object frmPmg: TfrmPmg
     object tabPlayers: TTabSheet
       Caption = 'Player editor'
       ClientHeight = 667
-      ClientWidth = 771
+      ClientWidth = 778
       Font.Height = -11
       Font.Name = 'Verdana'
       OnMouseDown = PopUpProc
@@ -422,9 +422,9 @@ object frmPmg: TfrmPmg
         Height = 640
         Top = 18
         Width = 128
-        OnMouseDown = editorMouseDown
-        OnMouseMove = editorMouseMove
-        OnMouseUp = editorMouseUp
+        OnMouseDown = editorDown
+        OnMouseMove = editorMove
+        OnMouseUp = editorUp
       end
       object shape02: TShape
         Left = 148
@@ -1211,169 +1211,35 @@ object frmPmg: TfrmPmg
           ParentColor = False
           ParentFont = False
         end
-        object editPosX: TBCTrackbarUpdown
+        object editPosX: TSpinEditEx
           Left = 8
-          Height = 22
-          Top = 18
-          Width = 50
-          AllowNegativeValues = False
-          BarExponent = 1
-          Increment = 1
-          LongTimeInterval = 400
-          MinValue = 0
-          MaxValue = 255
-          Value = 40
-          ShortTimeInterval = 100
-          Background.Color = clWindow
-          Background.Gradient1.StartColor = clWhite
-          Background.Gradient1.EndColor = clBlack
-          Background.Gradient1.GradientType = gtLinear
-          Background.Gradient1.Point1XPercent = 0
-          Background.Gradient1.Point1YPercent = 0
-          Background.Gradient1.Point2XPercent = 0
-          Background.Gradient1.Point2YPercent = 100
-          Background.Gradient2.StartColor = clWhite
-          Background.Gradient2.EndColor = clOlive
-          Background.Gradient2.GradientType = gtLinear
-          Background.Gradient2.Point1XPercent = 0
-          Background.Gradient2.Point1YPercent = 0
-          Background.Gradient2.Point2XPercent = 0
-          Background.Gradient2.Point2YPercent = 100
-          Background.Gradient2.Sinus = True
-          Background.Gradient1EndPercent = 35
-          Background.Style = bbsColor
-          ButtonBackground.Gradient1.StartColor = clBtnShadow
-          ButtonBackground.Gradient1.EndColor = clBtnFace
-          ButtonBackground.Gradient1.GradientType = gtLinear
-          ButtonBackground.Gradient1.Point1XPercent = 0
-          ButtonBackground.Gradient1.Point1YPercent = -50
-          ButtonBackground.Gradient1.Point2XPercent = 0
-          ButtonBackground.Gradient1.Point2YPercent = 50
-          ButtonBackground.Gradient1.Sinus = True
-          ButtonBackground.Gradient2.StartColor = clBtnFace
-          ButtonBackground.Gradient2.EndColor = clBtnShadow
-          ButtonBackground.Gradient2.GradientType = gtLinear
-          ButtonBackground.Gradient2.Point1XPercent = 0
-          ButtonBackground.Gradient2.Point1YPercent = 50
-          ButtonBackground.Gradient2.Point2XPercent = 0
-          ButtonBackground.Gradient2.Point2YPercent = 150
-          ButtonBackground.Gradient2.Sinus = True
-          ButtonBackground.Gradient1EndPercent = 50
-          ButtonBackground.Style = bbsGradient
-          ButtonDownBackground.Color = clBtnShadow
-          ButtonDownBackground.Gradient1.StartColor = clWhite
-          ButtonDownBackground.Gradient1.EndColor = clBlack
-          ButtonDownBackground.Gradient1.GradientType = gtLinear
-          ButtonDownBackground.Gradient1.Point1XPercent = 0
-          ButtonDownBackground.Gradient1.Point1YPercent = 0
-          ButtonDownBackground.Gradient1.Point2XPercent = 0
-          ButtonDownBackground.Gradient1.Point2YPercent = 100
-          ButtonDownBackground.Gradient2.StartColor = clWhite
-          ButtonDownBackground.Gradient2.EndColor = clBlack
-          ButtonDownBackground.Gradient2.GradientType = gtLinear
-          ButtonDownBackground.Gradient2.Point1XPercent = 0
-          ButtonDownBackground.Gradient2.Point1YPercent = 0
-          ButtonDownBackground.Gradient2.Point2XPercent = 0
-          ButtonDownBackground.Gradient2.Point2YPercent = 100
-          ButtonDownBackground.Gradient1EndPercent = 35
-          ButtonDownBackground.Style = bbsColor
-          Border.Color = clWindowText
-          Border.ColorOpacity = 100
-          Border.Style = bboSolid
-          Rounding.RoundX = 4
-          Rounding.RoundY = 4
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Verdana'
-          HasTrackBar = True
-          ArrowColor = clWindowText
+          Height = 21
+          Top = 19
+          Width = 52
+          BiDiMode = bdRightToLeft
+          BorderStyle = bsSingle
+          MaxLength = 0
+          NumbersOnly = True
+          ParentBiDiMode = False
           TabOrder = 2
-          TabStop = True
-          UseDockManager = False
-          OnMouseLeave = editPosXChange
-          OnMouseUp = editPosXMouseUp
-        end
-        object editPosY: TBCTrackbarUpdown
-          Left = 84
-          Height = 22
-          Top = 18
-          Width = 50
-          AllowNegativeValues = False
-          BarExponent = 1
-          Increment = 1
-          LongTimeInterval = 400
-          MinValue = 0
+          OnChange = editPosXChange
           MaxValue = 255
           Value = 40
-          ShortTimeInterval = 100
-          Background.Color = clWindow
-          Background.Gradient1.StartColor = clWhite
-          Background.Gradient1.EndColor = clBlack
-          Background.Gradient1.GradientType = gtLinear
-          Background.Gradient1.Point1XPercent = 0
-          Background.Gradient1.Point1YPercent = 0
-          Background.Gradient1.Point2XPercent = 0
-          Background.Gradient1.Point2YPercent = 100
-          Background.Gradient2.StartColor = clWhite
-          Background.Gradient2.EndColor = clOlive
-          Background.Gradient2.GradientType = gtLinear
-          Background.Gradient2.Point1XPercent = 0
-          Background.Gradient2.Point1YPercent = 0
-          Background.Gradient2.Point2XPercent = 0
-          Background.Gradient2.Point2YPercent = 100
-          Background.Gradient2.Sinus = True
-          Background.Gradient1EndPercent = 35
-          Background.Style = bbsColor
-          ButtonBackground.Gradient1.StartColor = clBtnShadow
-          ButtonBackground.Gradient1.EndColor = clBtnFace
-          ButtonBackground.Gradient1.GradientType = gtLinear
-          ButtonBackground.Gradient1.Point1XPercent = 0
-          ButtonBackground.Gradient1.Point1YPercent = -50
-          ButtonBackground.Gradient1.Point2XPercent = 0
-          ButtonBackground.Gradient1.Point2YPercent = 50
-          ButtonBackground.Gradient1.Sinus = True
-          ButtonBackground.Gradient2.StartColor = clBtnFace
-          ButtonBackground.Gradient2.EndColor = clBtnShadow
-          ButtonBackground.Gradient2.GradientType = gtLinear
-          ButtonBackground.Gradient2.Point1XPercent = 0
-          ButtonBackground.Gradient2.Point1YPercent = 50
-          ButtonBackground.Gradient2.Point2XPercent = 0
-          ButtonBackground.Gradient2.Point2YPercent = 150
-          ButtonBackground.Gradient2.Sinus = True
-          ButtonBackground.Gradient1EndPercent = 50
-          ButtonBackground.Style = bbsGradient
-          ButtonDownBackground.Color = clBtnShadow
-          ButtonDownBackground.Gradient1.StartColor = clWhite
-          ButtonDownBackground.Gradient1.EndColor = clBlack
-          ButtonDownBackground.Gradient1.GradientType = gtLinear
-          ButtonDownBackground.Gradient1.Point1XPercent = 0
-          ButtonDownBackground.Gradient1.Point1YPercent = 0
-          ButtonDownBackground.Gradient1.Point2XPercent = 0
-          ButtonDownBackground.Gradient1.Point2YPercent = 100
-          ButtonDownBackground.Gradient2.StartColor = clWhite
-          ButtonDownBackground.Gradient2.EndColor = clBlack
-          ButtonDownBackground.Gradient2.GradientType = gtLinear
-          ButtonDownBackground.Gradient2.Point1XPercent = 0
-          ButtonDownBackground.Gradient2.Point1YPercent = 0
-          ButtonDownBackground.Gradient2.Point2XPercent = 0
-          ButtonDownBackground.Gradient2.Point2YPercent = 100
-          ButtonDownBackground.Gradient1EndPercent = 35
-          ButtonDownBackground.Style = bbsColor
-          Border.Color = clWindowText
-          Border.ColorOpacity = 100
-          Border.Style = bboSolid
-          Rounding.RoundX = 4
-          Rounding.RoundY = 4
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Verdana'
-          HasTrackBar = True
-          ArrowColor = clWindowText
+        end
+        object editPosY: TSpinEditEx
+          Left = 83
+          Height = 21
+          Top = 19
+          Width = 52
+          BiDiMode = bdRightToLeft
+          BorderStyle = bsSingle
+          MaxLength = 0
+          NumbersOnly = True
+          ParentBiDiMode = False
           TabOrder = 3
-          TabStop = True
-          UseDockManager = False
-          OnMouseLeave = editPosYChange
-          OnMouseUp = editPosYMouseUp
+          OnChange = editPosYChange
+          MaxValue = 255
+          Value = 40
         end
       end
     end
@@ -1381,7 +1247,7 @@ object frmPmg: TfrmPmg
       Tag = 1
       Caption = 'Multi-color player editor'
       ClientHeight = 667
-      ClientWidth = 771
+      ClientWidth = 778
       Font.Height = -11
       Font.Name = 'Verdana'
       OnShow = tabPlayersShow
@@ -1396,9 +1262,9 @@ object frmPmg: TfrmPmg
         OnMouseUp = editorMultiUp
       end
       object tbPlayer0: TTrackBar
-        Left = 48
+        Left = 50
         Height = 20
-        Top = 512
+        Top = 510
         Width = 160
         LineSize = 0
         Max = 48
@@ -1410,18 +1276,18 @@ object frmPmg: TfrmPmg
       end
       object lblP4: TLabel
         Left = 6
-        Height = 13
-        Top = 517
-        Width = 16
+        Height = 16
+        Top = 515
+        Width = 18
         Caption = 'P0'
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Verdana'
         Font.Style = [fsBold]
         ParentColor = False
         ParentFont = False
       end
       object imgP0: TImage
-        Left = 28
+        Left = 30
         Height = 20
         Hint = 'Background color'
         Top = 510
@@ -1432,10 +1298,10 @@ object frmPmg: TfrmPmg
       end
       object imgP1: TImage
         Tag = 1
-        Left = 28
+        Left = 30
         Height = 20
         Hint = 'Color register 0'
-        Top = 540
+        Top = 543
         Width = 20
         BorderSpacing.Around = 1
         OnClick = Player1Proc
@@ -1443,11 +1309,11 @@ object frmPmg: TfrmPmg
       end
       object lblP5: TLabel
         Left = 6
-        Height = 13
-        Top = 543
-        Width = 16
+        Height = 16
+        Top = 548
+        Width = 18
         Caption = 'P1'
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Verdana'
         Font.Style = [fsBold]
         ParentColor = False
@@ -1455,11 +1321,11 @@ object frmPmg: TfrmPmg
       end
       object lblP6: TLabel
         Left = 6
-        Height = 13
-        Top = 574
-        Width = 16
+        Height = 16
+        Top = 579
+        Width = 18
         Caption = 'P2'
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Verdana'
         Font.Style = [fsBold]
         ParentColor = False
@@ -1467,10 +1333,10 @@ object frmPmg: TfrmPmg
       end
       object imgP2: TImage
         Tag = 2
-        Left = 28
+        Left = 30
         Height = 20
         Hint = 'Background color'
-        Top = 570
+        Top = 574
         Width = 20
         BorderSpacing.Around = 1
         OnClick = Player2Proc
@@ -1478,10 +1344,10 @@ object frmPmg: TfrmPmg
       end
       object imgP3: TImage
         Tag = 3
-        Left = 28
+        Left = 30
         Height = 20
         Hint = 'Color register 0'
-        Top = 600
+        Top = 606
         Width = 20
         BorderSpacing.Around = 1
         OnClick = Player3Proc
@@ -1489,11 +1355,11 @@ object frmPmg: TfrmPmg
       end
       object lblP7: TLabel
         Left = 6
-        Height = 13
-        Top = 604
-        Width = 16
+        Height = 16
+        Top = 608
+        Width = 18
         Caption = 'P3'
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Verdana'
         Font.Style = [fsBold]
         ParentColor = False
@@ -1501,7 +1367,7 @@ object frmPmg: TfrmPmg
       end
       object tbPlayer1: TTrackBar
         Tag = 1
-        Left = 48
+        Left = 50
         Height = 20
         Top = 543
         Width = 160
@@ -1515,9 +1381,9 @@ object frmPmg: TfrmPmg
       end
       object tbPlayer2: TTrackBar
         Tag = 2
-        Left = 48
+        Left = 50
         Height = 20
-        Top = 572
+        Top = 573
         Width = 160
         LineSize = 0
         Max = 48
@@ -1529,9 +1395,9 @@ object frmPmg: TfrmPmg
       end
       object tbPlayer3: TTrackBar
         Tag = 3
-        Left = 48
+        Left = 50
         Height = 20
-        Top = 602
+        Top = 606
         Width = 160
         LineSize = 0
         Max = 48
@@ -1543,148 +1409,376 @@ object frmPmg: TfrmPmg
       end
       object Label64: TLabel
         Left = 6
-        Height = 13
+        Height = 16
         Top = 492
-        Width = 144
+        Width = 165
         Caption = 'Player horizontal position'
-        Font.Height = -11
+        Font.Height = -13
         Font.Name = 'Verdana'
         ParentColor = False
         ParentFont = False
       end
       object chkJoinPlayers: TCheckBox
-        Left = 348
-        Height = 19
-        Top = 506
-        Width = 88
+        Left = 372
+        Height = 20
+        Top = 498
+        Width = 97
         Caption = 'Join players'
+        Font.Height = -13
+        Font.Name = 'Verdana'
         OnChange = chkJoinPlayersChange
+        ParentFont = False
         TabOrder = 4
       end
-      object tglP0x1: TToggleBox
-        Left = 234
-        Height = 24
-        Top = 506
-        Width = 24
-        Caption = 'x1'
-        Checked = True
-        OnChange = tglP0x1Change
-        State = cbChecked
+      object boxP0Res: TGroupBox
+        Left = 222
+        Height = 35
+        Top = 495
+        Width = 126
+        ClientHeight = 17
+        ClientWidth = 122
         TabOrder = 5
+        OnMouseDown = PopUpProc
+        object btnPlayer0SingleRes: TBCMDButton
+          Left = 2
+          Height = 20
+          Top = -6
+          Width = 34
+          Animation = True
+          Alignment = taLeftJustify
+          StyleNormal.Color = 15132390
+          StyleNormal.TextColor = clBlack
+          StyleHover.Color = 14342874
+          StyleHover.TextColor = clBlack
+          StyleActive.Color = 14079702
+          StyleActive.TextColor = clBlack
+          StyleDisabled.Color = clWhite
+          StyleDisabled.TextColor = 10724259
+          Checked = True
+          Kind = mdbkTab
+          TextAutoSize = True
+          TextProportional = True
+          TextProportionalRatio = 0.5
+          BorderSpacing.InnerBorder = 5
+          Caption = 'x1'
+          Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Verdana'
+          OnClick = PmResProc
+          ParentFont = False
+        end
+        object btnPlayer0DoubleRes: TBCMDButton
+          Left = 44
+          Height = 20
+          Top = -6
+          Width = 34
+          Animation = True
+          Alignment = taLeftJustify
+          StyleNormal.Color = 15132390
+          StyleNormal.TextColor = clBlack
+          StyleHover.Color = 14342874
+          StyleHover.TextColor = clBlack
+          StyleActive.Color = 14079702
+          StyleActive.TextColor = clBlack
+          StyleDisabled.Color = clWhite
+          StyleDisabled.TextColor = 10724259
+          Kind = mdbkTab
+          TextAutoSize = True
+          TextProportional = True
+          TextProportionalRatio = 0.5
+          BorderSpacing.InnerBorder = 5
+          Caption = 'x2'
+          Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Verdana'
+          OnClick = PmResProc
+          ParentFont = False
+        end
+        object btnPlayer0QuadRes: TBCMDButton
+          Left = 86
+          Height = 20
+          Top = -6
+          Width = 34
+          Animation = True
+          Alignment = taLeftJustify
+          StyleNormal.Color = 15132390
+          StyleNormal.TextColor = clBlack
+          StyleHover.Color = 14342874
+          StyleHover.TextColor = clBlack
+          StyleActive.Color = 14079702
+          StyleActive.TextColor = clBlack
+          StyleDisabled.Color = clWhite
+          StyleDisabled.TextColor = 10724259
+          Kind = mdbkTab
+          TextAutoSize = True
+          TextProportional = True
+          TextProportionalRatio = 0.5
+          BorderSpacing.InnerBorder = 5
+          Caption = 'x4'
+          Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Verdana'
+          OnClick = PmResProc
+          ParentFont = False
+        end
       end
-      object tglP0x2: TToggleBox
-        Left = 264
-        Height = 24
-        Top = 506
-        Width = 24
-        Caption = 'x2'
-        OnChange = tglP0x2Change
+      object boxP0Res1: TGroupBox
+        Left = 222
+        Height = 35
+        Top = 528
+        Width = 126
+        ClientHeight = 17
+        ClientWidth = 122
         TabOrder = 6
+        OnMouseDown = PopUpProc
+        object btnPlayer1SingleRes: TBCMDButton
+          Tag = 1
+          Left = 2
+          Height = 20
+          Top = -6
+          Width = 34
+          Animation = True
+          Alignment = taLeftJustify
+          StyleNormal.Color = 15132390
+          StyleNormal.TextColor = clBlack
+          StyleHover.Color = 14342874
+          StyleHover.TextColor = clBlack
+          StyleActive.Color = 14079702
+          StyleActive.TextColor = clBlack
+          StyleDisabled.Color = clWhite
+          StyleDisabled.TextColor = 10724259
+          Checked = True
+          Kind = mdbkTab
+          TextAutoSize = True
+          TextProportional = True
+          TextProportionalRatio = 0.5
+          BorderSpacing.InnerBorder = 5
+          Caption = 'x1'
+          Color = clBlack
+          OnClick = PmResProc
+        end
+        object btnPlayer1DoubleRes: TBCMDButton
+          Tag = 1
+          Left = 44
+          Height = 20
+          Top = -6
+          Width = 34
+          Animation = True
+          Alignment = taLeftJustify
+          StyleNormal.Color = 15132390
+          StyleNormal.TextColor = clBlack
+          StyleHover.Color = 14342874
+          StyleHover.TextColor = clBlack
+          StyleActive.Color = 14079702
+          StyleActive.TextColor = clBlack
+          StyleDisabled.Color = clWhite
+          StyleDisabled.TextColor = 10724259
+          Kind = mdbkTab
+          TextAutoSize = True
+          TextProportional = True
+          TextProportionalRatio = 0.5
+          BorderSpacing.InnerBorder = 5
+          Caption = 'x2'
+          Color = clBlack
+          OnClick = PmResProc
+        end
+        object btnPlayer1QuadRes: TBCMDButton
+          Tag = 1
+          Left = 86
+          Height = 20
+          Top = -6
+          Width = 34
+          Animation = True
+          Alignment = taLeftJustify
+          StyleNormal.Color = 15132390
+          StyleNormal.TextColor = clBlack
+          StyleHover.Color = 14342874
+          StyleHover.TextColor = clBlack
+          StyleActive.Color = 14079702
+          StyleActive.TextColor = clBlack
+          StyleDisabled.Color = clWhite
+          StyleDisabled.TextColor = 10724259
+          Kind = mdbkTab
+          TextAutoSize = True
+          TextProportional = True
+          TextProportionalRatio = 0.5
+          BorderSpacing.InnerBorder = 5
+          Caption = 'x4'
+          Color = clBlack
+          OnClick = PmResProc
+        end
       end
-      object tglP0x4: TToggleBox
-        Left = 294
-        Height = 24
-        Top = 506
-        Width = 24
-        Caption = 'x4'
-        OnChange = tglP0x4Change
+      object boxP0Res2: TGroupBox
+        Left = 222
+        Height = 35
+        Top = 558
+        Width = 126
+        ClientHeight = 17
+        ClientWidth = 122
         TabOrder = 7
+        OnMouseDown = PopUpProc
+        object btnPlayer2SingleRes: TBCMDButton
+          Tag = 2
+          Left = 2
+          Height = 20
+          Top = -6
+          Width = 34
+          Animation = True
+          Alignment = taLeftJustify
+          StyleNormal.Color = 15132390
+          StyleNormal.TextColor = clBlack
+          StyleHover.Color = 14342874
+          StyleHover.TextColor = clBlack
+          StyleActive.Color = 14079702
+          StyleActive.TextColor = clBlack
+          StyleDisabled.Color = clWhite
+          StyleDisabled.TextColor = 10724259
+          Checked = True
+          Kind = mdbkTab
+          TextAutoSize = True
+          TextProportional = True
+          TextProportionalRatio = 0.5
+          BorderSpacing.InnerBorder = 5
+          Caption = 'x1'
+          Color = clBlack
+          OnClick = PmResProc
+        end
+        object btnPlayer2DoubleRes: TBCMDButton
+          Tag = 2
+          Left = 44
+          Height = 20
+          Top = -6
+          Width = 34
+          Animation = True
+          Alignment = taLeftJustify
+          StyleNormal.Color = 15132390
+          StyleNormal.TextColor = clBlack
+          StyleHover.Color = 14342874
+          StyleHover.TextColor = clBlack
+          StyleActive.Color = 14079702
+          StyleActive.TextColor = clBlack
+          StyleDisabled.Color = clWhite
+          StyleDisabled.TextColor = 10724259
+          Kind = mdbkTab
+          TextAutoSize = True
+          TextProportional = True
+          TextProportionalRatio = 0.5
+          BorderSpacing.InnerBorder = 5
+          Caption = 'x2'
+          Color = clBlack
+          OnClick = PmResProc
+        end
+        object btnPlayer2QuadRes: TBCMDButton
+          Tag = 2
+          Left = 86
+          Height = 20
+          Top = -6
+          Width = 34
+          Animation = True
+          Alignment = taLeftJustify
+          StyleNormal.Color = 15132390
+          StyleNormal.TextColor = clBlack
+          StyleHover.Color = 14342874
+          StyleHover.TextColor = clBlack
+          StyleActive.Color = 14079702
+          StyleActive.TextColor = clBlack
+          StyleDisabled.Color = clWhite
+          StyleDisabled.TextColor = 10724259
+          Kind = mdbkTab
+          TextAutoSize = True
+          TextProportional = True
+          TextProportionalRatio = 0.5
+          BorderSpacing.InnerBorder = 5
+          Caption = 'x4'
+          Color = clBlack
+          OnClick = PmResProc
+        end
       end
-      object tglP1x1: TToggleBox
-        Tag = 1
-        Left = 234
-        Height = 24
-        Top = 538
-        Width = 24
-        Caption = 'x1'
-        Checked = True
-        OnChange = tglP1x1Change
-        State = cbChecked
+      object boxP0Res3: TGroupBox
+        Left = 222
+        Height = 35
+        Top = 591
+        Width = 126
+        ClientHeight = 17
+        ClientWidth = 122
         TabOrder = 8
-      end
-      object tglP1x2: TToggleBox
-        Tag = 1
-        Left = 264
-        Height = 24
-        Top = 538
-        Width = 24
-        Caption = 'x2'
-        OnChange = tglP1x2Change
-        TabOrder = 9
-      end
-      object tglP1x4: TToggleBox
-        Tag = 1
-        Left = 294
-        Height = 24
-        Top = 538
-        Width = 24
-        Caption = 'x4'
-        OnChange = tglP1x4Change
-        TabOrder = 10
-      end
-      object tglP2x1: TToggleBox
-        Tag = 2
-        Left = 234
-        Height = 24
-        Top = 568
-        Width = 24
-        Caption = 'x1'
-        Checked = True
-        OnChange = tglP2x1Change
-        State = cbChecked
-        TabOrder = 11
-      end
-      object tglP2x2: TToggleBox
-        Tag = 2
-        Left = 264
-        Height = 24
-        Top = 568
-        Width = 24
-        Caption = 'x2'
-        OnChange = tglP2x2Change
-        TabOrder = 12
-      end
-      object tglP2x4: TToggleBox
-        Tag = 2
-        Left = 294
-        Height = 24
-        Top = 568
-        Width = 24
-        Caption = 'x4'
-        OnChange = tglP2x4Change
-        TabOrder = 13
-      end
-      object tglP3x1: TToggleBox
-        Tag = 3
-        Left = 234
-        Height = 24
-        Top = 598
-        Width = 24
-        Caption = 'x1'
-        Checked = True
-        OnChange = tglP3x1Change
-        State = cbChecked
-        TabOrder = 14
-      end
-      object tglP3x2: TToggleBox
-        Tag = 3
-        Left = 264
-        Height = 24
-        Top = 598
-        Width = 24
-        Caption = 'x2'
-        OnChange = tglP3x2Change
-        TabOrder = 15
-      end
-      object tglP3x4: TToggleBox
-        Tag = 3
-        Left = 294
-        Height = 24
-        Top = 598
-        Width = 24
-        Caption = 'x4'
-        OnChange = tglP3x4Change
-        TabOrder = 16
+        OnMouseDown = PopUpProc
+        object btnPlayer3SingleRes: TBCMDButton
+          Tag = 3
+          Left = 2
+          Height = 20
+          Top = -6
+          Width = 34
+          Animation = True
+          Alignment = taLeftJustify
+          StyleNormal.Color = 15132390
+          StyleNormal.TextColor = clBlack
+          StyleHover.Color = 14342874
+          StyleHover.TextColor = clBlack
+          StyleActive.Color = 14079702
+          StyleActive.TextColor = clBlack
+          StyleDisabled.Color = clWhite
+          StyleDisabled.TextColor = 10724259
+          Checked = True
+          Kind = mdbkTab
+          TextAutoSize = True
+          TextProportional = True
+          TextProportionalRatio = 0.5
+          BorderSpacing.InnerBorder = 5
+          Caption = 'x1'
+          Color = clBlack
+          OnClick = PmResProc
+        end
+        object btnPlayer3DoubleRes: TBCMDButton
+          Tag = 3
+          Left = 44
+          Height = 20
+          Top = -6
+          Width = 34
+          Animation = True
+          Alignment = taLeftJustify
+          StyleNormal.Color = 15132390
+          StyleNormal.TextColor = clBlack
+          StyleHover.Color = 14342874
+          StyleHover.TextColor = clBlack
+          StyleActive.Color = 14079702
+          StyleActive.TextColor = clBlack
+          StyleDisabled.Color = clWhite
+          StyleDisabled.TextColor = 10724259
+          Kind = mdbkTab
+          TextAutoSize = True
+          TextProportional = True
+          TextProportionalRatio = 0.5
+          BorderSpacing.InnerBorder = 5
+          Caption = 'x2'
+          Color = clBlack
+          OnClick = PmResProc
+        end
+        object btnPlayer3QuadRes: TBCMDButton
+          Tag = 3
+          Left = 86
+          Height = 20
+          Top = -6
+          Width = 34
+          Animation = True
+          Alignment = taLeftJustify
+          StyleNormal.Color = 15132390
+          StyleNormal.TextColor = clBlack
+          StyleHover.Color = 14342874
+          StyleHover.TextColor = clBlack
+          StyleActive.Color = 14079702
+          StyleActive.TextColor = clBlack
+          StyleDisabled.Color = clWhite
+          StyleDisabled.TextColor = 10724259
+          Kind = mdbkTab
+          TextAutoSize = True
+          TextProportional = True
+          TextProportionalRatio = 0.5
+          BorderSpacing.InnerBorder = 5
+          Caption = 'x4'
+          Color = clBlack
+          OnClick = PmResProc
+        end
       end
     end
     object tabMissiles: TTabSheet
@@ -1700,9 +1794,9 @@ object frmPmg: TfrmPmg
         Height = 544
         Top = 32
         Width = 32
-        OnMouseDown = imgMissileMouseDown
-        OnMouseMove = imgMissileMouseMove
-        OnMouseUp = imgMissileMouseUp
+        OnMouseDown = imgMissileDown
+        OnMouseMove = imgMissileMove
+        OnMouseUp = imgMissileUp
       end
       object Label22: TLabel
         Left = 24
@@ -1742,9 +1836,9 @@ object frmPmg: TfrmPmg
         Height = 544
         Top = 32
         Width = 32
-        OnMouseDown = imgMissileMouseDown
-        OnMouseMove = imgMissileMouseMove
-        OnMouseUp = imgMissileMouseUp
+        OnMouseDown = imgMissileDown
+        OnMouseMove = imgMissileMove
+        OnMouseUp = imgMissileUp
       end
       object Label27: TLabel
         Left = 180
@@ -1771,9 +1865,9 @@ object frmPmg: TfrmPmg
         Height = 544
         Top = 32
         Width = 32
-        OnMouseDown = imgMissileMouseDown
-        OnMouseMove = imgMissileMouseMove
-        OnMouseUp = imgMissileMouseUp
+        OnMouseDown = imgMissileDown
+        OnMouseMove = imgMissileMove
+        OnMouseUp = imgMissileUp
       end
       object Label30: TLabel
         Left = 258
@@ -1797,9 +1891,9 @@ object frmPmg: TfrmPmg
         Height = 544
         Top = 32
         Width = 32
-        OnMouseDown = imgMissileMouseDown
-        OnMouseMove = imgMissileMouseMove
-        OnMouseUp = imgMissileMouseUp
+        OnMouseDown = imgMissileDown
+        OnMouseMove = imgMissileMove
+        OnMouseUp = imgMissileUp
       end
       object imgPlayer4: TImage
         Tag = 555
@@ -1807,7 +1901,7 @@ object frmPmg: TfrmPmg
         Height = 544
         Top = 32
         Width = 128
-        OnMouseDown = editorMouseDown
+        OnMouseDown = editorDown
       end
       object Label32: TLabel
         Left = 336
@@ -2002,7 +2096,7 @@ object frmPmg: TfrmPmg
         Font.Name = 'Verdana'
         ParentFont = False
         TabOrder = 0
-        OnClick = panelMissileClick
+        OnClick = panelMissileProc
       end
       object panelM1: TPanel
         Tag = 1
@@ -2017,7 +2111,7 @@ object frmPmg: TfrmPmg
         Font.Name = 'Verdana'
         ParentFont = False
         TabOrder = 1
-        OnClick = panelMissileClick
+        OnClick = panelMissileProc
       end
       object panelM2: TPanel
         Tag = 2
@@ -2032,7 +2126,7 @@ object frmPmg: TfrmPmg
         Font.Name = 'Verdana'
         ParentFont = False
         TabOrder = 2
-        OnClick = panelMissileClick
+        OnClick = panelMissileProc
       end
       object panelM3: TPanel
         Tag = 3
@@ -2047,7 +2141,7 @@ object frmPmg: TfrmPmg
         Font.Name = 'Verdana'
         ParentFont = False
         TabOrder = 3
-        OnClick = panelMissileClick
+        OnClick = panelMissileProc
       end
       object GroupBox3: TGroupBox
         Left = 494
@@ -2111,181 +2205,47 @@ object frmPmg: TfrmPmg
           TickStyle = tsNone
           TabOrder = 1
         end
-        object editMissilePosX: TBCTrackbarUpdown
+        object editMissilePosX: TSpinEditEx
           Left = 8
-          Height = 22
-          Top = 15
-          Width = 50
-          AllowNegativeValues = False
-          BarExponent = 1
-          Increment = 1
-          LongTimeInterval = 400
-          MinValue = 0
-          MaxValue = 255
-          Value = 40
-          ShortTimeInterval = 100
-          Background.Color = clWindow
-          Background.Gradient1.StartColor = clWhite
-          Background.Gradient1.EndColor = clBlack
-          Background.Gradient1.GradientType = gtLinear
-          Background.Gradient1.Point1XPercent = 0
-          Background.Gradient1.Point1YPercent = 0
-          Background.Gradient1.Point2XPercent = 0
-          Background.Gradient1.Point2YPercent = 100
-          Background.Gradient2.StartColor = clWhite
-          Background.Gradient2.EndColor = clOlive
-          Background.Gradient2.GradientType = gtLinear
-          Background.Gradient2.Point1XPercent = 0
-          Background.Gradient2.Point1YPercent = 0
-          Background.Gradient2.Point2XPercent = 0
-          Background.Gradient2.Point2YPercent = 100
-          Background.Gradient2.Sinus = True
-          Background.Gradient1EndPercent = 35
-          Background.Style = bbsColor
-          ButtonBackground.Gradient1.StartColor = clBtnShadow
-          ButtonBackground.Gradient1.EndColor = clBtnFace
-          ButtonBackground.Gradient1.GradientType = gtLinear
-          ButtonBackground.Gradient1.Point1XPercent = 0
-          ButtonBackground.Gradient1.Point1YPercent = -50
-          ButtonBackground.Gradient1.Point2XPercent = 0
-          ButtonBackground.Gradient1.Point2YPercent = 50
-          ButtonBackground.Gradient1.Sinus = True
-          ButtonBackground.Gradient2.StartColor = clBtnFace
-          ButtonBackground.Gradient2.EndColor = clBtnShadow
-          ButtonBackground.Gradient2.GradientType = gtLinear
-          ButtonBackground.Gradient2.Point1XPercent = 0
-          ButtonBackground.Gradient2.Point1YPercent = 50
-          ButtonBackground.Gradient2.Point2XPercent = 0
-          ButtonBackground.Gradient2.Point2YPercent = 150
-          ButtonBackground.Gradient2.Sinus = True
-          ButtonBackground.Gradient1EndPercent = 50
-          ButtonBackground.Style = bbsGradient
-          ButtonDownBackground.Color = clBtnShadow
-          ButtonDownBackground.Gradient1.StartColor = clWhite
-          ButtonDownBackground.Gradient1.EndColor = clBlack
-          ButtonDownBackground.Gradient1.GradientType = gtLinear
-          ButtonDownBackground.Gradient1.Point1XPercent = 0
-          ButtonDownBackground.Gradient1.Point1YPercent = 0
-          ButtonDownBackground.Gradient1.Point2XPercent = 0
-          ButtonDownBackground.Gradient1.Point2YPercent = 100
-          ButtonDownBackground.Gradient2.StartColor = clWhite
-          ButtonDownBackground.Gradient2.EndColor = clBlack
-          ButtonDownBackground.Gradient2.GradientType = gtLinear
-          ButtonDownBackground.Gradient2.Point1XPercent = 0
-          ButtonDownBackground.Gradient2.Point1YPercent = 0
-          ButtonDownBackground.Gradient2.Point2XPercent = 0
-          ButtonDownBackground.Gradient2.Point2YPercent = 100
-          ButtonDownBackground.Gradient1EndPercent = 35
-          ButtonDownBackground.Style = bbsColor
-          Border.Color = clWindowText
-          Border.ColorOpacity = 100
-          Border.Style = bboSolid
-          Rounding.RoundX = 4
-          Rounding.RoundY = 4
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Verdana'
-          HasTrackBar = True
-          ArrowColor = clWindowText
+          Height = 21
+          Top = 18
+          Width = 52
+          BiDiMode = bdRightToLeft
+          BorderStyle = bsSingle
+          MaxLength = 0
+          NumbersOnly = True
+          ParentBiDiMode = False
           TabOrder = 2
-          TabStop = True
-          UseDockManager = False
-          OnMouseLeave = editMissilePosXChange
-          OnMouseUp = editMissilePosXMouseUp
-        end
-        object editMissilePosY: TBCTrackbarUpdown
-          Left = 83
-          Height = 22
-          Top = 15
-          Width = 50
-          AllowNegativeValues = False
-          BarExponent = 1
-          Increment = 1
-          LongTimeInterval = 400
-          MinValue = 0
+          OnChange = editMissilePosXChange
           MaxValue = 255
           Value = 40
-          ShortTimeInterval = 100
-          Background.Color = clWindow
-          Background.Gradient1.StartColor = clWhite
-          Background.Gradient1.EndColor = clBlack
-          Background.Gradient1.GradientType = gtLinear
-          Background.Gradient1.Point1XPercent = 0
-          Background.Gradient1.Point1YPercent = 0
-          Background.Gradient1.Point2XPercent = 0
-          Background.Gradient1.Point2YPercent = 100
-          Background.Gradient2.StartColor = clWhite
-          Background.Gradient2.EndColor = clOlive
-          Background.Gradient2.GradientType = gtLinear
-          Background.Gradient2.Point1XPercent = 0
-          Background.Gradient2.Point1YPercent = 0
-          Background.Gradient2.Point2XPercent = 0
-          Background.Gradient2.Point2YPercent = 100
-          Background.Gradient2.Sinus = True
-          Background.Gradient1EndPercent = 35
-          Background.Style = bbsColor
-          ButtonBackground.Gradient1.StartColor = clBtnShadow
-          ButtonBackground.Gradient1.EndColor = clBtnFace
-          ButtonBackground.Gradient1.GradientType = gtLinear
-          ButtonBackground.Gradient1.Point1XPercent = 0
-          ButtonBackground.Gradient1.Point1YPercent = -50
-          ButtonBackground.Gradient1.Point2XPercent = 0
-          ButtonBackground.Gradient1.Point2YPercent = 50
-          ButtonBackground.Gradient1.Sinus = True
-          ButtonBackground.Gradient2.StartColor = clBtnFace
-          ButtonBackground.Gradient2.EndColor = clBtnShadow
-          ButtonBackground.Gradient2.GradientType = gtLinear
-          ButtonBackground.Gradient2.Point1XPercent = 0
-          ButtonBackground.Gradient2.Point1YPercent = 50
-          ButtonBackground.Gradient2.Point2XPercent = 0
-          ButtonBackground.Gradient2.Point2YPercent = 150
-          ButtonBackground.Gradient2.Sinus = True
-          ButtonBackground.Gradient1EndPercent = 50
-          ButtonBackground.Style = bbsGradient
-          ButtonDownBackground.Color = clBtnShadow
-          ButtonDownBackground.Gradient1.StartColor = clWhite
-          ButtonDownBackground.Gradient1.EndColor = clBlack
-          ButtonDownBackground.Gradient1.GradientType = gtLinear
-          ButtonDownBackground.Gradient1.Point1XPercent = 0
-          ButtonDownBackground.Gradient1.Point1YPercent = 0
-          ButtonDownBackground.Gradient1.Point2XPercent = 0
-          ButtonDownBackground.Gradient1.Point2YPercent = 100
-          ButtonDownBackground.Gradient2.StartColor = clWhite
-          ButtonDownBackground.Gradient2.EndColor = clBlack
-          ButtonDownBackground.Gradient2.GradientType = gtLinear
-          ButtonDownBackground.Gradient2.Point1XPercent = 0
-          ButtonDownBackground.Gradient2.Point1YPercent = 0
-          ButtonDownBackground.Gradient2.Point2XPercent = 0
-          ButtonDownBackground.Gradient2.Point2YPercent = 100
-          ButtonDownBackground.Gradient1EndPercent = 35
-          ButtonDownBackground.Style = bbsColor
-          Border.Color = clWindowText
-          Border.ColorOpacity = 100
-          Border.Style = bboSolid
-          Rounding.RoundX = 4
-          Rounding.RoundY = 4
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Verdana'
-          HasTrackBar = True
-          ArrowColor = clWindowText
+        end
+        object editMissilePosY: TSpinEditEx
+          Left = 83
+          Height = 21
+          Top = 18
+          Width = 52
+          BiDiMode = bdRightToLeft
+          BorderStyle = bsSingle
+          MaxLength = 0
+          NumbersOnly = True
+          ParentBiDiMode = False
           TabOrder = 3
-          TabStop = True
-          UseDockManager = False
-          OnMouseLeave = editMissilePosYChange
-          OnMouseUp = editMissilePosYMouseUp
+          OnChange = editMissilePosYChange
+          MaxValue = 255
+          Value = 40
         end
       end
     end
   end
   object panelRight: TPanel
-    Left = 947
+    Left = 954
     Height = 693
     Top = 32
-    Width = 191
+    Width = 218
     Align = alRight
     ClientHeight = 693
-    ClientWidth = 191
+    ClientWidth = 218
     TabOrder = 4
     OnMouseDown = PopUpProc
     object grpShiftMovePlayer: TGroupBox
@@ -2294,15 +2254,18 @@ object frmPmg: TfrmPmg
       Top = 252
       Width = 175
       Caption = 'Shift/move players'
-      ClientHeight = 226
+      ClientHeight = 228
       ClientWidth = 171
+      Font.Height = -11
+      Font.Name = 'Verdana'
+      ParentFont = False
       TabOrder = 0
       OnMouseDown = PopUpProc
       object radShiftPlayer: TRadioButton
         Left = 8
         Height = 19
         Top = 8
-        Width = 79
+        Width = 86
         Caption = 'Shift player'
         Checked = True
         TabOrder = 1
@@ -2312,7 +2275,7 @@ object frmPmg: TfrmPmg
         Left = 8
         Height = 19
         Top = 34
-        Width = 85
+        Width = 90
         Caption = 'Move player'
         TabOrder = 0
       end
@@ -2321,7 +2284,7 @@ object frmPmg: TfrmPmg
         Left = 8
         Height = 19
         Top = 60
-        Width = 99
+        Width = 109
         Caption = 'Shift all players'
         TabOrder = 2
       end
@@ -2330,7 +2293,7 @@ object frmPmg: TfrmPmg
         Left = 8
         Height = 19
         Top = 86
-        Width = 105
+        Width = 113
         Caption = 'Move all players'
         TabOrder = 3
       end
@@ -2397,85 +2360,20 @@ object frmPmg: TfrmPmg
         OnClick = ApplyPlayerHeightProc
         TabOrder = 0
       end
-      object editPlayerHeight: TBCTrackbarUpdown
+      object editPlayerHeight: TSpinEditEx
         Left = 8
-        Height = 22
-        Top = 4
+        Height = 23
+        Top = 3
         Width = 50
-        AllowNegativeValues = False
-        BarExponent = 1
-        Increment = 1
-        LongTimeInterval = 400
-        MinValue = 1
-        MaxValue = 40
-        Value = 40
-        ShortTimeInterval = 100
-        Background.Color = clWindow
-        Background.Gradient1.StartColor = clWhite
-        Background.Gradient1.EndColor = clBlack
-        Background.Gradient1.GradientType = gtLinear
-        Background.Gradient1.Point1XPercent = 0
-        Background.Gradient1.Point1YPercent = 0
-        Background.Gradient1.Point2XPercent = 0
-        Background.Gradient1.Point2YPercent = 100
-        Background.Gradient2.StartColor = clWhite
-        Background.Gradient2.EndColor = clOlive
-        Background.Gradient2.GradientType = gtLinear
-        Background.Gradient2.Point1XPercent = 0
-        Background.Gradient2.Point1YPercent = 0
-        Background.Gradient2.Point2XPercent = 0
-        Background.Gradient2.Point2YPercent = 100
-        Background.Gradient2.Sinus = True
-        Background.Gradient1EndPercent = 35
-        Background.Style = bbsColor
-        ButtonBackground.Gradient1.StartColor = clBtnShadow
-        ButtonBackground.Gradient1.EndColor = clBtnFace
-        ButtonBackground.Gradient1.GradientType = gtLinear
-        ButtonBackground.Gradient1.Point1XPercent = 0
-        ButtonBackground.Gradient1.Point1YPercent = -50
-        ButtonBackground.Gradient1.Point2XPercent = 0
-        ButtonBackground.Gradient1.Point2YPercent = 50
-        ButtonBackground.Gradient1.Sinus = True
-        ButtonBackground.Gradient2.StartColor = clBtnFace
-        ButtonBackground.Gradient2.EndColor = clBtnShadow
-        ButtonBackground.Gradient2.GradientType = gtLinear
-        ButtonBackground.Gradient2.Point1XPercent = 0
-        ButtonBackground.Gradient2.Point1YPercent = 50
-        ButtonBackground.Gradient2.Point2XPercent = 0
-        ButtonBackground.Gradient2.Point2YPercent = 150
-        ButtonBackground.Gradient2.Sinus = True
-        ButtonBackground.Gradient1EndPercent = 50
-        ButtonBackground.Style = bbsGradient
-        ButtonDownBackground.Color = clBtnShadow
-        ButtonDownBackground.Gradient1.StartColor = clWhite
-        ButtonDownBackground.Gradient1.EndColor = clBlack
-        ButtonDownBackground.Gradient1.GradientType = gtLinear
-        ButtonDownBackground.Gradient1.Point1XPercent = 0
-        ButtonDownBackground.Gradient1.Point1YPercent = 0
-        ButtonDownBackground.Gradient1.Point2XPercent = 0
-        ButtonDownBackground.Gradient1.Point2YPercent = 100
-        ButtonDownBackground.Gradient2.StartColor = clWhite
-        ButtonDownBackground.Gradient2.EndColor = clBlack
-        ButtonDownBackground.Gradient2.GradientType = gtLinear
-        ButtonDownBackground.Gradient2.Point1XPercent = 0
-        ButtonDownBackground.Gradient2.Point1YPercent = 0
-        ButtonDownBackground.Gradient2.Point2XPercent = 0
-        ButtonDownBackground.Gradient2.Point2YPercent = 100
-        ButtonDownBackground.Gradient1EndPercent = 35
-        ButtonDownBackground.Style = bbsColor
-        Border.Color = clWindowText
-        Border.ColorOpacity = 100
-        Border.Style = bboSolid
-        Rounding.RoundX = 4
-        Rounding.RoundY = 4
-        Font.Color = clWindowText
-        Font.Height = -13
-        Font.Name = 'Verdana'
-        HasTrackBar = True
-        ArrowColor = clWindowText
+        BiDiMode = bdRightToLeft
+        BorderStyle = bsSingle
+        MaxLength = 0
+        NumbersOnly = True
+        ParentBiDiMode = False
         TabOrder = 1
-        TabStop = True
-        UseDockManager = False
+        MaxValue = 40
+        MinValue = 1
+        Value = 40
       end
     end
     object grpPlayerHeight1: TGroupBox
@@ -2497,221 +2395,194 @@ object frmPmg: TfrmPmg
         OnClick = ApplyMissileHeightProc
         TabOrder = 0
       end
-      object editMissileHeight: TBCTrackbarUpdown
+      object editMissileHeight: TSpinEditEx
         Left = 8
-        Height = 22
-        Top = 5
+        Height = 23
+        Top = 4
         Width = 50
-        AllowNegativeValues = False
-        BarExponent = 1
-        Increment = 1
-        LongTimeInterval = 400
-        MinValue = 1
-        MaxValue = 34
-        Value = 34
-        ShortTimeInterval = 100
-        Background.Color = clWindow
-        Background.Gradient1.StartColor = clWhite
-        Background.Gradient1.EndColor = clBlack
-        Background.Gradient1.GradientType = gtLinear
-        Background.Gradient1.Point1XPercent = 0
-        Background.Gradient1.Point1YPercent = 0
-        Background.Gradient1.Point2XPercent = 0
-        Background.Gradient1.Point2YPercent = 100
-        Background.Gradient2.StartColor = clWhite
-        Background.Gradient2.EndColor = clOlive
-        Background.Gradient2.GradientType = gtLinear
-        Background.Gradient2.Point1XPercent = 0
-        Background.Gradient2.Point1YPercent = 0
-        Background.Gradient2.Point2XPercent = 0
-        Background.Gradient2.Point2YPercent = 100
-        Background.Gradient2.Sinus = True
-        Background.Gradient1EndPercent = 35
-        Background.Style = bbsColor
-        ButtonBackground.Gradient1.StartColor = clBtnShadow
-        ButtonBackground.Gradient1.EndColor = clBtnFace
-        ButtonBackground.Gradient1.GradientType = gtLinear
-        ButtonBackground.Gradient1.Point1XPercent = 0
-        ButtonBackground.Gradient1.Point1YPercent = -50
-        ButtonBackground.Gradient1.Point2XPercent = 0
-        ButtonBackground.Gradient1.Point2YPercent = 50
-        ButtonBackground.Gradient1.Sinus = True
-        ButtonBackground.Gradient2.StartColor = clBtnFace
-        ButtonBackground.Gradient2.EndColor = clBtnShadow
-        ButtonBackground.Gradient2.GradientType = gtLinear
-        ButtonBackground.Gradient2.Point1XPercent = 0
-        ButtonBackground.Gradient2.Point1YPercent = 50
-        ButtonBackground.Gradient2.Point2XPercent = 0
-        ButtonBackground.Gradient2.Point2YPercent = 150
-        ButtonBackground.Gradient2.Sinus = True
-        ButtonBackground.Gradient1EndPercent = 50
-        ButtonBackground.Style = bbsGradient
-        ButtonDownBackground.Color = clBtnShadow
-        ButtonDownBackground.Gradient1.StartColor = clWhite
-        ButtonDownBackground.Gradient1.EndColor = clBlack
-        ButtonDownBackground.Gradient1.GradientType = gtLinear
-        ButtonDownBackground.Gradient1.Point1XPercent = 0
-        ButtonDownBackground.Gradient1.Point1YPercent = 0
-        ButtonDownBackground.Gradient1.Point2XPercent = 0
-        ButtonDownBackground.Gradient1.Point2YPercent = 100
-        ButtonDownBackground.Gradient2.StartColor = clWhite
-        ButtonDownBackground.Gradient2.EndColor = clBlack
-        ButtonDownBackground.Gradient2.GradientType = gtLinear
-        ButtonDownBackground.Gradient2.Point1XPercent = 0
-        ButtonDownBackground.Gradient2.Point1YPercent = 0
-        ButtonDownBackground.Gradient2.Point2XPercent = 0
-        ButtonDownBackground.Gradient2.Point2YPercent = 100
-        ButtonDownBackground.Gradient1EndPercent = 35
-        ButtonDownBackground.Style = bbsColor
-        Border.Color = clWindowText
-        Border.ColorOpacity = 100
-        Border.Style = bboSolid
-        Rounding.RoundX = 4
-        Rounding.RoundY = 4
-        Font.Color = clWindowText
-        Font.Height = -13
-        Font.Name = 'Verdana'
-        HasTrackBar = True
-        ArrowColor = clWindowText
+        BiDiMode = bdRightToLeft
+        BorderStyle = bsSingle
+        MaxLength = 0
+        NumbersOnly = True
+        ParentBiDiMode = False
         TabOrder = 1
-        TabStop = True
-        UseDockManager = False
+        MaxValue = 34
+        MinValue = 1
+        Value = 34
       end
     end
-    object GroupBox1: TGroupBox
+    object boxPmResolution: TGroupBox
       Left = 6
       Height = 90
       Top = 12
       Width = 175
       Caption = 'Player/missile resolution size'
-      ClientHeight = 70
+      ClientHeight = 72
       ClientWidth = 171
+      Font.Height = -11
+      Font.Name = 'Verdana'
+      ParentFont = False
       TabOrder = 3
       OnMouseDown = PopUpProc
-      object ToggleBox1: TToggleBox
-        Left = 34
-        Height = 25
+      object btnDoubleRes: TBCMDButton
+        Left = 18
+        Height = 26
         Top = 6
-        Width = 108
-        Caption = 'Double resolution'
+        Width = 126
+        Animation = True
+        Alignment = taLeftJustify
+        StyleNormal.Color = 15132390
+        StyleNormal.TextColor = clBlack
+        StyleHover.Color = 14342874
+        StyleHover.TextColor = clBlack
+        StyleActive.Color = 14079702
+        StyleActive.TextColor = clBlack
+        StyleDisabled.Color = clWhite
+        StyleDisabled.TextColor = 10724259
         Checked = True
-        OnChange = ToggleBox1Change
-        State = cbChecked
-        TabOrder = 0
+        Kind = mdbkTab
+        TextAutoSize = True
+        TextProportional = True
+        TextProportionalRatio = 0.5
+        BorderSpacing.InnerBorder = 5
+        Caption = 'Double resolution'
+        Color = clBlack
+        OnClick = DoubleResProc
       end
-      object ToggleBox2: TToggleBox
-        Left = 34
-        Height = 25
-        Top = 36
-        Width = 108
+      object btnDoubleRes1: TBCMDButton
+        Left = 18
+        Height = 26
+        Top = 38
+        Width = 126
+        Animation = True
+        Alignment = taLeftJustify
+        StyleNormal.Color = 15132390
+        StyleNormal.TextColor = clBlack
+        StyleHover.Color = 14342874
+        StyleHover.TextColor = clBlack
+        StyleActive.Color = 14079702
+        StyleActive.TextColor = clBlack
+        StyleDisabled.Color = clWhite
+        StyleDisabled.TextColor = 10724259
+        Kind = mdbkTab
+        TextAutoSize = True
+        TextProportional = True
+        TextProportionalRatio = 0.5
+        BorderSpacing.InnerBorder = 5
         Caption = 'Single resolution'
-        OnChange = ToggleBox2Change
-        TabOrder = 1
+        Color = clBlack
+        OnClick = SingleResProc
       end
     end
     object grpFlipPlayers: TGroupBox
       Left = 6
-      Height = 150
+      Height = 156
       Top = 504
-      Width = 175
+      Width = 204
       Caption = 'Flip player/s'
-      ClientHeight = 130
-      ClientWidth = 171
+      ClientHeight = 138
+      ClientWidth = 200
+      Font.Height = -11
+      Font.Name = 'Verdana'
+      ParentFont = False
       TabOrder = 4
       OnMouseDown = PopUpProc
       object btnFlipXSelected: TBCMDButton
         Left = 12
         Height = 26
-        Top = 6
-        Width = 144
+        Top = 7
+        Width = 180
         Animation = True
         Alignment = taLeftJustify
-        StyleNormal.Color = 16316664
+        StyleNormal.Color = 15132390
         StyleNormal.TextColor = clBlack
-        StyleHover.Color = 14474460
+        StyleHover.Color = 14342874
         StyleHover.TextColor = clBlack
-        StyleActive.Color = 13027014
+        StyleActive.Color = 14079702
         StyleActive.TextColor = clBlack
         StyleDisabled.Color = clWhite
         StyleDisabled.TextColor = 10724259
         TextAutoSize = True
-        TextProportional = False
+        TextProportional = True
         TextProportionalRatio = 0.5
         BorderSpacing.InnerBorder = 5
         Caption = 'Flip horizontally selected'
-        OnClick = btnFlipXSelectedClick
+        OnClick = FlipXSelectedProc
       end
       object btnFlipXAll: TBCMDButton
         Left = 12
         Height = 25
-        Top = 36
-        Width = 144
+        Top = 40
+        Width = 180
         Animation = True
         Alignment = taLeftJustify
-        StyleNormal.Color = 16316664
+        StyleNormal.Color = 15132390
         StyleNormal.TextColor = clBlack
-        StyleHover.Color = 14474460
+        StyleHover.Color = 14342874
         StyleHover.TextColor = clBlack
-        StyleActive.Color = 13027014
+        StyleActive.Color = 14079702
         StyleActive.TextColor = clBlack
         StyleDisabled.Color = clWhite
         StyleDisabled.TextColor = 10724259
         TextAutoSize = True
-        TextProportional = False
+        TextProportional = True
         TextProportionalRatio = 0.5
         BorderSpacing.InnerBorder = 5
         Caption = 'Flip horizontally all'
-        OnClick = btnFlipXAllClick
+        Font.Height = -11
+        Font.Name = 'Verdana'
+        OnClick = FlipXAllProc
+        ParentFont = False
       end
-      object btnFlipXSelected1: TBCMDButton
+      object btnFlipYSelected: TBCMDButton
         Left = 12
         Height = 26
-        Top = 66
-        Width = 144
+        Top = 72
+        Width = 180
         Animation = True
         Alignment = taLeftJustify
-        StyleNormal.Color = 16316664
+        StyleNormal.Color = 15132390
         StyleNormal.TextColor = clBlack
-        StyleHover.Color = 14474460
+        StyleHover.Color = 14342874
         StyleHover.TextColor = clBlack
-        StyleActive.Color = 13027014
+        StyleActive.Color = 14079702
         StyleActive.TextColor = clBlack
         StyleDisabled.Color = clWhite
         StyleDisabled.TextColor = 10724259
         TextAutoSize = True
-        TextProportional = False
+        TextProportional = True
         TextProportionalRatio = 0.5
         BorderSpacing.InnerBorder = 5
         Caption = 'Flip vertically selected'
-        OnClick = btnFlipXSelected1Click
+        OnClick = FlipYSelectedProc
       end
-      object btnFlipXAll1: TBCMDButton
+      object btnFlipYAll: TBCMDButton
         Left = 12
         Height = 25
-        Top = 96
-        Width = 144
+        Top = 104
+        Width = 180
         Animation = True
         Alignment = taLeftJustify
-        StyleNormal.Color = 16316664
+        StyleNormal.Color = 15132390
         StyleNormal.TextColor = clBlack
-        StyleHover.Color = 14474460
+        StyleHover.Color = 14342874
         StyleHover.TextColor = clBlack
-        StyleActive.Color = 13027014
+        StyleActive.Color = 14079702
         StyleActive.TextColor = clBlack
         StyleDisabled.Color = clWhite
         StyleDisabled.TextColor = 10724259
         TextAutoSize = True
-        TextProportional = False
+        TextProportional = True
         TextProportionalRatio = 0.5
         BorderSpacing.InnerBorder = 5
         Caption = 'Flip vertically all'
-        OnClick = btnFlipXAll1Click
+        OnClick = FlipYAllProc
       end
     end
   end
   object menuPmg: TMainMenu
-    Left = 126
-    Top = 612
+    Left = 120
+    Top = 618
     object MenuItem1: TMenuItem
       Caption = '&File'
       object mnuPlayerLoad: TMenuItem
@@ -2875,7 +2746,7 @@ object frmPmg: TfrmPmg
       object MenuItem2: TMenuItem
         Caption = 'Source code generator'
         ShortCut = 49219
-        OnClick = Gencode
+        OnClick = GenCode
       end
       object MenuItem6: TMenuItem
         Caption = 'Byte editor'
@@ -2935,7 +2806,7 @@ object frmPmg: TfrmPmg
     end
   end
   object popMenu: TPopupMenu
-    Left = 114
+    Left = 120
     Top = 672
     object mnuCopyPlayer0: TMenuItem
       Caption = 'Copy player 0 data to selected player'

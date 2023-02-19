@@ -11,27 +11,26 @@ unit anim_load_save;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, lcltype;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics,
+  Dialogs, StdCtrls, ExtCtrls, lcltype, BCMaterialDesignButton;
 
 type
   { TfrmAnimLoadSave }
   TfrmAnimLoadSave = class(TForm)
-    btnClose: TButton;
-    btnLoad: TButton;
+    btnClose : TBCMaterialDesignButton;
+    btnCopyToEditor : TBCMaterialDesignButton;
     chkFrames: TCheckGroup;
     radLayer2Data: TRadioButton;
     radAllData: TRadioButton;
     radLayer1Data: TRadioButton;
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure FramesItemProc(Sender: TObject; Index: integer);
     procedure CloseProc(Sender: TObject);
     procedure LoadDataProc(Sender: TObject);
     procedure AllDataChange(Sender: TObject);
-  private
-
-  public
-
+    procedure FramesItemProc(Sender: TObject; Index: integer);
+    procedure ButtonHoverEnter(Sender : TObject);
+    procedure ButtonHoverLeave(Sender : TObject);
   end;
 
 var
@@ -95,13 +94,14 @@ begin
     end;
   end;
 
-  if (flag = 1) and (pl = 1) then
+  if (flag = 1) and (pl = 1) then begin
     for i := 0 to 16 do
       for j := 0 to height - 1 do
         if fs.Position < fs.Size then
           d := fs.ReadByte;
+  end;
 
-  for i := 0 to 16 do
+  for i := 0 to 16 do begin
     // Player data, frame i
     // 17 - Player data, copy buffer
     for j := 0 to height - 1 do begin
@@ -126,6 +126,7 @@ begin
         //end;
       end;
     end;
+  end;
 end;
 
 begin
@@ -285,6 +286,16 @@ begin
 //    end;
 ////    loadType[i] := chkFrames.Checked[i];
 //  end;
+end;
+
+procedure TfrmAnimLoadSave.ButtonHoverEnter(Sender : TObject);
+begin
+  SetButton(Sender as TBCMaterialDesignButton, true);
+end;
+
+procedure TfrmAnimLoadSave.ButtonHoverLeave(Sender : TObject);
+begin
+  SetButton(Sender as TBCMaterialDesignButton, false);
 end;
 
 procedure TfrmAnimLoadSave.CloseProc(Sender: TObject);

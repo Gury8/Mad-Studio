@@ -15,16 +15,16 @@ object frmDisplayList: TfrmDisplayList
   OnDeactivate = FormDeactivate
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object imgEditor: TImage
     Tag = 2
     Left = 229
     Height = 724
     Top = 104
     Width = 960
-    OnMouseDown = imgEditorMouseDown
-    OnMouseMove = imgEditorMouseMove
-    OnMouseUp = imgEditorMouseUp
+    OnMouseDown = imgEditorDown
+    OnMouseMove = imgEditorMove
+    OnMouseUp = imgEditorUp
   end
   object ToolBar2: TToolBar
     Left = 0
@@ -96,7 +96,7 @@ object frmDisplayList: TfrmDisplayList
     Height = 48
     Top = 52
     Width = 572
-    OnMouseDown = imgSelectionMouseDown
+    OnMouseDown = imgSelectionDown
   end
   object imgSelected: TImage
     Left = 156
@@ -143,8 +143,8 @@ object frmDisplayList: TfrmDisplayList
     ParentColor = False
   end
   object menuDl: TMainMenu
-    left = 20
-    top = 762
+    Left = 20
+    Top = 780
     object MenuItem1: TMenuItem
       Caption = '&File'
       object miOpen: TMenuItem
@@ -179,11 +179,6 @@ object frmDisplayList: TfrmDisplayList
     end
     object MenuItem3: TMenuItem
       Caption = '&Tools'
-      object MenuItem5: TMenuItem
-        Caption = 'Options'
-        Enabled = False
-        Visible = False
-      end
       object btnColors: TMenuItem
         Caption = 'Color palette'
         OnClick = ColorsProc
@@ -193,21 +188,17 @@ object frmDisplayList: TfrmDisplayList
         OnClick = GenCodeProc
       end
     end
-    object MenuItem4: TMenuItem
-      Caption = '&Help'
-      Visible = False
-    end
   end
   object popUp: TPopupMenu
-    left = 88
-    top = 762
+    Left = 96
+    Top = 780
     object MenuItem13: TMenuItem
       Caption = 'Put text on line'
-      OnClick = SetTextClick
+      OnClick = SetTextProc
     end
     object MenuItem14: TMenuItem
       Caption = 'Empy line (8 scanlines)'
-      OnClick = MenuItem14Click
+      OnClick = EmptyLineProc
     end
   end
 end

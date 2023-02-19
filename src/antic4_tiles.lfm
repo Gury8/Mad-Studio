@@ -16,10 +16,11 @@ object frmAntic4Tiles: TfrmAntic4Tiles
   OnClose = FormClose
   OnCreate = FormCreate
   OnDeactivate = FormDeactivate
+  OnKeyDown = FormKeyDown
   OnShow = FormShow
   PopupMenu = popMenu
   Position = poScreenCenter
-  LCLVersion = '2.0.10.0'
+  LCLVersion = '2.2.4.0'
   object shapeEditor: TShape
     Left = 468
     Height = 389
@@ -146,6 +147,7 @@ object frmAntic4Tiles: TfrmAntic4Tiles
       Top = 2
       Grouped = True
       ImageIndex = 6
+      OnClick = MiscOper
       ParentShowHint = False
       ShowHint = True
       Style = tbsCheck
@@ -844,6 +846,7 @@ object frmAntic4Tiles: TfrmAntic4Tiles
     OnChange = editXLeave
     MaxValue = 4
     MinValue = 1
+    NullValue = 0
     Value = 1
   end
   object editY: TSpinEditEx
@@ -860,6 +863,7 @@ object frmAntic4Tiles: TfrmAntic4Tiles
     OnChange = editXLeave
     MaxValue = 5
     MinValue = 1
+    NullValue = 0
     Value = 1
   end
   object chkTileDimAuto: TCheckBox
@@ -923,6 +927,14 @@ object frmAntic4Tiles: TfrmAntic4Tiles
     end
     object MenuItem3: TMenuItem
       Caption = '-'
+    end
+    object MenuItem6: TMenuItem
+      Caption = 'Copy selected tile character'
+      OnClick = CopySelectedTileCharProc
+    end
+    object MenuItem7: TMenuItem
+      Caption = 'Paste tile character'
+      OnClick = PasteTileCharProc
     end
     object popClearTile: TMenuItem
       Tag = 6

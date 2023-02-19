@@ -1,7 +1,7 @@
 object frmAntic4: TfrmAntic4
-  Left = 31
+  Left = 35
   Height = 940
-  Top = 2
+  Top = 30
   Width = 1211
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
@@ -18,7 +18,7 @@ object frmAntic4: TfrmAntic4
   OnMouseDown = FormMouseDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.10.0'
+  LCLVersion = '2.2.4.0'
   object lblAnticMode45: TLabel
     Left = 12
     Height = 15
@@ -90,7 +90,7 @@ object frmAntic4: TfrmAntic4
       ShowHint = True
     end
     object btnClearScreen: TToolButton
-      Left = 121
+      Left = 156
       Hint = 'Clear screen'
       Top = 2
       Caption = 'btnClearScreen'
@@ -109,15 +109,15 @@ object frmAntic4: TfrmAntic4
       ParentShowHint = False
       ShowHint = True
     end
-    object ToolButton17: TToolButton
-      Left = 181
+    object btnDiv02: TToolButton
+      Left = 216
       Height = 30
       Top = 2
-      Caption = 'ToolButton17'
+      Caption = 'btnDiv02'
       Style = tbsDivider
     end
     object btnFillScreen: TToolButton
-      Left = 151
+      Left = 186
       Hint = 'Fill screen with selected character'
       Top = 2
       Caption = 'btnFillScreen'
@@ -127,7 +127,7 @@ object frmAntic4: TfrmAntic4
       ShowHint = True
     end
     object btnClearCh: TToolButton
-      Left = 306
+      Left = 341
       Hint = 'Clear selected character'
       Top = 2
       Caption = 'btnClearCh'
@@ -137,7 +137,7 @@ object frmAntic4: TfrmAntic4
       ShowHint = True
     end
     object btnFlipX: TToolButton
-      Left = 216
+      Left = 251
       Hint = 'Flip character horizontally'
       Top = 2
       Caption = 'btnFlipX'
@@ -147,7 +147,7 @@ object frmAntic4: TfrmAntic4
       ShowHint = True
     end
     object btnFlipY: TToolButton
-      Left = 246
+      Left = 281
       Hint = 'Flip character vertically'
       Top = 2
       Caption = 'btnFlipY'
@@ -157,7 +157,7 @@ object frmAntic4: TfrmAntic4
       ShowHint = True
     end
     object btnRotate: TToolButton
-      Left = 276
+      Left = 311
       Hint = 'Rotate character'
       Top = 2
       Caption = 'btnRotate'
@@ -167,7 +167,7 @@ object frmAntic4: TfrmAntic4
       ShowHint = True
     end
     object cmbAnticMode: TComboBox
-      Left = 401
+      Left = 436
       Height = 23
       Top = 2
       Width = 146
@@ -193,7 +193,7 @@ object frmAntic4: TfrmAntic4
       ShowHint = True
     end
     object btnInvert: TToolButton
-      Left = 186
+      Left = 221
       Hint = 'Invert bits of character'
       Top = 2
       Caption = 'btnInvert'
@@ -203,7 +203,7 @@ object frmAntic4: TfrmAntic4
       ShowHint = True
     end
     object btnCopyChar: TToolButton
-      Left = 336
+      Left = 371
       Hint = 'Copy edited data to selected character set cell'
       Top = 2
       Caption = 'btnCopyChar'
@@ -213,7 +213,7 @@ object frmAntic4: TfrmAntic4
       ShowHint = True
     end
     object btnSettings: TToolButton
-      Left = 371
+      Left = 406
       Hint = 'Settings'
       Top = 2
       Caption = 'Settings'
@@ -223,13 +223,30 @@ object frmAntic4: TfrmAntic4
       ShowHint = True
       Visible = False
     end
-    object ToolButton2: TToolButton
-      Left = 366
+    object btnDiv03: TToolButton
+      Left = 401
       Height = 30
       Top = 2
-      Caption = 'ToolButton2'
+      Caption = 'btnDiv03'
       Style = tbsDivider
       Visible = False
+    end
+    object btnApplyText: TToolButton
+      Left = 126
+      Hint = 'Put text on screen'
+      Top = 2
+      Caption = 'btnApplyText'
+      ImageIndex = 33
+      OnClick = ApplyTextProc
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object btnDiv01: TToolButton
+      Left = 121
+      Height = 30
+      Top = 2
+      Caption = 'btnDiv01'
+      Style = tbsDivider
     end
   end
   object statusBar: TStatusBar
@@ -245,7 +262,7 @@ object frmAntic4: TfrmAntic4
         Width = 200
       end    
       item
-        Width = 350
+        Width = 400
       end    
       item
         Width = 250
@@ -468,7 +485,7 @@ object frmAntic4: TfrmAntic4
     Caption = '7'
     ParentColor = False
   end
-  object grpCharOper: TGroupBox
+  object boxCharOper: TGroupBox
     Left = 618
     Height = 84
     Top = 792
@@ -539,7 +556,7 @@ object frmAntic4: TfrmAntic4
       OnClick = CharOper
     end
   end
-  object GroupBox3: TGroupBox
+  object boxCharInfo: TGroupBox
     Left = 12
     Height = 90
     Top = 42
@@ -597,88 +614,6 @@ object frmAntic4: TfrmAntic4
       Caption = 'X max. size'
       ParentColor = False
     end
-    object editX: TBCTrackbarUpdown
-      Left = 6
-      Height = 22
-      Top = 24
-      Width = 50
-      AllowNegativeValues = False
-      BarExponent = 1
-      Increment = 1
-      LongTimeInterval = 400
-      MinValue = 0
-      MaxValue = 39
-      Value = 39
-      ShortTimeInterval = 100
-      Background.Color = clWindow
-      Background.Gradient1.StartColor = clWhite
-      Background.Gradient1.EndColor = clBlack
-      Background.Gradient1.GradientType = gtLinear
-      Background.Gradient1.Point1XPercent = 0
-      Background.Gradient1.Point1YPercent = 0
-      Background.Gradient1.Point2XPercent = 0
-      Background.Gradient1.Point2YPercent = 100
-      Background.Gradient2.StartColor = clWhite
-      Background.Gradient2.EndColor = clOlive
-      Background.Gradient2.GradientType = gtLinear
-      Background.Gradient2.Point1XPercent = 0
-      Background.Gradient2.Point1YPercent = 0
-      Background.Gradient2.Point2XPercent = 0
-      Background.Gradient2.Point2YPercent = 100
-      Background.Gradient2.Sinus = True
-      Background.Gradient1EndPercent = 35
-      Background.Style = bbsColor
-      ButtonBackground.Gradient1.StartColor = clBtnShadow
-      ButtonBackground.Gradient1.EndColor = clBtnFace
-      ButtonBackground.Gradient1.GradientType = gtLinear
-      ButtonBackground.Gradient1.Point1XPercent = 0
-      ButtonBackground.Gradient1.Point1YPercent = -50
-      ButtonBackground.Gradient1.Point2XPercent = 0
-      ButtonBackground.Gradient1.Point2YPercent = 50
-      ButtonBackground.Gradient1.Sinus = True
-      ButtonBackground.Gradient2.StartColor = clBtnFace
-      ButtonBackground.Gradient2.EndColor = clBtnShadow
-      ButtonBackground.Gradient2.GradientType = gtLinear
-      ButtonBackground.Gradient2.Point1XPercent = 0
-      ButtonBackground.Gradient2.Point1YPercent = 50
-      ButtonBackground.Gradient2.Point2XPercent = 0
-      ButtonBackground.Gradient2.Point2YPercent = 150
-      ButtonBackground.Gradient2.Sinus = True
-      ButtonBackground.Gradient1EndPercent = 50
-      ButtonBackground.Style = bbsGradient
-      ButtonDownBackground.Color = clBtnShadow
-      ButtonDownBackground.Gradient1.StartColor = clWhite
-      ButtonDownBackground.Gradient1.EndColor = clBlack
-      ButtonDownBackground.Gradient1.GradientType = gtLinear
-      ButtonDownBackground.Gradient1.Point1XPercent = 0
-      ButtonDownBackground.Gradient1.Point1YPercent = 0
-      ButtonDownBackground.Gradient1.Point2XPercent = 0
-      ButtonDownBackground.Gradient1.Point2YPercent = 100
-      ButtonDownBackground.Gradient2.StartColor = clWhite
-      ButtonDownBackground.Gradient2.EndColor = clBlack
-      ButtonDownBackground.Gradient2.GradientType = gtLinear
-      ButtonDownBackground.Gradient2.Point1XPercent = 0
-      ButtonDownBackground.Gradient2.Point1YPercent = 0
-      ButtonDownBackground.Gradient2.Point2XPercent = 0
-      ButtonDownBackground.Gradient2.Point2YPercent = 100
-      ButtonDownBackground.Gradient1EndPercent = 35
-      ButtonDownBackground.Style = bbsColor
-      Border.Color = clWindowText
-      Border.ColorOpacity = 100
-      Border.Style = bboSolid
-      Rounding.RoundX = 4
-      Rounding.RoundY = 4
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Verdana'
-      HasTrackBar = True
-      ArrowColor = clWindowText
-      TabOrder = 0
-      TabStop = True
-      UseDockManager = False
-      OnMouseLeave = EditDimProc
-      OnMouseUp = editYMouseUp
-    end
     object Label22: TLabel
       Left = 96
       Height = 15
@@ -687,88 +622,6 @@ object frmAntic4: TfrmAntic4
       Caption = 'Y max. size'
       ParentColor = False
     end
-    object editY: TBCTrackbarUpdown
-      Left = 96
-      Height = 22
-      Top = 24
-      Width = 50
-      AllowNegativeValues = False
-      BarExponent = 1
-      Increment = 1
-      LongTimeInterval = 400
-      MinValue = 0
-      MaxValue = 23
-      Value = 23
-      ShortTimeInterval = 100
-      Background.Color = clWindow
-      Background.Gradient1.StartColor = clWhite
-      Background.Gradient1.EndColor = clBlack
-      Background.Gradient1.GradientType = gtLinear
-      Background.Gradient1.Point1XPercent = 0
-      Background.Gradient1.Point1YPercent = 0
-      Background.Gradient1.Point2XPercent = 0
-      Background.Gradient1.Point2YPercent = 100
-      Background.Gradient2.StartColor = clWhite
-      Background.Gradient2.EndColor = clOlive
-      Background.Gradient2.GradientType = gtLinear
-      Background.Gradient2.Point1XPercent = 0
-      Background.Gradient2.Point1YPercent = 0
-      Background.Gradient2.Point2XPercent = 0
-      Background.Gradient2.Point2YPercent = 100
-      Background.Gradient2.Sinus = True
-      Background.Gradient1EndPercent = 35
-      Background.Style = bbsColor
-      ButtonBackground.Gradient1.StartColor = clBtnShadow
-      ButtonBackground.Gradient1.EndColor = clBtnFace
-      ButtonBackground.Gradient1.GradientType = gtLinear
-      ButtonBackground.Gradient1.Point1XPercent = 0
-      ButtonBackground.Gradient1.Point1YPercent = -50
-      ButtonBackground.Gradient1.Point2XPercent = 0
-      ButtonBackground.Gradient1.Point2YPercent = 50
-      ButtonBackground.Gradient1.Sinus = True
-      ButtonBackground.Gradient2.StartColor = clBtnFace
-      ButtonBackground.Gradient2.EndColor = clBtnShadow
-      ButtonBackground.Gradient2.GradientType = gtLinear
-      ButtonBackground.Gradient2.Point1XPercent = 0
-      ButtonBackground.Gradient2.Point1YPercent = 50
-      ButtonBackground.Gradient2.Point2XPercent = 0
-      ButtonBackground.Gradient2.Point2YPercent = 150
-      ButtonBackground.Gradient2.Sinus = True
-      ButtonBackground.Gradient1EndPercent = 50
-      ButtonBackground.Style = bbsGradient
-      ButtonDownBackground.Color = clBtnShadow
-      ButtonDownBackground.Gradient1.StartColor = clWhite
-      ButtonDownBackground.Gradient1.EndColor = clBlack
-      ButtonDownBackground.Gradient1.GradientType = gtLinear
-      ButtonDownBackground.Gradient1.Point1XPercent = 0
-      ButtonDownBackground.Gradient1.Point1YPercent = 0
-      ButtonDownBackground.Gradient1.Point2XPercent = 0
-      ButtonDownBackground.Gradient1.Point2YPercent = 100
-      ButtonDownBackground.Gradient2.StartColor = clWhite
-      ButtonDownBackground.Gradient2.EndColor = clBlack
-      ButtonDownBackground.Gradient2.GradientType = gtLinear
-      ButtonDownBackground.Gradient2.Point1XPercent = 0
-      ButtonDownBackground.Gradient2.Point1YPercent = 0
-      ButtonDownBackground.Gradient2.Point2XPercent = 0
-      ButtonDownBackground.Gradient2.Point2YPercent = 100
-      ButtonDownBackground.Gradient1EndPercent = 35
-      ButtonDownBackground.Style = bbsColor
-      Border.Color = clWindowText
-      Border.ColorOpacity = 100
-      Border.Style = bboSolid
-      Rounding.RoundX = 4
-      Rounding.RoundY = 4
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Verdana'
-      HasTrackBar = True
-      ArrowColor = clWindowText
-      TabOrder = 1
-      TabStop = True
-      UseDockManager = False
-      OnMouseLeave = EditDimProc
-      OnMouseUp = editYMouseUp
-    end
     object chkMaxSize: TCheckBox
       Left = 9
       Height = 19
@@ -776,7 +629,39 @@ object frmAntic4: TfrmAntic4
       Width = 156
       Caption = 'Text mode maximum size'
       OnClick = MaxSizeProc
+      TabOrder = 0
+    end
+    object editX: TSpinEditEx
+      Left = 6
+      Height = 23
+      Top = 24
+      Width = 54
+      BiDiMode = bdRightToLeft
+      BorderStyle = bsSingle
+      MaxLength = 0
+      NumbersOnly = True
+      ParentBiDiMode = False
+      TabOrder = 1
+      OnChange = EditDimProc
+      MaxValue = 39
+      NullValue = 0
+      Value = 39
+    end
+    object editY: TSpinEditEx
+      Left = 96
+      Height = 23
+      Top = 24
+      Width = 54
+      BiDiMode = bdRightToLeft
+      BorderStyle = bsSingle
+      MaxLength = 0
+      NumbersOnly = True
+      ParentBiDiMode = False
       TabOrder = 2
+      OnChange = EditDimProc
+      MaxValue = 23
+      NullValue = 0
+      Value = 23
     end
   end
   object imgCharAntic45: TImage

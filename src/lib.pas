@@ -1,8 +1,8 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
-  Unit: Common library
+  Release year: 2016 - 2023
+  Unit: Supporting library
 }
 unit lib;
 
@@ -11,8 +11,8 @@ unit lib;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, strutils, StdCtrls, ComCtrls, ExtCtrls,
-  Forms, Dialogs, LCLType, Controls, Graphics, BCTrackbarUpdown, BCMDButton, BCMaterialDesignButton,
+  Classes, SysUtils, FileUtil, strutils, ComCtrls, ExtCtrls, Forms,
+  LCLType, Controls, Graphics, BCMDButton, BCMaterialDesignButton, Dialogs,
   common;
 
 procedure MoveLeft(mx, my : byte; var fld : charType);
@@ -36,19 +36,17 @@ function AtasciiCode(offset : byte) : string;
 
 procedure FillRectEx(image : TImage; color : TColor; x, y, factX, factY : word);
 
-procedure Debug(text : variant); overload;
+procedure Debug(text : string); overload;
 procedure Debug(text : string; number : integer); overload;
 procedure Debug(text : string; number01, number02 : integer); overload;
 procedure Debug(text : string; number01, number02, number03 : integer); overload;
-
-procedure ShowCursor(control : TControl; winControl : TWinControl; cursorType : TCursor);
-
-procedure SetTrackBarUpDown(trackBarUpDown : TBCTrackBarUpDown; startColor, endColor : TColor);
 
 procedure SaveColors;
 procedure RetrieveColors;
 
 procedure SetButton(btn : TBCMaterialDesignButton; isEnter : boolean);
+
+function Antic45Mask(col, cnt : byte) : byte;
 
 var
   isDebug : boolean;
@@ -146,7 +144,9 @@ begin
     end;
 end;
 
-// Returns a string in which the character order of a specified string is reversed
+{-----------------------------------------------------------------------------
+ Returns a string in which the character order of a specified string is reversed
+ -----------------------------------------------------------------------------}
 function ReverseString(S : String) : String;
 var
   i : Integer;
@@ -210,7 +210,9 @@ Begin
   result := str;
 End;
 
-// Load default font
+{-----------------------------------------------------------------------------
+ Load default font
+ -----------------------------------------------------------------------------}
 procedure DefaultFontSet(var fldFontSet : fldFontSetType);
 var
   r, i : byte;
@@ -246,7 +248,9 @@ begin
   end;
 end;
 
-// Calculate code number
+{-----------------------------------------------------------------------------
+ Calculate code number
+ -----------------------------------------------------------------------------}
 function AtasciiCode(offset : byte) : string;
 begin
   if (offset >= 0) and (offset <= 63) then
@@ -267,7 +271,7 @@ begin
   end;
 end;
 
-procedure Debug(text : variant); overload;
+procedure Debug(text : string); overload;
 begin
   if isDebug then
     ShowMessage(text);
@@ -292,24 +296,15 @@ begin
                 IntToStr(number03));
 end;
 
-procedure ShowCursor(control : TControl; winControl : TWinControl; cursorType : TCursor);
-var
-  i : word;
-begin
-  control.Cursor := cursorType;
-  for i := 0 to winControl.ControlCount - 1 do
-    winControl.Controls[i].Cursor := cursorType;
-end;
-
-procedure SetTrackBarUpDown(trackBarUpDown : TBCTrackBarUpDown; startColor, endColor : TColor);
-begin
-  with trackBarUpDown do begin
-    ButtonBackground.Gradient1.StartColor := startColor;
-    ButtonBackground.Gradient1.EndColor := endColor;
-    ButtonBackground.Gradient2.StartColor := endColor;
-    ButtonBackground.Gradient2.EndColor := startColor;
-  end;
-end;
+//procedure SetTrackBarUpDown(trackBarUpDown : TBCTrackBarUpDown; startColor, endColor : TColor);
+//begin
+//  with trackBarUpDown do begin
+//    ButtonBackground.Gradient1.StartColor := startColor;
+//    ButtonBackground.Gradient1.EndColor := endColor;
+//    ButtonBackground.Gradient2.StartColor := endColor;
+//    ButtonBackground.Gradient2.EndColor := startColor;
+//  end;
+//end;
 
 procedure SaveColors;
 var
@@ -346,6 +341,22 @@ begin
   else begin
     btn.NormalColor := clWhite;
     btn.NormalColorEffect := clSilver;
+  end;
+end;
+
+function Antic45Mask(col, cnt : byte) : byte;
+var
+  mask : array[0..1] of byte;
+begin
+  result := 0;
+  mask[cnt - 1] := col;
+  if cnt = 2 then begin
+    if (mask[0] = 0) and (mask[1] = 1) then
+      result := 1
+    else if (mask[0] = 1) and (mask[1] = 0) then
+      result := 2
+    else if (mask[0] = 1) and (mask[1] = 1) then
+      result := 3;
   end;
 end;
 

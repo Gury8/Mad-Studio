@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2023
   Unit: Main application module
 }
 unit main;
@@ -12,29 +12,29 @@ interface
 
 uses
   Classes, SysUtils, Windows, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, Menus, Buttons, BCImageButton, jsonConf, StrUtils,
-  SynHighlighterPas, SynEditMiscClasses, SynHighlighterAny;
+  ExtCtrls, Menus, Buttons, BCImageButton, jsonConf, StrUtils, SynEditMiscClasses;
 
 type
   { TfrmMain }
   TfrmMain = class(TForm)
-    btnCodeEditor10 : TBCImageButton;
-    btnCodeEditor11 : TBCImageButton;
-    btnCodeEditor12 : TBCImageButton;
-    btnCodeEditor13 : TBCImageButton;
-    btnCodeEditor14 : TBCImageButton;
-    btnCodeEditor15 : TBCImageButton;
-    btnCodeEditor16 : TBCImageButton;
-    btnCodeEditor17 : TBCImageButton;
-    btnCodeEditor18 : TBCImageButton;
-    btnCodeEditor19 : TBCImageButton;
-    btnCodeEditor7 : TBCImageButton;
-    btnCodeEditor8 : TBCImageButton;
-    btnCodeEditor9 : TBCImageButton;
+    btnModule04 : TBCImageButton;
+    btnModule05 : TBCImageButton;
+    btnModule06 : TBCImageButton;
+    btnModule07 : TBCImageButton;
+    btnModule08 : TBCImageButton;
+    btnModule09 : TBCImageButton;
+    btnModule10 : TBCImageButton;
+    btnModule12 : TBCImageButton;
+    btnModule13 : TBCImageButton;
+    btnModule11 : TBCImageButton;
+    btnMoule01 : TBCImageButton;
+    btnModule02 : TBCImageButton;
+    btnModule03 : TBCImageButton;
     dlgColors: TColorDialog;
     Image1: TImage;
     images: TImageList;
     MenuItem12 : TMenuItem;
+    MenuItem23: TMenuItem;
     MenuItem5 : TMenuItem;
     MenuItem7 : TMenuItem;
     mnuAntic3: TMenuItem;
@@ -62,10 +62,12 @@ type
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
     dlgFolder: TSelectDirectoryDialog;
+    Separator1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure CloseModulesProc(Sender: TObject);
     procedure PmgAnimatorProc(Sender: TObject);
     procedure SrcEditorProc(Sender: TObject);
     procedure AnticMode45TileEditorProc(Sender : TObject);
@@ -74,7 +76,7 @@ type
     procedure CharSetEditorProc(Sender: TObject);
     procedure Antic2EditorProc(Sender: TObject);
     procedure DLEditorProc(Sender: TObject);
-    procedure TextMode12EditorProc(Sender: TObject);
+    procedure Antic6EditorProc(Sender: TObject);
     procedure AnticMode45EditorProc(Sender: TObject);
     procedure AboutProc(Sender: TObject);
     procedure LoadDefaultColors(Sender: TObject);
@@ -112,19 +114,19 @@ procedure TfrmMain.FormCreate(Sender: TObject);
 var
   i : byte;
 begin
-  btnCodeEditor7.LoadFromBitmapResource('BUTTON_GRAY');
-  btnCodeEditor8.LoadFromBitmapResource('BUTTON_GRAY');
-  btnCodeEditor9.LoadFromBitmapResource('BUTTON_GRAY');
-  btnCodeEditor10.LoadFromBitmapResource('BUTTON_GRAY');
-  btnCodeEditor11.LoadFromBitmapResource('BUTTON_GRAY');
-  btnCodeEditor12.LoadFromBitmapResource('BUTTON_GRAY');
-  btnCodeEditor13.LoadFromBitmapResource('BUTTON_GRAY');
-  btnCodeEditor14.LoadFromBitmapResource('BUTTON_GRAY');
-  btnCodeEditor15.LoadFromBitmapResource('BUTTON_GRAY');
-  btnCodeEditor16.LoadFromBitmapResource('BUTTON_GRAY');
-  btnCodeEditor17.LoadFromBitmapResource('BUTTON_GRAY');
-  btnCodeEditor18.LoadFromBitmapResource('BUTTON_GRAY');
-  btnCodeEditor19.LoadFromBitmapResource('BUTTON_GRAY');
+  btnMoule01.LoadFromBitmapResource('BUTTON_GRAY');
+  btnModule02.LoadFromBitmapResource('BUTTON_GRAY');
+  btnModule03.LoadFromBitmapResource('BUTTON_GRAY');
+  btnModule04.LoadFromBitmapResource('BUTTON_GRAY');
+  btnModule05.LoadFromBitmapResource('BUTTON_GRAY');
+  btnModule06.LoadFromBitmapResource('BUTTON_GRAY');
+  btnModule07.LoadFromBitmapResource('BUTTON_GRAY');
+  btnModule08.LoadFromBitmapResource('BUTTON_GRAY');
+  btnModule09.LoadFromBitmapResource('BUTTON_GRAY');
+  btnModule10.LoadFromBitmapResource('BUTTON_GRAY');
+  btnModule12.LoadFromBitmapResource('BUTTON_GRAY');
+  btnModule13.LoadFromBitmapResource('BUTTON_GRAY');
+  btnModule11.LoadFromBitmapResource('BUTTON_GRAY');
 
   dlgOpen.InitialDir := getDir + 'examples\';
 
@@ -151,23 +153,8 @@ begin
     Add('-h=Show help and exit');
   end;
 
-  with propFlagAtariBASIC do begin
-    Add('0120');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-  end;
+  for i := 0 to propAtariBASIC.Count do
+    propFlagAtariBASIC.Add('0');
 
   { Mad Pascal options
    ---------------------------------------------------------------------------}
@@ -177,43 +164,35 @@ begin
   propFlagMadsMP := TStringList.Create;
 
   with propMadPascal do begin
+//    Add('-o:filename=Output file');
     Add('-diag=Diagnostics mode');
     Add('-define:symbol=Defines the symbol');
     Add('-ipath:<x>=Add <x> to include path');
-    Add('-target:<x>=Target system: a8 (default), c64');
+    Add('-target:<x>=Target system: a8 (default), c64, c4p, raw');
     Add('-code:address=Code origin hex address');
     Add('-data:address=Data origin hex address');
     Add('-stack:address=Software stack hex address (size = 64 bytes)');
     Add('-zpage:address=Variables on the zero page hex address (size = 26 bytes)');
   end;
 
-  with propFlagMadPascal do begin
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-  end;
+  for i := 0 to propMadPascal.Count do
+    propFlagMadPascal.Add('0');
 
   { Mad Assembler (MADS) options
    ---------------------------------------------------------------------------}
   propMADS := TStringList.Create;
-//  propDescrMADS := TStringList.Create;
   propFlagMADS := TStringList.Create;
 
   with propMADS do begin
     Add('-b:=Generate binary file at specific address');
+    Add('-bc=Branch condition test');
     Add('-c=Label case sensitivity');
-    Add('-d:=Define a label');
-    //  -d:label=value  Define a label
+    Add('-d:label=Define a label');
     Add('-f=CPU command at first column');
+    Add('-fv:value=Set raw binary fill byte to [value]');
     Add('-hc=Header file for CC65');
     Add('-hm=Header file for MADS');
-    Add('-i:=Additional include directories');
-    //  -i:path         Additional include directories
+    Add('-i:path=Additional include directories');
     Add('-l=Generate listing');
     Add('-m:=File with macro definition');
     Add('-ml:=margin-left property');
@@ -226,26 +205,10 @@ begin
     Add('-vu=Verify code inside unreferenced procedures');
   end;
 
-  with propFlagMADS do begin
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('1');
-    Add('0');
-    Add('0');
-    Add('1');
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-  end;
+  for i := 0 to propMADS.Count do
+    propFlagMADS.Add('0');
 
+  // Copy options for MADS used by Mad Pascal
   propMadsMP.Assign(propMADS);
   propFlagMadsMP.Assign(propFlagMADS);
 
@@ -258,17 +221,21 @@ begin
     Add('-d=Enable parser debug options (only useful to debug parser)');
     Add('-n=Don''t run the optimizer, produces same code as 6502 version');
     Add('-prof=Show token usage statistics');
-//    -s=<name>      place code into given segment
-//    Add('-s=<name>Place code into given segment');
+    Add('-s:<name>=Place code into given segment');
+    Add('-t:<target>=Select compiler target (''atari-fp'', ''atari-int'', etc.)');
+    Add('-l=Produce a listing of the unabbreviated parsed source');
+    Add('-c=Only compile to assembler, don''t produce binary');
+    Add('-C:<name>=Select linker config file name');
+    Add('-S:<addr>=Select binary starting address');
+    Add('-X:<opt>=Pass option to the assembler');
+    Add('-DL:<sym-val>=Define linker symbol with given value');
+    Add('-o <name>=Select output file name');
     Add('-v=Show version and exit');
+    Add('-h=Show help for FastBasic options');
   end;
 
-  with propFlagFastBasic do begin
-    Add('0');
-    Add('0');
-    Add('0');
-    Add('0');
-  end;
+  for i := 0 to propFastBasic.Count do
+    propFlagFastBasic.Add('0');
 
   { Effectus options
    ---------------------------------------------------------------------------}
@@ -281,11 +248,8 @@ begin
     Add('-z=Variable zero page address');
   end;
 
-  with propFlagEffectus do begin
-    Add('0');
-    Add('0');
-    Add('0');
-  end;
+  for i := 0 to propEffectus.Count do
+    propFlagEffectus.Add('0');
 
   { KickC options
    ---------------------------------------------------------------------------}
@@ -298,11 +262,8 @@ begin
     Add('-E=Only run the preprocessor. Output is sent to standard out.');
   end;
 
-  with propFlagKickC do begin
-    Add('1');
-    Add('0');
-    Add('0');
-  end;
+  for i := 0 to propKickC.Count do
+    propFlagKickC.Add('0');
 
   { Antic mode list
    ---------------------------------------------------------------------------}
@@ -398,7 +359,7 @@ begin
   //pmSize[1].def := 'double size';
   //pmSize[2].bit := 3
   //pmSize[2].def := 'quadruple size';
-//  = ('normal size', 'double size', 'quadruple size');
+  //  = ('normal size', 'double size', 'quadruple size');
 
   LoadOptions;
 
@@ -422,7 +383,7 @@ begin
   isGrMicPalette := true;
   getDir := ExtractFilePath(Application.ExeName);
 
-  for i := 0 to 12 do
+  for i := 0 to 12 do begin
     if propFlagModules[i] = 1 then
        case i of
          0: SrcEditorProc(Sender);
@@ -430,7 +391,7 @@ begin
          2: PmgEditorProc(Sender);
          3: CharSetEditorProc(Sender);
          4: Antic2EditorProc(Sender);
-         5: TextMode12EditorProc(Sender);
+         5: Antic6EditorProc(Sender);
          6: AnticMode45EditorProc(Sender);
          7: DLEditorProc(Sender);
          8: PmgAnimatorProc(Sender);
@@ -439,6 +400,7 @@ begin
          11: ByteEditorProc(Sender);
          12: AnticMode45TileEditorProc(Sender);
        end;
+  end;
 end;
 
 procedure TfrmMain.FormActivate(Sender: TObject);
@@ -478,6 +440,30 @@ begin
   propModules.Free;
 
   imgCharList.Free;
+end;
+
+procedure TfrmMain.CloseModulesProc(Sender: TObject);
+begin
+  frmAntic2.Close;
+  frmAntic3.Close;
+  frmAntic4.Close;
+  frmAntic6.Close;
+  frmSrcEdit.Close;
+  frmGraph.Close;
+  frmPmg.Close;
+  frmFonts.Close;
+  frmDisplayList.Close;
+  frmAnimator.Close;
+  frmAntic4Tiles.Close;
+  frmByteEditor.Close;
+  frmViewer.Close;
+
+  FillByte(propFlagModules, 13, 0);
+
+  LoadDefaultPalette;
+  formId := formMain;
+
+//  frmAnimator.FormClose(nil, Action);
 end;
 
 {-----------------------------------------------------------------------------
@@ -563,73 +549,97 @@ end;
 
 procedure TfrmMain.AnticMode3EditorProc(Sender: TObject);
 begin
+  Screen.BeginWaitCursor;
   frmAntic3.Show;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmMain.SrcEditorProc(Sender: TObject);
 begin
+  Screen.BeginWaitCursor;
   isMemoToEditor := false;
   frmSrcEdit.Show;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmMain.PmgAnimatorProc(Sender: TObject);
 begin
+  Screen.BeginWaitCursor;
   frmAnimator.Show;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmMain.GrEditorProc(Sender: TObject);
 begin
+  Screen.BeginWaitCursor;
   frmGraph.Show;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmMain.PmgEditorProc(Sender: TObject);
 begin
-//  frmPmg.Cursor := crHourGlass;
+  Screen.BeginWaitCursor;
   frmPmg.Show;
-//  frmPmg.Cursor := crDefault;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmMain.CharSetEditorProc(Sender: TObject);
 begin
+  Screen.BeginWaitCursor;
   frmFonts.Show;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmMain.Antic2EditorProc(Sender: TObject);
 begin
+  Screen.BeginWaitCursor;
   frmAntic2.Show;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmMain.DLEditorProc(Sender: TObject);
 begin
+  Screen.BeginWaitCursor;
   frmDisplayList.Show;
+  Screen.EndWaitCursor;
 end;
 
-procedure TfrmMain.TextMode12EditorProc(Sender: TObject);
+procedure TfrmMain.Antic6EditorProc(Sender: TObject);
 begin
+  Screen.BeginWaitCursor;
   frmAntic6.Show;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmMain.AnticMode45EditorProc(Sender: TObject);
 begin
+  Screen.BeginWaitCursor;
   frmAntic4.Show;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmMain.ByteEditorProc(Sender : TObject);
 begin
+  Screen.BeginWaitCursor;
   maxLines := 0;
   frmByteEditor.Show;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmMain.ViewerProc(Sender : TObject);
 begin
+  Screen.BeginWaitCursor;
   isAntic4 := true;
   isAntic6 := true;
   frmViewer.Show;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmMain.AnticMode45TileEditorProc(Sender : TObject);
 begin
+  Screen.BeginWaitCursor;
   frmAntic4Tiles.Show;
+  Screen.EndWaitCursor;
 end;
 
 procedure TfrmMain.LoadDefaultColors(Sender: TObject);
@@ -679,7 +689,7 @@ begin
     // Selected computer language
     langIndex := c.GetValue('/General/laguageIndex', 0);
 
-    editorFont.Name := c.GetValue('/SourceCodeEditor/fontName', 'Verdana');
+    editorFont.Name := c.GetValue('/SourceCodeEditor/fontName', 'Courier New');
     editorFont.Size := c.GetValue('/SourceCodeEditor/fontSize', 12);
     editorFont.Color := c.GetValue('/SourceCodeEditor/fontColor', 10158080);
     editorBackColor := c.GetValue('/SourceCodeEditor/backColor', 15587522);
@@ -702,16 +712,23 @@ begin
 
     for i := 0 to propMadPascal.Count - 1 do begin
       param := ExtractDelimited(1, propMadPascal[i], ['=']);
-      propFlagMadPascal[i] := c.GetValue('/MadPascal/' + param, '0');
+
+      if i = 2 then
+        propFlagMadPascal[i] := c.GetValue('/MadPascal/' + param, '1bin\\mp\\lib')
+      else
+        propFlagMadPascal[i] := c.GetValue('/MadPascal/' + param, '0');
     end;
 
     for i := 0 to propMadsMP.Count - 1 do begin
       param := ExtractDelimited(1, propMadsMP[i], ['=']);
-      propFlagMadsMP[i] := c.GetValue('/MadPascal/' + param, '0');
-    end;
 
-//    isMadPascal_o := c.GetValue('/MadPascal/optimizeCode', true);
-//    isMadPascal_d := c.GetValue('/MadPascal/diagnosticsMode', false);
+      if i = 8 then
+        propFlagMadsMP[i] := c.GetValue('/MadsMadPascal/' + param, '1bin\\mp\\base')
+      else if i = 15 then
+        propFlagMadsMP[i] := c.GetValue('/MadsMadPascal/' + param, '1')
+      else
+        propFlagMadsMP[i] := c.GetValue('/MadsMadPascal/' + param, '0');
+    end;
 
     strMadPascalOutput := c.GetValue('/MadPascal/output', 'mp_output.txt');
 
@@ -721,14 +738,14 @@ begin
     for i := 0 to propMads.Count - 1 do begin
       param := ExtractDelimited(1, propMads[i], ['=']);
       propFlagMads[i] := c.GetValue('/Mads/' + param, '0');
-    end;
 
-    //isMadsLabelCase_c := c.GetValue('/Mads/labelCase', false);
-    //isMadsExcludeUnref_x := c.GetValue('/Mads/excludeUnref', false);
-    //isMadsAddLib_i := c.GetValue('/Mads/addLib', false);
-    //strMadsAddLib_i := c.GetValue('/Mads/addLibName', strMadsAddLib_i);
-    //isMadsBinAddress_b := c.GetValue('/Mads/binAddress', false);
-    //intMadsBinAddress_b := c.GetValue('/Mads/binAddressValue', intMadsBinAddress_b);
+      if i = 8 then
+        propFlagMads[i] := c.GetValue('/Mads/' + param, '1bin\\mp\\base')
+      else if i = 15 then
+        propFlagMads[i] := c.GetValue('/Mads/' + param, '1')
+      else
+        propFlagMads[i] := c.GetValue('/Mads/' + param, '0');
+    end;
 
     strFastBasicUserLocation := c.GetValue('/FastBasic/FastBasicLocation', '');
     strFastBasicOutput := c.GetValue('/FastBasic/output', 'fast_basic_output.txt');
@@ -754,7 +771,11 @@ begin
 
     for i := 0 to propKickC.Count - 1 do begin
       param := ExtractDelimited(1, propKickC[i], ['=']);
-      propFlagKickC[i] := c.GetValue('/KickC/' + param, '0');
+
+      if i = 0 then
+        propFlagKickC[i] := c.GetValue('/KickC/' + param, '1')
+      else
+        propFlagKickC[i] := c.GetValue('/KickC/' + param, '0');
     end;
 
     if strAtariBASICUserLocation = '' then
@@ -853,18 +874,10 @@ begin
 
     for i := 0 to propMadsMP.Count - 1 do begin
       param := ExtractDelimited(1, propMadsMP[i], ['=']);
-      c.SetValue('/MadPascal/' + param, propFlagMadsMP[i]);
+      c.SetValue('/MadsMadPascal/' + param, propFlagMadsMP[i]);
     end;
 
-//    c.SetValue('/MadPascal/optimizeCode', isMadPascal_o);
-//    c.SetValue('/MadPascal/diagnosticsMode', isMadPascal_d);
-
     c.SetValue('/MadPascal/output', strMadPascalOutput);
-
-    //for i := 0 to propAtariBASIC.Count - 1 do begin
-    //  param := ExtractDelimited(1, propAtariBASIC[i], ['=']);
-    //  c.SetValue('/AtariBASIC/' + param, propFlagAtariBASIC[i]);
-    //end;
 
     c.SetValue('/Mads/MadsLocation', strMadsUserLocation02);
 
@@ -873,12 +886,8 @@ begin
       c.SetValue('/Mads/' + param, propFlagMads[i]);
     end;
 
-    //c.SetValue('/Mads/labelCase', isMadsLabelCase_c);
-    //c.SetValue('/Mads/excludeUnref', isMadsExcludeUnref_x);
     //c.SetValue('/Mads/addLib', isMadsAddLib_i);
-    //c.SetValue('/Mads/addLibName', strMadsAddLib_i);
     //c.SetValue('/Mads/binAddress', isMadsBinAddress_b);
-    //c.SetValue('/Mads/binAddressValue', intMadsBinAddress_b);
     c.SetValue('/Mads/output', strMadsOutput);
 
     c.SetValue('/CC65/CC65Location', strCC65UserLocation);
@@ -921,10 +930,4 @@ begin
 end;
 
 end.
-
-(*var
-//  regn: HRGN;
-begin
-  //regn := CreateRoundRectRgn(0, 0, ClientWidth, ClientHeight, 18, 18);
-  //SetWindowRgn(Handle, regn, True);*)
 

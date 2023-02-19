@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2023
   Unit: The Viewer - Mad Studio files viewer
 }
 unit viewer;
@@ -12,7 +12,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, lcltype, ShellCtrls,
-  ComCtrls, EditBtn, StdCtrls, ExtCtrls, BCMaterialDesignButton, strutils,
+  ComCtrls, StdCtrls, ExtCtrls, BCMaterialDesignButton, strutils,
   common;
 
 type
@@ -63,6 +63,8 @@ type
     fldCharSet : fldFontSetType;
     fldAtascii : array[0.._ANTIC_MODE_4_SIZE - 1] of byte;
     factX02, factY02 : byte;
+    // Multi-color player resolution value factor
+    factX03 : byte;
     maxX, maxY : byte;
     maxSize : integer;
     Antic4maxX, Antic4maxY : byte;
@@ -71,8 +73,13 @@ type
     fileExt : string;
     comboType : byte;
     fldPlayer : fldType;
+    missile : array[0..1, 0..220] of byte;
     fldChar : array[0.._MAX_TILE_CHARS - 1, 0..7, 0..7] of byte;
     antic4TileArray : TAntic4TileType;
+    // Player matrix and position
+    playerPos : array[0..3, 0..80, 0..220] of byte;
+    // Player position
+    playerIndex : array[0..3] of byte;
     procedure GrModeSettings;
     procedure DrawImage;
     procedure ShowFontSet;
@@ -83,8 +90,12 @@ type
     procedure ClearData(Sender : TObject);
     procedure RefreshPM;
     procedure RefreshPlayer(pm : TImage; factX, factY : byte);
+    procedure RefresPM_MultiAll(player, factX, factY : byte);
+//    procedure SyncPlayer;
     procedure DrawTile;
     procedure DrawTileChar(scrPos, y, offset : byte);
+    procedure RefreshMissile;
+    procedure DrawMissile(pm : TImage; factX, factY : byte);
   public
     filename : string;
     isModal : boolean;
@@ -101,7 +112,9 @@ const
   _COMBO_ANTIC_7 = 108;
   _COMBO_CHR_SET = 100;
   _COMBO_PLAYER  = 111;
-  _COMBO_ANTIC_4_TILE = 112;
+  _COMBO_MISSILE = 112;
+  _COMBO_MULTI_COLOR_PLAYER = 113;
+  _COMBO_ANTIC_4_TILE = 114;
 
 implementation
 
@@ -171,7 +184,7 @@ begin
       cmbFormats.ItemIndex := 11;
     end;
     formAntic4TileEditor: begin
-      cmbFormats.ItemIndex := 12;
+      cmbFormats.ItemIndex := 14;
     end
     else
       cmbFormats.ItemIndex := 0;
@@ -200,6 +213,9 @@ begin
   FillByte(fldAtascii, SizeOf(fldAtascii), 0);
   FillByte(fld, SizeOf(fld), 0);
   FillByte(fldCharSet, SizeOf(fldCharSet), 0);
+  FillByte(fldPlayer, SizeOf(fldPlayer), 0);
+  FillByte(playerPos, SizeOf(playerPos), 0);
+  FillByte(missile, SizeOf(missile), 0);
 
   FillRectEx(imgView, coltab[0], 0, 0, imgView.Width, imgView.Height);
   FillRectEx(imgFontSet, coltab[0], 0, 0, imgFontSet.Width, imgFontSet.Height);
@@ -215,7 +231,7 @@ begin
   case cmbFormats.ItemIndex of
     0: begin
       shellListView.Mask := '*.gr0;*.an2;*.asc;*.gr1;*.gr2;*.an6;*.an7;*.gr3;*.gr7;*.mic;*.gr8;' +
-                            '*.fnt;*.fon;*.set;*.an4;*.an5;*.spr;*.tl4';
+                            '*.fnt;*.fon;*.set;*.an4;*.an5;*.spr;*.msl;*.mpl;*.tl4';
     end;
     1: begin
       comboType := grMode160x96x4;
@@ -263,6 +279,14 @@ begin
       shellListView.Mask := '*.spr';
     end;
     12: begin
+      comboType := _COMBO_MISSILE;
+      shellListView.Mask := '*.msl';
+    end;
+    13: begin
+      comboType := _COMBO_MULTI_COLOR_PLAYER;
+      shellListView.Mask := '*.mpl';
+    end;
+    14: begin
       comboType := _COMBO_ANTIC_4_TILE;
       shellListView.Mask := '*.tl4';
     end;
@@ -329,6 +353,7 @@ var
   r, i : byte;
   r4, m4 : integer;
   col, h : byte;
+//  mplTypeIndex : byte = 11;
 begin
   if not Assigned(shellListView.Selected) then Exit;
   ClearData(Sender);
@@ -348,6 +373,8 @@ begin
         1024: comboType := _COMBO_CHR_SET;
         960: comboType := _COMBO_ANTIC_2;
         42: comboType := _COMBO_PLAYER;
+        36: comboType := _COMBO_MISSILE;
+        174: comboType := _COMBO_MULTI_COLOR_PLAYER;
         _ANTIC_MODE_4_SIZE + 5:
           comboType := _COMBO_ANTIC_4;
         _TEXT_MODE_1_SIZE, _TEXT_MODE_1_SIZE + 5:
@@ -378,19 +405,24 @@ begin
         comboType := _COMBO_ANTIC_5
       else if fileExt = '.spr' then
         comboType := _COMBO_PLAYER
+      else if fileExt = '.msl' then
+        comboType := _COMBO_MISSILE
+      else if fileExt = '.mpl' then
+        comboType := _COMBO_MULTI_COLOR_PLAYER
       else if fileExt = '.tl4' then
         comboType := _COMBO_ANTIC_4_TILE
     end;
 
     if comboType = 255 then Exit;
 
-    boxView.Visible := comboType <> _COMBO_PLAYER;
-    boxPlayer.Visible := comboType = _COMBO_PLAYER;
+    boxView.Visible := (comboType <> _COMBO_PLAYER) and (comboType <> _COMBO_MISSILE);
+    boxPlayer.Visible := not boxView.Visible;  ////comboType = _COMBO_PLAYER;
 
     //Cursor := crHourGlass;
     //for x := 0 to ControlCount - 1 do
     //  Controls[x].Cursor := crHourGlass;
-    ShowCursor(frmViewer, frmViewer, crHourGlass);
+//    ShowCursor(frmViewer, frmViewer, crHourGlass);
+    Screen.BeginWaitCursor;
 
     { Character set view
      -------------------------------------------------------------------------}
@@ -398,14 +430,14 @@ begin
       imgFontSet.Visible := true;
       factX := 24; factY := 24;
       factX02 := 2; factY02 := 2;
-
-      for j := 0 to 1023 do
+      for j := 0 to 1023 do begin
         if fs.Position < fs.Size then begin
           r := fs.ReadByte;
           bin := IntToBin(r, 8);
           for i := 0 to 7 do
             fldCharSet[i, j] := StrToInt(bin[i + 1]);
         end;
+      end;
 
       boxView.Caption := 'Normal characters';
       lblView02.Caption := 'Antic mode 4 characters';
@@ -432,7 +464,7 @@ begin
       factX := 1; factY := 1;
 
       col := 0; h := 0;
-      for j := 0 to maxSize do
+      for j := 0 to maxSize do begin
         if fs.Position < fs.Size then begin
           fldAtascii[j] := fs.ReadByte;
           if (j > maxX) and (j mod (maxX + 1) = 0) then begin
@@ -442,6 +474,7 @@ begin
           PutAntic2Char(col, h, fldAtascii[j]);
           Inc(col);
         end;
+      end;
     end
     { Antic 6/7 (text mode 1/2) screen view
      -------------------------------------------------------------------------}
@@ -462,9 +495,10 @@ begin
 
       maxSize := maxX*maxY - 1;
 
-      for j := 0 to maxSize do
+      for j := 0 to maxSize do begin
         if fs.Position < fs.Size then
           fldAtascii[j] := fs.ReadByte;
+      end;
 
       // Read color values
       if (fs.Size = _TEXT_MODE_1_SIZE + 5) or (fs.Size = _TEXT_MODE_2_SIZE + 5) then begin
@@ -533,9 +567,10 @@ begin
       colorValues[10] := dta;
 
       // Read data
-      for j := 0 to Antic4maxSize do
+      for j := 0 to Antic4maxSize do begin
         if fs.Position < fs.Size then
           fldAtascii[j] := fs.ReadByte;
+      end;
 
       FillRectEx(imgView, coltab[0], 0, 0, imgView.Width, imgView.Height);
 
@@ -570,6 +605,88 @@ begin
 
       RefreshPM;
     end
+    { Missile view
+     -------------------------------------------------------------------------}
+    else if comboType = _COMBO_MISSILE then begin
+      // Read missile height
+      h := fs.ReadByte;
+
+      // Read missile color
+      col := fs.ReadByte;
+      coltab[4] := colorMem[col div 2];
+      colorValues[4] := col;
+
+      // Read missile data
+      for y := 0 to h - 1 do begin
+        if fs.Position < fs.Size then begin
+          x := fs.ReadByte;
+          bin := Dec2Bin(x);
+          for x := 0 to 1 do
+            missile[x, y] := StrToInt(bin[x + 7]);
+        end;
+      end;
+      RefreshMissile;
+    end
+    { Multi-color player (sprite) view
+     -------------------------------------------------------------------------}
+    else if comboType = _COMBO_MULTI_COLOR_PLAYER then begin
+      factX02 := 4; factY02 := 4;
+
+      // Read player height
+      h := fs.ReadByte;
+
+      for i := 0 to 11 do begin
+        // Player X-position
+        if i < 4 then
+          playerIndex[i] := fs.ReadByte
+        // Player color
+        else if (i >= 4) and (i <= 7) then begin
+          j := fs.ReadByte;
+          coltab[i] := colorMem[j div 2];
+          colorValues[i] := j;
+        end
+        // Player size
+        else begin
+          j := fs.ReadByte;
+          if i >= 8 then
+            playerSize[i - 8] := j
+        end;
+      end;
+
+//      debug('colorValues', colorValues[0], colorValues[1], colorValues[2]);
+//      debug('playerSize', playerSize[0], playerSize[1], playerSize[2]);
+
+      // 3rd color enable flag
+      j := fs.ReadByte;
+      if j = 0 then begin
+        isPmMixedColor := false;
+//          sbPmg.Panels[2].Text := 'Player mixed (3rd) color disabled';
+      end
+      else begin
+        isPmMixedColor := true;
+//          sbPmg.Panels[2].Text := 'Player mixed (3rd) color enabled';
+      end;
+
+      // Player data
+      for i := 0 to 3 do begin
+        for y := 0 to h - 1 do begin
+          if fs.Position < fs.Size then begin
+            x := fs.ReadByte;
+            bin := Dec2Bin(x);
+            for x := 0 to 7 do
+              fldPlayer[i, x, y] := StrToInt(bin[x + 1]);
+          end;
+        end;
+
+        case playerSize[i] of
+          0: factX03 := 4;
+          1: factX03 := 8;
+          3: factX03 := 16;
+        end;
+
+        RefresPM_MultiAll(i, factX02, factY02);
+      end;
+    end
     { Antic 4 tile view
      -------------------------------------------------------------------------}
     else if comboType = _COMBO_ANTIC_4_TILE then begin
@@ -583,14 +700,14 @@ begin
       for y := 0 to Antic4maxY - 1 do begin
         for x := 0 to Antic4maxX - 1 do begin
           h := x + y shl 2;
-          for i := 0 to _CHAR_DIM do
+          for i := 0 to _CHAR_DIM do begin
             if fs.Position < fs.Size then begin
               r := fs.ReadByte;
               bin := IntToBin(r, 8);
               for j := 0 to _CHAR_DIM do
                 fldChar[h, j, i] := StrToInt(bin[j + 1]);
             end;
-
+          end;
           col := fs.ReadByte;
           if col = 0 then
             antic4TileArray.charInverse[h] := false
@@ -667,7 +784,8 @@ begin
     end;
   finally
     fs.Free;
-    ShowCursor(frmViewer, frmViewer, crDefault);
+//    ShowCursor(frmViewer, frmViewer, crDefault);
+    Screen.EndWaitCursor;
     //Cursor := crDefault;
     //for x := 0 to ControlCount - 1 do
     //  Controls[x].Cursor := crDefault;
@@ -687,7 +805,7 @@ var
   col, xf, yf : integer;
 begin
   FillRectEx(imgView, coltab[0], 0, 0, imgView.Width, imgView.Height);
-  for xf := 0 to grX do
+  for xf := 0 to grX do begin
     for yf := 0 to grY do begin
       col := fld[xf, yf];
       if col >= 1 then begin
@@ -695,6 +813,7 @@ begin
         FillRectEx(imgView, coltab[col], xf*factX, yf*factY, factX, factY);
       end;
     end;
+  end;
 
 //  imgView.Refresh;
 end;
@@ -716,7 +835,7 @@ begin
       Inc(yoffset, 16);
     end;
     xoffset := offset shl 4;
-    for yf := 0 to 7 do
+    for yf := 0 to 7 do begin
       for xf := 0 to 7 do begin
         col := fldCharSet[xf, n shl 3 + yf];
 
@@ -724,7 +843,7 @@ begin
           FillRectEx(imgView, coltabFont[col], xf*factX02 + xoffset, yf*factY02 + yoffset,
                      factX02, factY02);
       end;
-
+    end;
     Inc(offset);
   end;
 
@@ -752,7 +871,7 @@ begin
   //      break;
   //    end;
 
-  if offset > 128 then begin
+  if offset >= 128 then begin
     Dec(offset, 128);
     isInverse := true;
   end;
@@ -777,7 +896,7 @@ procedure TfrmViewer.ShowAntic4FontSet(image : TImage; factor, factorY : byte);
 var
   n, cnt : byte;
   col, xf, yf, offset, xoffset, yoffset : integer;
-  mask : array[0..1] of byte;
+//  mask : array[0..1] of byte;
 begin
   FillRectEx(image, coltab[0], 0, 0, image.Width, image.Height);
   offset := 0;
@@ -792,16 +911,18 @@ begin
     for yf := 0 to 7 do begin
       for xf := 0 to 7 do begin
         Inc(cnt);
-        col := fldCharSet[xf, n shl 3 + yf];
-        mask[cnt - 1] := col;
-        if cnt = 2 then begin
-          if (mask[0] = 0) and (mask[1] = 1) then
-            col := 1
-          else if (mask[0] = 1) and (mask[1] = 0) then
-            col := 2
-          else if (mask[0] = 1) and (mask[1] = 1) then
-            col := 3;
+//        col := fldCharSet[xf, n shl 3 + yf];
+        col := Antic45Mask(fldCharSet[xf, n shl 3 + yf], cnt);
+        //mask[cnt - 1] := col;
+        //if cnt = 2 then begin
+        //  if (mask[0] = 0) and (mask[1] = 1) then
+        //    col := 1
+        //  else if (mask[0] = 1) and (mask[1] = 0) then
+        //    col := 2
+        //  else if (mask[0] = 1) and (mask[1] = 1) then
+        //    col := 3;
 
+        if cnt = 2 then begin
           if col >= 1 then
             FillRectEx(image, coltab[col], xf*factX02 + xoffset, yf*factorY + yoffset,
                        factX02 shl 1, factorY);
@@ -821,7 +942,7 @@ procedure TfrmViewer.PutAntic4Char(scrPos, y, offset : integer);
 var
   cnt, col : byte;
   dx, dy, xf, yf : integer;
-  mask : array[0..1] of byte;
+//  mask : array[0..1] of byte;
 begin
   xf := scrPos shl 3;
   yf := y shl 2;
@@ -837,16 +958,18 @@ begin
   for dy := 0 to 7 do
     for dx := 0 to 7 do begin
       Inc(cnt);
-      col := fldFontSet[dx, dy + offset shl 3];
-      mask[cnt - 1] := col;
-      if cnt = 2 then begin
-        if (mask[0] = 0) and (mask[1] = 1) then
-          col := 1
-        else if (mask[0] = 1) and (mask[1] = 0) then
-          col := 2
-        else if (mask[0] = 1) and (mask[1] = 1) then
-          col := 3;
+//      col := fldFontSet[dx, dy + offset shl 3];
+      col := Antic45Mask(fldFontSet[dx, dy + offset shl 3], cnt);
+      //mask[cnt - 1] := col;
+      //if cnt = 2 then begin
+      //  if (mask[0] = 0) and (mask[1] = 1) then
+      //    col := 1
+      //  else if (mask[0] = 1) and (mask[1] = 0) then
+      //    col := 2
+      //  else if (mask[0] = 1) and (mask[1] = 1) then
+      //    col := 3;
 
+      if cnt = 2 then begin
         if col >= 1 then
           FillRectEx(imgView, coltab[col],
                      (xf + dx - 1)*factX, (yf + dy)*factY, factX shl 1, factY);
@@ -868,13 +991,6 @@ var
 begin
   xf := scrPos shl 3;
   yf := y shl 2;
-
-  //for dy := 0 to maxY - 1 do
-  //  for dx := 0 to 19 do
-  //    if (xf >= dx shl 3) and (xf < (dx + 1) shl 3) then begin
-  //      xf := dx shl 3;
-  //      break;
-  //    end;
 
   if (offset >= 97) and (offset <= 122) then begin
     col02 := _CHARSET_LOWER;
@@ -901,6 +1017,9 @@ begin
     end;
 end;
 
+{-----------------------------------------------------------------------------
+ Draw player
+ -----------------------------------------------------------------------------}
 procedure TfrmViewer.RefreshPM;
 begin
   RefreshPlayer(imgP0_normal, 4, 4);
@@ -918,7 +1037,7 @@ var
   xf, yf : integer;
 begin
   FillRectEx(pm, coltab[0], 0, 0, pm.Width, pm.Height);
-  for yf := 0 to _PM_MAX_LINES - 1 do
+  for yf := 0 to _PM_MAX_LINES - 1 do begin
     for xf := 0 to _PM_WIDTH do begin
       col := fldPlayer[0, xf, yf];
       if col = 1 then
@@ -928,6 +1047,175 @@ begin
 
       pm.Canvas.FillRect(bounds(xf*factX, yf*factY, factX, factY))
     end;
+  end;
+end;
+
+{-----------------------------------------------------------------------------
+ Draw missile
+ -----------------------------------------------------------------------------}
+procedure TfrmViewer.RefreshMissile;
+begin
+   DrawMissile(imgP0_normal, 4, 4);
+   DrawMissile(imgP0_double, 8, 4);
+   DrawMissile(imgP0_quadrable, 16, 4);
+   DrawMissile(imgP0_normalSr, 4, 2);
+   DrawMissile(imgP0_doubleSr, 8, 2);
+   DrawMissile(imgP0_quadrableSr, 16, 2);
+end;
+
+procedure TfrmViewer.DrawMissile(pm : TImage; factX, factY : byte);
+var
+  col : byte;
+  xf, yf : integer;
+begin
+  FillRectEx(pm, coltab[0], 0, 0, pm.Width, pm.Height);
+  for yf := 0 to _PM_MAX_LINES - 1 do begin
+    for xf := 0 to 1 do begin
+      col := missile[xf, yf];
+      if col = 1 then begin
+        col := 0;
+        pm.Canvas.Brush.Color := coltab[col + 4]
+      end
+      else
+        pm.Canvas.Brush.Color := coltab[0];
+
+      pm.Canvas.FillRect(bounds(xf*factX, yf*factY, factX, factY));
+//      pm.Canvas.Pixels[xf*factX, yf*factY] := coltab[col + 4];
+    end;
+//    Inc(xf);
+//    if xf > 1 then xf := 0;
+  end;
+  pm.Refresh;
+end;
+
+{-----------------------------------------------------------------------------
+ Draw multi-color player
+ -----------------------------------------------------------------------------}
+(*
+procedure TfrmViewer.SyncPlayer;
+var
+  col : byte;
+  xf, yf : integer;
+  i, n : byte;
+begin
+//  index := player;
+  for i := 0 to 3 do begin
+    maxX := _MAX_PLAYER_POS - 1;
+    for yf := 0 to _PM_MAX_LINES - 1 do begin
+      n := 0;
+      for xf := playerIndex[i] to maxX do begin
+        col := playerPos[i, xf, yf];
+
+        if playerSize[i] = _PLAYER_SIZE_NORMAL then begin
+          if n < 8 then
+            fldPlayer[i, n, yf] := col;
+
+          Inc(n);
+        end
+        else if playerSize[i] = _PLAYER_SIZE_DOUBLE then begin
+          if xf mod 2 = 0 then begin
+            if n < 16 then
+              fldPlayer[i, n, yf] := col;
+
+            Inc(n);
+          end;
+        end
+        else if playerSize[i] = _PLAYER_SIZE_QUADRUPLE then begin
+          if xf mod 4 = 0 then begin
+            if n < 32 then
+              fldPlayer[i, n, yf] := col;
+
+            Inc(n);
+          end;
+        end;
+      end;
+    end;
+  end;
+end;
+*)
+procedure TfrmViewer.RefresPM_MultiAll(player, factX, factY : byte);
+var
+  xf, yf : integer;
+  index : byte;
+  col, col01, col02, col03 : byte;
+  c, d : integer;
+begin
+  for c := 0 to _MAX_PLAYER_POS - 1 do
+    for d := 0 to _PM_MAX_LINES - 1 do
+      playerPos[player, c, d] := 0;
+
+  if player < 2 then
+    index := 0
+  else
+    index := 2;
+
+  // Player data and size
+  for yf := 0 to _PM_MAX_LINES - 1 do begin
+    d := 0;
+    for xf := 0 to 7 do begin
+      if playerSize[player] = _PLAYER_SIZE_NORMAL then
+        playerPos[player, playerIndex[player] + xf, yf] := fldPlayer[player, xf, yf]
+      else if playerSize[player] = _PLAYER_SIZE_DOUBLE then begin
+        playerPos[player, playerIndex[player] + xf + d, yf] := fldPlayer[player, xf, yf];
+        playerPos[player, playerIndex[player] + xf + d + 1, yf] := fldPlayer[player, xf, yf];
+        Inc(d);
+      end
+      else if playerSize[player] = _PLAYER_SIZE_QUADRUPLE then begin
+        playerPos[player, playerIndex[player] + xf + d, yf] := fldPlayer[player, xf, yf];
+        playerPos[player, playerIndex[player] + xf + d + 1, yf] := fldPlayer[player, xf, yf];
+        playerPos[player, playerIndex[player] + xf + d + 2, yf] := fldPlayer[player, xf, yf];
+        playerPos[player, playerIndex[player] + xf + d + 3, yf] := fldPlayer[player, xf, yf];
+        Inc(d, 3);
+      end
+    end;
+  end;
+
+  for yf := 0 to _PM_MAX_LINES - 1 do begin
+    for xf := 0 to _PM_WIDTH + _MAX_PLAYER_POS do begin
+      col := playerPos[0, xf, yf];      // Player 0 value
+      col01 := playerPos[1, xf, yf];    // Player 1 value
+      col02 := playerPos[2, xf, yf];    // Player 2 value
+      col03 := playerPos[3, xf, yf];    // Player 3 value
+
+      imgView.Canvas.Brush.Color := coltab[index + 4];
+
+      // Color register priority
+      if col = 1 then begin
+        if (col01 = 1) and isPmMixedColor then
+          imgView.Canvas.Brush.Color := coltab[4] or coltab[5]
+        else
+          imgView.Canvas.Brush.Color := coltab[4]
+      end
+      else if col01 = 1 then
+        imgView.Canvas.Brush.Color := coltab[5]
+      else if col02 = 1 then begin
+        if col = 1 then begin
+          if (col01 = 1) and isPmMixedColor then
+            imgView.Canvas.Brush.Color := coltab[4] or coltab[5]
+          else
+            imgView.Canvas.Brush.Color := coltab[4]
+        end
+        else if col01 = 1 then
+          imgView.Canvas.Brush.Color := coltab[5]
+        else if (col03 = 1) and isPmMixedColor then
+          imgView.Canvas.Brush.Color := coltab[6] or coltab[7]
+        else
+          imgView.Canvas.Brush.Color := coltab[6];
+      end
+      else begin
+        imgView.Canvas.Brush.Color := coltab[0];
+        if col01 = 1 then
+          imgView.Canvas.Brush.Color := coltab[5];
+
+        if col03 = 1 then
+          imgView.Canvas.Brush.Color := coltab[7];
+      end;
+
+      imgView.Canvas.FillRect(bounds(xf*factX02 + 1, yf*factY02 + 1, factX03, factY));
+    end;
+  end;
+  imgView.Refresh;
+//  SyncPlayer;
 end;
 
 {-----------------------------------------------------------------------------
@@ -940,13 +1228,13 @@ var
 begin
   r := 0; m := 0;
   for j := 0 to maxTileSize do begin
-    for i := 1 to 4 do
-      if j = 4*i then begin
+    for i := 1 to 4 do begin
+      if j = i shl 2 then begin  // *4
         r := 0;
         Inc(m, 2);
         break;
       end;
-
+    end;
     DrawTileChar(r, m, j);
     Inc(r);
   end;
@@ -965,10 +1253,11 @@ begin
   xf := scrPos shl 3;
   yf := y shl 2;
 
-  for i := 0 to _CHAR_DIM do
+  for i := 0 to _CHAR_DIM do begin
     for j := 0 to _CHAR_DIM do begin
       Inc(cnt);
       col := fldChar[offset, j, i];
+//      col := Antic45Mask(fldChar[offset, j, i], cnt);
       mask[cnt - 1] := col;
       if cnt = 2 then begin
         if (mask[0] = 0) and (mask[1] = 1) then
@@ -986,6 +1275,7 @@ begin
         cnt := 0;
       end;
     end;
+  end;
 end;
 
 {-----------------------------------------------------------------------------

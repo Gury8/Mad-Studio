@@ -14,7 +14,7 @@ object frmByteEditor: TfrmByteEditor
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '2.0.10.0'
   object scrlBox: TScrollBox
     Left = 6
     Height = 618
@@ -115,14 +115,14 @@ object frmByteEditor: TfrmByteEditor
     RowCount = 2
     ScrollBars = ssVertical
     TabOrder = 1
-    OnHeaderClick = strGridHeaderClick
+    OnHeaderClick = GridHeaderProc
     OnKeyUp = strGridKeyUp
-    OnMouseUp = strGridMouseUp
+    OnMouseUp = strGridUp
   end
   object chkRowSelect: TCheckBox
     Left = 120
     Height = 19
-    Top = 12
+    Top = 11
     Width = 93
     Caption = 'Row selection'
     Checked = True
@@ -133,7 +133,7 @@ object frmByteEditor: TfrmByteEditor
   object chkHex: TCheckBox
     Left = 234
     Height = 19
-    Top = 12
+    Top = 11
     Width = 125
     Caption = 'Hexadecimal values'
     Checked = True
@@ -147,13 +147,13 @@ object frmByteEditor: TfrmByteEditor
     Top = 6
     Width = 75
     Caption = '&Load data'
-    OnClick = btnLoadDataClick
+    OnClick = LoadDataProc
     TabOrder = 4
   end
   object Label1: TLabel
-    Left = 432
+    Left = 426
     Height = 15
-    Top = 12
+    Top = 11
     Width = 165
     Caption = 'Max. number of exported lines '
     ParentColor = False
@@ -184,86 +184,6 @@ object frmByteEditor: TfrmByteEditor
     ParentColor = False
     Visible = False
   end
-  object editMaxLines: TBCTrackbarUpdown
-    Left = 600
-    Height = 22
-    Top = 9
-    Width = 54
-    AllowNegativeValues = False
-    BarExponent = 1
-    Increment = 1
-    LongTimeInterval = 400
-    MinValue = 1
-    MaxValue = 255
-    Value = 16
-    ShortTimeInterval = 100
-    Background.Color = clWindow
-    Background.Gradient1.StartColor = clWhite
-    Background.Gradient1.EndColor = clBlack
-    Background.Gradient1.GradientType = gtLinear
-    Background.Gradient1.Point1XPercent = 0
-    Background.Gradient1.Point1YPercent = 0
-    Background.Gradient1.Point2XPercent = 0
-    Background.Gradient1.Point2YPercent = 100
-    Background.Gradient2.StartColor = clWhite
-    Background.Gradient2.EndColor = clOlive
-    Background.Gradient2.GradientType = gtLinear
-    Background.Gradient2.Point1XPercent = 0
-    Background.Gradient2.Point1YPercent = 0
-    Background.Gradient2.Point2XPercent = 0
-    Background.Gradient2.Point2YPercent = 100
-    Background.Gradient2.Sinus = True
-    Background.Gradient1EndPercent = 35
-    Background.Style = bbsColor
-    ButtonBackground.Gradient1.StartColor = clBtnShadow
-    ButtonBackground.Gradient1.EndColor = clBtnFace
-    ButtonBackground.Gradient1.GradientType = gtLinear
-    ButtonBackground.Gradient1.Point1XPercent = 0
-    ButtonBackground.Gradient1.Point1YPercent = -50
-    ButtonBackground.Gradient1.Point2XPercent = 0
-    ButtonBackground.Gradient1.Point2YPercent = 50
-    ButtonBackground.Gradient1.Sinus = True
-    ButtonBackground.Gradient2.StartColor = clBtnFace
-    ButtonBackground.Gradient2.EndColor = clBtnShadow
-    ButtonBackground.Gradient2.GradientType = gtLinear
-    ButtonBackground.Gradient2.Point1XPercent = 0
-    ButtonBackground.Gradient2.Point1YPercent = 50
-    ButtonBackground.Gradient2.Point2XPercent = 0
-    ButtonBackground.Gradient2.Point2YPercent = 150
-    ButtonBackground.Gradient2.Sinus = True
-    ButtonBackground.Gradient1EndPercent = 50
-    ButtonBackground.Style = bbsGradient
-    ButtonDownBackground.Color = clBtnShadow
-    ButtonDownBackground.Gradient1.StartColor = clWhite
-    ButtonDownBackground.Gradient1.EndColor = clBlack
-    ButtonDownBackground.Gradient1.GradientType = gtLinear
-    ButtonDownBackground.Gradient1.Point1XPercent = 0
-    ButtonDownBackground.Gradient1.Point1YPercent = 0
-    ButtonDownBackground.Gradient1.Point2XPercent = 0
-    ButtonDownBackground.Gradient1.Point2YPercent = 100
-    ButtonDownBackground.Gradient2.StartColor = clWhite
-    ButtonDownBackground.Gradient2.EndColor = clBlack
-    ButtonDownBackground.Gradient2.GradientType = gtLinear
-    ButtonDownBackground.Gradient2.Point1XPercent = 0
-    ButtonDownBackground.Gradient2.Point1YPercent = 0
-    ButtonDownBackground.Gradient2.Point2XPercent = 0
-    ButtonDownBackground.Gradient2.Point2YPercent = 100
-    ButtonDownBackground.Gradient1EndPercent = 35
-    ButtonDownBackground.Style = bbsColor
-    Border.Color = clWindowText
-    Border.ColorOpacity = 100
-    Border.Style = bboSolid
-    Rounding.RoundX = 4
-    Rounding.RoundY = 4
-    Font.Color = clWindowText
-    Font.Height = -13
-    Font.Name = 'Verdana'
-    HasTrackBar = True
-    ArrowColor = clWindowText
-    TabOrder = 5
-    TabStop = True
-    UseDockManager = False
-  end
   object btnExportData: TBCMaterialDesignButton
     Left = 438
     Height = 30
@@ -275,8 +195,8 @@ object frmByteEditor: TfrmByteEditor
     TextQuality = fqSystemClearType
     Caption = 'Export data'
     OnClick = ExportDataProc
-    OnMouseEnter = btnExportDataMouseEnter
-    OnMouseLeave = btnExportDataMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
   end
   object btnClose: TBCMaterialDesignButton
     Left = 549
@@ -289,7 +209,22 @@ object frmByteEditor: TfrmByteEditor
     TextQuality = fqSystemClearType
     Caption = 'Close'
     OnClick = CloseProc
-    OnMouseEnter = btnCloseMouseEnter
-    OnMouseLeave = btnCloseMouseLeave
+    OnMouseEnter = ButtonHoverEnter
+    OnMouseLeave = ButtonHoverLeave
+  end
+  object editMaxLines: TSpinEditEx
+    Left = 597
+    Height = 23
+    Top = 8
+    Width = 57
+    BiDiMode = bdRightToLeft
+    BorderStyle = bsSingle
+    MaxLength = 0
+    NumbersOnly = True
+    ParentBiDiMode = False
+    TabOrder = 5
+    MaxValue = 255
+    MinValue = 1
+    Value = 16
   end
 end

@@ -21,15 +21,11 @@ type
     chkDefaultColors: TCheckBox;
     chkGrMicPalette: TCheckBox;
     cmbGrMode: TComboBox;
-    DividerBevel2: TDividerBevel;
+//    DividerBevel2: TDividerBevel;
     procedure FormShow(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure btnOkProc(Sender: TObject);
     procedure btnCancelProc(Sender: TObject);
-  private
-    { private declarations }
-  public
-    { public declarations }
   end;
 
 var
@@ -69,8 +65,6 @@ end;
 
 procedure TfrmGrSettings.btnOkProc(Sender: TObject);
 begin
-  isChange := true;
-
   case cmbGrMode.ItemIndex of
     0: grMode := grMode40x24x4;
     1: grMode := grMode80x48x2;

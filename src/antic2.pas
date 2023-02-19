@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2023
   Unit: Text mode 0 (Antic mode 2) editor
 }
 unit antic2;
@@ -11,36 +11,30 @@ unit antic2;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, ComCtrls, Menus, StdCtrls, BCTrackbarUpdown, strutils, lcltype,
+  Classes, SysUtils, FileUtil, SpinEx, Forms, Controls, Graphics,
+  Dialogs, ExtCtrls, ComCtrls, Menus, StdCtrls, strutils, lcltype,
   common;
 
 type
   { TfrmAntic2 }
   TfrmAntic2 = class(TForm)
-    btnApplyText: TButton;
-    btnClearText: TButton;
+    boxCharInfo : TGroupBox;
     btnViewer : TToolButton;
     chkMaxSize : TCheckBox;
-    editText: TLabeledEdit;
-    boxTextPos: TGroupBox;
-    boxSelChar: TGroupBox;
-    editTextX : TBCTrackbarUpdown;
-    editX : TBCTrackbarUpdown;
-    editTextY : TBCTrackbarUpdown;
-    editY : TBCTrackbarUpdown;
+    editX : TSpinEditEx;
     boxResize : TGroupBox;
-    imgChar: TImage;
+    editY : TSpinEditEx;
+    imgChar : TImage;
     imgEditor: TImage;
     imgFontSet: TImage;
     imgFontSetInv: TImage;
     Label1: TLabel;
     Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
     Label5 : TLabel;
     Label6 : TLabel;
-    memoInfo: TMemo;
+    lblCharInfo01 : TLabel;
+    lblCharInfo02 : TLabel;
+    lblCharInfo03 : TLabel;
     menuAntic2: TMainMenu;
     MenuItem1: TMenuItem;
     itemViewer : TMenuItem;
@@ -63,6 +57,7 @@ type
     ToolBar2: TToolBar;
     btnNewScreen: TToolButton;
     btnFillScreen: TToolButton;
+    btnApplyText : TToolButton;
     ToolButton16: TToolButton;
     btnLoadScreen: TToolButton;
     btnSaveScreen: TToolButton;
@@ -74,12 +69,9 @@ type
     procedure FormActivate(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-    procedure ApplyText(Sender: TObject);
-    procedure ClearText(Sender: TObject);
+    procedure ApplyTextProc(Sender: TObject);
     procedure editTextXChange(Sender : TObject);
-    procedure editTextXLeave(Sender : TObject);
-    procedure editTextXUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
+    procedure ScreenSizeProc(Sender : TObject);
     procedure FormKeyDown(Sender : TObject; var Key : Word; Shift : TShiftState);
     procedure LoadFontProc(Sender : TObject);
     procedure DefaultFontProc(Sender : TObject);
@@ -101,8 +93,7 @@ type
     procedure SaveProc(fs : TFileStream);
     procedure LoadScreenProc(Sender: TObject);
     procedure ClearScreenProc(Sender: TObject);
-    procedure chkMaxSizeChange(Sender : TObject);
-    procedure chkMaxSizeClick(Sender : TObject);
+    procedure MaxSizeProc(Sender : TObject);
   private
     { private declarations }
     btn : TMousebutton;
@@ -112,6 +103,7 @@ type
     isFontSetNormal : boolean;
     fldChar : charType;
     isCreate : boolean;
+    isEdit : boolean;
     procedure ShowFontSet;
     procedure Plot(xf, yf : integer);
     procedure PutChar(scrPos, y, offset : integer);
@@ -119,6 +111,7 @@ type
     procedure SetXY(_maxX, _maxY : byte);
     procedure RefreshCharX(offset : integer);
     procedure OpenFile(filename : string);
+    procedure CharInfo(offset : integer);
   public
     { public declarations }
     filename : string;
@@ -128,7 +121,6 @@ type
     fldAtascii : array[0..960] of byte;
     grX, grY : integer;
     factX, factY,
-    grX02, grY02,
     factX02, factY02 : byte;
     maxX, maxY : byte;  // Maximum X and Y coordinates
     maxSize : integer;
@@ -143,7 +135,7 @@ implementation
 {$R *.lfm}
 
 uses
-  main, lib, antic2_gen, colors, viewer;
+  main, lib, antic2_gen, colors, viewer, set_values;
 
 { TfrmAntic2 }
 
@@ -152,17 +144,11 @@ begin
   DoubleBuffered := true;
   btn := mbMiddle;
   isCreate := true;
-
-  SetTrackBarUpDown(editX, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editY, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editTextX, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editTextY, $00DDDDDD, clWhite);
 end;
 
 procedure TfrmAntic2.FormShow(Sender: TObject);
 begin
   propFlagModules[4] := 1;
-  isChange := true;
 
   frmMain.Top := 10;
   formId := formAntic2;
@@ -173,16 +159,18 @@ begin
   statusBar.Panels[1].Text := 'Editor cursor coordinates (x: 0, y: 0)';
   FillRectEx(imgEditor, coltabFont[0], 0, 0, imgEditor.Width, imgEditor.Height);
 
+  isEdit := false;
   SetXY(39, 23);
   editX.Value := maxX;
   editY.Value := maxY;
   factX := 3; factY := 3;
-  grX02 := 7; grY02 := 7;
   factX02 := 3; factY02 := 3;
-  offs := 1;
   isFontSetNormal := true;
   DefaultFontSet(fldFontSet);
   ShowFontSet;
+
+  offs := 1;
+  RefreshCharX(offs);
 
   FillScreen(0);
   isCreate := false;
@@ -254,14 +242,16 @@ begin
   end;
 end;
 
-procedure TfrmAntic2.editTextXLeave(Sender : TObject);
+procedure TfrmAntic2.ScreenSizeProc(Sender : TObject);
 begin
   btn := mbMiddle;
   if not isCreate then
     SetXY(editX.Value, editY.Value);
 
-  if (editX.Value < 39) or (editY.Value < 23) then
-    chkMaxSize.Checked := false;
+  //if (editX.Value < 39) or (editY.Value < 23) then
+  //  chkMaxSize.Checked := false;
+
+  chkMaxSize.Checked := (editX.Value = 39) and (editY.Value = 23);
 
   if maxSize = 959 then
     filename := getDir + 'examples\screen01.gr0'
@@ -269,23 +259,6 @@ begin
     filename := getDir + 'examples\screen01.an2';
 
   caption := programName + ' ' + programVersion + ' - Text mode 0 editor (' + filename + ')';
-end;
-
-procedure TfrmAntic2.editTextXUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-  X, Y : Integer);
-begin
-  //btn := mbMiddle;
-  //if not isCreate then
-  //  SetXY(editX.Value, editY.Value);
-  //
-  //if maxSize = 959 then
-  //  filename := getDir + 'examples\screen01.gr0'
-  //else
-  //  filename := getDir + 'examples\screen01.an2';
-  //
-  //caption := programName + ' ' + programVersion + ' - Text mode 0 editor (' + filename + ')';
-
-  editTextXLeave(Sender);
 end;
 
 procedure TfrmAntic2.DefaultFontProc(Sender : TObject);
@@ -324,45 +297,56 @@ begin
                               ', max Y coord.: ' + IntToStr(maxY);
 end;
 
-procedure TfrmAntic2.ApplyText(Sender: TObject);
+procedure TfrmAntic2.ApplyTextProc(Sender: TObject);
 var
   i, n : byte;
   ch : char;
   isAtascii : boolean;
 begin
-//  showmessage(chr(97) + ' ' + inttostr(ord('b')));  // A 65
-  for i := 1 to Length(editText.Text) do begin
-    ch := editText.Text[i];
-    isAtascii := false;
+  setValues.caption := 'Set text position dialog';
+  setValues.warningText := '';
+  setValues.editX := 3;
+  setValues.editY := 3;
+  setValues.minEditX := 0;
+  setValues.minEditY := 0;
+  setValues.maxEditX := 39;
+  setValues.maxEditY := 19;
+  setValues.editText := '';
 
-    if (ord(ch) >= 32) and (ord(ch) <= 95) then begin
-      n := ord(ch) - 32;
-      isAtascii := true;
-    end
-    else if (ord(ch) >= 97) and (ord(ch) <= 122) then begin
-      n := ord(ch);
-      isAtascii := true;
+  frmSetValues := TfrmSetValues.Create(Self);
+  with frmSetValues do
+    try
+      ShowModal;
+    finally
+      Free;
     end;
 
-    //if (j > 39) and (j mod 40 = 0) then begin
-    //  r := 0;
-    //  Inc(m, 2);
-    //end;
+  if setValues.valuesSet then begin
+  //  showmessage(chr(97) + ' ' + inttostr(ord('b')));  // A 65
 
-    if isAtascii then begin
-      if editTextY.Value = 0 then
-        PutChar(editTextX.Value + i - 1, editTextY.Value, n)
-      else
-        PutChar(editTextX.Value + i - 1, editTextY.Value + editTextY.Value, n);
+    for i := 1 to Length(setValues.editText) do begin
+      ch := setValues.editText[i];
+      isAtascii := false;
 
-      fldAtascii[editTextX.Value + i - 1 + editTextY.Value*(maxX + 1)] := n;
+      if (ord(ch) >= 32) and (ord(ch) <= 95) then begin
+        n := ord(ch) - 32;
+        isAtascii := true;
+      end
+      else if (ord(ch) >= 97) and (ord(ch) <= 122) then begin
+        n := ord(ch);
+        isAtascii := true;
+      end;
+
+      if isAtascii then begin
+        if setValues.editY = 0 then
+          PutChar(setValues.editX + i - 1, setValues.editY, n)
+        else
+          PutChar(setValues.editX + i - 1, setValues.editY + setValues.editY, n);
+
+        fldAtascii[setValues.editX + i - 1 + setValues.editY*(maxX + 1)] := n;
+      end;
     end;
   end;
-end;
-
-procedure TfrmAntic2.ClearText(Sender: TObject);
-begin
-  editText.Text := '';
 end;
 
 procedure TfrmAntic2.imgEditorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
@@ -374,6 +358,13 @@ begin
   xf := X div factX;
   yf := Y div factY;
   Plot(xf, yf);
+
+  // Data is changed
+  if not isEdit then begin
+    isEdit := true;
+    if Pos(' *', caption) = 0 then
+      caption := caption + ' *';
+  end;
 end;
 
 procedure TfrmAntic2.imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -424,19 +415,8 @@ begin
     end;
   end;
 
-  with memoInfo do begin
-    Clear;
-
-    //// Calculate code number
-    //n := offs;
-    //if (offs >= 0) and (offs <= 63) then
-    //  n += 32
-    //else if (offs >= 64) and (offs <= 95) then
-    //  n -= 64;
-    //
-    //m := offs;
-    n := StrToInt(AtasciiCode(offs));
-
+//  CharInfo(offs);
+(*
     //if isFontSetNormal then
     //  m := offs
     //else begin
@@ -450,13 +430,11 @@ begin
     else
       Lines.Add('Atascii code Dec: ' + IntToStr(n + 128) + ' Hex: ' + Dec2hex(n + 128));
 
-//      Lines.Add('Inverse character value + 128');
-  end;
-
 //  if chkFillChar.Checked then begin
 ////    if not isFontSetNormal then Inc(offs, 128);
 //    FillScreen(offs);
 //  end;
+*)
 end;
 
 procedure TfrmAntic2.CloseWinProc(Sender: TObject);
@@ -491,6 +469,7 @@ end;
  -----------------------------------------------------------------------------}
 procedure TfrmAntic2.NewScreenProc(Sender: TObject);
 begin
+  isFontSetNormal := true;
   ClearScreenProc(Sender);
   filename := 'examples\screen01.gr0';
   caption := programName + ' ' + programVersion + ' - Text mode 0 editor (' + filename + ')';
@@ -509,6 +488,7 @@ var
   j : integer;
 begin
 //  debug('save values', maxX, maxY, maxSize);
+  isEdit := false;
 
   // Text mode 0 standard format
   if (editX.Value = 39) and (editY.Value = 23) then begin
@@ -520,10 +500,6 @@ begin
     // Dimension x, y
     fs.WriteByte(maxX);
     fs.WriteByte(maxY);
-
-    //// Save colors
-    //fs.WriteByte(colorValues[0]);
-    //fs.WriteByte(colorValues[1]);
 
     // Save data
     for j := 0 to maxSize do
@@ -569,22 +545,12 @@ begin
     fs := TFileStream.Create(Filename, fmCreate);
     try
       SaveProc(fs);
+      caption := programName + ' ' + programVersion + ' - Text mode 0 editor (' + filename + ')';
     finally
       fs.Free;
     end;
   end;
 end;
-
-//// Save Atascii screen
-//procedure TfrmAntic2.SaveScreen(Sender: TObject);
-//begin
-//  //if filename = 'screen01.gr0' then
-//  //  isSaveAs := true
-//  //else
-//  //  isSaveAs := false;
-//
-//  SaveScreen;
-//end;
 
 {-----------------------------------------------------------------------------
  Save text mode 0 (Antic mode 2) screen as
@@ -593,6 +559,7 @@ procedure TfrmAntic2.SaveScreenAsProc(Sender: TObject);
 begin
   isSaveAs := true;
   SaveScreenProc(Sender);
+  isSaveAs := false;
 end;
 
 {-----------------------------------------------------------------------------
@@ -603,6 +570,8 @@ var
   j, r, m : integer;
   fs : TFileStream;
 begin
+  isEdit := false;
+
 //  filename := LowerCase(filename);
   fs := TFileStream.Create(filename, fmOpenReadWrite);
   try
@@ -623,7 +592,7 @@ begin
 //    debug('load values', maxX, maxY, maxSize);
 
     r := 0; m := 0;
-    for j := 0 to maxSize do
+    for j := 0 to maxSize do begin
       if fs.Position < fs.Size then begin
         fldAtascii[j] := fs.ReadByte;
         if (j > maxX) and (j mod (maxX + 1) = 0) then begin
@@ -633,6 +602,7 @@ begin
         PutChar(r, m, fldAtascii[j]);
         Inc(r);
       end;
+    end;
 
     FillByte(fldChar, SizeOf(fldChar), 0);
     caption := programName + ' ' + programVersion + ' - Text mode 0 editor (' + filename + ')';
@@ -651,13 +621,8 @@ end;
 procedure TfrmAntic2.LoadScreenProc(Sender: TObject);
 begin
   frmMain.dlgOpen.Title := 'Open existing Text mode 0 screen file';
-
-//  if (editX.Value = 39) and (editY.Value = 23) then
-    frmMain.dlgOpen.Filter := 'Text mode 0 screen files' +
-                              ' (*.gr0, *.asc, *.an2)|*.gr0;*.asc;*.an2|All files (*.*)|*.*';
-  //else
-  //  frmMain.dlgOpen.Filter := 'Text mode 0 screen files' +
-  //                            ' (*.an2)|*.an2|All files (*.*)|*.*';
+  frmMain.dlgOpen.Filter := 'Text mode 0 screen files' +
+                            ' (*.gr0, *.asc, *.an2)|*.gr0;*.asc;*.an2|All files (*.*)|*.*';
 
   if frmMain.dlgOpen.Execute then begin
     filename := frmMain.dlgOpen.Filename;
@@ -691,6 +656,7 @@ end;
  -----------------------------------------------------------------------------}
 procedure TfrmAntic2.ClearScreenProc(Sender: TObject);
 begin
+  isFontSetNormal := true;
   FillScreen(0);
 end;
 
@@ -707,10 +673,9 @@ begin
       offset := 0;
       Inc(yoffset, 24);
     end;
-
     xoffset := offset*24;
-    for yf := 0 to grY02 do
-      for xf := 0 to grX02 do begin
+    for yf := 0 to _CHAR_DIM do begin
+      for xf := 0 to _CHAR_DIM do begin
         col := fldFontSet[xf, n shl 3 + yf];
 //        col := SetColorIndex(col, true);
         FillRectEx(imgFontSet, coltabFont[col],
@@ -722,7 +687,7 @@ begin
         FillRectEx(imgFontSetInv, coltabFont[col],
                    xf*factX02 + xoffset, yf*factY02 + yoffset, factX02, factY02);
       end;
-
+    end;
     Inc(offset);
   end;
 end;
@@ -776,7 +741,7 @@ begin
   if not isFontSetNormal then Inc(offset2, 128);
   fldAtascii[xx + yy*(maxX + 1)] := offset2;
 
-  for dy := 0 to 7 do
+  for dy := 0 to 7 do begin
     for dx := 0 to 7 do begin
       col := fldFontSet[dx, dy + offset];
       if not isFontSetNormal then
@@ -787,6 +752,7 @@ begin
 //      col := SetColorIndex(col, isFontSetNormal);
       FillRectEx(imgEditor, coltabFont[col], (xf + dx)*factX, (yf + dy)*factY, factX, factY);
     end;
+  end;
 end;
 
 {-----------------------------------------------------------------------------
@@ -803,21 +769,21 @@ begin
 //  showmessage(inttostr(scrPos) + ' ' + inttostr(y) + ' ' + inttostr(offset));
 //  if xf > grX then xf := grX;
 //  if xf mod 8 = 0 then Inc(xf, 8);
-  for dy := 0 to maxY do
+  for dy := 0 to maxY do begin
     for dx := 0 to maxX do
       if (xf >= dx shl 3) and (xf < (dx + 1) shl 3) then begin
         xf := dx shl 3;
         break;
       end;
-
-  if offset > 128 then begin
+  end;
+  if offset >= 128 then begin
     Dec(offset, 128);
     isInverse := true;
   end;
 
   offset := offset shl 3;
 
-  for dy := 0 to 7 do
+  for dy := 0 to 7 do begin
     for dx := 0 to 7 do begin
       col := fldFontSet[dx, dy + offset];
 //      fldScreen[xf + dx, yf + dy] := col;
@@ -827,6 +793,7 @@ begin
 
       FillRectEx(imgEditor, coltabFont[col], (xf + dx)*factX, (yf + dy)*factY, factX, factY);
     end;
+  end;
 end;
 
 procedure TfrmAntic2.RefreshCharX(offset : integer);
@@ -835,18 +802,19 @@ var
 begin
   FillRectEx(imgChar, clBlack, 0, 0, imgChar.Width, imgChar.Height);
   offset := offset shl 3;
-
-  for yf := 0 to 7 do
+  for yf := 0 to 7 do begin
     for xf := 0 to 7 do begin
       col := fldFontSet[xf, yf + offset];
       if not isFontSetNormal then
         col := 1 - col;
 
       fldChar[xf, yf] := col;
-      FillRectEx(imgChar, coltabFont[col], xf*factX, yf*factY, factX, factY);
+      FillRectEx(imgChar, coltabFont[col], xf*(factX + 1), yf*(factY + 1), factX + 1, factY + 1);
     end;
+  end;
 
   imgChar.Refresh;
+  CharInfo(offset);
 end;
 
 {-----------------------------------------------------------------------------
@@ -871,23 +839,35 @@ begin
 //  frmColors.RefreshColors;
 end;
 
-procedure TfrmAntic2.chkMaxSizeChange(Sender : TObject);
-begin
-  //debug('1');
-  //if chkMaxSize.Checked then begin
-  //  debug('2');
-  //  editX.Value := 39;
-  //  editY.Value := 23;
-  //  editTextXMouseLeave(Sender);
-  //end;
-end;
-
-procedure TfrmAntic2.chkMaxSizeClick(Sender : TObject);
+procedure TfrmAntic2.MaxSizeProc(Sender : TObject);
 begin
   if chkMaxSize.Checked then begin
     editX.Value := 39;
     editY.Value := 23;
-    editTextXLeave(Sender);
+    ScreenSizeProc(Sender);
+  end;
+end;
+
+{-----------------------------------------------------------------------------
+ Show character information
+ -----------------------------------------------------------------------------}
+procedure TfrmAntic2.CharInfo(offset : integer);
+var
+  n : byte;
+begin
+  if offset < 0 then begin
+    lblCharInfo01.Caption := '';
+    lblCharInfo02.Caption := '';
+    lblCharInfo03.Caption := '';
+  end
+  else begin
+    n := StrToInt(AtasciiCode(offset));
+    lblCharInfo01.Caption := 'Internal code Dec: ' + IntToStr(offset) +
+                             ' Hex: ' + Dec2hex(offset);
+    lblCharInfo02.Caption := 'Atascii code Dec: ' + IntToStr(n) +
+                             ' Hex: ' + Dec2hex(n);
+    lblCharInfo03.Caption := 'Atascii inverse Dec: ' + IntToStr(n + 128) +
+                             ' Hex: ' + Dec2hex(n + 128);
   end;
 end;
 

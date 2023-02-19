@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2020
+  Release year: 2016 - 2021
   Unit: Antic mode 3 editor - source code generator
 }
 unit antic3_gen;
@@ -11,8 +11,8 @@ unit antic3_gen;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, ExtCtrls,
-  lcltype, BCTrackbarUpdown, BCListBox, BCMDButton, BCMaterialDesignButton, Windows,
+  Classes, SysUtils, FileUtil, SpinEx, Forms, Controls, Graphics, Dialogs,
+  StdCtrls, ExtCtrls, lcltype, BCListBox, BCMDButton, BCMaterialDesignButton,
   common;
 
 type
@@ -28,8 +28,8 @@ type
     btnMadPascal : TBCMDButton;
     btnTurboBasicXL : TBCMDButton;
     editFilename: TLabeledEdit;
-    editLineStep : TBCTrackbarUpdown;
-    editStartLine : TBCTrackbarUpdown;
+    editLineStep : TSpinEditEx;
+    editStartLine : TSpinEditEx;
     lblLineStep : TLabel;
     lblStartLine : TLabel;
     ListExamples : TBCPaperListBox;
@@ -45,12 +45,8 @@ type
     procedure CopyToEditorProc(Sender: TObject);
     procedure listExamplesProc(Sender: TObject);
     procedure radLangProc(Sender: TObject);
-    procedure btnCloseMouseEnter(Sender : TObject);
-    procedure btnCloseMouseLeave(Sender : TObject);
     procedure ButtonHoverEnter(Sender : TObject);
     procedure ButtonHoverLeave(Sender : TObject);
-    procedure editStartLineMouseUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
     procedure CloseWinProc(Sender: TObject);
   private
     { private declarations }
@@ -61,8 +57,6 @@ type
     function Example02 : string;
     function Example03 : string;
     function Example04 : string;
-  public
-    { public declarations }
   end;
 
 var
@@ -79,36 +73,27 @@ uses
 
 procedure TfrmAntic3Gen.FormCreate(Sender: TObject);
 begin
+  SetListings(listings);
+
   // Example 1
-  listings[0, 0] := true;
-  listings[0, 1] := true;
   listings[0, 2] := false;
   listings[0, 3] := false;
   listings[0, 4] := false;
 
   // Example 2
-  listings[1, 0] := true;
-  listings[1, 1] := true;
   listings[1, 2] := false;
   listings[1, 3] := false;
   listings[1, 4] := false;
 
   // Example 3
-  listings[2, 0] := true;
-  listings[2, 1] := true;
   listings[2, 2] := false;
   listings[2, 3] := false;
   listings[2, 4] := false;
 
   // Example 4
-  listings[3, 0] := true;
-  listings[3, 1] := true;
   listings[3, 2] := false;
   listings[3, 3] := false;
   listings[3, 4] := false;
-
-  SetTrackBarUpDown(editStartLine, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editLineStep, $00DDDDDD, clWhite);
 end;
 
 procedure TfrmAntic3Gen.FormShow(Sender: TObject);
@@ -141,20 +126,7 @@ procedure TfrmAntic3Gen.CreateCode;
 var
   code : string;
 begin
-  boxStartLine.Enabled := langIndex < 2;
-  boxStartLine.Visible := boxStartLine.Enabled;
-
-  if langIndex = 0 then begin
-    radDataType.ItemIndex := 0;
-    TRadioButton(radDataType.Controls[1]).Enabled := false;
-    TRadioButton(radDataType.Controls[2]).Enabled := false;
-  end
-  else begin
-    TRadioButton(radDataType.Controls[1]).Enabled := true;
-    TRadioButton(radDataType.Controls[2]).Enabled := true;
-  end;
-
-  memo.Lines.Clear;
+  Set01(boxStartLine, langIndex, radDataType, true);
 
   // List of listing examples
   case ListExamples.ListBox.ItemIndex of
@@ -164,12 +136,7 @@ begin
     3: code := Example04;
   end;
 
-  memo.Lines.Add(code);
-
-  // Set cursor position at the top of memo object
-  memo.SelStart := 0;
-  memo.SelLength := 0;
-  SendMessage(memo.Handle, EM_SCROLLCARET, 0, 0);
+  Set02(memo, code);
 end;
 
 function TfrmAntic3Gen.SetValues(offset : byte; separator : string) : string;
@@ -196,7 +163,6 @@ begin
       end;
     end;
 //    if offset = 98 then
-//      showmessage(inttostr(y) + ' * ' + line);
     case radDataType.ItemIndex of
       0: line := IntToStr(Bin2Dec(line));
       1: line := '$' + Dec2Hex(bin2Dec(line));
@@ -223,7 +189,12 @@ begin
   if langIndex = _ATARI_BASIC then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-    code.line := CodeLine('GRAPHICS 0') +
+
+    code.line := CodeLine(_REM) +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Default Antic mode 3 screen') +
+                 CodeLine(_REM) +
+                 CodeLine('GRAPHICS 0') +
                  CodeLine('REM Turn off TV display') +
                  CodeLine('POKE 559,0') +
                  CodeLine('REM Find start of display list') +
@@ -242,7 +213,12 @@ begin
   else if langIndex = _TURBO_BASIC_XL then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-    code.line := CodeLine('GRAPHICS %0') +
+
+    code.line := CodeLine('--') +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Default Antic mode 3 screen') +
+                 CodeLine('--') +
+                 CodeLine('GRAPHICS %0') +
                  CodeLine('REM Turn off TV display') +
                  CodeLine('POKE 559,%0') +
                  CodeLine('REM Find start of display list') +
@@ -273,7 +249,11 @@ begin
   if langIndex = _ATARI_BASIC then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-    code.line := CodeLine('REM Reserve 4 pages of RAM for character set') +
+    code.line := CodeLine(_REM) +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Antic mode 3 screen with modified characters') +
+                 CodeLine(_REM) +
+                 CodeLine('REM Reserve 4 pages of RAM for character set') +
                  CodeLine('MEM=PEEK(106)-4:POKE 106,MEM-1:RAMSTART=256*MEM') +
                  CodeLine('GRAPHICS 0') +
                  CodeLine('REM Turn off TV display') +
@@ -296,20 +276,16 @@ begin
                  CodeLine('POKE 205,0:POKE 206,MEM+3:POKE 207,4') +
                  CodeLine('REM Call ML routine to move character set') +
                  CodeLine('A=USR(1536)');
-//    lineNum := 290;
-//    code.number := 290;
     for i := 0 to 127 do
       if frmAntic3.charEditIndex[i] = 1 then
         code.line += CodeLine('FOR I=0 TO 7:READ CHAR:POKE RAMSTART+I+' +
                      IntToStr(i) + '*8,CHAR:NEXT I');
 
-//    Inc(code.number, 10);
     code.line += CodeLine('REM MODIFY CHARACTER SET POINTER') +
                  CodeLine('POKE 756,MEM') +
                  CodeLine('REM MODIFIED CHARACTER DATA') +
                  CodeLine('REM Turn on TV display') +
                  CodeLine('POKE 559,34') +
-//    Inc(code.number, 40);
                  CodeLine('SCR=PEEK(88)+PEEK(89)*256') +
                  CodeLine('FOR I=0 TO ' + IntToStr(modeSize - 1)) +
                  CodeLine('READ BYTE:POKE SCR+I,BYTE') +
@@ -329,16 +305,17 @@ begin
 //    Inc(code.number, 10);
     code.line += DataValues(_ATARI_BASIC, frmAntic3.fldAtascii, code.number, code.step,
                             modeHeight, 40, radDataType.ItemIndex);
-
-//    lineNum := 80;
-//    code += WaitKeyCode(radLang.ItemIndex, lineNum);
   end
   { Turbo BASIC XL
    ---------------------------------------------------------------------------}
   else if langIndex = _TURBO_BASIC_XL then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-    code.line := CodeLine('REM Reserve 4 pages of RAM for character set') +
+    code.line := CodeLine('--') +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Antic mode 3 screen with modified characters') +
+                 CodeLine('--') +
+                 CodeLine('REM Reserve 4 pages of RAM for character set') +
                  CodeLine('MEM=PEEK(106)-4:POKE 106,MEM-1:RAMSTART=256*MEM') +
                  CodeLine('GRAPHICS %0') +
                  CodeLine('REM Turn off TV display') +
@@ -361,42 +338,32 @@ begin
                  CodeLine('POKE 205,%0:POKE 206,MEM+%3:POKE 207,4') +
                  CodeLine('REM Call ML routine to move character set') +
                  CodeLine('A=USR(1536)');
-//    code.number := 290;
-    for i := 0 to 127 do
-      if frmAntic3.charEditIndex[i] = 1 then begin
+    for i := 0 to 127 do begin
+      if frmAntic3.charEditIndex[i] = 1 then
         code.line += CodeLine('FOR I=%0 TO 7:READ CHAR:POKE RAMSTART+I+' +
                               IntToStr(i) + '*8,CHAR:NEXT I');
-        //code += IntToStr(lineNum) + ' FOR I=%0 TO 7'#13#10 +
-        //        IntToStr(lineNum + 10) + ' READ CHAR:POKE RAMSTART+I+' + IntToStr(i) + '*8,CHAR'#13#10 +
-        //        IntToStr(lineNum + 20) + ' NEXT I'#13#10;
-//        Inc(lineNum, 30);
-      end;
-
-//    Inc(code.number, 10);
+    end;
     code.line += CodeLine('REM MODIFY CHARACTER SET POINTER') +
                  CodeLine('POKE 756,MEM') +
                  CodeLine('REM MODIFIED CHARACTER DATA') +
                  CodeLine('REM Turn on TV display') +
                  CodeLine('POKE 559,34') +
-    //Inc(code.number, 40);
                  CodeLine('SCR=DPEEK(88)') +
                  CodeLine('FOR I=%0 TO ' + IntToStr(modeSize - 1)) +
                  CodeLine('READ BYTE:POKE SCR+I,BYTE') +
                  CodeLine('NEXT I');
-//    Inc(lineNum, 10);
 
     // Modified characters
     code.line += CodeLine('REM MODIFIED CHARACTERS');
-//    Inc(lineNum, 10);
-    for i := 0 to 127 do
+    for i := 0 to 127 do begin
       if frmAntic3.charEditIndex[i] = 1 then begin
         code.line += CodeLine('REM CHR$(' + AtasciiCode(i) + ')');
         code.line += CodeLine('DATA ' + SetValues(i, ','));
       end;
+    end;
 
     // Screen data
     code.line += CodeLine('REM SCREEN DATA');
-//    Inc(code.number, 10);
     code.line += DataValues(_ATARI_BASIC, frmAntic3.fldAtascii, code.number, code.step,
                             modeHeight, 40, radDataType.ItemIndex);
   end;
@@ -423,7 +390,11 @@ begin
   if (langIndex = _ATARI_BASIC) or (langIndex = _TURBO_BASIC_XL) then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-    code.line := CodeLine('REM Reserve 4 pages of RAM for character set') +
+    code.line := CodeLine(_REM) +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Antic mode 3 screen with predefined characters') +
+                 CodeLine(_REM) +
+                 CodeLine('REM Reserve 4 pages of RAM for character set') +
                  CodeLine('MEM=PEEK(106)-4:POKE 106,MEM-1:RAMSTART=256*MEM') +
                  CodeLine('GRAPHICS 0') +
                  CodeLine('REM Turn off TV display') +
@@ -501,20 +472,17 @@ end;
 // Data values for modified characters
 function TfrmAntic3Gen.Example04 : string;
 var
-  lineNum : word = 10;
-  code : string = '';
   i : byte;
 begin
   { Atari BASIC, Turbo BASIC XL
    ---------------------------------------------------------------------------}
   if (langIndex = _ATARI_BASIC) or (langIndex = _TURBO_BASIC_XL) then begin
+    code.number := editStartLine.Value;
+    code.step := editLineStep.Value;
     for i := 0 to 127 do begin
-      if frmAntic3.charEditIndex[i] = 1 then begin
-        code += IntToStr(lineNum) + ' REM CHR$(' + AtasciiCode(i) + ')' + #13#10;
-        Inc(lineNum, 10);
-        code += IntToStr(lineNum) + ' DATA ' + SetValues(i, ',') + #13#10;
-        Inc(lineNum, 10);
-      end;
+      if frmAntic3.charEditIndex[i] = 1 then
+        code.line += CodeLine('REM CHR$(' + AtasciiCode(i) + ')') +
+                     CodeLine('DATA ' + SetValues(i, ','));
     end;
   end;
   //{ Action!
@@ -530,22 +498,11 @@ begin
   //else if langIndex = _FAST_BASIC then begin
   //end;
 
-  result := code;
+  result := code.line;
 end;
 
 procedure TfrmAntic3Gen.listExamplesProc(Sender: TObject);
-//var
-//  i : byte;
 begin
-//  for i := 0 to radLang.Items.Count - 1 do
-//    radLang.Controls[i].Enabled := listings[ListExamples.ItemIndex, i];
-////    radLang.Controls[i].Visible := listings[ListExamples.ItemIndex, i];
-//
-//  if langIndex < 5 then
-//    radLang.ItemIndex := langIndex;
-
-//  editFilename.Visible := ListExamples.ItemIndex = 0;
-//  editFilename.Enabled := ListExamples.ItemIndex = 0;
   CreateCode;
 end;
 
@@ -555,38 +512,14 @@ begin
   CreateCode;
 end;
 
-procedure TfrmAntic3Gen.editStartLineMouseUp(Sender : TObject; Button : TMouseButton;
-  Shift : TShiftState; X, Y : Integer);
-begin
-  CreateCode;
-end;
-
 procedure TfrmAntic3Gen.ButtonHoverEnter(Sender : TObject);
 begin
-//  btnCopyToEditor.NormalColor := $00CECECE;
-//  btnCopyToEditor.NormalColorEffect := clWhite;
-  SetButton(btnCopyToEditor, true);
+  SetButton(Sender as TBCMaterialDesignButton, true);
 end;
 
 procedure TfrmAntic3Gen.ButtonHoverLeave(Sender : TObject);
 begin
-//  btnCopyToEditor.NormalColor := clWhite;
-//  btnCopyToEditor.NormalColorEffect := clSilver;
-  SetButton(btnCopyToEditor, false);
-end;
-
-procedure TfrmAntic3Gen.btnCloseMouseEnter(Sender : TObject);
-begin
-//  btnClose.NormalColor := $00CECECE;
-//  btnClose.NormalColorEffect := clWhite;
-  SetButton(btnClose, true);
-end;
-
-procedure TfrmAntic3Gen.btnCloseMouseLeave(Sender : TObject);
-begin
-//  btnClose.NormalColor := clWhite;
-//  btnClose.NormalColorEffect := clSilver;
-  SetButton(btnClose, false);
+  SetButton(Sender as TBCMaterialDesignButton, false);
 end;
 
 procedure TfrmAntic3Gen.CloseWinProc(Sender: TObject);

@@ -9,12 +9,13 @@ object frmViewer: TfrmViewer
   ClientWidth = 1028
   Font.Height = -11
   Font.Name = 'Verdana'
+  KeyPreview = True
   OnClose = FormClose
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.10.0'
+  LCLVersion = '2.2.4.0'
   object boxPlayer: TGroupBox
     Left = 660
     Height = 372
@@ -164,7 +165,7 @@ object frmViewer: TfrmViewer
     Mask = '*.gr7'
     ReadOnly = True
     RowSelect = True
-    SortColumn = 2
+    SortColumn = 1
     SortType = stBoth
     TabOrder = 1
     OnClick = ShellListViewProc
@@ -193,7 +194,7 @@ object frmViewer: TfrmViewer
     Height = 21
     Top = 6
     Width = 320
-    DropDownCount = 14
+    DropDownCount = 16
     ItemHeight = 13
     ItemIndex = 0
     Items.Strings = (
@@ -208,7 +209,9 @@ object frmViewer: TfrmViewer
       'Text mode 2 screens (*.gr2, *.an7) - 20x12x5'
       'Antic mode 4 screens (*.an4) - 40x24x5'
       'Antic mode 5 screens (*.an5) - 40x12x5'
-      'Player/sprite graphics (*.spr)'
+      'Player (sprite) graphics (*.spr)'
+      'Missile graphics (*.msl)'
+      'Multi-color players (*.mpl)'
       'Antic mode 4 tiles (*.tl4)'
     )
     OnChange = cmbFormatsChange

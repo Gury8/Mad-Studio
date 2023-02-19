@@ -1,7 +1,8 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2023
+  Unit: Common constant and variable library
 }
 unit common;
 
@@ -10,12 +11,12 @@ unit common;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Controls, Graphics, ExtCtrls, LCLIntf, SynEditMiscClasses;
+  Classes, SysUtils, Graphics, ExtCtrls, LCLIntf, SynEditMiscClasses;
 
 const
   programName = 'Mad Studio';
-//  programVersion = ' v1.2.4 (x86_64-win32/win64)';
-  programVersion = ' v1.2.4 x86_64-win64';
+//  programVersion = ' v1.2.5 (i386-Win32)';
+  programVersion = ' v1.2.5 x86_64-Win64';
 
 type
   TPlayerResolution = (singleResolution, doubleResolution);
@@ -32,8 +33,7 @@ type
     bits : byte;
   end;
 
-  TListings = array[0..9, 0..7] of boolean;
-  TListingsEx = array[0..9, 0..7, 0..3] of boolean;
+  TListings = array[0..7, 0..8] of boolean;
 
   TAplAnim = (normal, extended, fixed52);
 
@@ -57,12 +57,15 @@ type
     x, y : byte;               // Tile character coordinates on Antic mode 4 screen
   end;
 
-  //TAntic4CharValueExType = record
-  //  tileSelected : byte;      // Selected tile
-  //  x : array[0..7] of byte;  // Tile value coordinates
-  //  y : array[0..7] of byte;  // Tile value coordinates
-  //  value : byte;             // Tile value
-  //end;
+  TSetValuesType = record
+    caption : string;
+    warningText : string;
+    valuesSet : boolean;
+    editX, editY : byte;
+    minEditX, minEditY : byte;
+    maxEditX, maxEditY : byte;
+    editText : string;
+  end;
 
 const
   // Supported graphics resolutions
@@ -191,9 +194,27 @@ const
   _MAX_TILE_CHARS = 20;
 
   _TILE_FUNCTION : array[0..9] of string[40] = (
-    'Tile region select', 'Tile draw', 'Flip tile horizontally', 'Flip tile vertically',
-    'Invert bits of tile', 'Rotate tile', 'Fill tile character with color', 'Clear tile character',
-    'Clear tile', 'Fill tile with color');
+    'Tile region select',
+    'Tile draw',
+    'Flip tile horizontally',
+    'Flip tile vertically',
+    'Invert bits of tile',
+    'Rotate tile',
+    'Fill tile character with color',
+    'Clear tile character',
+    'Clear tile',
+    'Fill tile with color');
+
+  _ANTIC_MODE_2_MAX_X = 39;
+  _ANTIC_MODE_2_MAX_Y = 23;
+  _ANTIC_MODE_4_MAX_X = 39;
+  _ANTIC_MODE_4_MAX_Y = 23;
+  _ANTIC_MODE_5_MAX_X = 39;
+  _ANTIC_MODE_5_MAX_Y = 11;
+  _ANTIC_MODE_6_MAX_X = 20;
+  _ANTIC_MODE_6_MAX_Y = 23;
+  _ANTIC_MODE_7_MAX_X = 20;
+  _ANTIC_MODE_7_MAX_Y = 11;
 
   {$I 'missile_sizes.inc'}
 
@@ -278,7 +299,6 @@ var
   isShowPmEditorGrid : boolean;
   isPmMixedColor : boolean;
 
-  isChange : boolean = false;
   isMemoToEditor : boolean = true;
 
   // Editor font settings
@@ -312,12 +332,16 @@ var
   maxLines : word;
   beType : byte;
 
+  setValues : TSetValuesType;
+
   isAntic4 : boolean;
   isAntic6 : boolean;
 
   aplAnim : TAplAnim;
 
-  imgCharList: TList;
+  imgCharList : TList;
+
+  antic_mode_max_x, antic_mode_max_y : byte;
 
 implementation
 

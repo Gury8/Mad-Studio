@@ -99,7 +99,6 @@ object frmAntic4TilesGen: TfrmAntic4TilesGen
       ParentBiDiMode = False
       TabOrder = 0
       OnChange = ExamplesProc
-      OnMouseLeave = ExamplesProc
       MaxValue = 65535
       Value = 10
     end
@@ -115,7 +114,6 @@ object frmAntic4TilesGen: TfrmAntic4TilesGen
       ParentBiDiMode = False
       TabOrder = 1
       OnChange = ExamplesProc
-      OnMouseLeave = ExamplesProc
       MaxValue = 1000
       MinValue = 1
       Value = 10
@@ -305,6 +303,7 @@ object frmAntic4TilesGen: TfrmAntic4TilesGen
       'Display a screen made of tiles'
     )
     ListBox.ItemHeight = 20
+    ListBox.ItemIndex = 0
     ListBox.OnClick = ExamplesProc
     ListBox.Style = lbOwnerDrawFixed
     ListBox.TabOrder = 0
@@ -550,7 +549,6 @@ object frmAntic4TilesGen: TfrmAntic4TilesGen
       ParentBiDiMode = False
       TabOrder = 0
       OnChange = ExamplesProc
-      OnMouseLeave = ExamplesProc
       MaxValue = 39
       Value = 4
     end
@@ -566,7 +564,6 @@ object frmAntic4TilesGen: TfrmAntic4TilesGen
       ParentBiDiMode = False
       TabOrder = 1
       OnChange = ExamplesProc
-      OnMouseLeave = ExamplesProc
       MaxValue = 23
       MinValue = 1
       Value = 4

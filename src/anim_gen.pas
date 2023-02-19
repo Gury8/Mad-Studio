@@ -11,8 +11,8 @@ unit anim_gen;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, lcltype,
-  ExtCtrls, BCTrackbarUpdown, BCListBox, BCMDButton, BCMaterialDesignButton, Windows,
+  Classes, SysUtils, FileUtil, SpinEx, Forms, Controls, Graphics, Dialogs,
+  StdCtrls, lcltype, ExtCtrls, BCListBox, BCMDButton, BCMaterialDesignButton,
   common;
 
 type
@@ -23,20 +23,20 @@ type
     btnClose : TBCMaterialDesignButton;
     btnSingleRes : TBCMDButton;
     btnDoubleRes : TBCMDButton;
+    editLineStep : TSpinEditEx;
+    editStartLine : TSpinEditEx;
     panelLang : TBCPaperPanel;
     boxStartLine : TGroupBox;
     btnAtariBASIC : TBCMDButton;
     btnEffectus : TBCMDButton;
     btnFastBasic : TBCMDButton;
     btnKickC : TBCMDButton;
-    btnKickC1 : TBCMDButton;
-    btnKickC2 : TBCMDButton;
+    btnMads : TBCMDButton;
+    btnCC65 : TBCMDButton;
     btnMadPascal : TBCMDButton;
     btnTurboBasicXL : TBCMDButton;
-    editLineStep : TBCTrackbarUpdown;
-    editStartLine : TBCTrackbarUpdown;
-    lblLineStep1 : TLabel;
-    lblStartLine1 : TLabel;
+    lblLineStep : TLabel;
+    lblStartLine : TLabel;
     ListExamples : TBCPaperListBox;
     memo : TMemo;
     radDataType : TRadioGroup;
@@ -50,8 +50,6 @@ type
     procedure ListExamplesProc(Sender: TObject);
     procedure CreateCode;
     procedure radLangProc(Sender: TObject);
-    procedure editStartLineUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-      X, Y : Integer);
     procedure CloseWin(Sender: TObject);
     procedure CreateCodeProc(Sender : TObject);
     procedure ButtonHoverEnter(Sender : TObject);
@@ -63,12 +61,11 @@ type
     PMBASEStart : string;
     SDMCTL : string;
     PMBASE : string;
+    pmRes : string;
     function GenData : string;
     function Example01 : string;
     function Example02 : string;
     function Example03 : string;
-  public
-
   end;
 
 var
@@ -85,31 +82,24 @@ uses
 
 procedure TfrmAnimGen.FormCreate(Sender: TObject);
 begin
+  SetListings(listings);
+
   // Example 1
-  listings[0, 0] := true;
-  listings[0, 1] := true;
-  listings[0, 2] := true;
-  listings[0, 3] := true;
-  listings[0, 4] := true;
-  listings[0, 5] := true;
-  listings[0, 6] := true;
+  listings[0, 5] := false;
+  listings[0, 6] := false;
+  listings[0, 7] := false;
 
   // Example 2
-  listings[1, 0] := true;
-  listings[1, 1] := true;
-  listings[1, 2] := true;
-  listings[1, 3] := true;
-  listings[1, 4] := true;
+  listings[1, 5] := false;
+  listings[1, 6] := false;
+  listings[1, 7] := false;
+  listings[1, 8] := false;
 
   // Example 3
-  listings[2, 0] := true;
-  listings[2, 1] := true;
-  listings[2, 2] := true;
-  listings[2, 3] := true;
-  listings[2, 4] := true;
-
-  SetTrackBarUpDown(editStartLine, $00DDDDDD, clWhite);
-  SetTrackBarUpDown(editLineStep, $00DDDDDD, clWhite);
+  listings[2, 5] := false;
+  listings[2, 6] := false;
+  listings[2, 7] := false;
+  listings[2, 8] := false;
 end;
 
 procedure TfrmAnimGen.FormShow(Sender: TObject);
@@ -149,20 +139,7 @@ procedure TfrmAnimGen.CreateCode;
 var
   code : string;
 begin
-  boxStartLine.Enabled := langIndex < 2;
-  boxStartLine.Visible := boxStartLine.Enabled;
-
-  if langIndex = 0 then begin
-    radDataType.ItemIndex := 0;
-    TRadioButton(radDataType.Controls[1]).Enabled := false;
-//    TRadioButton(radDataType.Controls[2]).Enabled := false;
-  end
-  else begin
-    TRadioButton(radDataType.Controls[1]).Enabled := true;
-//    TRadioButton(radDataType.Controls[2]).Enabled := true;
-  end;
-
-  memo.Lines.Clear;
+  Set01(boxStartLine, langIndex, radDataType, false);
 
   case ListExamples.ListBox.ItemIndex of
     0: code := Example01;
@@ -170,18 +147,13 @@ begin
     2: code := Example03;
   end;
 
-  memo.Lines.Add(code);
-
-  // Set cursor position at the top of memo object
-  memo.SelStart := 0;
-  memo.SelLength := 0;
-  SendMessage(memo.Handle, EM_SCROLLCARET, 0, 0);
+  Set02(memo, code);
 end;
 
 function TfrmAnimGen.GenData : string;
 var
   codex : string = '';
-  bin : string;
+  bin : string = '';
   pl, i, j, n : byte;
   count : integer;
 begin
@@ -307,8 +279,7 @@ begin
           end;
           Inc(count);
         end;
-        codex += ');'#13#10;
-        codex += #13#10;
+        codex += ');'#13#10#13#10;
       end;
     end
   end
@@ -366,9 +337,9 @@ begin
 
         codex += ']';
         if i < frmAnimator.numFrames.Value - 1 then
-          codex += ','#13#10
-        else
-          codex += #13#10;
+          codex += ',';
+
+        codex += #13#10;
       end;
     end;
   end
@@ -468,11 +439,7 @@ begin
           Inc(count);
         end;
 
-        codex += '};';
-        //if i < frmAnimator.numFrames.Value - 1 then
-        //  codex += ','#13#10
-        //else
-          codex += #13#10;
+        codex += '};'#13#10;
       end;
     end;
   end;
@@ -480,6 +447,9 @@ begin
   result := codex;
 end;
 
+{-----------------------------------------------------------------------------
+ Data values for animation frames
+ -----------------------------------------------------------------------------}
 function TfrmAnimGen.Example01 : string;
 var
   bin : string;
@@ -491,9 +461,7 @@ begin
   if langIndex < 2 then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-//    lineNum := 10000;
     code.line := CodeLine('REM *** FRAMES ***') +
-//    Inc(lineNum, 10);
                  CodeLine('DATA ' + IntToStr(frmAnimator.numFrames.Value)) +
                  CodeLine('REM *** HEIGHT ***') +
                  CodeLine('DATA ' + IntToStr(animFrameHeight)) +
@@ -659,23 +627,34 @@ begin
   result := code.line;
 end;
 
+{-----------------------------------------------------------------------------
+ Animation with non-moving object
+ -----------------------------------------------------------------------------}
 function TfrmAnimGen.Example02 : string;
 var
   i : byte;
   dimValue : short;
+  rtnCodeNum : word = 20000;       // ML starting Atari BASIC line number
+  charDataCodeNum : word = 30000;  // Character data starting Atari BASIC line number
 begin
   dimValue := frmAnimator.numFrames.Value * animFrameHeight;
 
   { Atari BASIC, Turbo BASIC XL
    ---------------------------------------------------------------------------}
   if langIndex < 2 then begin
-//    lineNum := 10;
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-    code.line := CodeLine('DIM PL0(' + IntToStr(dimValue) + '),' +
-                   'PL1(' + IntToStr(dimValue) + ')');
+
+    code.line := CodeLine(_REM) +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Animation with non-moving object') +
+                 CodeLine(_REM);
+    code.line += CodeLine('DIM MLCODE$(33)');
+    code.line += CodeLine('GOSUB ' + IntToStr(rtnCodeNum));
+    code.line += CodeLine('DIM PL0(' + IntToStr(dimValue) + '),' +
+                          'PL1(' + IntToStr(dimValue) + ')');
     code.line += CodeLine('DIM PL0COL(' + IntToStr(frmAnimator.numFrames.Value - 1) +
-                   '),PL1COL(' + IntToStr(frmAnimator.numFrames.Value - 1) + ')');
+                          '),PL1COL(' + IntToStr(frmAnimator.numFrames.Value - 1) + ')');
     code.line += CodeLine('REM Number of frames');
     code.line += CodeLine('FRAMES=' + IntToStr(frmAnimator.numFrames.Value));
     code.line += CodeLine('REM Player data height');
@@ -691,16 +670,23 @@ begin
     code.line += CodeLine('PMGMEM=PEEK(106)-' + playerPageSize);
     code.line += CodeLine('POKE 54279,PMGMEM');
     code.line += CodeLine('PMGMEM=PMGMEM*256');
-    code.line += CodeLine('REM P/M graphics double resolution');
+    code.line += CodeLine('REM ' + pmRes);
     code.line += CodeLine('POKE 559,' + SDMCTL);
-    code.line += CodeLine('? "Clear player memory"');
-    code.line += CodeLine('FOR I=0 TO ' + PMBASE + '+' + PlayerMemSize + '-1:POKE PMGMEM+' + PMBASEStart + '+I,0:NEXT I');
+//    code.line += CodeLine('? "Clear player memory"');
+//    code.line += CodeLine('FOR I=0 TO ' + PMBASE + '+' + PlayerMemSize + '-1:POKE PMGMEM+' + PMBASEStart + '+I,0:NEXT I');
+
+    code.line += CodeLine('REM CALL MACHINE LANGUAGE ROUTINE');
+    code.line += CodeLine('X=USR(ADR(MLCODE$),1536,PEEK(PMGMEM),' +
+                          IntToStr(StrToInt(playerPageSize) div 2) + ')');
+    if code.number > 30000 then
+      Inc(charDataCodeNum, 1000);
+
     code.line += CodeLine('REM Enable third color');
     code.line += CodeLine('POKE 623,33');
     code.line += CodeLine('REM Player normal size');
     code.line += CodeLine('POKE 53256,0');
     code.line += CodeLine('POKE 53257,0');
-    code.line += CodeLine('? "Set player colors"');
+    code.line += CodeLine('REM Set player colors');
     code.line += CodeLine('FOR I=0 TO FRAMES-1:READ A:PL0COL(I)=A:NEXT I');
     code.line += CodeLine('FOR I=0 TO FRAMES-1:READ A:PL1COL(I)=A:NEXT I');
     code.line += CodeLine('REM Player horizontal position');
@@ -733,14 +719,22 @@ begin
     code.line += CodeLine('NEXT FRAME');
     code.line += CodeLine('NEXT ITER');
     code.line += CodeLine('END');
+
+    // Machine language routine
+    code.number := rtnCodeNum;
+    code.line += SetFastCopyRoutine;
+    // Modified character data
+    code.number := charDataCodeNum;
+
     code.line += GenData;
   end
   { Mad Pascal
    ---------------------------------------------------------------------------}
   else if langIndex = _MAD_PASCAL then begin
-    code.line := 'uses'#13#10 +
-            '  SysUtils, FastGraph, Crt;'#13#10 +
-            #13#10;
+    code.line := '//' + _REM_MAD_STUDIO + #13#10 +
+                 '// Animation with non-moving object'#13#10#13#10;
+    code.line += 'uses'#13#10 +
+                 '  SysUtils, FastGraph, Crt;'#13#10#13#10;
     code.line += GenData;
 
     //code += 'frames = ' + IntToStr(frmAnimator.numFrames.Value) + #13#10 +
@@ -751,8 +745,7 @@ begin
                  '  px0, py0 : byte;'#13#10 +
                  '  px1, py1 : byte;'#13#10 +
                  '  frame : byte;'#13#10 +
-                 '  i : byte;'#13#10 +
-                 #13#10 +
+                 '  i : byte;'#13#10#13#10 +
                  'procedure NextFrame;'#13#10 +
                  'begin'#13#10;
 
@@ -773,9 +766,9 @@ begin
                      '  end';
 
       if i = frmAnimator.numFrames.Value then
-        code.line += ';'#13#10
-      else
-        code.line += #13#10;
+        code.line += ';';
+
+      code.line += #13#10;
     end;
     code.line += 'end;'#13#10;
 
@@ -791,7 +784,7 @@ begin
                 '  PMGMEM := Peek(106) - ' + playerPageSize + ';'#13#10 +
                 '  Poke(54279, PMGMEM);'#13#10 +
                 '  PMGMEM := PMGMEM * 256;'#13#10#13#10 +
-                '  // P/M graphics double resolution'#13#10 +
+                '  // ' + pmRes + #13#10 +
                 '  Poke(559, ' + SDMCTL + ');'#13#10#13#10 +
                 '  // Clear player memory'#13#10 +
                 '  FillByte(pointer(PMGMEM + ' + PMBASEStart + '), ' + PMBASE + ' - 1 + ' + PlayerMemSize + ', 0);'#13#10#13#10 +
@@ -812,14 +805,15 @@ begin
                 '    Inc(frame);'#13#10 +
                 '    if frame > ' + IntToStr(frmAnimator.numFrames.Value) + ' then frame := 1;' +
                 #13#10'  end;'#13#10 +
-                //'  repeat until keypressed;'#13#10 +
                 WaitKeyCode(langIndex) +
                 'end.';
   end
   { Action!
    ---------------------------------------------------------------------------}
   else if langIndex = _ACTION then begin
-    code.line := GenData;
+    code.line := ';' + _REM_MAD_STUDIO + #13#10 +
+                 '; Animation with non-moving object'#13#10#13#10;
+    code.line += GenData;
     code.line += #13#10;
     code.line += 'BYTE PMBASE = $D407  ; PLAYER/MISSILE BASE ADDRESS'#13#10 +
                 'BYTE SDMCTL = $22F   ; PLAYER RESOLUTION'#13#10 +
@@ -827,20 +821,17 @@ begin
                 'BYTE RAMTOP = $6A    ; TOP OF RAM IN 256-BYTE PAGES'#13#10 +
                 'BYTE PRIOR  = 623    ; Priority Register'#13#10 +
                 'BYTE CH     = $2FC   ; KEYBOARD CODE OF LAST KEY PRESSED'#13#10 +
-                'CARD PMGMEM'#13#10 +
-                #13#10 +
+                'CARD PMGMEM'#13#10#13#10 +
                 'BYTE ARRAY'#13#10 +
                 '  PCOLR(1) = $2C0,   ; PLAYER COLOR'#13#10 +
                 '  HPOSP(1) = $D000,  ; PLAYER HORIZONTAL POSITION'#13#10 +
-                '  SIZEP(1) = $D008   ; PLAYER SIZE'#13#10 +
-                #13#10 +
+                '  SIZEP(1) = $D008   ; PLAYER SIZE'#13#10#13#10 +
     //            'BYTE px0, py0'#13#10 +
     //            'BYTE px1, py1'#13#10 +
                 'BYTE height = [' + IntToStr(animFrameHeight) + ']'#13#10 +
                 'BYTE frame = [1]'#13#10 +
                 'BYTE i'#13#10 +
-                'INT delay'#13#10 +
-                #13#10 +
+                'INT delay'#13#10#13#10 +
                 'PROC NextFrame()'#13#10;
     code.line += #13#10;
     for i := 1 to frmAnimator.numFrames.Value do begin
@@ -871,7 +862,7 @@ begin
                 'PMGMEM = RAMTOP - ' + playerPageSize + #13#10 +
                 'PMBASE = PMGMEM'#13#10 +
                 'PMGMEM ==* 256'#13#10#13#10 +
-                '; P/M graphics double resolution'#13#10 +
+                '; ' + pmRes + #13#10 +
                 'SDMCTL = 46'#13#10#13#10 +
                 '; Clear player memory'#13#10 +
                 'Zero(PMGMEM + ' + PMBASEStart + ', ' + PMBASE + ' - 1 + ' + PlayerMemSize + ')'#13#10#13#10 +
@@ -892,9 +883,6 @@ begin
                 '  IF frame > ' + IntToStr(frmAnimator.numFrames.Value) + ' THEN frame = 1 FI' +
                 #13#10 +
                 'OD'#13#10#13#10 +
-                //'CH=255'#13#10 +
-                //'DO UNTIL CH#255 OD'#13#10 +
-                //'CH=255'#13#10#13#10 +
                 WaitKeyCode(langIndex) +
                 '; TURN OFF P/M GRAPHICS'#13#10 +
                 'GRACTL=0'#13#10#13#10 +
@@ -903,14 +891,15 @@ begin
   { FastBasic
    ---------------------------------------------------------------------------}
   else if langIndex = _FAST_BASIC then begin
-    code.line := GenData;
+    code.line := '''' + _REM_MAD_STUDIO + #13#10 +
+                 ''' Animation with non-moving object'#13#10#13#10;
+    code.line += GenData;
 
     //code += 'frames = ' + IntToStr(frmAnimator.numFrames.Value) + #13#10 +
     //        'height = ' + IntToStr(animFrameHeight) + #13#10 +
     //        'gap = 0'#13#10;
 
-    code.line += #13#10;
-    code.line += ''' Player position'#13#10 +
+    code.line += #13#10''' Player position'#13#10 +
                 'PX0 = 90 : PY0 = 40'#13#10 +
                 'PX1 = 90 : PY1 = 40'#13#10#13#10 +
                 ''' Set environment'#13#10 +
@@ -921,7 +910,7 @@ begin
                 'PMGMEM = PEEK(106) - ' + playerPageSize + #13#10 +
                 'POKE 54279, PMGMEM'#13#10 +
                 'PMGMEM = PMGMEM * 256'#13#10#13#10 +
-                ''' P/M graphics double resolution'#13#10 +
+                '''' + pmRes + #13#10 +
                 'POKE 559, ' + SDMCTL + #13#10#13#10 +
                 ''' Clear player memory'#13#10 +
                 'MSET PMGMEM + ' + PMBASEStart + ', ' + PMBASE + ' - 1 + ' + PlayerMemSize + ', 0'#13#10 +
@@ -945,11 +934,7 @@ begin
                 '  INC FRAME'#13#10 +
                 '  IF FRAME > ' + IntToStr(frmAnimator.numFrames.Value) + ' THEN FRAME = 1'#13#10 +
                 'NEXT'#13#10 +
-                //#13#10 +
-                //'REPEAT'#13#10 +
-                //'UNTIL Key()'#13#10 +
-                WaitKeyCode(langIndex) +
-                #13#10 +
+                WaitKeyCode(langIndex) + #13#10 +
                 'END'#13#10#13#10 +
                 'PROC NextFrame'#13#10#13#10;
 
@@ -971,62 +956,6 @@ begin
       end;
       code.line += 'ENDIF'#13#10#13#10 +
                    'ENDPROC';
-    (*
-    //code := IntToStr(LineNum) + ' DIM PL0(' + IntToStr(dimValue) + '),PL1(' + IntToStr(dimValue) + ')'#13#10;
-    //code += IntToStr(LineNum) +
-    //        ' DIM PL0COL(' + IntToStr(frmAnimator.numFrames.Value - 1) +
-    //        '),PL1COL(' + IntToStr(frmAnimator.numFrames.Value - 1) + ')'#13#10;
-    code += '''Player position'#13#10;
-    code += 'PX0 = 90 : PY0 = 45'#13#10;
-    code += 'PX1 = 90 : PY1 = 45'#13#10;
-    code += ''' Initialize P/M graphics'#13#10;
-    code += 'POKE 53277, 0'#13#10;
-    code += 'GRAPHICS 0'#13#10;
-    code += 'POKE 710, 0 : POKE 712, 0'#13#10;
-    code += '? "Set P/M graphics"'#13#10;
-    code += 'PMGMEM = PEEK(106) - 8'#13#10;
-    code += 'POKE 54279, PMGMEM'#13#10;
-    code += 'PMGMEM = PMGMEM * 256'#13#10;
-    code += ''' P/M graphics double resolution'#13#10;
-    code += 'POKE 559,46'#13#10;
-    code += '? "Clear player memory"'#13#10;
-    code += 'POKE PMGMEM + 384, 0 : MOVE PMGMEM + 384, PMGMEM + 385, 511 + 128'#13#10;
-    code += ''' Enable third color'#13#10;
-    code += 'POKE 623, 33'#13#10;
-    code += ''' Player normal size'#13#10;
-    code += 'POKE 53256, 0'#13#10;
-    code += 'POKE 53257, 0'#13#10;
-//    code += '? "Set player colors"'#13#10;
-//    code += ' FOR I=0 TO FRAMES-1:PL0COL(I)=A:NEXT'#13#10;
-//    code += ' FOR I=0 TO FRAMES-1:PL1COL(I)=A:NEXT'#13#10;
-    code += ' '' Player horizontal position'#13#10;
-    code += ' POKE 53248, PX0'#13#10;
-    code += ' POKE 53249, PX1'#13#10;
-//    code += IntToStr(LineNum) + ' ? "SET PLAYER 0 DATA"'#13#10;
-    //code += IntToStr(LineNum) + ' FOR FRAME=0 TO FRAMES-1'#13#10;
-    //code += IntToStr(LineNum) + ' FOR I=0 TO HEIGHT-1'#13#10;
-    //code += IntToStr(LineNum) + ' READ A:PL0(I+FRAME*HEIGHT)=A'#13#10;
-    //code += IntToStr(LineNum) + ' NEXT I'#13#10;
-    //code += IntToStr(LineNum) + ' NEXT FRAME'#13#10;
-    code += ' ? "Let''s move..."'#13#10;
-    code += 'POKE 53277, 3'#13#10;
-    code += 'FOR ITER=1 TO 4'#13#10;
-    code += '  FOR FRAME=0 TO FRAMES-1'#13#10;
-    code += '    POKE 704,p0Colors(FRAME)'#13#10;
-    code += '    POKE 705,p1Colors(FRAME)'#13#10;
-//    code += '    FOR I=0 TO HEIGHT-1'#13#10;
-//    code += '      POKE PMGMEM+512+128*0+PY0+I,P0Frame(I+FRAME*HEIGHT)'#13#10;
-//    code += '      POKE PMGMEM+512+128*1+PY1+I,P1Frame(I+FRAME*HEIGHT)'#13#10;
-//    code += '    NEXT I'#13#10;
-    code += ''' Move player horizontally'#13#10;
-    code += '    POKE 53248,PX0:POKE 53249,PX1'#13#10;
-    code += '    PX0=PX0+1:PX1=PX1+1'#13#10;
-    code += '  NEXT FRAME'#13#10;
-    code += 'NEXT ITER'#13#10;
-    code += #13#10;
-    code += 'REPEAT'#13#10;
-    code += 'UNTIL Key()';
-    *)
   end
   else begin
     code.line := '';
@@ -1035,10 +964,15 @@ begin
   result := code.line;
 end;
 
+{-----------------------------------------------------------------------------
+ Animation with moving object in horizontal direction
+ -----------------------------------------------------------------------------}
 function TfrmAnimGen.Example03 : string;
 var
   i : byte;
   dimValue : short;
+  rtnCodeNum : word = 20000;       // ML starting Atari BASIC line number
+  charDataCodeNum : word = 30000;  // Character data starting Atari BASIC line number
 begin
   dimValue := frmAnimator.numFrames.Value*animFrameHeight;
 
@@ -1047,8 +981,14 @@ begin
   if langIndex < 2 then begin
     code.number := editStartLine.Value;
     code.step := editLineStep.Value;
-//    lineNum := 10;
-    code.line := CodeLine('DIM PL0(' + IntToStr(dimValue) + '),' +
+
+    code.line := CodeLine(_REM) +
+                 CodeLine('REM' + _REM_MAD_STUDIO) +
+                 CodeLine('REM Animation with moving object') +
+                 CodeLine(_REM);
+    code.line += CodeLine('DIM MLCODE$(33)');
+    code.line += CodeLine('GOSUB ' + IntToStr(rtnCodeNum));
+    code.line += CodeLine('DIM PL0(' + IntToStr(dimValue) + '),' +
                           'PL1(' + IntToStr(dimValue) + ')');
     code.line += CodeLine('DIM PL0COL(' + IntToStr(frmAnimator.numFrames.Value - 1) +
                           '),PL1COL(' + IntToStr(frmAnimator.numFrames.Value - 1) + ')');
@@ -1067,16 +1007,23 @@ begin
     code.line += CodeLine('PMGMEM=PEEK(106)-' + playerPageSize);
     code.line += CodeLine('POKE 54279,PMGMEM');
     code.line += CodeLine('PMGMEM=PMGMEM*256');
-    code.line += CodeLine('REM P/M graphics double resolution');
+    code.line += CodeLine('REM ' + pmRes);
     code.line += CodeLine('POKE 559,' + SDMCTL);
-    code.line += CodeLine('? "Clear player memory"');
-    code.line += CodeLine('FOR I=0 TO ' + PMBASE + '+' + PlayerMemSize + '-1:POKE PMGMEM+' + PMBASEStart + '+I,0:NEXT I');
+//    code.line += CodeLine('? "Clear player memory"');
+//    code.line += CodeLine('FOR I=0 TO ' + PMBASE + '+' + PlayerMemSize + '-1:POKE PMGMEM+' + PMBASEStart + '+I,0:NEXT I');
+
+    code.line += CodeLine('REM CALL MACHINE LANGUAGE ROUTINE');
+    code.line += CodeLine('X=USR(ADR(MLCODE$),1536,PEEK(PMGMEM),' +
+                          IntToStr(StrToInt(playerPageSize) div 2) + ')');
+    if code.number > 30000 then
+      Inc(charDataCodeNum, 1000);
+
     code.line += CodeLine('REM Enable third color');
     code.line += CodeLine('POKE 623,33');
     code.line += CodeLine('REM Player normal size');
     code.line += CodeLine('POKE 53256,0');
     code.line += CodeLine('POKE 53257,0');
-    code.line += CodeLine('? "Set player colors"');
+    code.line += CodeLine('REM Set player colors');
     code.line += CodeLine('FOR I=0 TO FRAMES-1:READ A:PL0COL(I)=A:NEXT I');
     code.line += CodeLine('FOR I=0 TO FRAMES-1:READ A:PL1COL(I)=A:NEXT I');
     code.line += CodeLine('REM Player horizontal position');
@@ -1114,12 +1061,20 @@ begin
     code.line += CodeLine('NEXT ITER');
     code.line += CodeLine('END');
 
+    // Machine language routine
+    code.number := rtnCodeNum;
+    code.line += SetFastCopyRoutine;
+    // Modified character data
+    code.number := charDataCodeNum;
+
     code.line += GenData;
   end
   { Mad Pascal
    ---------------------------------------------------------------------------}
   else if langIndex = _MAD_PASCAL then begin
-    code.line := 'uses'#13#10 +
+    code.line := '//' + _REM_MAD_STUDIO + #13#10 +
+                 '// Animation with moving object'#13#10#13#10;
+    code.line += 'uses'#13#10 +
                  '  SysUtils, FastGraph, Crt;'#13#10 +
                  #13#10;
     code.line += GenData;
@@ -1159,42 +1114,32 @@ begin
     end;
     code.line += 'end;'#13#10;
 
-    code.line += #13#10 +
-                'begin'#13#10 +
+    code.line += #13#10'begin'#13#10 +
                 '  // Player position'#13#10 +
                 '  px0 := 90; py0 := 40;'#13#10 +
-                '  px1 := 90; py1 := 40;'#13#10 +
-                #13#10 +
+                '  px1 := 90; py1 := 40;'#13#10#13#10 +
                 '  // Set environment'#13#10 +
                 '  InitGraph(0);'#13#10 +
                 '  Poke(710, 0); Poke(712, 0);'#13#10 +
-                #13#10 +
-                '  // Set P/M graphics'#13#10 +
+                #13#10'  // Set P/M graphics'#13#10 +
                 '  Poke(53277, 0);'#13#10 +
                 '  PMGMEM := Peek(106) - ' + playerPageSize + ';'#13#10 +
                 '  Poke(54279, PMGMEM);'#13#10 +
-                '  PMGMEM := PMGMEM * 256;'#13#10 +
-                #13#10 +
-                '  // P/M graphics double resolution'#13#10 +
-                '  Poke(559, ' + SDMCTL + ');'#13#10 +
-                #13#10 +
+                '  PMGMEM := PMGMEM * 256;'#13#10#13#10 +
+                '  // ' + pmRes + #13#10 +
+                '  Poke(559, ' + SDMCTL + ');'#13#10#13#10 +
                 '  // Clear player memory'#13#10 +
-                '  FillByte(pointer(PMGMEM + ' + PMBASEStart + '), ' + PMBASE + ' - 1 + ' + PlayerMemSize + ', 0);'#13#10 +
-                #13#10 +
+                '  FillByte(pointer(PMGMEM + ' + PMBASEStart + '), ' + PMBASE + ' - 1 + ' +
+                  PlayerMemSize + ', 0);'#13#10#13#10 +
                 '  // Enable third color'#13#10 +
-                '  Poke(623, 33);'#13#10 +
-                #13#10 +
+                '  Poke(623, 33);'#13#10#13#10 +
                 '  // Player normal size'#13#10 +
-                '  Poke(53256, 0); Poke(53257, 0);'#13#10 +
-                #13#10 +
+                '  Poke(53256, 0); Poke(53257, 0);'#13#10#13#10 +
                 '  // Turn on P/M graphics'#13#10 +
-                '  Poke(53277, 3);'#13#10 +
-                #13#10 +
-                '  frame := 1;'#13#10 +
-                #13#10 +
+                '  Poke(53277, 3);'#13#10#13#10 +
+                '  frame := 1;'#13#10#13#10 +
                 '  Writeln(''Player animation and movement'');'#13#10 +
-                '  Poke(53248, px0); Poke(53249, px1);'#13#10 +
-                #13#10 +
+                '  Poke(53248, px0); Poke(53249, px1);'#13#10#13#10 +
                 '  for i := 1 to 50 do begin'#13#10 +
                 '    NextFrame;'#13#10 +
                 '    Poke(704, p0Color[0]);'#13#10 +
@@ -1206,15 +1151,15 @@ begin
                 '    if frame > ' + IntToStr(frmAnimator.numFrames.Value) + ' then frame := 1;' +
                 #13#10 +
                 '  end;'#13#10 +
-                //#13#10 +
-                //'  repeat until keypressed;'#13#10 +
                 WaitKeyCode(langIndex) +
                 'end.';
   end
   { Action!
    ---------------------------------------------------------------------------}
   else if langIndex = _ACTION then begin
-    code.line := GenData;
+    code.line := ';' + _REM_MAD_STUDIO + #13#10 +
+                 '; Animation with moving object'#13#10#13#10;
+    code.line += GenData;
 
     code.line += #13#10;
     code.line += 'BYTE PMBASE = $D407  ; PLAYER/MISSILE BASE ADDRESS'#13#10 +
@@ -1223,20 +1168,17 @@ begin
                  'BYTE RAMTOP = $6A    ; TOP OF RAM IN 256-BYTE PAGES'#13#10 +
                  'BYTE PRIOR  = 623    ; Priority Register'#13#10 +
                  'BYTE CH     = $2FC   ; KEYBOARD CODE OF LAST KEY PRESSED'#13#10 +
-                 'CARD PMGMEM'#13#10 +
-                 #13#10 +
+                 'CARD PMGMEM'#13#10#13#10 +
                  'BYTE ARRAY'#13#10 +
                  '  PCOLR(1) = $2C0,   ; PLAYER COLOR'#13#10 +
                  '  HPOSP(1) = $D000,  ; PLAYER HORIZONTAL POSITION'#13#10 +
-                 '  SIZEP(1) = $D008   ; PLAYER SIZE'#13#10 +
-                 #13#10 +
+                 '  SIZEP(1) = $D008   ; PLAYER SIZE'#13#10#13#10 +
                  'BYTE px0 = [90]'#13#10 +
                  'BYTE px1 = [90]'#13#10 +
                  'BYTE height = [' + IntToStr(animFrameHeight) + ']'#13#10 +
                  'BYTE frame = [1]'#13#10 +
                  'BYTE i'#13#10 +
-                 'INT delay'#13#10 +
-                 #13#10 +
+                 'INT delay'#13#10#13#10 +
                  'PROC NextFrame()'#13#10;
     code.line += #13#10;
     for i := 1 to frmAnimator.numFrames.Value do begin
@@ -1253,40 +1195,29 @@ begin
                      '  MoveBlock(PMGMEM + ' + PMBASE + ' + ' + PlayerMemSize + ' + 70, p1Frame' + IntToStr(i) + ', height)' +
                      #13#10;
     end;
-    code.line += 'FI'#13#10 +
-                #13#10 +
-                'RETURN'#13#10 +
-                #13#10 +
-                'PROC MAIN()'#13#10 +
-                #13#10 +
+    code.line += 'FI'#13#10#13#10 +
+                'RETURN'#13#10#13#10 +
+                'PROC MAIN()'#13#10#13#10 +
                 '; Set environment'#13#10 +
                 'Graphics(0)'#13#10 +
-                'Poke(710, 0) Poke(712, 0)'#13#10 +
-                #13#10 +
+                'Poke(710, 0) Poke(712, 0)'#13#10#13#10 +
                 '; Set P/M graphics'#13#10 +
                 'GRACTL = 0'#13#10 +
                 'PMGMEM = RAMTOP - ' + playerPageSize + #13#10 +
                 'PMBASE = PMGMEM'#13#10 +
-                'PMGMEM ==* 256'#13#10 +
-                #13#10 +
-                '; P/M graphics double resolution'#13#10 +
-                'SDMCTL = 46'#13#10 +
-                #13#10 +
+                'PMGMEM ==* 256'#13#10#13#10 +
+                '; ' + pmRes + #13#10 +
+                'SDMCTL = 46'#13#10#13#10 +
                 '; Clear player memory'#13#10 +
-                'Zero(PMGMEM + ' + PMBASEStart + ', ' + PMBASE + ' - 1 + ' + PlayerMemSize + ')'#13#10 +
-                #13#10 +
+                'Zero(PMGMEM + ' + PMBASEStart + ', ' + PMBASE + ' - 1 + ' + PlayerMemSize + ')'#13#10#13#10 +
                 '; Enable third color'#13#10 +
-                'PRIOR = 33'#13#10 +
-                #13#10 +
+                'PRIOR = 33'#13#10#13#10 +
                 '; Player normal size'#13#10 +
-                'Zero(SIZEP, 2)'#13#10 +
-                #13#10 +
+                'Zero(SIZEP, 2)'#13#10#13#10 +
                 '; Turn on P/M graphics'#13#10 +
-                'GRACTL = 3'#13#10 +
-                #13#10 +
+                'GRACTL = 3'#13#10#13#10 +
                 'PrintE("Player animation")'#13#10 +
-                'HPOSP(0) = px0 HPOSP(1) = px1'#13#10 +
-                #13#10 +
+                'HPOSP(0) = px0 HPOSP(1) = px1'#13#10#13#10 +
                 'FOR i = 1 TO 50 DO'#13#10 +
                 '  NextFrame()'#13#10 +
                 '  PCOLR(0) = p0Color(0)'#13#10 +
@@ -1295,24 +1226,19 @@ begin
                 '    px0 ==+ 1 px1 ==+ 1'#13#10 +
                 '  FOR delay = 0 TO 4500 DO OD'#13#10 +
                 '  frame ==+ 1'#13#10 +
-                '  IF frame > ' + IntToStr(frmAnimator.numFrames.Value) + ' THEN frame = 1 FI' +
-                #13#10 +
+                '  IF frame > ' + IntToStr(frmAnimator.numFrames.Value) + ' THEN frame = 1 FI'#13#10 +
                 'OD'#13#10 +
-                //#13#10 +
-                //'CH=255'#13#10 +
-                //'DO UNTIL CH#255 OD'#13#10 +
-                //'CH=255'#13#10 +
                 WaitKeyCode(langIndex) + #13#10 +
-//                #13#10 +
                 '; TURN OFF P/M GRAPHICS'#13#10 +
-                'GRACTL=0'#13#10 +
-                #13#10 +
+                'GRACTL=0'#13#10#13#10 +
                 'RETURN';
   end
   { FastBasic
    ---------------------------------------------------------------------------}
   else if langIndex = _FAST_BASIC then begin
-    code.line := GenData;
+    code.line := '''' + _REM_MAD_STUDIO + #13#10 +
+                 ''' Animation with moving object'#13#10#13#10;
+    code.line += GenData;
 
     //code += 'frames = ' + IntToStr(frmAnimator.numFrames.Value) + #13#10 +
     //        'height = ' + IntToStr(animFrameHeight) + #13#10 +
@@ -1328,7 +1254,7 @@ begin
                  'PMGMEM = PEEK(106) - ' + playerPageSize + #13#10 +
                  'POKE 54279, PMGMEM'#13#10 +
                  'PMGMEM = PMGMEM * 256'#13#10#13#10 +
-                 ''' P/M graphics double resolution'#13#10 +
+                 '''' + pmRes + #13#10 +
                  'POKE 559, ' + SDMCTL + #13#10#13#10 +
                  ''' Clear player memory'#13#10 +
                  'MSET PMGMEM + ' + PMBASEStart + ', ' + PMBASE + ' - 1 + ' + PlayerMemSize + ', 0'#13#10 +
@@ -1353,10 +1279,6 @@ begin
                  '  INC FRAME'#13#10 +
                  '  IF FRAME > ' + IntToStr(frmAnimator.numFrames.Value) + ' THEN FRAME = 1'#13#10 +
                  'NEXT'#13#10;
-                 //#13#10 +
-                 //'REPEAT'#13#10 +
-                 //'UNTIL Key()'#13#10 +
-                 //#13#10 +
        code.line += WaitKeyCode(langIndex);
        code.line += 'END'#13#10#13#10 +
                     'PROC NextFrame'#13#10#13#10;
@@ -1388,21 +1310,24 @@ end;
 
 procedure TfrmAnimGen.radLangProc(Sender: TObject);
 begin
-  //langIndex := radLang.ItemIndex;
   langIndex := (Sender as TBCMDButton).Tag;
   CreateCode;
 end;
 
 procedure TfrmAnimGen.ListExamplesProc(Sender: TObject);
 begin
-//  for i := 0 to radLang.Items.Count - 1 do begin
-//    radLang.Controls[i].Enabled := listings[ListExamples.ItemIndex, i];
-////    radLang.Controls[i].Visible := listings[ListExamples.ItemIndex, i];
-//  end;
-//  radLang.ItemIndex := langIndex;
+  btnAtariBASIC.Enabled := listings[listExamples.ListBox.ItemIndex, 0];
+  btnTurboBasicXL.Enabled := listings[listExamples.ListBox.ItemIndex, 1];
+  btnMadPascal.Enabled := listings[listExamples.ListBox.ItemIndex, 2];
+  btnEffectus.Enabled := listings[listExamples.ListBox.ItemIndex, 3];
+  btnFastBasic.Enabled := listings[listExamples.ListBox.ItemIndex, 4];
+  btnKickC.Enabled := listings[listExamples.ListBox.ItemIndex, 8];
+  btnMads.Enabled := listings[listExamples.ListBox.ItemIndex, 6];
+  btnCC65.Enabled := listings[listExamples.ListBox.ItemIndex, 7];
 
   if btnDoubleRes.Checked then begin
     pmResolution := doubleResolution;
+    pmRes := 'P/M graphics double resolution';
     playerPageSize := '8';
     PMBASEStart := '384';
     SDMCTL := '46';
@@ -1411,6 +1336,7 @@ begin
   end
   else begin
     pmResolution := singleResolution;
+    pmRes := 'P/M graphics single resolution';
     playerPageSize := '16';
     PMBASEStart := '768';
     SDMCTL := '62';
@@ -1418,12 +1344,6 @@ begin
     PlayerMemSize := '256';
   end;
 
-  CreateCode;
-end;
-
-procedure TfrmAnimGen.editStartLineUp(Sender : TObject; Button : TMouseButton; Shift : TShiftState;
-  X, Y : Integer);
-begin
   CreateCode;
 end;
 

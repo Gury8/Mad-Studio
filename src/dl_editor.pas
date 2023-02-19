@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2023
   Unit: Display list editor
 }
 unit dl_editor;
@@ -34,8 +34,6 @@ type
     MenuItem19: TMenuItem;
     miDefaultDl: TMenuItem;
     MenuItem3: TMenuItem;
-    MenuItem4: TMenuItem;
-    MenuItem5: TMenuItem;
     btnColors: TMenuItem;
     miOpen: TMenuItem;
     miSave: TMenuItem;
@@ -54,19 +52,19 @@ type
     procedure FormActivate(Sender : TObject);
     procedure FormDeactivate(Sender : TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-    procedure imgEditorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgEditorDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure GenCodeProc(Sender: TObject);
-    procedure imgEditorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure imgEditorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure imgEditorUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
-    procedure imgSelectionMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
+    procedure imgSelectionDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer);
     procedure CloseWinProc(Sender: TObject);
     procedure ClearProc(Sender: TObject);
     procedure ColorsProc(Sender: TObject);
-    procedure MenuItem14Click(Sender: TObject);
-    procedure SetTextClick(Sender: TObject);
+    procedure EmptyLineProc(Sender: TObject);
+    procedure SetTextProc(Sender: TObject);
     procedure OpenDlProc(Sender: TObject);
     procedure SaveDlAsProc(Sender: TObject);
     procedure SaveDlProc(Sender: TObject);
@@ -149,7 +147,6 @@ var
   n : integer = 72;
 begin
   propFlagModules[7] := 1;
-  isChange := true;
   frmMain.Top := 10;
   formId := formDisplayList;
 
@@ -226,7 +223,7 @@ begin
     end;
 end;
 
-procedure TfrmDisplayList.imgEditorMouseDown(Sender: TObject; Button: TMouseButton;
+procedure TfrmDisplayList.imgEditorDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
   xf, yf : integer;
@@ -282,7 +279,7 @@ begin
   end;
 end;
 
-procedure TfrmDisplayList.imgEditorMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TfrmDisplayList.imgEditorMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
   xf, yf : integer;
 begin
@@ -306,7 +303,7 @@ begin
   end;
 end;
 
-procedure TfrmDisplayList.imgEditorMouseUp(Sender: TObject; Button: TMouseButton;
+procedure TfrmDisplayList.imgEditorUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   btn := mbMiddle;
@@ -346,7 +343,7 @@ begin
   maxSize := maxX*modeHeight - 1;
 end;
 
-procedure TfrmDisplayList.imgSelectionMouseDown(Sender: TObject; Button: TMouseButton;
+procedure TfrmDisplayList.imgSelectionDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   // Clear canvas selection
@@ -441,13 +438,13 @@ begin
   frmColors.Show;
 end;
 
-procedure TfrmDisplayList.MenuItem14Click(Sender: TObject);
+procedure TfrmDisplayList.EmptyLineProc(Sender: TObject);
 begin
   PlotByte(xxx, yyy + 1, 27, colTab[0], true);
   btn := mbMiddle;
 end;
 
-procedure TfrmDisplayList.SetTextClick(Sender: TObject);
+procedure TfrmDisplayList.SetTextProc(Sender: TObject);
 var
   i, n : byte;
   ch : char;
@@ -993,12 +990,13 @@ begin
     end;
 
     for j := 0 to mHeight do begin
-      for i := 0 to maxX - 1 do
+      for i := 0 to maxX - 1 do begin
         if (xf >= i shl 3) and (xf < (i + 1) shl 3) then begin
           xf := i shl 3;
           xx := i;
           break;
         end;
+      end;
 
       if (yf > j shl 3) and (yf <= (j + 1) shl 3) then begin
         yf := j shl 3;
@@ -1097,11 +1095,12 @@ begin
     if xf > grX then xf := grX;
 
     for j := 0 to modeHeight + 6 do begin
-      for i := 0 to maxX - 1 do
+      for i := 0 to maxX - 1 do begin
         if (xf >= i shl 3) and (xf < (i + 1) shl 3) then begin
           xf := i shl 3;
           break;
         end;
+      end;
 
       if (yf > j shl 3) and (yf <= (j + 1) shl 3) then begin
         yf := j shl 3;
@@ -1160,12 +1159,13 @@ begin
   //  if xf > grX then xf := grX;
 
   //  if xf mod 8 = 0 then Inc(xf, 8);
-    for dy := 0 to modeHeight - 1 do
+    for dy := 0 to modeHeight - 1 do begin
       for dx := 0 to maxX - 1 do
         if (xf >= dx shl 3) and (xf < (dx + 1) shl 3) then begin
           xf := dx shl 3;
           break;
         end;
+    end;
 
     if offset > 128 then begin
       Dec(offset, 128);
@@ -1197,12 +1197,13 @@ begin
     xf := scrPos shl 3;
     yf := yyy;  //y shl 2;
 
-    for dy := 0 to modeHeight - 1 do
+    for dy := 0 to modeHeight - 1 do begin
       for dx := 0 to 19 do
         if (xf >= dx shl 3) and (xf < (dx + 1) shl 3) then begin
           xf := dx shl 3;
           break;
         end;
+    end;
 
     col02 := _CHARSET_UPPER;
 
@@ -1221,7 +1222,7 @@ begin
 
     offset := offset shl 3;
 
-    for dy := 0 to 7 do
+    for dy := 0 to 7 do begin
       for dx := 0 to 7 do begin
         col := fldFontSet[dx, dy + offset];
         if col = 1 then col := col02;
@@ -1233,6 +1234,7 @@ begin
   //      else
         imgEditor.Canvas.FillRect(bounds((xf + dx)*factX, (yf + dy)*factY, factX, factY));
       end;
+    end;
   end;
 end;
 

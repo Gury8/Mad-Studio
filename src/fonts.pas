@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2023
   Unit: Character set (font) editor
 }
 unit fonts;
@@ -198,6 +198,7 @@ type
     factOrigX, factOrigY : byte;
     fact6OrigX, fact6OrigY, fact7OrigY : byte;
     isCopyChar : boolean;
+    isEdit : boolean;
     procedure ShowFontSet;
     procedure ShowAntic4FontSet(image : TImage; factor, factorY : byte);
     procedure ShowAntic6FontSet(image : TImage; factor, factorY : byte);
@@ -272,9 +273,9 @@ var
   i : byte;
 begin
   propFlagModules[3] := 1;
-  isChange := true;
   formId := formFont;
 
+  isEdit := false;
   frmMain.Top := 0;
   Caption := programName + ' ' + programVersion + ' - Character set editor (' + filename + ')';
   sbFont.Panels[0].Text := 'Cursor coordinates: x: 0, y: 0';
@@ -309,25 +310,14 @@ begin
   if isCopy then begin
     sbFont.Panels[1].Text := 'Copy drawing character to selected character set cell.' +
                              ' Press ''Esc'' key to end the operation!';
-    //Cursor := crDrag;
-    //imgfontSet.Cursor := crDrag;
-    //imgfontSetInv.Cursor := crDrag;
-    //imgAntic4FontSet.Cursor := crDrag;
-    //imgAntic5FontSet.Cursor := crDrag;
-    //imgAntic6FontSet.Cursor := crDrag;
-    //imgAntic7FontSet.Cursor := crDrag;
-    ShowCursor(frmFonts, frmFonts, crDrag);
+//    ShowCursor(frmFonts, frmFonts, crDrag);
+    Screen.BeginTempCursor(crDrag);
   end
   else begin
     sbFont.Panels[1].Text := '';
-    //Cursor := crDefault;
-    //imgfontSet.Cursor := crDefault;
-    //imgfontSetInv.Cursor := crDefault;
-    //imgAntic4FontSet.Cursor := crDefault;
-    //imgAntic5FontSet.Cursor := crDefault;
-    //imgAntic6FontSet.Cursor := crDefault;
-    //imgAntic7FontSet.Cursor := crDefault;
-    ShowCursor(frmFonts, frmFonts, crDefault);
+//    ShowCursor(frmFonts, frmFonts, crDefault);
+//    Screen.BeginTempCursor(crDefault);
+    Screen.EndTempCursor(crDrag);
   end;
 end;
 
@@ -404,13 +394,13 @@ var
   col, xf, yf : integer;
 begin
   FillRectEx(imgChar, colTab[0], 0, 0, imgChar.Width, imgChar.Height);
-  for yf := 0 to grY do
+  for yf := 0 to grY do begin
     for xf := 0 to grX do begin
       col := fldOrig[xf, yf + offs shl 3];
       fld[xf, yf + offs shl 3] := col;
       FillRectEx(imgChar, coltabFont[col], xf*factX, yf*factY, factX, factY);
     end;
-
+  end;
   imgChar.Refresh;
   Plot(255, 255);
 end;
@@ -419,9 +409,10 @@ procedure TfrmFonts.InvertProc(Sender : TObject);
 var
   x, y : byte;
 begin
-  for y := 0 to grY do
+  for y := 0 to grY do begin
     for x := 0 to grX do
       fldChar[x, y] := 1 - fldChar[x, y];
+  end;
 
   RefreshChar;
 end;
@@ -449,6 +440,13 @@ begin
 
   Plot(xf, yf);
   charEditIndex[offs] := 1;
+
+  // Data is changed
+  if not isEdit then begin
+    isEdit := true;
+    if Pos(' *', caption) = 0 then
+      caption := caption + ' *';
+  end;
 end;
 
 procedure TfrmFonts.imgCharMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -722,16 +720,17 @@ var
   r, i : byte;
   fs : TFileStream;
 begin
+  isEdit := false;
   fs := TFileStream.Create(Filename, fmOpenReadWrite);
   try
-    for j := 0 to 1023 do
+    for j := 0 to 1023 do begin
       if fs.Position < fs.Size then begin
         r := fs.ReadByte;
         bin := IntToBin(r, 8);
         for i := 0 to 7 do
           fld[i, j] := StrToInt(bin[i + 1]);
       end;
-
+    end;
     Caption := programName + ' ' + programVersion + ' - Character set editor (' + filename + ')';
     ShowFontSet;
   finally
@@ -765,6 +764,8 @@ var
   i : byte;
   fs : TFileStream;
 begin
+  isEdit := false;
+
 //    filename := GetCurrentDir + '\FONT.SET';
     fs := TFileStream.Create(filename, fmCreate);
     try
@@ -885,11 +886,12 @@ begin
   for x := 0 to 7 do
     fld02[x] := fldChar[x, 0];
 
-  for x := 0 to grX do
+  for x := 0 to grX do begin
     for y := 1 to grY do begin
       fldChar[x, y - 1] := fldChar[x, y];
       fldChar[x, y] := 0;
     end;
+  end;
 
   for x := 0 to 7 do
     fldChar[x, grY] := fld02[x];
@@ -905,11 +907,12 @@ begin
   for x := 0 to 7 do
     fld02[x] := fldChar[x, grY];
 
-  for x := 0 to grX do
+  for x := 0 to grX do begin
     for y := grY - 1 downto 0 do begin
       fldChar[x, y + 1] := fldChar[x, y];
       fldChar[x, y] := 0;
     end;
+  end;
 
   for x := 0 to 7 do
     fldChar[x, 0] := fld02[x];
@@ -917,38 +920,44 @@ begin
   RefreshChar;
 end;
 
-// Flip character horizontally
+{-----------------------------------------------------------------------------
+ Flip character horizontally
+ -----------------------------------------------------------------------------}
 procedure TfrmFonts.FlipXProc(Sender: TObject);
 var
   x, y, n : byte;
 begin
-  for y := 0 to grY do
+  for y := 0 to grY do begin
     for x := 7 downto 4 do begin
       n := fldChar[x, y];
       fldChar[x, y] := fldChar[7 - x, y];
       fldChar[7 - x, y] := n;
     end;
-
+  end;
   RefreshChar;
 end;
 
-// Flip character vertically
+{-----------------------------------------------------------------------------
+ Flip character vertically
+ -----------------------------------------------------------------------------}
 procedure TfrmFonts.FlipYProc(Sender: TObject);
 var
   x, y, n : byte;
 begin
-  for x := 0 to grX do
+  for x := 0 to grX do begin
     for y := 7 downto 4 do begin
       n := fldChar[x, y];
       fldChar[x, y] := fldChar[x, 7 - y];
       fldChar[x, 7 - y] := n;
 //      fld[x, 7 - y + offs*8] := n;
     end;
-
+  end;
   RefreshChar;
 end;
 
-// Rotate character
+{-----------------------------------------------------------------------------
+ Rotate character
+ -----------------------------------------------------------------------------}
 procedure TfrmFonts.RotateProc(Sender: TObject);
 var
   x, y : byte;
@@ -970,14 +979,14 @@ var
   col, xf, yf : integer;
 begin
   FillRectEx(imgChar, colTab[0], 0, 0, imgChar.Width, imgChar.Height);
-  for yf := 0 to grY do
+  for yf := 0 to grY do begin
     for xf := 0 to grX do begin
       col := fldChar[xf, yf];
       fld[xf, yf + offs shl 3] := col;
       FillRectEx(imgChar, coltabFont[col], xf*factX, yf*factY, factX, factY);
 //      imgChar.Canvas.Pixels[xf*factX, yf*factY] := coltab[col];
     end;
-
+  end;
   imgChar.Refresh;
   Plot(255, 255);
 //  ShowFontSet;
@@ -990,13 +999,13 @@ begin
   imgChar.Canvas.Brush.Style := bsSolid;
   FillRectEx(imgChar, colTab[0], 0, 0, imgChar.Width, imgChar.Height);
   offset := offset shl 3;
-  for yf := 0 to grY do
+  for yf := 0 to grY do begin
     for xf := 0 to grX do begin
       col := fld[xf, yf + offset];
       fldChar[xf, yf] := col;
       FillRectEx(imgChar, coltabFont[col], xf*factX, yf*factY, factX, factY);
     end;
-
+  end;
   imgChar.Refresh;
 //  sbFont.Panels[1].Text := 'offset = ' + IntToStr(offset) + ' / offs = ' + IntToStr(offs);
 end;
@@ -1066,7 +1075,7 @@ procedure TfrmFonts.ShowAntic4FontSet(image : TImage; factor, factorY : byte);
 var
   n, cnt : byte;
   col, xf, yf, offset, xoffset, yoffset : integer;
-  mask : array[0..1] of byte;
+//  mask : array[0..1] of byte;
 begin
   FillRectEx(image, coltab[0], 0, 0, image.Width, image.Height);
   offset := 0;
@@ -1081,16 +1090,18 @@ begin
     for yf := 0 to grY do begin
       for xf := 0 to grX do begin
         Inc(cnt);
-        col := fld[xf, n shl 3 + yf];
-        mask[cnt - 1] := col;
-        if cnt = 2 then begin
-          if (mask[0] = 0) and (mask[1] = 1) then
-            col := 1
-          else if (mask[0] = 1) and (mask[1] = 0) then
-            col := 2
-          else if (mask[0] = 1) and (mask[1] = 1) then
-            col := 3;
+//        col := fld[xf, n shl 3 + yf];
+        col := Antic45Mask(fld[xf, n shl 3 + yf], cnt);
+        //mask[cnt - 1] := col;
+        //if cnt = 2 then begin
+        //  if (mask[0] = 0) and (mask[1] = 1) then
+        //    col := 1
+        //  else if (mask[0] = 1) and (mask[1] = 0) then
+        //    col := 2
+        //  else if (mask[0] = 1) and (mask[1] = 1) then
+        //    col := 3;
 
+        if cnt = 2 then begin
           FillRectEx(image, coltab[col], xf*factX02 + xoffset, yf*factorY + yoffset,
                      factX02 shl 1, factorY);
           cnt := 0;
@@ -1116,13 +1127,13 @@ begin
       Inc(yoffset, factor);
     end;
     xoffset := offset shl 5;  // * 32;
-    for yf := 0 to grY02 do
+    for yf := 0 to grY02 do begin
       for xf := 0 to grX02 do begin
         col := fld[xf, n shl 3 + yf];
         FillRectEx(image, coltab[col], xf*factX06 + xoffset, yf*factorY + yoffset,
                    factX06, factorY);
       end;
-
+    end;
     Inc(offset);
   end;
 end;
@@ -1201,7 +1212,7 @@ var
   cnt : byte;
   col, xf, yf : byte;
   xoffset, yoffset : integer;
-  mask : array[0..1] of byte;
+//  mask : array[0..1] of byte;
 begin
   yoffset := offsY*offsetFac;
   if offset < 16 then
@@ -1217,16 +1228,18 @@ begin
   for yf := 0 to grY do
     for xf := 0 to grX do begin
       Inc(cnt);
-      col := fld[xf, offset shl 3 + yf];
-      mask[cnt - 1] := col;
-      if cnt = 2 then begin
-        if (mask[0] = 0) and (mask[1] = 1) then
-          col := 1
-        else if (mask[0] = 1) and (mask[1] = 0) then
-          col := 2
-        else if (mask[0] = 1) and (mask[1] = 1) then
-          col := 3;
+//      col := fld[xf, offset shl 3 + yf];
+      col := Antic45Mask(fld[xf, offset shl 3 + yf], cnt);
+      //mask[cnt - 1] := col;
+      //if cnt = 2 then begin
+      //  if (mask[0] = 0) and (mask[1] = 1) then
+      //    col := 1
+      //  else if (mask[0] = 1) and (mask[1] = 0) then
+      //    col := 2
+      //  else if (mask[0] = 1) and (mask[1] = 1) then
+      //    col := 3;
 
+      if cnt = 2 then begin
         FillRectEx(image, coltab[col], xf*factX02 + xoffset, yf*factYpar + yoffset,
                    factX02 shl 1, factYpar);
         cnt := 0;
@@ -1270,8 +1283,7 @@ var
 begin
   FillRectEx(image, colTab[0], 0, 0, image.Width, image.Height);
   offset := offset shl 3;
-
-  for yf := 0 to 7 do
+  for yf := 0 to 7 do begin
     for xf := 0 to 7 do begin
       col := fontType[xf, yf + offset];
       if isInverse then
@@ -1279,7 +1291,7 @@ begin
 
       FillRectEx(image, colTabFont[col], xf*factOrigX, yf*factOrigY, factOrigX, factOrigY);
     end;
-
+  end;
   image.Refresh;
 end;
 
@@ -1288,25 +1300,27 @@ procedure TfrmFonts.ShowAntic4Char(offset : word; image : TImage; fontType : fld
 var
   cnt : byte;
   col, xf, yf : integer;
-  mask : array[0..1] of byte;
+//  mask : array[0..1] of byte;
 begin
   FillRectEx(image, colTab[0], 0, 0, image.Width, image.Height);
   cnt := 0;
   for yf := 0 to grY do
     for xf := 0 to grX do begin
       Inc(cnt);
-      col := fontType[xf, offset shl 3 + yf];
-      mask[cnt - 1] := col;
-      if cnt = 2 then begin
-        if (mask[0] = 0) and (mask[1] = 1) then
-          col := 1
-        else if (mask[0] = 1) and (mask[1] = 0) then
-          col := 2
-        else if (mask[0] = 1) and (mask[1] = 1) then
-          col := 3;
+//      col := fontType[xf, offset shl 3 + yf];
+      col := Antic45Mask(fontType[xf, offset shl 3 + yf], cnt);
+      //mask[cnt - 1] := col;
+      //if cnt = 2 then begin
+      //  if (mask[0] = 0) and (mask[1] = 1) then
+      //    col := 1
+      //  else if (mask[0] = 1) and (mask[1] = 0) then
+      //    col := 2
+      //  else if (mask[0] = 1) and (mask[1] = 1) then
+      //    col := 3;
 
+      if cnt = 2 then begin
         FillRectEx(image, colTab[col], xf*factOrigX - factOrigX, yf*factXOrigY,
-                   factOrigX*2, factXOrigY);
+                   factOrigX shl 1, factXOrigY);
         cnt := 0;
       end;
     end;

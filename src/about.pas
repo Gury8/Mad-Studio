@@ -1,7 +1,7 @@
 {
   Program name: Mad Studio
   Author: Boštjan Gorišek
-  Release year: 2016 - 2021
+  Release year: 2016 - 2023
   Unit: About
 }
 unit about;
@@ -11,8 +11,8 @@ unit about;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  StdCtrls, lcltype, ExtCtrls, lclintf, DTAnalogClock, BCMaterialDesignButton;
+  Classes, SysUtils, Forms, Controls, Graphics, ComCtrls, StdCtrls,
+  lcltype, ExtCtrls, lclintf, DTAnalogClock, BCMaterialDesignButton;
 
 type
   { TfrmAbout }
@@ -79,10 +79,6 @@ type
     procedure KickCClick(Sender : TObject);
     procedure btnCloseMouseEnter(Sender : TObject);
     procedure btnCloseMouseLeave(Sender : TObject);
-  private
-    { private declarations }
-  public
-    { public declarations }
   end;
 
 var
@@ -100,15 +96,15 @@ uses
 procedure TfrmAbout.FormShow(Sender: TObject);
 begin
   lblVersion.Caption := programVersion;
-  lblReleaseYear.Caption := '(c) 2021';
-  textLazarus.Caption := 'Lazarus 2.0.10 x86_64-win64';  //-win64-win32/win64';
-  textFreePascal.Caption := 'Free Pascal Compiler 3.2';
-  textMadsVer.Caption := 'Mad Assembler 2.1.0 build 8';
-  textMadPascalVer.Caption := 'Mad Pascal Compiler version 1.6.4';
+  lblReleaseYear.Caption := '(c) 2016 - 2023';
+  textLazarus.Caption := 'Lazarus 2.2.4 x86_64-win64';
+  textFreePascal.Caption := 'Free Pascal Compiler 3.2.2';
+  textMadsVer.Caption := 'Mad Assembler 2.1.5 build 3 (21 Feb 22)';
+  textMadPascalVer.Caption := 'Mad Pascal Compiler version 1.6.6 [2022/07/23]';
   textBasicParserVer.Caption := 'TurboBasic XL Parser Tool 10';
-  textFastBasic.Caption := 'FastBasic 4.4 - Fast BASIC interpreter';
+  textFastBasic.Caption := 'FastBasic 4.6 - Fast BASIC interpreter';
   textCC65.Caption := 'cc65 - the 6502 C Compiler';
-  textEffectus.Caption := 'Effectus 0.5.3 - Action! parser/cross-compiler';
+  textEffectus.Caption := 'Effectus 0.5.5 - Action! parser/cross-compiler';
   textKickC.Caption := 'KickC 0.8.5 - C compiler for optimized 6502 code';
   textBGRABitmap.Caption := 'BGRABitmap';
   textBGRAControls.Caption := 'BGRA Controls';

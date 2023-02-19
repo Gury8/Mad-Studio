@@ -43,8 +43,6 @@ type
     fldFontSet : fldFontSetType;
     procedure ShowFontSet;
     procedure ShowChar(offset : integer);
-  public
-
   end;
 
 var
